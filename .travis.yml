@@ -5,6 +5,7 @@ python:
 
 install:
 - pip install web.py
+- pip install psycopg2
 - pip install paste
 
 script: nosetests -v
