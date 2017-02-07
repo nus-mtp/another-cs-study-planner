@@ -1,0 +1,18 @@
+$def with (opcode)
+
+<h1>CS-Modify Account Registration</h1>
+<form method="post" action="register">
+<p><label for="staffId">Staff ID:</label> <input type="text" name="staffId" required pattern="[a-zA-Z0-9]+" /></p>
+<p><label for="password">Password:</label> <input type="password" name="password" required></p>
+<p><label for="Confirm password">Confirm Password:</label> <input type="password" name="confirm_password" required></p>
+<p><input type="submit" value="Register" /></p>
+</form>
+<br>
+<p>Already have an account? Login <a href="/login">here</a>.</p>
+<br>
+
+$if opcode == -1:
+    <p>Account registration failed.</p>
+
+$elif opcode == 0:
+    <p>User is accessing registration page.</p>

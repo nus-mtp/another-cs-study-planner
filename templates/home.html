@@ -1,0 +1,55 @@
+$def with (staffid)
+
+$if staffid:
+    <form method="post" action="home">
+        <h1>Welcome, $staffid!</h1>
+        <p><input type="submit" value="Logout" /></p>
+    </form>
+    <h2>Module Views</h2>
+    <ul>
+        <li>Oversubscribed Modules</li>
+        <li>View Modules in Focus Area</li>
+        <li>View Module Information</li>
+        <li>Sort/Filter Modules</li>
+        <li>View Recently Removed Modules</li>
+        <li>View Modules for Current Semester</li>
+        <li>View Modules for Next Semester</li>
+        <li>View Module Demand History</li>
+        <li>Starred Modules</li>
+    </ul>
+    <hr>
+    <h2>Change Curriculum</h2>
+    <ul>
+        <li>Change Module Quota</li>
+        <li>Change Module Prerequisites/Preclusions</li>
+        <li>Edit Module</li>
+        <li>Add Module</li>
+        <li>Delete Module</li>
+    </ul>
+    <hr>
+    <h2>Module Relations</h2>
+    <ul>
+        <li>Commonly Overlapping Modules</li>
+        <li>Module Information by Semester</li>
+        <li>Prior Modules Taken:</li>
+            <ul>
+                <li>Before Specified Module</li>
+                <li>Before Internship</li>
+            </ul>
+    </ul>
+    <hr>
+    <h2>Student Statistics</h2>
+    <ul>
+        <li>Module Demand In:</li>
+            <ul>
+                <li>Current Semester</li>
+                <li>Next Semester</li>
+                <li>In Specific Semester</li>
+            </ul>
+        <li>Student Information</li>
+        <li>Module Timeline</li>
+        <li>Non-overlapping Modules</li>
+    </ul>
+    
+$else:
+    <p>ERROR: User has NOT logged in yet.</p>
