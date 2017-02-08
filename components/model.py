@@ -12,6 +12,10 @@ db = web.database(dbn='postgres', db='postgres', user='postgres', pw='super', po
 def getAllModules():
     return db.select('module', order='code')
 
+## Retrieve the info of a single module
+def viewModule(code):
+    return db.select('module', where="code=$code", vars=locals())
+
 ## Insert a new module into the module table
 def addModule(code, name, description, mc):
     db.insert('module', code=code, name=name, description=description, mc=mc)

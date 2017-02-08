@@ -15,6 +15,10 @@ $for module in modules:
         <td>$module.description</td>
         <td>$module.mc</td>
         <td>
+            <form action="/view" method="get">
+                <input type="hidden" name="code" value="$module.code">
+                <input type="submit" value="View"/>
+            </form>
             <form action="/del/$module.code" method="post">
                 <input type="submit" value="Delete"/>
             </form>

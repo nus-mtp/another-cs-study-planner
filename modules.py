@@ -12,6 +12,7 @@ from components import model  # model.py (the other python file that handles our
 ## The first string is the URL extension, the 2nd string is the class that will be invoked when the page is loaded
 urls = (
     '/', 'Index',
+    '/view', 'View',
     '/del/(.*)', 'Delete'  # (.*) represents the POST data
 )
 
@@ -52,6 +53,14 @@ class Index:
         ## else add module to db and refresh page
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
         raise web.seeother('/')
+
+## This class handles the viewing of a single module
+class View:
+    def GET(self):
+        input_data = web.input()
+        inputCode = input_data.code
+        moduleInfo = model.viewModule(inputCode)
+        return render.view(moduleInfo)
 
 ## This class handles the deletion of module
 class Delete:
