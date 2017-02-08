@@ -1,7 +1,16 @@
 import os
 import psycopg2
 import urlparse
-import local_database_data
+
+try:
+	import local_database_data
+except ImportError:
+	handle_no_local_data()
+
+def handle_no_local_data():
+	print ("local_database_data.py file is missing from components folder.")
+	print ("Please create it manually")
+	local_database_data = None
 
 def connect_db(is_for_deployment):
 	connection = None
