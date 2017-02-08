@@ -3,6 +3,14 @@ language: python
 python:
 - "2.7"
 
+services:
+- postgresql
+
+postgres:
+  adapter: postgresql
+  database: postgres
+  username: postgres
+
 install:
 - pip install web.py
 - pip install psycopg2
