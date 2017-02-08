@@ -1,6 +1,6 @@
 from paste.fixture import TestApp
 from nose.tools import *
-from code import app
+from app import app
 import os
 
 class TestCode():
