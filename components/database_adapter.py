@@ -13,7 +13,13 @@ def connect_db(is_for_deployment):
 	connection = None
 
 	if ('TRAVIS' in os.environ):
-		pass
+		connection = psycopg2.connect(
+			database = 'postgres',
+			user = 'postgres',
+			password = '',
+			host = 'localhost',
+			port = ''
+		)
 	elif (is_for_deployment):
 		# Specifying the postgres SQL and the database for Heroku
 		urlparse.uses_netloc.append("postgres")
