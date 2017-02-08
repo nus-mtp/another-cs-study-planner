@@ -1,0 +1,27 @@
+$def with (modules, form)  
+
+<table>
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>MCs</th>
+        <th></th>
+    </tr>
+$for module in modules:
+    <tr>
+        <td>$module.code</td>
+        <td>$module.name</td>
+        <td>$module.description</td>
+        <td>$module.mc</td>
+        <td>
+            <form action="/del/$module.code" method="post">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+    </tr>    
+</table>  
+
+<form action="" method="post">
+$:form.render()
+</form>
