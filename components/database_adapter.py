@@ -8,7 +8,6 @@ try:
 except ImportError:
     print "local_database_data.py file is missing from components folder."
     print "Please create it manually"
-    components.local_database_data = None
 
 def connect_db(is_for_deployment):
     ''' This function is used to establish the connection to the database according to the
