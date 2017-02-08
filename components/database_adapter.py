@@ -12,7 +12,9 @@ except ImportError:
 def connect_db(is_for_deployment):
 	connection = None
 
-	if (is_for_deployment):
+	if ('TRAVIS' in os.environ):
+		pass
+	elif (is_for_deployment):
 		# Specifying the postgres SQL and the database for Heroku
 		urlparse.uses_netloc.append("postgres")
 		url = urlparse.urlparse(os.environ["DATABASE_URL"])
