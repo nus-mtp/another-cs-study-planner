@@ -5,9 +5,6 @@ import urlparse
 try:
 	import local_database_data
 except ImportError:
-	handle_no_local_data()
-
-def handle_no_local_data():
 	print ("local_database_data.py file is missing from components folder.")
 	print ("Please create it manually")
 	local_database_data = None
