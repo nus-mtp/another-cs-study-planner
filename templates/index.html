@@ -10,16 +10,16 @@ $def with (modules, form)
     </tr>
 $for module in modules:
     <tr>
-        <td>$module.code</td>
-        <td>$module.name</td>
-        <td>$module.description</td>
-        <td>$module.mc</td>
+        <td>$module[0]</td>
+        <td>$module[1]</td>
+        <td>$module[2]</td>
+        <td>$module[3]</td>
         <td>
             <form action="/view" method="get">
-                <input type="hidden" name="code" value="$module.code">
+                <input type="hidden" name="code" value="$module[0]">
                 <input type="submit" value="View"/>
             </form>
-            <form action="/del/$module.code" method="post">
+            <form action="/del/$module[0]" method="post">
                 <input type="submit" value="Delete"/>
             </form>
         </td>
