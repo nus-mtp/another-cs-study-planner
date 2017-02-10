@@ -11,7 +11,7 @@ except ImportError:
 
 def repopulate_database(connection):
     with connection.cursor() as cursor:
-        cursor.execute(open("utils/databaseClean.sql", "r").read())
+        #cursor.execute(open("utils/databaseClean.sql", "r").read())
         cursor.execute(open("utils/databaseSchema.sql", "r").read())
         cursor.execute(open("utils/modulePopulator.sql", "r").read())
         cursor.execute(open("utils/moduleMountedPopulator.sql", "r").read())
