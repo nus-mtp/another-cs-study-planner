@@ -30,9 +30,20 @@ def getModule(code):
 
 ## Insert a new module into the module table
 def addModule(code, name, description, mc):
-	sql_command = "INSERT INTO module (code, name, description, mc)" +  \
-		" VALUES (%s,%s,%s,%s)"
+	sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,'New')"
 	db_cursor.execute(sql_command, (code, name, description, mc))
+	connection.commit()
+
+## Change the status of a module to 'To Be Removed'
+def flagModuleAsRemoved(code):
+	sql_command = "UPDATE module SET status='To Be Removed' WHERE code=%s"
+	db_cursor.execute(sql_command, (code, ))
+	connection.commit()
+
+## Change the status of a module to 'Active'
+def flagModuleAsActive(code):
+	sql_command = "UPDATE module SET status='Active' WHERE code=%s"
+	db_cursor.execute(sql_command, (code, ))
 	connection.commit()
 
 ## Delete a module from the module table

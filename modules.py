@@ -13,6 +13,8 @@ from components import model  # model.py (the other python file that handles our
 urls = (
     '/', 'Index',
     '/viewModule', 'ViewMod',
+    '/flagAsRemoved/(.*)', 'FlagAsRemoved',
+    '/flagAsActive/(.*)', 'FlagAsActive',
     '/deleteModule/(.*)', 'DeleteMod'  # (.*) represents the POST data
 )
 
@@ -54,6 +56,7 @@ class Index:
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
         raise web.seeother('/')  # load index.html again
 
+
 ## This class handles the viewing of a single module
 class ViewMod:
     def GET(self):
@@ -61,6 +64,21 @@ class ViewMod:
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)
         return render.viewModule(moduleInfo)
+
+
+## This class handles the flagging of a module as 'To Be Removed'
+class FlagAsRemoved:
+    def POST(self, moduleCode):
+        model.flagModuleAsRemoved(moduleCode)
+        raise web.seeother('/') 
+
+
+## This class handles the flagging of a module as 'Active'
+class FlagAsActive:
+    def POST(self, moduleCode):
+        model.flagModuleAsActive(moduleCode)
+        raise web.seeother('/') 
+
 
 ## This class handles the deletion of module
 class DeleteMod:

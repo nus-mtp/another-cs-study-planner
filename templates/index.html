@@ -6,6 +6,7 @@ $def with (moduleInfos, form)
         <th>Name</th>
         <th>Description</th>
         <th>MCs</th>
+		<th>Status</th>
         <th></th>
     </tr>
 $for moduleInfo in moduleInfos:
@@ -14,14 +15,24 @@ $for moduleInfo in moduleInfos:
         <td>$moduleInfo[1]</td>
         <td>$moduleInfo[2]</td>
         <td>$moduleInfo[3]</td>
+		<td>$moduleInfo[4]</td>
         <td>
             <form action="/viewModule" method="get">
                 <input type="hidden" name="code" value="$moduleInfo[0]">
                 <input type="submit" value="View"/>
             </form>
-            <form action="/deleteModule/$moduleInfo[0]" method="post">
-                <input type="submit" value="Delete"/>
-            </form>
+            $if moduleInfo[4][0:6] == 'Active':
+                <form action="/flagAsRemoved/$moduleInfo[0]" method="post">
+                    <input type="submit" value="Flag As Removed"/>
+                </form>
+            $elif moduleInfo[4][0:13] == 'To Be Removed':
+                <form action="/flagAsActive/$moduleInfo[0]" method="post">
+                    <input type="submit" value="Flag As Active"/>
+                </form>
+            $elif moduleInfo[4][0:3] == 'New':
+                <form action="/deleteModule/$moduleInfo[0]" method="post">
+                    <input type="submit" value="Delete Module"/>
+                </form>
         </td>
     </tr>    
 </table>  

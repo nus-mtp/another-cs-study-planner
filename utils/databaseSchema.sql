@@ -1,8 +1,16 @@
-CREATE TABLE module (
+/*CREATE TABLE module (
 code VARCHAR(10) PRIMARY KEY,
 name VARCHAR(64),
 description VARCHAR(4096),
 mc INT
+);*/
+
+CREATE TABLE module (
+code VARCHAR(10) PRIMARY KEY,
+name VARCHAR(64),
+description VARCHAR(4096),
+mc INT,
+status CHAR(14) CHECK(status = 'Active' or status = 'To Be Removed' or status = 'New') DEFAULT('Active')
 );
 
 CREATE TABLE moduleMounted(
@@ -13,7 +21,7 @@ PRIMARY KEY (moduleCode, acadYearAndSem),
 FOREIGN KEY (moduleCode) REFERENCES module(code)
 );
  
-CREATE TABLE moduleMountTentative (
+/*CREATE TABLE moduleMountTentative (
 acadYearAndSem VARCHAR(9),
 moduleCode VARCHAR(10),
 mountingPlanID INT,
@@ -21,6 +29,15 @@ examDate DATE,
 quota INT,
 isNewModule BOOLEAN NOT NULL,
 isToBeRemoved BOOLEAN,
+PRIMARY KEY (acadYearAndSem, moduleCode, mountingPlanID),
+FOREIGN KEY (moduleCode) REFERENCES module(code)
+);*/
+
+CREATE TABLE moduleMountTentative (
+moduleCode VARCHAR(10),
+acadYearAndSem VARCHAR(14),
+quota INT,
+mountingPlanID INT DEFAULT(1),
 PRIMARY KEY (acadYearAndSem, moduleCode, mountingPlanID),
 FOREIGN KEY (moduleCode) REFERENCES module(code)
 );
