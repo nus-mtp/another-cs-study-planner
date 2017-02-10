@@ -24,7 +24,7 @@ def connect_db(is_for_deployment):
             host='localhost',
             port=''
         )
-    elif is_for_deployment:
+    elif 'HEROKU' in os.environ:
         # Specifying the postgres SQL and the database for Heroku
         urlparse.uses_netloc.append("postgres")
         url = urlparse.urlparse(os.environ["DATABASE_URL"])
