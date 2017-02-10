@@ -9,11 +9,19 @@ except ImportError:
     print "local_database_data.py file is missing from components folder."
     print "Please create it manually"
 
-def connect_db(is_for_deployment):
+def repopulate_database(connection):
+    with connection.cursor() as cursor:
+        cursor.execute(open("utils/databaseClean.sql", "r").read())
+        cursor.execute(open("utils/databaseSchema.sql", "r").read())
+        cursor.execute(open("utils/modulePopulator.sql", "r").read())
+        cursor.execute(open("utils/moduleMountedPopulator.sql", "r").read())
+        cursor.execute(open("utils/moduleMountedTentativePopulator.sql", "r").read())
+        cursor.execute(open("utils/studentAndFocusPopulator.sql", "r").read())
+        cursor.execute(open("utils/plannerPopulator.sql", "r").read())
+
+def connect_db():
     ''' This function is used to establish the connection to the database according to the
-    current environment. (local or Heroku or Travis)
-    is_for_deployment parameter is used to determine if program is run in local or
-    in Heroku '''
+    current environment. (local or Heroku or Travis) '''
     connection = None
 
     if 'TRAVIS' in os.environ:
@@ -46,5 +54,7 @@ def connect_db(is_for_deployment):
             host=components.local_database_data.get_host_name(),
             port=components.local_database_data.get_port()
         )
+
+    repopulate_database(connection)
 
     return connection

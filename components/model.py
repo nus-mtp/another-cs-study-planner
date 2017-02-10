@@ -5,15 +5,10 @@
 
 import web
 import psycopg2
+import components.database_adapter # database_adaptor.py handles the connection to database
 
 ## Connects to the postgres database
-connection = psycopg2.connect(
-	database='postgres',
-	user='postgres',
-	password='12345678',
-	host='localhost',
-	port='5433'
-)
+connection = components.database_adapter.connect_db()
 db_cursor = connection.cursor()
 
 ## Get the module code, name, description, and MCs of all modules

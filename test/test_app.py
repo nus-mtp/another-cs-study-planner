@@ -1,6 +1,6 @@
 from paste.fixture import TestApp
 from nose.tools import *
-from app import app
+from modules import app
 import os
 
 class TestCode():
@@ -9,4 +9,4 @@ class TestCode():
         testApp = TestApp(app.wsgifunc(*middleware))
         root = testApp.get('/')
         assert_equal(root.status, 200)
-        root.mustcontain('CS-Modify: Module Planner for Module Administrators')
+        root.mustcontain('All Modules')
