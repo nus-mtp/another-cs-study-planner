@@ -10,6 +10,14 @@ $def with (moduleInfos, form)
     form {
         margin: 3px;
     }
+	#navForm {
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+	#navForm input {
+		width: 200px;
+		height: 25px;
+	}
 	#addModDiv {
 		border: 1px solid black;
 		display: inline-block;
@@ -37,7 +45,10 @@ $def with (moduleInfos, form)
 	</form>
 </div>
 
-<br><br>
+<form id="navForm" action="/moduleMountingFixed" method="post">
+    <input type="submit" value="Go To Fixed Module Mountings" />
+</form>
+
 <h1>All Modules</h1>
 
 <table>

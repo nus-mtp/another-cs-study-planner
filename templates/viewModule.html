@@ -1,6 +1,54 @@
-$def with (moduleInfo)
+$def with (moduleInfo, fixedMountingAndQuota)
 
-<p>$moduleInfo[0]</p>
-<p>$moduleInfo[1]</p>
-<p>$moduleInfo[2]</p>
-<p>$moduleInfo[3]</p>
+<style>
+    th, td {
+        padding: 5px;
+    }
+    #mountingAndQuota {
+        text-align: left;
+    }
+    #mountingAndQuota th, #mountingAndQuota td {
+        padding: 5px;
+        padding-top: 2px;
+        padding-right: 30px;
+    }
+</style>
+
+<table>
+    <tr><td>
+        <b>Module Code</b><br>
+        $moduleInfo[0]
+    </td></tr>
+    <tr><td>
+        <b>Module Name</b><br>
+        $moduleInfo[1]
+    </td></tr>
+    <tr><td>
+        <b>Description</b><br>
+        $moduleInfo[2]
+    </td></tr>
+    <tr><td>
+        <b>MCs</b><br>
+        $moduleInfo[3]
+    </td></tr>
+    <table id="mountingAndQuota">
+        <tr>
+            <th>Mounted In</th>
+            <th>Quota</th>
+        </tr>
+    $if len(fixedMountingAndQuota) == 0:
+        <tr>
+            <td>Nil</td>
+            <td>Nil</td>
+        </tr>
+    $else:
+        $for entry in fixedMountingAndQuota:
+            <tr>
+                <td>$entry[0]</td>
+                $if entry[1] == None:
+                    <td>?</td>
+                $else:
+                    <td>$entry[1]</td>
+            </tr>
+    </table>
+</table>

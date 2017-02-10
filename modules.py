@@ -12,6 +12,8 @@ from components import model  # model.py (the other python file that handles our
 ## The first string is the URL extension, the 2nd string is the class that will be invoked when the page is loaded
 urls = (
     '/', 'Index',
+    '/modules', 'Modules',
+    '/moduleMountingFixed', 'Fixed',
     '/viewModule', 'ViewMod',
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
@@ -56,6 +58,21 @@ class Index:
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
         raise web.seeother('/')  # load index.html again
 
+## This class redirects to index.html
+class Modules:
+    def POST(self):
+        raise web.seeother('/')
+
+
+## This class handles the displaying of the fixed module mountings
+class Fixed:
+    def GET(self):
+        mountedModuleInfos = model.getAllFixedMountedModules()
+        return render.moduleMountingFixed(mountedModuleInfos)
+
+    def POST(self):
+        raise web.seeother('/moduleMountingFixed')
+    
 
 ## This class handles the viewing of a single module
 class ViewMod:
@@ -63,7 +80,8 @@ class ViewMod:
         inputData = web.input()
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)
-        return render.viewModule(moduleInfo)
+        fixedMountingAndQuota = model.getFixedMountingAndQuota(moduleCode)
+        return render.viewModule(moduleInfo, fixedMountingAndQuota)
 
 
 ## This class handles the flagging of a module as 'To Be Removed'
