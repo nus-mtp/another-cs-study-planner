@@ -1,4 +1,4 @@
-$def with (modules, form)  
+$def with (moduleInfos, form)  
 
 <table>
     <tr>
@@ -8,18 +8,18 @@ $def with (modules, form)
         <th>MCs</th>
         <th></th>
     </tr>
-$for module in modules:
+$for moduleInfo in moduleInfos:
     <tr>
-        <td>$module[0]</td>
-        <td>$module[1]</td>
-        <td>$module[2]</td>
-        <td>$module[3]</td>
+        <td>$moduleInfo[0]</td>
+        <td>$moduleInfo[1]</td>
+        <td>$moduleInfo[2]</td>
+        <td>$moduleInfo[3]</td>
         <td>
-            <form action="/view" method="get">
-                <input type="hidden" name="code" value="$module[0]">
+            <form action="/viewModule" method="get">
+                <input type="hidden" name="code" value="$moduleInfo[0]">
                 <input type="submit" value="View"/>
             </form>
-            <form action="/del/$module[0]" method="post">
+            <form action="/deleteModule/$moduleInfo[0]" method="post">
                 <input type="submit" value="Delete"/>
             </form>
         </td>

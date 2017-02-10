@@ -16,19 +16,17 @@ connection = psycopg2.connect(
 )
 db_cursor = connection.cursor()
 
-## Select all modules from the module table (order by code)
+## Get the module code, name, description, and MCs of all modules
 def getAllModules():
 	sql_command = "SELECT * FROM module ORDER BY code"
 	db_cursor.execute(sql_command)
 	return db_cursor.fetchall()
-    #return db.select('module', order='code')
 
-## Retrieve the info of a single module
-def viewModule(code):
+## Get the module code, name, description and MCs of a single module
+def getModule(code):
 	sql_command = "SELECT * FROM module WHERE code=%s"
 	db_cursor.execute(sql_command, (code,))
 	return db_cursor.fetchone()
-    #return db.select('module', where="code=$code", vars=locals())
 
 ## Insert a new module into the module table
 def addModule(code, name, description, mc):
@@ -36,7 +34,6 @@ def addModule(code, name, description, mc):
 		" VALUES (%s,%s,%s,%s)"
 	db_cursor.execute(sql_command, (code, name, description, mc))
 	connection.commit()
-    #db.insert('module', code=code, name=name, description=description, mc=mc)
 
 ## Delete a module from the module table
 def deleteModule(code):
@@ -48,4 +45,3 @@ def deleteModule(code):
 	sql_command = "DELETE FROM module WHERE code=%s"
 	db_cursor.execute(sql_command, (code,))
 	connection.commit()
-    #db.delete('module', where="code=$code", vars=locals())

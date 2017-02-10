@@ -12,8 +12,8 @@ from components import model  # model.py (the other python file that handles our
 ## The first string is the URL extension, the 2nd string is the class that will be invoked when the page is loaded
 urls = (
     '/', 'Index',
-    '/view', 'View',
-    '/del/(.*)', 'Delete'  # (.*) represents the POST data
+    '/viewModule', 'ViewMod',
+    '/deleteModule/(.*)', 'DeleteMod'  # (.*) represents the POST data
 )
 
 ## This line tells web.py that the html files to be rendered are found in the 'templates' folder
@@ -23,7 +23,7 @@ render = web.template.render('templates', base='base')
 
 ## This class handles the Add Module form and the displaying of list of modules
 class Index:
-    ## Creates the Add Module form that will appear in index.html
+    ## Creates the 'Add Module' form that will appear on the webpage
     form = web.form.Form(
         web.form.Textbox('code', web.form.notnull, 
             description="Code"),
@@ -38,11 +38,11 @@ class Index:
 
     ## This function is called when the '/' page (index.html) is loaded
     def GET(self):
-        modules = model.getAllModules()     # Get list of modules from db 
-        form = self.form()                  # Add Module form
-        return render.index(modules, form)  # Pass the list of modules and Add Module form to index.html for rendering
+        moduleInfos = model.getAllModules()
+        form = self.form()
+        return render.index(moduleInfos, form)
 
-    ## This function is called when Add Module form is submitted
+    ## This function is called when the 'Add Module' form is submitted
     def POST(self):
         ## if form input is invalid, reload the page (warning message will be shown besides invalid field)
         form = self.form()
@@ -52,18 +52,18 @@ class Index:
 
         ## else add module to db and refresh page
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
-        raise web.seeother('/')
+        raise web.seeother('/')  # load index.html again
 
 ## This class handles the viewing of a single module
-class View:
+class ViewMod:
     def GET(self):
-        input_data = web.input()
-        inputCode = input_data.code
-        moduleInfo = model.viewModule(inputCode)
-        return render.view(moduleInfo)
+        inputData = web.input()
+        moduleCode = inputData.code
+        moduleInfo = model.getModule(moduleCode)
+        return render.viewModule(moduleInfo)
 
 ## This class handles the deletion of module
-class Delete:
+class DeleteMod:
     def POST(self, moduleCode):  # moduleCode is obtained from the end of the URL
         model.deleteModule(moduleCode)
         raise web.seeother('/')
