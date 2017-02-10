@@ -1,5 +1,45 @@
 $def with (moduleInfos, form)  
 
+<style>
+	h2 {
+		margin-bottom: 7px;
+	}
+    table {
+        text-align: left;
+    }
+    form {
+        margin: 3px;
+    }
+	#addModDiv {
+		border: 1px solid black;
+		display: inline-block;
+		padding: 10px;
+	}
+	#addModDiv h2 {
+		margin-top: 0px;
+	}
+	#addModForm th, #addModForm td {
+		padding: 2px;
+	}
+	input {
+		width: 120px;
+	}
+    th, td {
+        padding: 5px;
+        padding-right: 30px;
+    }
+</style>
+
+<div id="addModDiv">
+	<h2>Add a new module</h2>
+	<form id="addModForm" action="" method="post">
+	$:form.render()
+	</form>
+</div>
+
+<br><br>
+<h1>All Modules</h1>
+
 <table>
     <tr>
         <th>Code</th>
@@ -19,7 +59,7 @@ $for moduleInfo in moduleInfos:
         <td>
             <form action="/viewModule" method="get">
                 <input type="hidden" name="code" value="$moduleInfo[0]">
-                <input type="submit" value="View"/>
+                <input type="submit" value="View Module"/>
             </form>
             $if moduleInfo[4][0:6] == 'Active':
                 <form action="/flagAsRemoved/$moduleInfo[0]" method="post">
@@ -35,8 +75,4 @@ $for moduleInfo in moduleInfos:
                 </form>
         </td>
     </tr>    
-</table>  
-
-<form action="" method="post">
-$:form.render()
-</form>
+</table>
