@@ -14,6 +14,7 @@ urls = (
     '/', 'Index',
     '/modules', 'Modules',
     '/moduleMountingFixed', 'Fixed',
+    '/moduleMountingTentative', 'Tentative',
     '/viewModule', 'ViewMod',
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
@@ -74,6 +75,15 @@ class Fixed:
         raise web.seeother('/moduleMountingFixed')
     
 
+## This class handles the displaying of the tentative module mountings
+class Tentative:
+    def GET(self):
+        mountedModuleInfos = model.getAllTentativeMountedModules()
+        return render.moduleMountingTentative(mountedModuleInfos)
+
+    def POST(self):
+        raise web.seeother('/moduleMountingTentative')
+
 ## This class handles the viewing of a single module
 class ViewMod:
     def GET(self):
@@ -81,7 +91,8 @@ class ViewMod:
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)
         fixedMountingAndQuota = model.getFixedMountingAndQuota(moduleCode)
-        return render.viewModule(moduleInfo, fixedMountingAndQuota)
+        tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
+        return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
 
 
 ## This class handles the flagging of a module as 'To Be Removed'

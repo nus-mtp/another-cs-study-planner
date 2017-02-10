@@ -34,9 +34,21 @@ def getAllFixedMountedModules():
 	db_cursor.execute(sql_command)
 	return db_cursor.fetchall()
 
+## Get the module code, name, AY/Sem and quota of all tentative mounted modules
+def getAllTentativeMountedModules():
+	sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code ORDER BY m2.moduleCode, m2.acadYearAndSem"
+	db_cursor.execute(sql_command)
+	return db_cursor.fetchall()
+
 ## Get the fixed AY/Sem and quota of a mounted module
 def getFixedMountingAndQuota(code):
 	sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted WHERE moduleCode=%s ORDER BY acadYearAndSem"
+	db_cursor.execute(sql_command, (code, ))
+	return db_cursor.fetchall()
+
+## Get the tentative AY/Sem and quota of a mounted module
+def getTentativeMountingAndQuota(code):
+	sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative WHERE moduleCode=%s ORDER BY acadYearAndSem"
 	db_cursor.execute(sql_command, (code, ))
 	return db_cursor.fetchall()
 

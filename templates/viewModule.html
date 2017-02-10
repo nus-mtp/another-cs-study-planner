@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingAndQuota)
+$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
 
 <style>
     th, td {
@@ -36,7 +36,7 @@ $def with (moduleInfo, fixedMountingAndQuota)
             <th>Mounted In</th>
             <th>Quota</th>
         </tr>
-    $if len(fixedMountingAndQuota) == 0:
+    $if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
         <tr>
             <td>Nil</td>
             <td>Nil</td>
@@ -49,6 +49,15 @@ $def with (moduleInfo, fixedMountingAndQuota)
                     <td>?</td>
                 $else:
                     <td>$entry[1]</td>
+            </tr>
+        $for entry in tentativeMountingAndQuota:
+            <tr>
+                <td>$entry[0]</td>
+                $if entry[1] == None:
+                    <td>?</td>
+                $else:
+                    <td>$entry[1]</td>
+                <td>(Tentative)</td>
             </tr>
     </table>
 </table>

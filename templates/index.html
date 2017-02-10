@@ -10,18 +10,18 @@ $def with (moduleInfos, form)
     form {
         margin: 3px;
     }
-	#navForm {
-		margin-top: 30px;
-		margin-bottom: 30px;
+	.navForm {
+		display: inline-block
 	}
-	#navForm input {
-		width: 200px;
+	.navForm input {
+		width: 240px;
 		height: 25px;
 	}
 	#addModDiv {
 		border: 1px solid black;
-		display: inline-block;
+		width: 300px;
 		padding: 10px;
+		margin-bottom: 30px;
 	}
 	#addModDiv h2 {
 		margin-top: 0px;
@@ -45,8 +45,11 @@ $def with (moduleInfos, form)
 	</form>
 </div>
 
-<form id="navForm" action="/moduleMountingFixed" method="post">
+<form class="navForm" action="/moduleMountingFixed" method="post">
     <input type="submit" value="Go To Fixed Module Mountings" />
+</form>
+<form class="navForm" action="/moduleMountingTentative" method="post">
+    <input type="submit" value="Go To Tentative Module Mountings" />
 </form>
 
 <h1>All Modules</h1>
@@ -57,7 +60,7 @@ $def with (moduleInfos, form)
         <th>Name</th>
         <th>Description</th>
         <th>MCs</th>
-		<th>Status</th>
+        <th>Status</th>
         <th></th>
     </tr>
 $for moduleInfo in moduleInfos:
@@ -66,7 +69,7 @@ $for moduleInfo in moduleInfos:
         <td>$moduleInfo[1]</td>
         <td>$moduleInfo[2]</td>
         <td>$moduleInfo[3]</td>
-		<td>$moduleInfo[4]</td>
+        <td>$moduleInfo[4]</td>
         <td>
             <form action="/viewModule" method="get">
                 <input type="hidden" name="code" value="$moduleInfo[0]">
@@ -85,5 +88,7 @@ $for moduleInfo in moduleInfos:
                     <input type="submit" value="Delete Module"/>
                 </form>
         </td>
-    </tr>    
-</table>
+    </tr>
+</table>  
+
+
