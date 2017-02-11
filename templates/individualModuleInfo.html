@@ -1,4 +1,9 @@
-$def with (moduleInfo, targetAY)
+$def with (moduleInfo, ay, quota)
+
+$ moduleCode = moduleInfo[0]
+$ moduleName = moduleInfo[1]
+$ moduleDescription = moduleInfo[2]
+$ moduleMC = moduleInfo[3]
 
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
@@ -49,12 +54,12 @@ $def with (moduleInfo, targetAY)
 							<hr>
 						</div>
 						<div class="col-md-12 text-center">
-							<h3>Module Info for <b><u>$targetAY</u></b></h3>
+							<h3>Module Info for <b><u>$ay</u></b></h3>
 						</div>
 						<div class="col-md-12 module-header">
 							<div class="page-header">
-								<h1><b>$moduleInfo[0]</b></h1>
-								<h3>$moduleInfo[1] ($moduleInfo[3] MCs)"</h3>
+								<h1><b>$moduleCode</b></h1>
+								<h3>$moduleName ($moduleMC MCs)"</h3>
 								<button class="btn btn-lg btn-primary" action="#">Edit Module</button>
 								<br>
 								<br>
@@ -63,7 +68,7 @@ $def with (moduleInfo, targetAY)
 						<div class="col-md-12">
 							<h4><b>Module Description:</b></h4>
 							<p>
-								$moduleInfo[2]
+								$moduleDescription
 							</p>
 							<br>
 							<h4><b>Module Preclusions:</b></h4>
@@ -73,7 +78,7 @@ $def with (moduleInfo, targetAY)
 							<p>--none loaded</p>
 							<br>
 							<h4><b>Class quota:</b></h4>
-							<p>--none loaded</p>
+							<p>$quota</p>
 						</div>
 					</div>
 				</div>
