@@ -2,7 +2,6 @@
 ## modules.py
 ## Handles the displaying of web pages and the GET/POST actions
 ########
-
 import web    # web.py (the framework that we are using)
 from components import model  # model.py (the other python file that handles our database)
 
@@ -18,7 +17,9 @@ urls = (
     '/viewModule', 'ViewMod',
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
-    '/deleteModule/(.*)', 'DeleteMod'  # (.*) represents the POST data
+    '/deleteModule/(.*)', 'DeleteMod',
+    '/individualModuleInfo?(.*)', 'IndividualModule'
+    # (.*) represents the POST data
 )
 
 ## This line tells web.py that the html files to be rendered are found in the 'templates' folder
@@ -51,8 +52,8 @@ class Index:
     def POST(self):
         ## if form input is invalid, reload the page (warning message will be shown besides invalid field)
         form = self.form()
-        if not form.validates():  
-            modules = model.getModules()
+        if not form.validates():
+            modules = model.getAllModules()
             return render.index(modules, form)
 
         ## else add module to db and refresh page
@@ -93,7 +94,27 @@ class ViewMod:
         fixedMountingAndQuota = model.getFixedMountingAndQuota(moduleCode)
         tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
         return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
-
+    
+## This class handles the desplay on a single module mounting
+class IndividualModule:
+    def GET(code, ay):
+        print(code)
+        print(ay)
+        inputData = web.input()
+        moduleCode = inputData.code
+        moduleInfo = model.getModule(moduleCode)
+        targetAY = inputData.targetAY
+        return render.individualModuleInfo(moduleInfo, targetAY)
+    
+    def POST(self):
+        print(code)
+        print(ay)
+        print("hello")
+        """inputData = web.input()
+        moduleCode = inputData.code
+        moduleInfo = model.getModule(coduleCode)
+        targetAY = inputData.targetAY"""
+        raise web.seeother('/individualModuleInfo?code=' + code + '&targetAY=' + ay)
 
 ## This class handles the flagging of a module as 'To Be Removed'
 class FlagAsRemoved:
