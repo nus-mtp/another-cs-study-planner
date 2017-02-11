@@ -1,0 +1,20 @@
+body {
+	overflow-x: hidden;
+}
+
+.search-form {
+	padding: 5%;
+	border: 1px solid black;
+}
+
+.module-info-wrapper {
+	padding: 0 2.5% 2.5% 2.5%;
+	border-right: 1px solid black;
+	height: 1500px;
+}
+
+.module-analysis-wrapper {
+	padding: 0 2.5% 2.5% 2.5%;
+	border-left: 1px solid black;
+	height: 1500px;
+}
