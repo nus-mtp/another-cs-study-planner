@@ -18,7 +18,7 @@ urls = (
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
     '/deleteModule/(.*)', 'DeleteMod',
-    '/individualModuleInfo?(.*)', 'IndividualModule'
+    '/individualModuleInfo', 'IndividualModule'
     # (.*) represents the POST data
 )
 
@@ -128,17 +128,14 @@ class ViewMod:
         tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
         return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
     
+
 ## This class handles the desplay on a single module mounting
 class IndividualModule:
-    def GET(code, ay):
+    def GET(self):
         inputData = web.input()
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)
         targetAY = inputData.targetAY
-        return render.individualModuleInfo(moduleInfo, targetAY)
-    
-    def POST(self):
-        raise web.seeother('/individualModuleInfo?code=' + code + '&targetAY=' + ay)
         quota = inputData.quota
         return render.individualModuleInfo(moduleInfo, targetAY, quota)
 
