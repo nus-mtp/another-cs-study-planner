@@ -98,23 +98,13 @@ class ViewMod:
 ## This class handles the desplay on a single module mounting
 class IndividualModule:
     def GET(code, ay):
-        print(code)
-        print(ay)
         inputData = web.input()
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)
         targetAY = inputData.targetAY
-        return render.individualModuleInfo(moduleInfo, targetAY)
-    
-    def POST(self):
-        print(code)
-        print(ay)
-        print("hello")
-        """inputData = web.input()
-        moduleCode = inputData.code
-        moduleInfo = model.getModule(coduleCode)
-        targetAY = inputData.targetAY"""
-        raise web.seeother('/individualModuleInfo?code=' + code + '&targetAY=' + ay)
+        quota = inputData.quota
+        return render.individualModuleInfo(moduleInfo, targetAY, quota)
+
 
 ## This class handles the flagging of a module as 'To Be Removed'
 class FlagAsRemoved:
