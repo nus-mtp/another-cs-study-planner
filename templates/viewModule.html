@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
+$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentsPlanning)
 
 <style>
     th, td {
@@ -13,6 +13,14 @@ $def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
         padding-right: 30px;
     }
 </style>
+
+$code:
+    # get number of students who plan to take the module in a certain AY and Sem
+    def getNumStudents(acadYearSem):
+        for mounting in numberOfStudentsPlanning:
+            if mounting[1] == acadYearSem:
+                return mounting[0]
+        return 0
 
 <table>
     <tr><td>
@@ -35,9 +43,11 @@ $def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
         <tr>
             <th>Mounted In</th>
             <th>Quota</th>
+            <th>Students Planning to Take</th>
         </tr>
     $if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
         <tr>
+            <td>Nil</td>
             <td>Nil</td>
             <td>Nil</td>
         </tr>
@@ -45,10 +55,14 @@ $def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
         $for entry in fixedMountingAndQuota:
             <tr>
                 <td>$entry[0]</td>
+                $ numberTaking = getNumStudents(entry[0])
                 $if entry[1] == None:
                     <td>?</td>
+                    <td>$numberTaking</td>
                 $else:
                     <td>$entry[1]</td>
+                    <td>$numberTaking</td>
+
             </tr>
         $for entry in tentativeMountingAndQuota:
             <tr>

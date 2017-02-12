@@ -47,6 +47,12 @@ def getTentativeMountingAndQuota(code):
 	db_cursor.execute(sql_command, (code, ))
 	return db_cursor.fetchall()
 
+## Get the number of students planning to take a mounted module
+def getNumberStudentsPlanning(code):
+	sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
+	db_cursor.execute(sql_command, (code, ))
+	return db_cursor.fetchall()
+
 ## Insert a new module into the module table
 def addModule(code, name, description, mc):
 	sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,'New')"

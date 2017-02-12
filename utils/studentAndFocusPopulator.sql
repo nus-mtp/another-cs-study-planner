@@ -11,6 +11,7 @@ INSERT INTO student VALUES('D1000002A', 1);
 INSERT INTO student VALUES('D2000002A', 2);
 INSERT INTO student VALUES('D3000002A', 3);
 INSERT INTO student VALUES('D4000002A', 4);
+INSERT INTO student VALUES('D1000003A', 1);
 
 --Focus Areas--
 INSERT INTO focusArea VALUES('Algorithms & Theory');
