@@ -9,6 +9,17 @@ except ImportError:
     print "local_database_data.py file is missing from components folder."
     print "Please create it manually"
 
+# Returns true if there are existing tables in the database,
+# returns false otherwise.
+def has_existing_database(connection):
+    cursor = connection.cursor()
+    sql_command = "SELECT exists(SELECT * from information_schema.tables where table_name=%s)"
+    cursor.execute(sql_command, ('module',))
+    if (cursor.rowcount > 0):
+        return True
+    else:
+        return False
+
 def repopulate_database(connection):
     with connection.cursor() as cursor:
         #cursor.execute(open("utils/databaseClean.sql", "r").read())
@@ -55,6 +66,7 @@ def connect_db():
             port=components.local_database_data.get_port()
         )
 
-    repopulate_database(connection)
+    if not has_existing_database:
+        repopulate_database(connection)
 
     return connection
