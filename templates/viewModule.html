@@ -1,10 +1,18 @@
-$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
+$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentsPlanning)
 
 $ hasMountingAndQuota = (len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0)
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
 $ moduleDescription = moduleInfo[2]
 $ moduleMC = moduleInfo[3]
+
+$code:
+    # get number of students who plan to take the module in a certain AY and Sem
+    def getNumStudents(acadYearSem):
+        for mounting in numberOfStudentsPlanning:
+            if mounting[1] == acadYearSem:
+                return mounting[0]
+        return 0
 
 <!--bottom half module info-->
 <div clas="container-fluid">
@@ -66,11 +74,13 @@ $ moduleMC = moduleInfo[3]
 							<tr>
 								<th>Mounted In</th>
 								<th>Quota</th>
+								<th>Students Planning to Take</th>
 							</tr>
 						</thead>
 						<tbody>
 					$if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
 						<tr>
+							<td>Nil</td>
 							<td>Nil</td>
 							<td>Nil</td>
 						</tr>
@@ -86,11 +96,14 @@ $ moduleMC = moduleInfo[3]
 										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
+							$ numberTaking = getNumStudents(entry[0])
 							$if entry[1] == None:
 								<td>?</td>
+								<td>$numberTaking</td>
 							$else:
 								<td>$entry[1]</td>
-								</tr>
+								<td>$numberTaking</td>
+							</tr>
 						$for entry in tentativeMountingAndQuota:
 							<tr>
 								<td>

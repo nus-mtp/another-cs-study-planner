@@ -130,8 +130,9 @@ class ViewMod:
         moduleInfo = model.getModule(moduleCode)
         fixedMountingAndQuota = model.getFixedMountingAndQuota(moduleCode)
         tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
-        return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
-    
+        numberOfStudentPlanning = model.getNumberStudentsPlanning(moduleCode)
+        return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentPlanning)
+
 
 ## This class handles the desplay on a single module mounting
 class IndividualModule:
