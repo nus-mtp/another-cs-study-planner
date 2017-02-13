@@ -18,7 +18,7 @@ urls = (
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
     '/deleteModule/(.*)', 'DeleteMod',
-    '/individualModuleInfo?(.*)', 'IndividualModule'
+    '/individualModuleInfo', 'IndividualModule'
     # (.*) represents the POST data
 )
 
@@ -29,19 +29,6 @@ render = web.template.render('templates', base='base')
 
 ## This class handles the Add Module form and the displaying of list of modules
 class Index:
-    ## Creates the 'Add Module' form that will appear on the webpage
-    form = web.form.Form(
-        web.form.Textbox('code', web.form.notnull, 
-            description="Code"),
-        web.form.Textbox('name', web.form.notnull, 
-            description="Name"),
-        web.form.Textbox('description', web.form.notnull, 
-            description="Description"),
-        web.form.Textbox('mc', web.form.notnull, 
-            description="MCs"),
-        web.form.Button('Add Module'),
-    )
-
     ## This function is called when the '/' page (index.html) is loaded
     def GET(self):
         moduleInfos = model.getAllModules()
@@ -59,6 +46,51 @@ class Index:
         ## else add module to db and refresh page
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
         raise web.seeother('/')  # load index.html again
+
+    def createForm():
+        ## Creates the 'Add Module' form that will appear on the webpage
+        validation_alphanumeric = web.form.regexp(
+            r"\w+", '\n\nModule code should be alphanumeric.')
+
+        validation_numeric_only = web.form.regexp(
+            r"\d+", '\n\nNumber of MCs should be a number.')
+        
+        module_code_textbox = web.form.Textbox('code',
+                                               web.form.notnull,
+                                               validation_alphanumeric,
+                                               post="<br><br>",
+                                               description="Code")
+        
+        module_name_textbox = web.form.Textbox('name',
+                                               web.form.notnull,
+                                               post="<br><br>",
+                                               description="Name")
+        
+        module_description_textarea = web.form.Textarea('description',
+                                                        web.form.notnull,
+                                                        rows="5",
+                                                        cols="55",
+                                                        post="<br><br>",
+                                                        description="Description")
+        
+        module_mcs = web.form.Textbox('mc',
+                                      web.form.notnull,
+                                      validation_numeric_only,
+                                      post="<br><br>",
+                                      description="MCs")
+
+        module_form_submit_button = web.form.Button('Add Module',
+                                                    class_="btn btn-primary")
+
+        form = web.form.Form(module_code_textbox,
+                             module_name_textbox,
+                             module_description_textarea,
+                             module_mcs,
+                             module_form_submit_button)
+        return form
+
+    form = createForm()
+
 
 ## This class redirects to index.html
 class Modules:
@@ -85,6 +117,7 @@ class Tentative:
     def POST(self):
         raise web.seeother('/moduleMountingTentative')
 
+
 ## This class handles the viewing of a single module
 class ViewMod:
     def GET(self):
@@ -95,9 +128,10 @@ class ViewMod:
         tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
         return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota)
     
+
 ## This class handles the desplay on a single module mounting
 class IndividualModule:
-    def GET(code, ay):
+    def GET(self):
         inputData = web.input()
         moduleCode = inputData.code
         moduleInfo = model.getModule(moduleCode)

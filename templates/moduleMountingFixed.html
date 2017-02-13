@@ -1,61 +1,51 @@
-$def with (mountedModuleInfos)  
+$def with (mountedModuleInfos)
 
-<style>
-    table {
-        text-align: left;
-    }
-    form {
-        margin: 0px;
-    }
-	input {
-		width: 120px;
-	}
-    th, td {
-        padding: 5px;
-        padding-right: 30px;
-    }
-	.navForm {
-		display: inline-block;
-		margin-top: 10px;
-		margin-bottom: 15px;
-	}
-	.navForm input {
-		width: 240px;
-		height: 25px;
-		margin-right: 5px;
-	}
-</style>
+<div class="container-fluid" id="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="options">
+                <h2>Options:</h2>
+                <form class="navForm" action="/modules" method="post">
+                    <input class="btn btn-primary" type="submit" value="Go To All Modules" />
+                </form>
+                <form class="navForm" action="/moduleMountingTentative" method="post">
+                    <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
+                </form>
+            </div>
+        </div>
 
-<form class="navForm" action="/modules" method="post">
-    <input type="submit" value="Go To All Modules" />
-</form>
-<form class="navForm" action="/moduleMountingTentative" method="post">
-    <input type="submit" value="Go To Tentative Module Mountings" />
-</form>
+        <div class="col-md-12">
+            <h1>Module Mountings (Fixed)</h1>
 
-<h1>Module Mountings (Fixed)</h1>
-
-<table>
-    <tr>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Mounted In</th>
-        <th>Quota</th>
-    </tr>
-$for mountedModuleInfo in mountedModuleInfos:
-    <tr>
-        <td>$mountedModuleInfo[0]</td>
-        <td>$mountedModuleInfo[1]</td>
-        <td>$mountedModuleInfo[2]</td>
-        $if mountedModuleInfo[3] == None:
-            <td>?</td>
-        $else:
-            <td>$mountedModuleInfo[3]</td>
-        <td>
-            <form action="/viewModule" method="get">
-                <input type="hidden" name="code" value="$mountedModuleInfo[0]">
-                <input type="submit" value="View Module"/>
-            </form>
-        </td>
-    </tr>    
-</table>
+            <table class="table table-bordered table-hover text-center">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Mounted In</th>
+                    <th>Quota</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+            $for mountedModuleInfo in mountedModuleInfos:
+                <tbody>
+                <tr>
+                    <td>$mountedModuleInfo[0]</td>
+                    <td>$mountedModuleInfo[1]</td>
+                    <td>$mountedModuleInfo[2]</td>
+                    $if mountedModuleInfo[3] == None:
+                        <td>?</td>
+                    $else:
+                        <td>$mountedModuleInfo[3]</td>
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$mountedModuleInfo[0]">
+                            <input type="submit" value="View Module"/>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
