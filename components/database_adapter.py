@@ -9,6 +9,19 @@ except ImportError:
     print "local_database_data.py file is missing from components folder."
     print "Please create it manually"
 
+# Returns true if there are existing tables in the database,
+# returns false otherwise.
+def has_existing_database(connection):
+    cursor = connection.cursor()
+    sql_command = "SELECT exists(SELECT * from information_schema.tables where table_name=%s)"
+    cursor.execute(sql_command, ('module',))
+
+    # Retrieves if the sql command returns True or False
+    if (cursor.fetchone()[0]):
+        return True
+    else:
+        return False
+
 def repopulate_database(connection):
     with connection.cursor() as cursor:
         #cursor.execute(open("utils/databaseClean.sql", "r").read())
@@ -18,6 +31,7 @@ def repopulate_database(connection):
         cursor.execute(open("utils/moduleMountedTentativePopulator.sql", "r").read())
         cursor.execute(open("utils/studentAndFocusPopulator.sql", "r").read())
         cursor.execute(open("utils/plannerPopulator.sql", "r").read())
+    connection.commit()
 
 def connect_db():
     ''' This function is used to establish the connection to the database according to the
@@ -55,6 +69,7 @@ def connect_db():
             port=components.local_database_data.get_port()
         )
 
-    repopulate_database(connection)
+    if not has_existing_database(connection):
+        repopulate_database(connection)
 
     return connection
