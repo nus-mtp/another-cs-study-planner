@@ -2,7 +2,6 @@
 ## modules.py
 ## Handles the displaying of web pages and the GET/POST actions
 ########
-
 import web    # web.py (the framework that we are using)
 from components import model  # model.py (the other python file that handles our database)
 
@@ -18,7 +17,9 @@ urls = (
     '/viewModule', 'ViewMod',
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
-    '/deleteModule/(.*)', 'DeleteMod'  # (.*) represents the POST data
+    '/deleteModule/(.*)', 'DeleteMod',
+    '/individualModuleInfo', 'IndividualModule'
+    # (.*) represents the POST data
 )
 
 ## This line tells web.py that the html files to be rendered are found in the 'templates' folder
@@ -28,19 +29,6 @@ render = web.template.render('templates', base='base')
 
 ## This class handles the Add Module form and the displaying of list of modules
 class Index:
-    ## Creates the 'Add Module' form that will appear on the webpage
-    form = web.form.Form(
-        web.form.Textbox('code', web.form.notnull, 
-            description="Code"),
-        web.form.Textbox('name', web.form.notnull, 
-            description="Name"),
-        web.form.Textbox('description', web.form.notnull, 
-            description="Description"),
-        web.form.Textbox('mc', web.form.notnull, 
-            description="MCs"),
-        web.form.Button('Add Module'),
-    )
-
     ## This function is called when the '/' page (index.html) is loaded
     def GET(self):
         moduleInfos = model.getAllModules()
@@ -51,13 +39,58 @@ class Index:
     def POST(self):
         ## if form input is invalid, reload the page (warning message will be shown besides invalid field)
         form = self.form()
-        if not form.validates():  
-            modules = model.getModules()
+        if not form.validates():
+            modules = model.getAllModules()
             return render.index(modules, form)
 
         ## else add module to db and refresh page
         model.addModule(form.d.code, form.d.name, form.d.description, form.d.mc)
         raise web.seeother('/')  # load index.html again
+
+    def createForm():
+        ## Creates the 'Add Module' form that will appear on the webpage
+        validation_alphanumeric = web.form.regexp(
+            r"\w+", '\n\nModule code should be alphanumeric.')
+
+        validation_numeric_only = web.form.regexp(
+            r"\d+", '\n\nNumber of MCs should be a number.')
+        
+        module_code_textbox = web.form.Textbox('code',
+                                               web.form.notnull,
+                                               validation_alphanumeric,
+                                               post="<br><br>",
+                                               description="Code")
+        
+        module_name_textbox = web.form.Textbox('name',
+                                               web.form.notnull,
+                                               post="<br><br>",
+                                               description="Name")
+        
+        module_description_textarea = web.form.Textarea('description',
+                                                        web.form.notnull,
+                                                        rows="5",
+                                                        cols="55",
+                                                        post="<br><br>",
+                                                        description="Description")
+        
+        module_mcs = web.form.Textbox('mc',
+                                      web.form.notnull,
+                                      validation_numeric_only,
+                                      post="<br><br>",
+                                      description="MCs")
+
+        module_form_submit_button = web.form.Button('Add Module',
+                                                    class_="btn btn-primary")
+
+        form = web.form.Form(module_code_textbox,
+                             module_name_textbox,
+                             module_description_textarea,
+                             module_mcs,
+                             module_form_submit_button)
+        return form
+
+    form = createForm()
+
 
 ## This class redirects to index.html
 class Modules:
@@ -84,6 +117,7 @@ class Tentative:
     def POST(self):
         raise web.seeother('/moduleMountingTentative')
 
+
 ## This class handles the viewing of a single module
 class ViewMod:
     def GET(self):
@@ -94,6 +128,17 @@ class ViewMod:
         tentativeMountingAndQuota = model.getTentativeMountingAndQuota(moduleCode)
         numberOfStudentPlanning = model.getNumberStudentsPlanning(moduleCode)
         return render.viewModule(moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentPlanning)
+
+
+## This class handles the desplay on a single module mounting
+class IndividualModule:
+    def GET(self):
+        inputData = web.input()
+        moduleCode = inputData.code
+        moduleInfo = model.getModule(moduleCode)
+        targetAY = inputData.targetAY
+        quota = inputData.quota
+        return render.individualModuleInfo(moduleInfo, targetAY, quota)
 
 
 ## This class handles the flagging of a module as 'To Be Removed'

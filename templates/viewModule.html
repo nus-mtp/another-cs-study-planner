@@ -1,18 +1,10 @@
 $def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentsPlanning)
 
-<style>
-    th, td {
-        padding: 5px;
-    }
-    #mountingAndQuota {
-        text-align: left;
-    }
-    #mountingAndQuota th, #mountingAndQuota td {
-        padding: 5px;
-        padding-top: 2px;
-        padding-right: 30px;
-    }
-</style>
+$ hasMountingAndQuota = (len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0)
+$ moduleCode = moduleInfo[0]
+$ moduleName = moduleInfo[1]
+$ moduleDescription = moduleInfo[2]
+$ moduleMC = moduleInfo[3]
 
 $code:
     # get number of students who plan to take the module in a certain AY and Sem
@@ -22,56 +14,122 @@ $code:
                 return mounting[0]
         return 0
 
-<table>
-    <tr><td>
-        <b>Module Code</b><br>
-        $moduleInfo[0]
-    </td></tr>
-    <tr><td>
-        <b>Module Name</b><br>
-        $moduleInfo[1]
-    </td></tr>
-    <tr><td>
-        <b>Description</b><br>
-        $moduleInfo[2]
-    </td></tr>
-    <tr><td>
-        <b>MCs</b><br>
-        $moduleInfo[3]
-    </td></tr>
-    <table id="mountingAndQuota">
-        <tr>
-            <th>Mounted In</th>
-            <th>Quota</th>
-            <th>Students Planning to Take</th>
-        </tr>
-    $if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
-        <tr>
-            <td>Nil</td>
-            <td>Nil</td>
-            <td>Nil</td>
-        </tr>
-    $else:
-        $for entry in fixedMountingAndQuota:
-            <tr>
-                <td>$entry[0]</td>
-                $ numberTaking = getNumStudents(entry[0])
-                $if entry[1] == None:
-                    <td>?</td>
-                    <td>$numberTaking</td>
-                $else:
-                    <td>$entry[1]</td>
-                    <td>$numberTaking</td>
-
-            </tr>
-        $for entry in tentativeMountingAndQuota:
-            <tr>
-                <td>$entry[0]</td>
-                $if entry[1] == None:
-                    <td>?</td>
-                $else:
-                    <td>$entry[1]</td>
-                <td>(Tentative)</td>
-            </tr>
-    </table>
-</table>
+<!--bottom half module info-->
+<div clas="container-fluid">
+	<div class="row"><!--left half of module info-->
+		<div class="col-md-6 module-info-wrapper">
+			<div class="row">
+				<div class="col-md-12">
+				<!--search bar-->
+					<form class="search-form" id="search-form" action"#">
+						<h2>Search Module</h2>
+						<br>
+						<div class="form-group">
+							<label for="module-code">Enter Module Code: </label>
+							<input type="text" class="form-control" name="module-code" pattern="[a-zA-Z0-9]+" placeholder="Module Code" required>
+						</div>
+						<div class="form-group">
+							<label for="ay-sem">Select Target AY &amp; Semester: </label>
+							<br>
+							<select name="ay-sem" form="search-form">
+								<option value="1">AY 2016/2017 Sem 1</option>
+								<option value="2">AY 2016/2017 Sem 2</option>
+								<option value="3">AY 2016/2017 Special Term I</option>
+								<option value="4">AY 2016/2017 Special Term II</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary">Search</button>
+					</form>
+					<br>
+					<hr>
+				</div>
+				<div class="col-md-12 text-center">
+					<h2><b>Module Info Overview</b></h2>
+				</div>
+				<div class="col-md-12 module-header">
+					<div class="page-header">
+						<h1><b>$moduleCode</b></h1>
+						<h3>$moduleName ($moduleMC MCs)</h3>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<h4><b>Module Description:</b></h4>
+					<p>
+						$moduleDescription
+					</p>
+					<br>
+					<h4><b>Module Preclusions:</b></h4>
+					<p>--not parsed yet</p>
+					<br>
+					<h4><b>Module Prerequisites:</b></h4>
+					<p>--not parsed yet</p>
+					<br>
+					<h4><b>Class Quota for AY-Semesters:</b></h4>
+					<br>
+				</div>
+				<div  class="col-md-12">
+					<!--mountingAndQuota-->
+					<table class="table table-bordered table-hover" id="mountingAndQuota">
+						<thead>
+							<tr>
+								<th>Mounted In</th>
+								<th>Quota</th>
+								<th>Students Planning to Take</th>
+							</tr>
+						</thead>
+						<tbody>
+					$if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
+						<tr>
+							<td>Nil</td>
+							<td>Nil</td>
+							<td>Nil</td>
+						</tr>
+						</tbody>
+					$else:
+						$for entry in fixedMountingAndQuota:
+							<tr>
+								<td>
+									<form action="/individualModuleInfo" method="get">
+										<input type="hidden" name="code" value="$moduleCode">
+										<input type="hidden" name="targetAY" value="$entry[0]">
+										<input type="hidden" name="quota" value="$entry[1]">
+										<input type="submit" value="$entry[0]">
+									</form>
+								</td>
+							$numberTaking = getNumStudents(entry[0])
+							$if entry[1] == None:
+								<td>?</td>
+								<td>$numberTaking</td>
+							$else:
+								<td>$entry[1]</td>
+								<td>$numberTaking</td>
+							</tr>
+						$for entry in tentativeMountingAndQuota:
+							<tr>
+								<td>
+									<form action="/individualModuleInfo" method="get">
+										<input type="hidden" name="code" value="$moduleCode">
+										<input type="hidden" name="targetAY" value="$entry[0]">
+										<input type="hidden" name="quota" value="$entry[1]">
+										<input type="submit" value="$entry[0]">
+									</form>
+								</td>
+							$if entry[1] == None:
+								<td>?</td>
+							$else:
+								<td>$entry[1] (Tentative)</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 module-analysis-wrapper">
+			<div class="page-header text-center">
+				<h2>Module Statistics</h2>
+			</div>
+			<h4><b>Student Demand:</b></h4>
+			<p>315</p>
+		</div>
+	</div>
+</div>
