@@ -23,6 +23,11 @@ class TestCode():
                                 '&targetAY=AY+16%2F17+Sem+1' +\
                                 '&quota=70'
 
+    URL_CONRAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
+                                   '?code=CP3880' +\
+                                   '&targetAY=AY+16%2F17+Sem+1'+\
+                                   '&quota='
+    
     FORM_SEARCH_MODULE = '<form class="search-form" id="search-form"'
     FORM_SEARCH_MODULE_LABEL_CODE = '<label for="module-code">Enter ' +\
                                     'Module Code: </label>'
@@ -47,6 +52,7 @@ class TestCode():
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
     CONTENT_STATS = "Module Statistics"
+    CONTENT_CLASS_QUOTA_BLANK = "<p></p>"
 
     """
         Tests whether user can access page for showing module overview
@@ -157,3 +163,13 @@ class TestCode():
         root.mustcontain(self.CONTENT_STATS)
 
 
+    """
+        Tests the contents when there is no quota specified
+    """
+    def test_view_individual_module_no_quota_valid_response(self):
+        middleware = []
+        testApp = TestApp(app.wsgifunc(*middleware))
+        
+        root = testApp.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
+
+        root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
