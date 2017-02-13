@@ -5,6 +5,27 @@ import os
 
 class TestCode():
 
+    URL_CONTAIN_CODE_AY_QUOTA = '/individualModuleInfo?' +\
+                                'code=BT5110' +\
+                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&quota=60'
+    URL_CONTAIN_INVALID_CODE_AY_QUOTA = '/individualModuleInfo?' +\
+                                'code=CS0123' +\
+                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&quota=60'
+    URL_CONTAIN_CODE_INVALID_AY_QUOTA = '/individualModuleInfo?' +\
+                                        'code=BT5110' +\
+                                        '&targetAY=AY+16%2F18+Sem+1' +\
+                                        '&quota=60'
+    URL_CONTAIN_CODE_AY_INVALID_QUOTA = '/individualModuleInfo?' +\
+                                        'code=BT5110' +\
+                                        '&targetAY=AY+16%2F17+Sem+1' +\
+                                        '&quota=70'
+    URL_CONRAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
+                                   '?code=CP3880' +\
+                                   '&targetAY=AY+16%2F17+Sem+1'+\
+                                   '&quota='
+    
     FORM_SEARCH_MODULE = '<form class="search-form" id="search-form"'
     FORM_SEARCH_MODULE_LABEL_CODE = '<label for="module-code">Enter ' +\
                                     'Module Code: </label>'
@@ -29,6 +50,8 @@ class TestCode():
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
     CONTENT_STATS = "Module Statistics"
+    CONTENT_CLASS_QUOTA_BLANK = "<p></p>"
+
 
     """
         Tests whether user can access page for showing module overview
@@ -38,9 +61,7 @@ class TestCode():
         # loads a 'modules.py' fixture
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
-        root = testApp.get(url)
+        root = testApp.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -58,9 +79,7 @@ class TestCode():
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        url = '/individualModuleInfo?code=CS0123&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
-        root = testApp.get(url)
+        root = testApp.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
 
     """
@@ -68,6 +87,8 @@ class TestCode():
         if the target AY-semester is invalid.
 
         NOTE: this test case is supposed to FAIL
+        NOTE: Checking for invalid AY-semester is not implemented
+    """
     """
     @raises(Exception)
     def test_view_individual_module_invalid_ay_sem_response(self):
@@ -76,16 +97,17 @@ class TestCode():
         testApp = TestApp(app.wsgifunc(*middleware))
         # AY-Semester used here is '16/18 Sem 1'
         # an exception WILL be encountered here
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F18+Sem+1' +\
-              '&quota=60'
-        root = testApp.get(url)
-
+        root = testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+    """
+    
 
     """
         Tests if user will fail to access page for showing module overview
         if the quota associated with the target module is invalid.
 
         NOTE: this test case is supposed to FAIL
+        NOTE: Checking for invalid module quota is not implemented
+    """
     """
     @raises(Exception)
     def test_view_invalid_module_overview_invalid_quota_response(self):
@@ -93,10 +115,9 @@ class TestCode():
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         # Quota used here is '70' (actual is '60')
-        # an exception WILL be encountered here
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F18+Sem+1' +\
-              '&quota=70'
-        root = testApp.get(url)
+        # an exception WILL be encountered here 
+        root = testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+    """
 
 
     """
@@ -107,9 +128,7 @@ class TestCode():
     def test_view_individual_module_search_form(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
-        root = testApp.get(url)
+        root = testApp.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -127,9 +146,7 @@ class TestCode():
     def test_view_individual_module_contents(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
-        root = testApp.get(url)
+        root = testApp.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.CONTENT_SUMMARY + self.CONTENT_TARGET_AY_SEM)
         root.mustcontain(self.CONTENT_CODE)
@@ -142,3 +159,14 @@ class TestCode():
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.CONTENT_STATS)
+
+
+    """
+        Tests the contents when there is no quota specified
+    """
+    def test_view_individual_module_no_quota_valid_response(self):
+        middleware = []
+        testApp = TestApp(app.wsgifunc(*middleware))
+        root = testApp.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
+
+        root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)

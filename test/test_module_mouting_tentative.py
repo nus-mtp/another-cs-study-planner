@@ -5,12 +5,16 @@ import os
 
 class TestCode():
 
+    URL_MODULE_MOUNTING_TENTATIVE = '/moduleMountingTentative'
+    URL_MODULE_VIEW_VALID = '/viewModule?code=BT5110'
+    URL_MODULE_VIEW_INVALID = '/viewModule?code=CS0123'
+
     FORM_ALL_MODULES = '<form class="navForm" action="/modules" method="post">'
     FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" ' +\
                               'type="submit" value="Go To All Modules">'
     FORM_FIXED_MOUNTING = '<form class="navForm" action=' +\
-                              '"/moduleMountingFixed" ' +\
-                              'method="post">'
+                          '"/moduleMountingFixed" ' +\
+                          'method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
                                  'type="submit" value="Go To Fixed ' +\
                                  'Module Mountings">'
@@ -29,7 +33,7 @@ class TestCode():
         # loads a 'modules.py' fixture
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/moduleMountingTentative')
+        root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -43,8 +47,8 @@ class TestCode():
             self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/moduleMountingTentative')
-        response = root.goto('/viewModule?code=BT5110', method='get')
+        root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
+        response = root.goto(self.URL_MODULE_VIEW_VALID, method='get')
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(response.status, 200)
@@ -70,9 +74,9 @@ class TestCode():
             self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/moduleMountingTentative')
+        root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         # an exception WILL be encountered here
-        response = root.goto('/viewModule?code=CS0123', method='get')
+        response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
 
 
     """
@@ -82,7 +86,7 @@ class TestCode():
     def test_tentative_module_mounting_view_options(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/moduleMountingTentative')
+        root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         
         # Checks the existence of the handler for viewing fixed mounting plan
         root.__contains__(self.FORM_ALL_MODULES)
@@ -100,7 +104,7 @@ class TestCode():
     def test_tentative_module_mounting_module_listing(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/moduleMountingTentative')
+        root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
         root.__contains__(self.TABLE_HEADER_CODE)
         root.__contains__(self.TABLE_HEADER_NAME)

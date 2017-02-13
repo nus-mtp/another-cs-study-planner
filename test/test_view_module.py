@@ -5,6 +5,9 @@ import os
 
 class TestCode():
 
+    URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
+    URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
+
     FORM_SEARCH_MODULE = '<form class="search-form" id="search-form"'
     FORM_SEARCH_MODULE_LABEL_CODE = '<label for="module-code">Enter ' +\
                                     'Module Code: </label>'
@@ -36,7 +39,7 @@ class TestCode():
         # loads a 'modules.py' fixture
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        root = testApp.get(self.URL_VIEW_MODULE_VALID)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -54,7 +57,7 @@ class TestCode():
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        root = testApp.get('/viewModule?code=CS0123')
+        root = testApp.get(self.URL_VIEW_MODULE_INVALID)
 
 
     """
@@ -67,8 +70,8 @@ class TestCode():
     def test_view_module_overview_goto_valid_individual_module(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F17+Sem+1' +\
+        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
 
@@ -88,7 +91,7 @@ class TestCode():
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         root = testApp.get('/viewModule?code=BT5110')
-        url = '/individualModuleInfo?code=CS0123&targetAY=AY+16%2F17+Sem+1' +\
+        url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
 
@@ -99,32 +102,40 @@ class TestCode():
 
         (i.e. navigation to module info for valid target module and
         quota, but invalid AY-semester)
+
+        NOTE: Checking for invalid AY-semester is not implemented yet.
+    """
     """
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         root = testApp.get('/viewModule?code=BT5110')
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F18+Sem+1' +\
+        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
+    """
 
 
     """
         Tests if navigation to an individual module view
-        with invalid module code is unsuccesful.
+        with invalid quota is unsuccesful.
 
-        (i.e. navigation to module info for invalid target module and
-        valid target AY-semester and quota)
+        (i.e. navigation to module info for invalid quota and
+        valid target module and AY-semester)
+
+        NOTE: Checking for invalid quota is not implemented yet.
+    """
     """
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_quota(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
         root = testApp.get('/viewModule?code=BT5110')
-        url = '/individualModuleInfo?code=BT5110&targetAY=AY+16%2F17+Sem+1' +\
+        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=70'
         response = root.goto(url, method='get')
+    """
 
 
     """
@@ -135,7 +146,7 @@ class TestCode():
     def test_view_module_overview_search_form(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        root = testApp.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -153,7 +164,7 @@ class TestCode():
     def test_view_module_overview_contents(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        root = testApp.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.CONTENT_SUMMARY)
         root.mustcontain(self.CONTENT_CODE)
