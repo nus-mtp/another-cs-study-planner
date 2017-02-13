@@ -1,0 +1,75 @@
+$def with (moduleInfo, ay, quota)
+
+$ moduleCode = moduleInfo[0]
+$ moduleName = moduleInfo[1]
+$ moduleDescription = moduleInfo[2]
+$ moduleMC = moduleInfo[3]
+
+<div clas="container-fluid">
+	<div class="row">
+		<div class="col-md-6 module-info-wrapper">
+			<div class="row">
+				<div class="col-md-12">
+					<!--search form-->
+					<form class="search-form" id="search-form" action"#">
+						<h2>Search Module</h2>
+						<br>
+						<div class="form-group">
+							<label for="module-code">Enter Module Code: </label>
+							<input type="text" class="form-control" name="module-code" pattern="[a-zA-Z0-9]+" placeholder="Module Code" required>
+						</div>
+						<div class="form-group">
+							<label for="ay-sem">Select Target AY &amp; Semester: </label>
+							<br>
+							<select name="ay-sem" form="search-form">
+								<option value="1">AY 2016/2017 Sem 1</option>
+								<option value="2">AY 2016/2017 Sem 2</option>
+								<option value="3">AY 2016/2017 Special Term I</option>
+								<option value="4">AY 2016/2017 Special Term II</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary">Search</button>
+					</form>
+					<br>
+					<hr>
+				</div>
+				<div class="col-md-12 text-center">
+					<h3>Module Info for <b><u>$ay</u></b></h3>
+				</div>
+				<div class="col-md-12 module-header">
+					<div class="page-header">
+						<h1><b>$moduleCode</b></h1>
+						<h3>$moduleName ($moduleMC MCs)"</h3>
+						<button class="btn btn-lg btn-primary" action="#">Edit Module</button>
+						<br>
+						<br>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<h4><b>Module Description:</b></h4>
+					<p>
+						$moduleDescription
+					</p>
+					<br>
+					<h4><b>Module Preclusions:</b></h4>
+					<p>--none loaded</p>
+					<br>
+					<h4><b>Module Prerequisites:</b></h4>
+					<p>--none loaded</p>
+					<br>
+					<h4><b>Class Quota:</b></h4>
+					<p>$quota</p>
+				</div>
+			</div>
+		</div>
+		<!--module statistics, in other view-->
+		<div class="col-md-6 module-analysis-wrapper">
+			<div class="page-header text-center">
+				<h2>Module Statistics</h2>
+			</div>
+			<h4><b>Student Demand:</b></h4>
+			<p>--none loaded</p>
+		</div>
+	</div>
+</div>
+
