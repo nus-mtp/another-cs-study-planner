@@ -49,20 +49,24 @@ class Index:
 
     def createForm():
         ## Creates the 'Add Module' form that will appear on the webpage
-        validation_alphanumeric = web.form.regexp(
-            r"\w+", '\n\nModule code should be alphanumeric.')
+        code_validation_alphanumeric = web.form.regexp(
+            r"^\w+$", 'Module code should be alphanumeric.')
+
+        name_validation_alphanumeric = web.form.regexp(
+            r"^[\w\s]+$", 'Module name should be alphanumeric.')
 
         validation_numeric_only = web.form.regexp(
-            r"\d+", '\n\nNumber of MCs should be a number.')
+            r"^\d+$", 'Number of MCs should be a number.')
         
         module_code_textbox = web.form.Textbox('code',
                                                web.form.notnull,
-                                               validation_alphanumeric,
+                                               code_validation_alphanumeric,
                                                post="<br><br>",
                                                description="Code")
         
         module_name_textbox = web.form.Textbox('name',
                                                web.form.notnull,
+                                               name_validation_alphanumeric,
                                                post="<br><br>",
                                                description="Name")
         
