@@ -1,8 +1,8 @@
 '''
     test_app.py test the application's home page
 '''
-from paste.fixture import *
-from nose.tools import *
+from paste.fixture import TestApp
+from nose.tools import assert_equal, raises
 from modules import app
 
 
