@@ -71,7 +71,7 @@ class TestCode(object):
         '''
             Tests getting of tentative mountings and quota.
         '''
-        mountings = model.get_tentative_mounting_and_quota(self.test_module_code)
+        mountings = model.get_tenta_mounting_and_quota(self.test_module_code)
         assert_equal(self.test_module_mounted_count, len(mountings))
 
         mounting_and_quota1 = mountings[0]
