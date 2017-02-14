@@ -18,7 +18,8 @@ urls = (
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
     '/deleteModule/(.*)', 'DeleteMod',
-    '/individualModuleInfo', 'IndividualModule'
+    '/individualModuleInfo', 'IndividualModule',
+    '/dummyQuery', 'DummyQuery'
     # (.*) represents the POST data
 )
 
@@ -164,6 +165,12 @@ class DeleteMod:
     def POST(self, moduleCode):  # moduleCode is obtained from the end of the URL
         model.deleteModule(moduleCode)
         raise web.seeother('/')
+
+
+## This class is a placeholder to place the results of queries: to be deleted
+class DummyQuery:
+    def GET(self):
+        return render.dummyQuery()
 
 
 ## Run the app
