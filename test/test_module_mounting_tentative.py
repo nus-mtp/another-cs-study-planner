@@ -1,5 +1,5 @@
 from paste.fixture import TestApp
-from nose.tools import *
+from nose.tools import assert_equal, raises
 from modules import APP
 import os
 
