@@ -125,6 +125,7 @@ class TestCode():
 
         NOTE: the current form is NON_FUNCTIONAL at the moment.
     """
+    ''' commited as element is none functional and removed from .html
     def test_view_individual_module_search_form(self):
         middleware = []
         testApp = TestApp(app.wsgifunc(*middleware))
@@ -139,7 +140,7 @@ class TestCode():
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
 
-
+    '''
     """
         Tests if all the necessary info is displayed in the module
         overview page.
