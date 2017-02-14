@@ -1,4 +1,6 @@
-''' database_adapter.py handles the connection to the database. '''
+'''
+database_adapter.py handles the connection to the database.
+'''
 import os
 import urlparse
 import psycopg2
@@ -9,20 +11,25 @@ except ImportError:
     print "local_database_data.py file is missing from components folder."
     print "Please create it manually"
 
-# Returns true if there are existing tables in the database,
-# returns false otherwise.
+
 def has_existing_database(connection):
+    '''
+    Returns true if there are existing tables in the database,
+    returns false otherwise.
+    '''
     cursor = connection.cursor()
     sql_command = "SELECT exists(SELECT * from information_schema.tables where table_name=%s)"
     cursor.execute(sql_command, ('module',))
 
     # Retrieves if the sql command returns True or False
-    if (cursor.fetchone()[0]):
-        return True
-    else:
-        return False
+    return cursor.fetchone()[0]
+
 
 def repopulate_database(connection):
+    '''
+    Rebuilds the schema and populate values for the tables in the database.
+    This function assumes that the database has no tables or is empty.
+    '''
     with connection.cursor() as cursor:
         #cursor.execute(open("utils/databaseClean.sql", "r").read())
         cursor.execute(open("utils/databaseSchema.sql", "r").read())
@@ -32,6 +39,7 @@ def repopulate_database(connection):
         cursor.execute(open("utils/studentAndFocusPopulator.sql", "r").read())
         cursor.execute(open("utils/plannerPopulator.sql", "r").read())
     connection.commit()
+
 
 def connect_db():
     ''' This function is used to establish the connection to the database according to the
