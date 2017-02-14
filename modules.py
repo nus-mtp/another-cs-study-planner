@@ -35,17 +35,18 @@ class Index(object):
     '''
         This class handles the 'Add Module' form and the displaying of list of modules
     '''
-    form = create_form()
+    def __init__(self):
+        self.form = self.create_form()
 
 
-    def get(self):
+    def GET(self):
         ''' This function is called when the '/' page (index.html) is loaded '''
         module_infos = model.get_all_modules()
         form = self.form()
         return RENDER.index(module_infos, form)
 
 
-    def post(self):
+    def POST(self):
         '''
             This function is called when the 'Add Module' form is submitted
             if form input is invalid, reload the page and shows error message besides field
@@ -60,8 +61,7 @@ class Index(object):
         raise web.seeother('/')        # load index.html again
 
 
-    @classmethod
-    def create_form(cls):
+    def create_form(self):
         ''' Creates the 'Add Module' form that will appear on the webpage '''
         code_validation_alphanumeric = web.form.regexp(
             r"^\w+$", 'Module code should be alphanumeric.')
@@ -112,14 +112,12 @@ class Modules(object):
     '''
         This class redirects to index.html
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Redirect '''
         raise web.seeother('/')
 
 
-    @classmethod
-    def post(cls):
+    def POST(self):
         ''' Redirect '''
         raise web.seeother('/')
 
@@ -128,15 +126,13 @@ class Fixed(object):
     '''
         This class handles the displaying of the fixed module mountings
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Display list of fixed module mountigs '''
         mounted_module_infos = model.get_all_fixed_mounted_modules()
-        return RENDER.module_mounting_fixed(mounted_module_infos)
+        return RENDER.moduleMountingFixed(mounted_module_infos)
 
 
-    @classmethod
-    def post(cls):
+    def POST(self):
         ''' Redirect '''
         raise web.seeother('/moduleMountingFixed')
 
@@ -145,15 +141,13 @@ class Tentative(object):
     '''
         This class handles the displaying of the tenta module mountings
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Display list of tenta module mountigs '''
         mounted_module_infos = model.get_all_tenta_mounted_modules()
-        return RENDER.module_mounting_tenta(mounted_module_infos)
+        return RENDER.moduleMountingTentative(mounted_module_infos)
 
 
-    @classmethod
-    def post(cls):
+    def POST(self):
         ''' Redirect '''
         raise web.seeother('/moduleMountingTentative')
 
@@ -163,8 +157,7 @@ class ViewMod(object):
     '''
         This class handles the display of a single module
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Retrieve and render all the info of a module '''
         input_data = web.input()
         module_code = input_data.code
@@ -176,8 +169,7 @@ class ViewMod(object):
                                  tenta_mounting_and_quota, number_of_student_planning)
 
 
-    @classmethod
-    def post(cls):
+    def POST(self):
         ''' Redirect '''
         raise web.seeother('/')
 
@@ -186,19 +178,17 @@ class IndividualModule(object):
     '''
         This class handles the display on a single module mounting
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Retrieve and render all the info of a module mounting '''
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
-        target_ay = input_data.target_AY
+        target_ay = input_data.targetAY
         quota = input_data.quota
-        return RENDER.individual_module_info(module_info, target_ay, quota)
+        return RENDER.individualModuleInfo(module_info, target_ay, quota)
 
 
-    @classmethod
-    def post(cls):
+    def POST(self):
         ''' Redirect '''
         raise web.seeother('/')
 
@@ -207,14 +197,12 @@ class FlagAsRemoved(object):
     '''
         This class handles the flagging of a module as 'To Be Removed'
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Redirect '''
         raise web.seeother('/')
 
 
-    @classmethod
-    def post(cls, module_code):
+    def POST(self, module_code):
         ''' Flag module as removed '''
         model.flag_module_as_removed(module_code)
         raise web.seeother('/')
@@ -224,14 +212,12 @@ class FlagAsActive(object):
     '''
         This class handles the flagging of a module as 'Active'
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Redirect '''
         raise web.seeother('/')
 
 
-    @classmethod
-    def post(cls, module_code):
+    def POST(self, module_code):
         ''' Flag module as active '''
         model.flag_module_as_active(module_code)
         raise web.seeother('/')
@@ -241,14 +227,12 @@ class DeleteMod(object):
     '''
         This class handles the deletion of module
     '''
-    @classmethod
-    def get(cls):
+    def GET(self):
         ''' Redirect '''
         raise web.seeother('/')
 
 
-    @classmethod
-    def post(cls, module_code):        # module_code is obtained from the end of the URL
+    def POST(self, module_code):        # module_code is obtained from the end of the URL
         ''' Delete the module '''
         model.delete_module(module_code)
         raise web.seeother('/')

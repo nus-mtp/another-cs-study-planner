@@ -3,7 +3,7 @@
 '''
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from modules import app
+from modules import APP
 
 
 class TestCode(object):
@@ -63,7 +63,7 @@ class TestCode(object):
 
         # loads a 'modules.py' fixture
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         # checks if HTTP response code is 200 (= OK)
@@ -76,7 +76,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
         response = root.goto('/moduleMountingFixed', method='post')
 
@@ -92,7 +92,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
         response = root.goto('/moduleMountingTentative', method='post')
 
@@ -109,7 +109,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
         response = root.goto('/viewModule?code=BT5110', method='get')
 
@@ -135,7 +135,7 @@ class TestCode(object):
             NOTE: this test case is supposed to FAIL.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
         # an exception WILL be encountered here
         response = root.goto('/viewModule?code=CS0123', method='get')
@@ -154,7 +154,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         # These check for the existence of labels and input fields
@@ -185,7 +185,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
@@ -201,7 +201,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
@@ -218,7 +218,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
@@ -235,7 +235,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
@@ -251,7 +251,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
@@ -270,7 +270,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         # Checks the existence of the handler for viewing fixed mounting plan
@@ -288,7 +288,7 @@ class TestCode(object):
         '''
 
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
 
         # Checks the existence of the handler for viewing fixed mounting plan

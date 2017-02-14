@@ -3,7 +3,7 @@
 '''
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from modules import app
+from modules import APP
 
 class TestCode(object):
     '''
@@ -65,7 +65,7 @@ class TestCode(object):
         '''
         # loads a 'modules.py' fixture
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         # checks if HTTP response code is 200 (= OK)
@@ -82,7 +82,7 @@ class TestCode(object):
         '''
         # loads a 'modules.py' fixture
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
         root = test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
@@ -99,7 +99,7 @@ class TestCode(object):
     def test_view_individual_module_invalid_ay_sem_response(self):
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         # AY-Semester used here is '16/18 Sem 1'
         # an exception WILL be encountered here
         root = testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
@@ -118,7 +118,7 @@ class TestCode(object):
     def test_view_invalid_module_overview_invalid_quota_response(self):
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         # Quota used here is '70' (actual is '60')
         # an exception WILL be encountered here
         root = testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
@@ -132,7 +132,7 @@ class TestCode(object):
             NOTE: the current form is NON_FUNCTIONAL at the moment.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
@@ -150,7 +150,7 @@ class TestCode(object):
             overview page.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.CONTENT_SUMMARY + self.CONTENT_TARGET_AY_SEM)
@@ -171,7 +171,7 @@ class TestCode(object):
             Tests the contents when there is no quota specified
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)

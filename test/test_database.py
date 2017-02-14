@@ -71,7 +71,7 @@ class TestCode(object):
         '''
             Tests getting of tentative mountings and quota.
         '''
-        mountings = model.get_tentative_mounting_and_quota(self.test_module_code)
+        mountings = model.get_tenta_mounting_and_quota(self.test_module_code)
         assert_equal(self.test_module_mounted_count, len(mountings))
 
         mounting_and_quota1 = mountings[0]
@@ -92,7 +92,7 @@ class TestCode(object):
         assert_true(module_info is not None)
         assert_equal("New", module_info[4].rstrip())
 
-        model.deleteModule("AA1111")
+        model.delete_module("AA1111")
         module_info = model.get_module("AA1111")
         assert_true(module_info is None)
 
@@ -121,6 +121,6 @@ class TestCode(object):
         assert_true(has_integrity_error)
         assert_in("duplicate key value", error_message)
 
-        model.connection.rollback()
-        model.deleteModule("AA1111")
-        model.deleteModule("AA2222")
+        model.CONNECTION.rollback()
+        model.delete_module("AA1111")
+        model.delete_module("AA2222")

@@ -1,6 +1,6 @@
 from paste.fixture import TestApp
 from nose.tools import *
-from modules import app
+from modules import APP
 import os
 
 class TestCode():
@@ -32,7 +32,7 @@ class TestCode():
     def test_tentative_module_mounting_valid_response(self):
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
         # checks if HTTP response code is 200 (= OK)
@@ -46,7 +46,7 @@ class TestCode():
     def test_tentative_module_mounting_goto_valid_module_overview_page_response(
             self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         response = root.goto(self.URL_MODULE_VIEW_VALID, method='get')
 
@@ -73,7 +73,7 @@ class TestCode():
     def test_tentative_module_mounting_goto_invalid_module_overview_page_response(
             self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         # an exception WILL be encountered here
         response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
@@ -85,7 +85,7 @@ class TestCode():
     """
     def test_tentative_module_mounting_view_options(self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         
         # Checks the existence of the handler for viewing fixed mounting plan
@@ -103,7 +103,7 @@ class TestCode():
     """
     def test_tentative_module_mounting_module_listing(self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
         root.__contains__(self.TABLE_HEADER_CODE)

@@ -15,7 +15,7 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from modules import app
+from modules import APP
 
 class TestCode(object):
     '''
@@ -52,7 +52,7 @@ class TestCode(object):
         '''
         # loads a 'modules.py' fixture
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         # checks if HTTP response code is 200 (= OK)
@@ -66,7 +66,7 @@ class TestCode(object):
             a valid target module code is successful.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
         response = root.goto(self.URL_MODULE_VIEW_OVERVIEW, method='get')
 
@@ -90,7 +90,7 @@ class TestCode(object):
             NOTE: this test case is supposed to FAIL.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
         # an exception WILL be encountered here
         root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
@@ -102,7 +102,7 @@ class TestCode(object):
             module mounting plans exist.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         # Checks the existence of the handler for viewing fixed mounting plan
@@ -120,7 +120,7 @@ class TestCode(object):
             module mounting exists.
         '''
         middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         root.__contains__(self.TABLE_HEADER_CODE)
