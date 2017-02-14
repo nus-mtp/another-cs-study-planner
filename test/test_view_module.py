@@ -1,9 +1,28 @@
-from paste.fixture import TestApp
-from nose.tools import *
-from modules import app
-import os
+'''
+    test_view_module.py tests the page views and navigations for
+    viewing a target module's overview.
 
-class TestCode():
+    Firstly, we specify a target URL for conducting UI testing.
+
+    Then, we proceed to test the following things:
+    #1 Accessing the target page should be possible (i.e. response code should be 200 OK).
+    #2 The necessary HTML elements are contained in the page view for target page.
+    #3 Navigating to other valid pages from the target page should be successful.
+
+    For #3, we do not check the full correctness of the UI for the other pages, as this
+    will be handled by its corresponding test cases.
+'''
+
+from paste.fixture import TestApp
+from nose.tools import assert_equal, raises
+from modules import app
+
+class TestCode(object):
+    '''
+        This class contains methods that tests the page views and navigations inside
+        the target page.
+    '''
+
 
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
@@ -32,46 +51,47 @@ class TestCode():
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
     CONTENT_STATS = "Module Statistics"
 
-    """
-        Tests whether user can access page for showing module overview
-        if target module is valid.
-    """
+
     def test_view_valid_module_overview_valid_response(self):
+        '''
+            Tests whether user can access page for showing module overview
+            if target module is valid.
+        '''
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
 
 
-    """
-        Tests if user will fail to access page for showing module overview
-        if target module is invalid.
-
-        NOTE: this test case is supposed to FAIL
-    """
     @raises(Exception)
     def test_view_invalid_module_overview_valid_response(self):
+        '''
+            Tests if user will fail to access page for showing module overview
+            if target module is invalid.
+
+            NOTE: this test case is supposed to FAIL
+        '''
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
+        test_app = TestApp(app.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        root = testApp.get(self.URL_VIEW_MODULE_INVALID)
+        test_app.get(self.URL_VIEW_MODULE_INVALID)
 
 
-    """
-        Tests if navigation to a valid individual module view
-        is succesful.
-
-        (i.e. navigation to module info for valid target module and
-        valid target AY-semester and quota)
-    """
     def test_view_module_overview_goto_valid_individual_module(self):
+        '''
+            Tests if navigation to a valid individual module view
+            is succesful.
+
+            (i.e. navigation to module info for valid target module and
+            valid target AY-semester and quota)
+        '''
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
@@ -80,24 +100,24 @@ class TestCode():
         assert_equal(response.status, 200)
 
 
-    """
-        Tests if navigation to an individual module view
-        with invalid module code is unsuccesful.
-
-        (i.e. navigation to module info for invalid target module and
-        valid target AY-semester and quota)
-    """
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_code(self):
+        '''
+            Tests if navigation to an individual module view
+            with invalid module code is unsuccesful.
+
+            (i.e. navigation to module info for invalid target module and
+            valid target AY-semester and quota)
+        '''
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get('/viewModule?code=BT5110')
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
-        response = root.goto(url, method='get')
+        root.goto(url, method='get')
 
 
-    """
+    '''
         Tests if navigation to an individual module view
         with invalid AY-semester is unsuccesful.
 
@@ -105,20 +125,20 @@ class TestCode():
         quota, but invalid AY-semester)
 
         NOTE: Checking for invalid AY-semester is not implemented yet.
-    """
-    """
+    '''
+    '''
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get('/viewModule?code=BT5110')
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
-    """
+    '''
 
 
-    """
+    '''
         Tests if navigation to an individual module view
         with invalid quota is unsuccesful.
 
@@ -126,28 +146,28 @@ class TestCode():
         valid target module and AY-semester)
 
         NOTE: Checking for invalid quota is not implemented yet.
-    """
-    """
+    '''
+    '''
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_quota(self):
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get('/viewModule?code=BT5110')
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=70'
         response = root.goto(url, method='get')
-    """
+    '''
 
 
-    """
-        Tests if the module-search form exists.
-
-        NOTE: the current form is NON_FUNCTIONAL at the moment.
-    """
     def test_view_module_overview_search_form(self):
+        '''
+            Tests if the module-search form exists.
+
+            NOTE: the current form is NON_FUNCTIONAL at the moment.
+        '''
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -158,14 +178,14 @@ class TestCode():
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
 
 
-    """
-        Tests if all the necessary info is displayed in the module
-        overview page.
-    """
     def test_view_module_overview_contents(self):
+        '''
+            Tests if all the necessary info is displayed in the module
+            overview page.
+        '''
         middleware = []
-        testApp = TestApp(app.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(app.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.CONTENT_SUMMARY)
         root.mustcontain(self.CONTENT_CODE)
