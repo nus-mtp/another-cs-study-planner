@@ -119,3 +119,41 @@ def delete_module(code):
     sql_command = "DELETE FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
     CONNECTION.commit()
+
+
+def add_admin(username, hashed_pass):
+    '''
+        Register an admin into the database.
+        Note: to change last argument to false once
+        activation done
+    '''
+    sql_command = "INSERT INTO admin VALUES (%s, %s, FALSE, TRUE)"
+    DB_CURSOR.execute(sql_command, (username, hashed_pass))
+    CONNECTION.commit()
+
+
+def delete_admin(username):
+    '''
+        Delete an admin from the database.
+    '''
+    # Delete the foreign key references first.
+    sql_command = "DELETE FROM starred WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+
+    sql_command = "DELETE FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    CONNECTION.commit()
+
+
+def validate_admin(username, hashed_pass):
+    '''
+        Check if a provided admin-password pair is valid.
+    '''
+    sql_command = "SELECT password FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    admin = DB_CURSOR.fetchall()
+    if not admin:
+        return False
+    else:
+        is_valid = (admin[0][0] == hashed_pass)
+        return is_valid
