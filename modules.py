@@ -7,7 +7,6 @@
 import web        # web.py (the framework that we are using)
 from components import model        # model.py (the other python file that handles our database)
 
-
 # This is the URL structure, which lists the pages in our webapp.
 # Each line represents a page.
 # The first string is the URL extension.
@@ -21,7 +20,8 @@ URLS = (
     '/flagAsRemoved/(.*)', 'FlagAsRemoved',
     '/flagAsActive/(.*)', 'FlagAsActive',
     '/deleteModule/(.*)', 'DeleteMod',
-    '/individualModuleInfo', 'IndividualModule'
+    '/individualModuleInfo', 'IndividualModule',
+    '/login', 'components.login.Login'
     # (.*) represents the POST data
 )
 
@@ -236,6 +236,7 @@ class DeleteMod(object):
         ''' Delete the module '''
         model.delete_module(module_code)
         raise web.seeother('/')
+
 
 
 # Run the app
