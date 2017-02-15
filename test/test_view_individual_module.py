@@ -84,7 +84,7 @@ class TestCode(object):
         middleware = []
         test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        root = test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+        test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
 
     '''
