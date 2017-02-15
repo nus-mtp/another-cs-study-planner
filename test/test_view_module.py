@@ -59,8 +59,8 @@ class TestCode(object):
         '''
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(APP.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -76,7 +76,7 @@ class TestCode(object):
         '''
         # loads a 'modules.py' fixture
         middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
+        test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
         test_app.get(self.URL_VIEW_MODULE_INVALID)
 
@@ -90,8 +90,8 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        test_app = TestApp(APP.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
@@ -109,8 +109,9 @@ class TestCode(object):
             (i.e. navigation to module info for invalid target module and
             valid target AY-semester and quota)
         '''
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
+        middleware = []
+        test_app = TestApp(APP.wsgifunc(*middleware))
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         root.goto(url, method='get')
@@ -129,13 +130,8 @@ class TestCode(object):
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
         middleware = []
-<<<<<<< HEAD
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
-=======
         test_app = TestApp(app.wsgifunc(*middleware))
-        root = test_app.get('/viewModule?code=BT5110')
->>>>>>> b5a0973fa5bbf53d60b4101099adb46b5a8b61d9
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
@@ -155,13 +151,8 @@ class TestCode(object):
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_quota(self):
         middleware = []
-<<<<<<< HEAD
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get('/viewModule?code=BT5110')
-=======
         test_app = TestApp(app.wsgifunc(*middleware))
-        root = test_app.get('/viewModule?code=BT5110')
->>>>>>> b5a0973fa5bbf53d60b4101099adb46b5a8b61d9
+        root = test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=70'
         response = root.goto(url, method='get')
