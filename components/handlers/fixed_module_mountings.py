@@ -4,7 +4,9 @@
 '''
 
 
+from app import RENDER
 import web
+from components import model
 
 
 class Fixed(object):
@@ -17,8 +19,8 @@ class Fixed(object):
             Renders the fixed mounting page if users requested
             for the page through the GET method.
         '''
-        mountedModuleInfos = model.getAllFixedMountedModules()
-        return render.moduleMountingFixed(mountedModuleInfos)
+        mountedModuleInfos = model.get_all_fixed_mounted_modules()
+        return RENDER.moduleMountingFixed(mountedModuleInfos)
 
 
     def POST(self):

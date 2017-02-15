@@ -4,7 +4,9 @@
 '''
 
 
+from app import RENDER
 import web
+from components import model
 
 
 class Modules(object):

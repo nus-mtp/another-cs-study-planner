@@ -4,7 +4,9 @@
 '''
 
 
+from app import RENDER
 import web
+from components import model
 
 
 class Tentative(object):
@@ -17,8 +19,8 @@ class Tentative(object):
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
-        mountedModuleInfos = model.getAllTentativeMountedModules()
-        return render.moduleMountingTentative(mountedModuleInfos)
+        mountedModuleInfos = model.get_all_tenta_mounted_modules()
+        return RENDER.moduleMountingTentative(mountedModuleInfos)
 
 
     def POST(self):

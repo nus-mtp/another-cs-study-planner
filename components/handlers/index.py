@@ -3,8 +3,9 @@
     the home page.
 '''
 
-
+from app import RENDER
 import web
+from components import model
 
 
 class Index(object):
