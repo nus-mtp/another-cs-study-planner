@@ -29,8 +29,8 @@ class TestCode(object):
             model.get_num_students_by_yr_study()
 
         num_of_rows_expected = 4
-        for x in range(1, num_of_rows_expected):
-            current_row = table_of_year_of_study_with_count[x]
+        for index_row in range(1, num_of_rows_expected):
+            current_row = table_of_year_of_study_with_count[index_row]
             assert_equal(self.num_column_for_each_year, len(current_row))
             current_year = current_row[0]
             current_number_of_student = current_row[1]
@@ -59,8 +59,8 @@ class TestCode(object):
 
         assert_equal(len(table_of_focus_area_with_count), num_of_focus_area)
 
-        for x in range(1, num_of_focus_area):
-            current_row = table_of_focus_area_with_count[x]
+        for index_row in range(1, num_of_focus_area):
+            current_row = table_of_focus_area_with_count[index_row]
             assert_equal(self.num_column_for_each_focus, len(current_row))
             current_focus_area = current_row[0]
             current_number_of_student = current_row[1]
