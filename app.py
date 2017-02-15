@@ -3,7 +3,6 @@
 '''
 
 
-from components import local_database_data      # remove if not in localhost
 from components import database_adapter, model
 from components.handlers import *
 import web
