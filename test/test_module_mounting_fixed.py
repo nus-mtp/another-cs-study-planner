@@ -19,8 +19,8 @@ from modules import APP
 
 class TestCode(object):
     '''
-    This class contains methods that tests the page views and navigations inside
-    the target page.
+        This class contains methods that tests the page views and navigations inside
+        the target page.
     '''
 
 
