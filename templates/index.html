@@ -6,7 +6,7 @@ $def with (moduleInfos, form)
             <div class="row">
                 <div class="col-md-7">
                     <div id="add-module-form-wrapper">
-                        <h2>Add a new module</h2>
+                        <h2><span class="glyphicon glyphicon-pencil"></span> Add a new module</h2>
                         <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
                         <form id="addModForm" action="" method="post">
                             $:form.render()
@@ -16,7 +16,7 @@ $def with (moduleInfos, form)
 
                 <div class="col-md-5">
                     <div id="module-mounting-options">
-                        <h2>View Module Mountings</h2>
+                        <h2><span class="glyphicon glyphicon-list"></span> View Module Mountings</h2>
                         <p>View your mounting plans here.</p>
                         <br>
                         <form action="/moduleMountingFixed" method="post">
@@ -53,14 +53,14 @@ $def with (moduleInfos, form)
                         <td>$moduleInfo[2]</td>
                         <td class="text-center">$moduleInfo[3]</td>
                         <td class="text-center">$moduleInfo[4]</td>
-                        <td>
+                        <td class="text-center">
                             <form action="/viewModule" method="get">
                                 <input type="hidden" name="code" value="$moduleInfo[0]">
-                                <input type="submit" value="View Module"/>
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
                             $if moduleInfo[4][0:3] == 'New':
                                 <form action="/deleteModule/$moduleInfo[0]" method="post">
-                                    <input type="submit" value="Delete Module"/>
+                                    <input class="btn btn-primary" type="submit" value="Delete Module"/>
                                 </form>
                         </td>
                     </tr>
