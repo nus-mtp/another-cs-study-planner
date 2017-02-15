@@ -47,8 +47,12 @@ class TestCode(object):
     CONTENT_CODE = "BT5110"
     CONTENT_NAME = "Data Management and Warehousing"
     CONTENT_MC = "(4 MCs)"
-    CONTENT_BUTTON_EDIT = '<button class="btn btn-lg btn-primary" action="#">' +\
-                          'Edit Module</button>'
+    CONTENT_BUTTON_EDIT = '<input class="btn btn-lg btn-primary" ' +\
+                          'type="submit" value="Edit Module" />'
+    CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
+                                      'value="BT5110" />'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
+                                        'type="submit" value="Back to Overview" />'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
@@ -162,6 +166,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_NAME)
         root.mustcontain(self.CONTENT_MC)
         root.mustcontain(self.CONTENT_BUTTON_EDIT)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
@@ -179,3 +185,17 @@ class TestCode(object):
         root = test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
+
+
+    '''
+        [NOTE]: Edit Module backend is not up yet.
+    def test_view_individual_module_goto_edit_module(self):
+        """
+            Tests if user can go to the page for editing the module.
+        """
+        middleware = []
+        test_app = TestApp(APP.wsgifunc(*middleware))
+        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        response = root.goto("Edit Module URL", method='get')
+        assert_equal(response.code, 200)
+    '''
