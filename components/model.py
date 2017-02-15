@@ -133,3 +133,31 @@ def get_num_students_by_yr_study():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+def get_num_students_by_focus_areas():
+    '''
+        Retrieves the number of students for each focus area as a table
+        Each row will contain (focus area, number of students) pair
+        e.g. [(AI, 4), (Database, 3)] means four students taking AI as
+        focus area and three students taking database as focus area.
+        Note: A student taking double focus on AI and Database will be
+        reflected once for AI and once for database (i.e. double counting)
+    '''
+    sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
+        " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
+    DB_CURSOR.execute(sql_command)
+
+    table_with_non_zero_students = DB_CURSOR.fetchall()
+    final_table = table_with_non_zero_students
+
+    sql_command = "SELECT f2.name FROM focusarea f2 WHERE NOT EXISTS(" + \
+        "SELECT f.name FROM focusarea f, takesfocusarea t " + \
+        "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
+        "AND f2.name = f.name GROUP BY f.name)"
+    DB_CURSOR.execute(sql_command)
+    table_with_zero_students = DB_CURSOR.fetchall()
+
+    for focus_area_name in table_with_zero_students:
+        final_table.append((focus_area_name[0], 0))
+
+    return final_table
