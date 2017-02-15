@@ -58,15 +58,7 @@ $def with (moduleInfos, form)
                                 <input type="hidden" name="code" value="$moduleInfo[0]">
                                 <input type="submit" value="View Module"/>
                             </form>
-                            $if moduleInfo[4][0:6] == 'Active':
-                                <form action="/flagAsRemoved/$moduleInfo[0]" method="post">
-                                    <input type="submit" value="Flag As Removed"/>
-                                </form>
-                            $elif moduleInfo[4][0:13] == 'To Be Removed':
-                                <form action="/flagAsActive/$moduleInfo[0]" method="post">
-                                    <input type="submit" value="Flag As Active"/>
-                                </form>
-                            $elif moduleInfo[4][0:3] == 'New':
+                            $if moduleInfo[4][0:3] == 'New':
                                 <form action="/deleteModule/$moduleInfo[0]" method="post">
                                     <input type="submit" value="Delete Module"/>
                                 </form>
