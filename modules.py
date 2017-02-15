@@ -243,7 +243,9 @@ class DeleteMod(object):
 class DummyQuery:
     def GET(self):
         table_of_year_of_study_with_count = model.get_num_students_by_yr_study()
-        return RENDER.dummyQuery(table_of_year_of_study_with_count)
+        table_of_focus_area_with_count = model.get_num_students_by_focus_areas()
+        return RENDER.dummyQuery(table_of_year_of_study_with_count, 
+            table_of_focus_area_with_count)
 
 
 # Run the app
