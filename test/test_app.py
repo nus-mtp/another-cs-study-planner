@@ -138,7 +138,7 @@ class TestCode(object):
         test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get('/')
         # an exception WILL be encountered here
-        response = root.goto('/viewModule?code=CS0123', method='get')
+        root.goto('/viewModule?code=CS0123', method='get')
 
 
     def test_index_add_module_form_exists(self):
