@@ -1,10 +1,3 @@
-/*CREATE TABLE module (
-code VARCHAR(10) PRIMARY KEY,
-name VARCHAR(64),
-description VARCHAR(4096),
-mc INT
-);*/
-
 CREATE TABLE module (
 code VARCHAR(10) PRIMARY KEY,
 name VARCHAR(64),
@@ -20,18 +13,6 @@ quota INT,
 PRIMARY KEY (moduleCode, acadYearAndSem),
 FOREIGN KEY (moduleCode) REFERENCES module(code)
 );
- 
-/*CREATE TABLE moduleMountTentative (
-acadYearAndSem VARCHAR(9),
-moduleCode VARCHAR(10),
-mountingPlanID INT,
-examDate DATE,
-quota INT,
-isNewModule BOOLEAN NOT NULL,
-isToBeRemoved BOOLEAN,
-PRIMARY KEY (acadYearAndSem, moduleCode, mountingPlanID),
-FOREIGN KEY (moduleCode) REFERENCES module(code)
-);*/
 
 CREATE TABLE moduleMountTentative (
 moduleCode VARCHAR(10),
@@ -107,8 +88,8 @@ FOREIGN KEY (studentId) REFERENCES student(nusnetId)
  
 CREATE TABLE starred(
 moduleCode VARCHAR(10),
-adminID VARCHAR(9),
-PRIMARY KEY (moduleCode, adminID),
+staffID VARCHAR(9),
+PRIMARY KEY (moduleCode, staffID),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
-FOREIGN KEY (adminID) REFERENCES admin(staffID)
+FOREIGN KEY (staffID) REFERENCES admin(staffID)
 );
