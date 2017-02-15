@@ -46,14 +46,14 @@ class TestCode(object):
     TABLE_HEADER_MOUNTING_SEM_2 = '<th>Mounted In Sem 2</th>'
     TABLE_HEADER_ACTION = '<th>Action</th>'
     TABLE_MOUNTING_SYMBOL_MOUNTED = '<span class="glyphicon glyphicon-ok" ' +\
-                                    'data-toggle="tooltip" data-placement="top" ' +\
+                                    'data-toggle="tooltip" data-placement="bottom" ' +\
                                     'title="Mounted"></span>'
     TABLE_MOUNTING_SYMBOL_UNMOUNTED = '<span class="glyphicon glyphicon-remove" ' +\
-                                      'data-toggle="tooltip" data-placement="top" ' +\
-                                      'title="Unmounted"></span>'
+                                      'data-toggle="tooltip" data-placement="bottom' +\
+                                      '" title="Unmounted"></span>'
     TABLE_MOUNTING_SYMBOL_NOT_MOUNTED = '<span class="glyphicon glyphicon-minus" ' +\
-                                        'data-toggle="tooltip" data-placement="top" ' +\
-                                        'title="Not Mounted"></span>'
+                                        'data-toggle="tooltip" data-placement="' +\
+                                        'bottom" title="Not Mounted"></span>'
 
 
     def test_fixed_module_mounting_valid_response(self):
