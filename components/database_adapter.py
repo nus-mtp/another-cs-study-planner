@@ -1,5 +1,5 @@
 '''
-database_adapter.py handles the connection to the database.
+    database_adapter.py handles the connection to the database.
 '''
 import os
 import urlparse
@@ -14,8 +14,8 @@ except ImportError:
 
 def has_existing_database(connection):
     '''
-    Returns true if there are existing tables in the database,
-    returns false otherwise.
+        Returns true if there are existing tables in the database,
+        returns false otherwise.
     '''
     cursor = connection.cursor()
     sql_command = "SELECT exists(SELECT * from information_schema.tables where table_name=%s)"
@@ -27,8 +27,8 @@ def has_existing_database(connection):
 
 def repopulate_database(connection):
     '''
-    Rebuilds the schema and populate values for the tables in the database.
-    This function assumes that the database has no tables or is empty.
+        Rebuilds the schema and populate values for the tables in the database.
+        This function assumes that the database has no tables or is empty.
     '''
     with connection.cursor() as cursor:
         #cursor.execute(open("utils/databaseClean.sql", "r").read())
@@ -42,8 +42,10 @@ def repopulate_database(connection):
 
 
 def connect_db():
-    ''' This function is used to establish the connection to the database according to the
-    current environment. (local or Heroku or Travis) '''
+    '''
+        This function is used to establish the connection to the database according to the
+        current environment. (local or Heroku or Travis)
+    '''
     connection = None
 
     if 'TRAVIS' in os.environ:
