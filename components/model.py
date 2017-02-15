@@ -119,3 +119,17 @@ def delete_module(code):
     sql_command = "DELETE FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
     CONNECTION.commit()
+
+
+def get_num_students_by_yr_study():
+    '''
+        Retrieves the number of students at each year of study as a table
+        Each row will contain (year, number of students) pair.
+        e.g. [(1, 4), (2, 3)] means four year 1 students 
+        and two year 3 students
+    '''
+    sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
+        " ORDER BY year"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
