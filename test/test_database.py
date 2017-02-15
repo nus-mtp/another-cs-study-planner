@@ -124,3 +124,20 @@ class TestCode(object):
         model.CONNECTION.rollback()
         model.delete_module("AA1111")
         model.delete_module("AA2222")
+
+
+    def test_add_validate_and_delete_admin(self):
+        '''
+            Tests addition, validation, and deletion of admins.
+        '''
+        is_admin_valid = model.validate_admin("Admin 1", "password")
+        assert_false(is_admin_valid)
+
+        model.add_admin("Admin 1", "password")
+        is_admin_valid = model.validate_admin("Admin 1", "password")
+        assert_true(is_admin_valid)
+
+        model.delete_admin("Admin 1")
+        is_admin_valid = model.validate_admin("Admin 1", "password")
+        assert_false(is_admin_valid)
+        
