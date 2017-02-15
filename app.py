@@ -4,7 +4,7 @@
 
 
 from components import database_adapter, model
-from components.handlers import *
+import components.handlers
 import web
 
 
@@ -18,15 +18,15 @@ import web
     using the URL '/modules', it will be handled by the 'Modules' class.
 '''
 URLS = (
-    '/', 'modules.Index',
-    '/modules', 'modules.Modules',
-    '/moduleMountingFixed', 'modules.Fixed',
-    '/moduleMountingTentative', 'modules.Tentative',
-    '/viewModule', 'modules.ViewMod',
-    '/flagAsRemoved/(.*)', 'modules.FlagAsRemoved',
-    '/flagAsActive/(.*)', 'modules.FlagAsActive',
-    '/deleteModule/(.*)', 'modules.DeleteMod',
-    '/individualModuleInfo', 'modules.IndividualModule'
+    '/', 'components.handlers.index.Index',
+    '/modules', 'components.handlers.module_listing.Modules',
+    '/moduleMountingFixed', 'components.handlers.fixed_module_mountings.Fixed',
+    '/moduleMountingTentative', 'components.handlers.tentative_module_mountings.Tentative',
+    '/viewModule', 'components.handlers.module_overview.ViewMod',
+    '/flagAsRemoved/(.*)', 'components.handlers.module_listing.FlagAsRemoved',
+    '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
+    '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
+    '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule'
 )
 
 
