@@ -2,7 +2,6 @@
 test_database.py
 Contains test cases for database related functions.
 '''
-import psycopg2
 from nose.tools import assert_equal, assert_false, assert_in, assert_true
 from components import model
 
@@ -101,26 +100,15 @@ class TestCode(object):
         '''
             Tests adding of module with duplicated code. Should fail.
         '''
-        has_integrity_error = False
-        error_message = ""
         model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
 
-        # Not duplicate code --> No error
-        try:
-            model.add_module("AA2222", "Dummy Module", "Dummy Description", 1)
-        except psycopg2.IntegrityError as error:
-            has_integrity_error = True
-        assert_false(has_integrity_error)
+        # Not duplicate code --> success
+        outcome = model.add_module("AA2222", "Dummy Module", "Dummy Description", 1)
+        assert_true(outcome)
 
-        # Duplicate code --> Integrity error
-        try:
-            model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
-        except psycopg2.IntegrityError as error:
-            has_integrity_error = True
-            error_message = str(error.args)
-        assert_true(has_integrity_error)
-        assert_in("duplicate key value", error_message)
+        # Duplicate code --> fail
+        outcome = model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
+        assert_false(outcome)
 
-        model.CONNECTION.rollback()
         model.delete_module("AA1111")
         model.delete_module("AA2222")

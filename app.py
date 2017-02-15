@@ -3,8 +3,6 @@
 '''
 
 
-from components import database_adapter, model
-import components.handlers
 import web
 
 
@@ -47,7 +45,9 @@ RENDER = web.template.render('templates', base='base')
     globals().
 '''
 APP = web.application(URLS, globals())
-
+SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
+                              initializer={'keyError': False,
+                                           'displayErrorMessage': False})._initializer
 
 if __name__ == '__main__':
     APP.run()
