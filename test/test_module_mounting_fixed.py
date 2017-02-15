@@ -15,7 +15,7 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from modules import APP
+from app import APP
 
 class TestCode(object):
     '''
