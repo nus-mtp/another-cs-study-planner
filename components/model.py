@@ -1,6 +1,6 @@
 '''
-model.py
-Handles queries to the database
+    model.py
+    Handles queries to the database
 '''
 
 import components.database_adapter # database_adaptor.py handles the connection to database
@@ -12,7 +12,7 @@ DB_CURSOR = CONNECTION.cursor()
 
 def get_all_modules():
     '''
-    Get the module code, name, description, and MCs of all modules
+        Get the module code, name, description, and MCs of all modules
     '''
     sql_command = "SELECT * FROM module ORDER BY code"
     DB_CURSOR.execute(sql_command)
@@ -21,7 +21,7 @@ def get_all_modules():
 
 def get_module(code):
     '''
-    Get the module code, name, description and MCs of a single module
+        Get the module code, name, description and MCs of a single module
     '''
     sql_command = "SELECT * FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
@@ -30,7 +30,7 @@ def get_module(code):
 
 def get_all_fixed_mounted_modules():
     '''
-    Get the module code, name, AY/Sem and quota of all fixed mounted modules
+        Get the module code, name, AY/Sem and quota of all fixed mounted modules
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
                     "FROM module m1, moduleMounted m2 WHERE m2.moduleCode = m1.code " +\
@@ -41,7 +41,7 @@ def get_all_fixed_mounted_modules():
 
 def get_all_tenta_mounted_modules():
     '''
-    Get the module code, name, AY/Sem and quota of all tentative mounted modules
+        Get the module code, name, AY/Sem and quota of all tentative mounted modules
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
                     "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
@@ -52,7 +52,7 @@ def get_all_tenta_mounted_modules():
 
 def get_fixed_mounting_and_quota(code):
     '''
-    Get the fixed AY/Sem and quota of a mounted module
+        Get the fixed AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted " +\
                     "WHERE moduleCode=%s ORDER BY acadYearAndSem"
@@ -62,7 +62,7 @@ def get_fixed_mounting_and_quota(code):
 
 def get_tenta_mounting_and_quota(code):
     '''
-    Get the tentative AY/Sem and quota of a mounted module
+        Get the tentative AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative " +\
                     "WHERE moduleCode=%s ORDER BY acadYearAndSem"
@@ -72,7 +72,7 @@ def get_tenta_mounting_and_quota(code):
 
 def get_number_students_planning(code):
     '''
-    Get the number of students planning to take a mounted module
+        Get the number of students planning to take a mounted module
     '''
     sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE " +\
                     "moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
@@ -82,7 +82,7 @@ def get_number_students_planning(code):
 
 def add_module(code, name, description, module_credits):
     '''
-    Insert a new module into the module table
+        Insert a new module into the module table
     '''
     sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,'New')"
     DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
@@ -91,7 +91,7 @@ def add_module(code, name, description, module_credits):
 
 def flag_module_as_removed(code):
     '''
-    Change the status of a module to 'To Be Removed'
+        Change the status of a module to 'To Be Removed'
     '''
     sql_command = "UPDATE module SET status='To Be Removed' WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code, ))
@@ -100,7 +100,7 @@ def flag_module_as_removed(code):
 
 def flag_module_as_active(code):
     '''
-    Change the status of a module to 'Active'
+        Change the status of a module to 'Active'
     '''
     sql_command = "UPDATE module SET status='Active' WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code, ))
@@ -109,7 +109,7 @@ def flag_module_as_active(code):
 
 def delete_module(code):
     '''
-    Delete a module from the module table
+        Delete a module from the module table
     '''
     # Delete the foreign key reference first.
     sql_command = "DELETE FROM modulemounted WHERE modulecode=%s"
