@@ -17,6 +17,7 @@ class TestCode(object):
     '''
     def __init__(self):
         self.num_column_for_each_year = 2
+        self.num_column_for_each_focus = 2
 
     def test_query_num_students_in_year_of_study(self):
         '''
@@ -34,3 +35,34 @@ class TestCode(object):
             current_year = current_row[0]
             current_number_of_student = current_row[1]
             assert_equal(num_in_year[current_year - 1], current_number_of_student)
+
+    def test_query_num_students_in_focus_area(self):
+        '''
+            Tests querying number of students for each focus area
+        '''
+        num_in_focus = {
+            'Algorithms & Theory': 0,
+            'Artificial Intelligence': 5,
+            'Computer Graphics and Games': 5,
+            'Computer Security': 0,
+            'Database Systems': 5,
+            'Multimedia Information Retrieval': 0,
+            'Networking and Distributed Systems': 0,
+            'Parallel Computing': 0,
+            'Programming Languages': 0,
+            'Software Engineering': 0
+        }
+        num_of_focus_area = len(num_in_focus)
+
+        table_of_focus_area_with_count = \
+            model.get_num_students_by_focus_areas()
+
+        assert_equal(len(table_of_focus_area_with_count), num_of_focus_area)
+
+        for x in range(1, num_of_focus_area):
+            current_row = table_of_focus_area_with_count[x]
+            assert_equal(self.num_column_for_each_focus, len(current_row))
+            current_focus_area = current_row[0]
+            current_number_of_student = current_row[1]
+            assert_equal(num_in_focus.get(current_focus_area),
+                         current_number_of_student)
