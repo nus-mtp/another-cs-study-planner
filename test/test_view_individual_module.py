@@ -125,12 +125,15 @@ class TestCode(object):
     '''
 
 
+    '''
     def test_view_individual_module_search_form(self):
-        '''
+        """
             Tests if the module-search form exists.
 
             NOTE: the current form is NON_FUNCTIONAL at the moment.
-        '''
+            NOTE: This is also hidden from shipping product so this
+                  test case is commented out for now.
+        """
         middleware = []
         test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
@@ -142,12 +145,13 @@ class TestCode(object):
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
+    '''
 
 
     def test_view_individual_module_contents(self):
         '''
-            Tests if all the necessary info is displayed in the module
-            overview page.
+            Tests if all the necessary info is displayed in the individual
+            module view page.
         '''
         middleware = []
         test_app = TestApp(APP.wsgifunc(*middleware))
