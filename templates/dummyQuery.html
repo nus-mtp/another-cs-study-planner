@@ -1,3 +1,6 @@
-$def with ()
+$def with (yr_of_study_count_table)
 
-Hello World
+$for year_count_pair in yr_of_study_count_table:
+	<span>Number of year $year_count_pair[0] students: <!-- Year--></span>
+	<span>$year_count_pair[1] <!-- Number of students in that year--></span>
+	<br>

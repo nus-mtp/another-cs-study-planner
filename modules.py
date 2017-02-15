@@ -242,7 +242,8 @@ class DeleteMod(object):
 ## This class is a placeholder to place the results of queries: to be deleted
 class DummyQuery:
     def GET(self):
-        return render.dummyQuery()
+        table_of_year_of_study_with_count = model.get_num_students_by_yr_study()
+        return RENDER.dummyQuery(table_of_year_of_study_with_count)
 
 
 # Run the app
