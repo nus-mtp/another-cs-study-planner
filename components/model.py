@@ -134,6 +134,35 @@ def get_num_students_by_yr_study():
 
     return DB_CURSOR.fetchall()
 
+
+def get_num_students_by_focus_area_non_zero():
+    '''
+        Retrieves the number of students for each focus area as a table,
+        if no student is taking that focus area, that row will not be 
+        returned.
+        Each row will contain (focus area, number of students) pair.
+        See: get_num_students_by_focus_areas() for more details.
+    '''
+    sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
+        " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
+def get_focus_areas_with_no_students_taking():
+    '''
+        Retrieves a list of focus areas with no students taking.
+    '''
+    sql_command = "SELECT f2.name FROM focusarea f2 WHERE NOT EXISTS(" + \
+        "SELECT f.name FROM focusarea f, takesfocusarea t " + \
+        "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
+        "AND f2.name = f.name GROUP BY f.name)"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
 def get_num_students_by_focus_areas():
     '''
         Retrieves the number of students for each focus area as a table
@@ -143,21 +172,16 @@ def get_num_students_by_focus_areas():
         Note: A student taking double focus on AI and Database will be
         reflected once for AI and once for database (i.e. double counting)
     '''
-    sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
-        " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
-    DB_CURSOR.execute(sql_command)
+    table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
+    table_with_zero_students = get_focus_areas_with_no_students_taking()
 
-    table_with_non_zero_students = DB_CURSOR.fetchall()
-    final_table = table_with_non_zero_students
+    temp_table = table_with_non_zero_students
 
-    sql_command = "SELECT f2.name FROM focusarea f2 WHERE NOT EXISTS(" + \
-        "SELECT f.name FROM focusarea f, takesfocusarea t " + \
-        "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
-        "AND f2.name = f.name GROUP BY f.name)"
-    DB_CURSOR.execute(sql_command)
-    table_with_zero_students = DB_CURSOR.fetchall()
-
+    # Loops through all focus areas with no students taking and add them to
+    # the table with (focus area, number of students) pair.
     for focus_area_name in table_with_zero_students:
-        final_table.append((focus_area_name[0], 0))
+        temp_table.append((focus_area_name[0], 0))
+
+    final_table = temp_table
 
     return final_table
