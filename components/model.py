@@ -163,6 +163,18 @@ def get_focus_areas_with_no_students_taking():
     return DB_CURSOR.fetchall()
 
 
+def get_number_students_without_focus_area():
+    '''
+        Retrieves the number of students who have not indicated their focus
+        area.
+    '''
+    sql_command = "SELECT COUNT(*) FROM takesfocusarea WHERE " + \
+        "focusarea1 IS NULL AND focusarea2 IS NULL"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchone()
+
+
 def get_num_students_by_focus_areas():
     '''
         Retrieves the number of students for each focus area as a table
@@ -172,6 +184,8 @@ def get_num_students_by_focus_areas():
         Note: A student taking double focus on AI and Database will be
         reflected once for AI and once for database (i.e. double counting)
     '''
+    INDEX_FIRST_ELEM = 0
+
     table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
     table_with_zero_students = get_focus_areas_with_no_students_taking()
 
@@ -180,11 +194,17 @@ def get_num_students_by_focus_areas():
     # Loops through all focus areas with no students taking and add them to
     # the table with (focus area, number of students) pair.
     for focus_area_name in table_with_zero_students:
-        temp_table.append((focus_area_name[0], 0))
+        temp_table.append((focus_area_name[INDEX_FIRST_ELEM], 0))
 
     # Sort the table based on focus area
-    temp_table.sort(key=lambda row: row[0])
+    temp_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
 
+    # Build the final table with info of students without focus area.
+    num_students_without_focus = \
+    get_number_students_without_focus_area()[INDEX_FIRST_ELEM]
+
+    temp_table.insert(INDEX_FIRST_ELEM,
+                      ("Have Not Indicated", num_students_without_focus))
     final_table = temp_table
 
     return final_table
