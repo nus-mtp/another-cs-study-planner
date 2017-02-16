@@ -30,7 +30,7 @@ class TestCode(object):
             model.get_num_students_by_yr_study()
 
         num_of_rows_expected = 4
-        for index_row in range(1, num_of_rows_expected):
+        for index_row in range(0, num_of_rows_expected):
             current_row = table_of_year_of_study_with_count[index_row]
             assert_equal(self.num_column_for_each_year, len(current_row))
             current_year = current_row[0]
