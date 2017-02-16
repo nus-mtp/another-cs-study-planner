@@ -41,6 +41,36 @@ class TestCode(object):
             assert_equal(num_in_year[current_year - 1], current_number_of_student)
 
 
+    def test_additional_query_num_students_in_year_of_study(self):
+        '''
+            Additional tests to ensure querying number of students at each year of study
+            works for year 5 students as well.
+        '''
+        # Inject year 5 student temporarily
+        sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
+        model.DB_CURSOR.execute(sql_command)
+
+        num_in_year = [4, 3, 3, 3, 1]
+
+        table_of_year_of_study_with_count = \
+            model.get_num_students_by_yr_study()
+
+        assert_equal(self.is_table_sorted_by_first_elem(
+            table_of_year_of_study_with_count), True)
+
+        num_of_rows_expected = 5
+        for index_row in range(0, num_of_rows_expected):
+            current_row = table_of_year_of_study_with_count[index_row]
+            assert_equal(self.num_column_for_each_year, len(current_row))
+            current_year = current_row[0]
+            current_number_of_student = current_row[1]
+            assert_equal(num_in_year[current_year - 1], current_number_of_student)
+
+        # Clean up the database
+        sql_command = "DELETE FROM student WHERE nusnetid='D9818872A'"
+        model.DB_CURSOR.execute(sql_command)
+
+
     def is_table_sorted_by_first_elem(self, table_to_test):
         '''
             Helper function to tests if the rows in table_to_test
