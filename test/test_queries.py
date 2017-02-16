@@ -96,7 +96,15 @@ class TestCode(object):
         '''
             Tests querying number of students for each focus area
         '''
+        # Inject year 5 student temporarily with no focus area
+        sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
+        model.DB_CURSOR.execute(sql_command)
+        sql_command = "INSERT INTO takesFocusArea VALUES('D9818872A'" + \
+            ", NULL, NULL)"
+        model.DB_CURSOR.execute(sql_command)
+
         num_in_focus = {
+            'Have Not Indicated': 1,
             'Algorithms & Theory': 0,
             'Artificial Intelligence': 5,
             'Computer Graphics and Games': 5,
@@ -113,9 +121,14 @@ class TestCode(object):
         table_of_focus_area_with_count = \
             model.get_num_students_by_focus_areas()
 
+        # Remove the first row which contains "Have not indicated",
+        # then test if the remaining is sorted by focus area
+        have_not_indicated_row = table_of_focus_area_with_count.pop(0)
         assert_equal(
             self.is_table_sorted_by_first_elem(table_of_focus_area_with_count),
             True)
+        table_of_focus_area_with_count.insert(0, have_not_indicated_row)
+
         assert_equal(len(table_of_focus_area_with_count), num_of_focus_area)
 
         for index_row in range(0, num_of_focus_area):
@@ -125,3 +138,9 @@ class TestCode(object):
             current_number_of_student = current_row[1]
             assert_equal(num_in_focus.get(current_focus_area),
                          current_number_of_student)
+
+        # Clean up the database
+        sql_command = "DELETE FROM takesFocusArea WHERE nusnetid ='D9818872A'"
+        model.DB_CURSOR.execute(sql_command)
+        sql_command = "DELETE FROM student WHERE nusnetid = 'D9818872A'"
+        model.DB_CURSOR.execute(sql_command)
