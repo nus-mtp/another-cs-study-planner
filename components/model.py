@@ -138,7 +138,7 @@ def get_num_students_by_yr_study():
 def get_num_students_by_focus_area_non_zero():
     '''
         Retrieves the number of students for each focus area as a table,
-        if no student is taking that focus area, that row will not be 
+        if no student is taking that focus area, that row will not be
         returned.
         Each row will contain (focus area, number of students) pair.
         See: get_num_students_by_focus_areas() for more details.
@@ -181,6 +181,9 @@ def get_num_students_by_focus_areas():
     # the table with (focus area, number of students) pair.
     for focus_area_name in table_with_zero_students:
         temp_table.append((focus_area_name[0], 0))
+
+    # Sort the table based on focus area
+    temp_table.sort(key=lambda row: row[0])
 
     final_table = temp_table
 
