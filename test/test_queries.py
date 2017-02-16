@@ -29,6 +29,9 @@ class TestCode(object):
         table_of_year_of_study_with_count = \
             model.get_num_students_by_yr_study()
 
+        assert_equal(self.is_table_sorted_by_first_elem(
+                    table_of_year_of_study_with_count), True)
+
         num_of_rows_expected = 4
         for index_row in range(0, num_of_rows_expected):
             current_row = table_of_year_of_study_with_count[index_row]
