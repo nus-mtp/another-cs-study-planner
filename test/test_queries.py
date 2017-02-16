@@ -43,7 +43,8 @@ class TestCode(object):
 
     def is_table_sorted_by_first_elem(self, table_to_test):
         '''
-            Tests if the rows in table_to_test is sorted in ascending order
+            Helper function to tests if the rows in table_to_test
+            is sorted in ascending order
             according to the first element in each row.
             Table must contain at least one row.
             Returns true if so, false otherwise.
