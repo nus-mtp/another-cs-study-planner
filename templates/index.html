@@ -1,92 +1,71 @@
 $def with (moduleInfos, form)  
 
-<style>
-	h2 {
-		margin-bottom: 7px;
-	}
-    table {
-        text-align: left;
-    }
-    form {
-        margin: 3px;
-    }
-	.navForm {
-		display: inline-block
-	}
-	.navForm input {
-		width: 240px;
-		height: 25px;
-	}
-	#addModDiv {
-		border: 1px solid black;
-		width: 300px;
-		padding: 10px;
-		margin-bottom: 30px;
-	}
-	#addModDiv h2 {
-		margin-top: 0px;
-	}
-	#addModForm th, #addModForm td {
-		padding: 2px;
-	}
-	input {
-		width: 120px;
-	}
-    th, td {
-        padding: 5px;
-        padding-right: 30px;
-    }
-</style>
+<div class="container-fluid" id="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-7">
+                    <div id="add-module-form-wrapper">
+                        <h2><span class="glyphicon glyphicon-pencil"></span> Add a new module</h2>
+                        <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
+                        <form id="addModForm" action="" method="post">
+                            $:form.render()
+                        </form>
+                    </div>
+                </div>
 
-<div id="addModDiv">
-	<h2>Add a new module</h2>
-	<form id="addModForm" action="" method="post">
-	$:form.render()
-	</form>
+                <div class="col-md-5">
+                    <div id="module-mounting-options">
+                        <h2><span class="glyphicon glyphicon-list"></span> View Module Mountings</h2>
+                        <p>View your mounting plans here.</p>
+                        <br>
+                        <form action="/moduleMountingFixed" method="post">
+                            <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
+                        </form>
+                        <form action="/moduleMountingTentative" method="post">
+                            <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <br>
+            <h1 class="text-center">All Modules</h1>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>MCs</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            $for moduleInfo in moduleInfos:
+                <tbody>
+                    <tr>
+                        <td class="text-center">$moduleInfo[0]</td>
+                        <td>$moduleInfo[1]</td>
+                        <td>$moduleInfo[2]</td>
+                        <td class="text-center">$moduleInfo[3]</td>
+                        <td class="text-center">$moduleInfo[4]</td>
+                        <td class="text-center">
+                            <form action="/viewModule" method="get">
+                                <input type="hidden" name="code" value="$moduleInfo[0]">
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
+                            </form>
+                            $if moduleInfo[4][0:3] == 'New':
+                                <form action="/deleteModule/$moduleInfo[0]" method="post">
+                                    <input class="btn btn-primary" type="submit" value="Delete Module"/>
+                                </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-<form class="navForm" action="/moduleMountingFixed" method="post">
-    <input type="submit" value="Go To Fixed Module Mountings" />
-</form>
-<form class="navForm" action="/moduleMountingTentative" method="post">
-    <input type="submit" value="Go To Tentative Module Mountings" />
-</form>
-
-<h1>All Modules</h1>
-
-<table>
-    <tr>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>MCs</th>
-        <th>Status</th>
-        <th></th>
-    </tr>
-$for moduleInfo in moduleInfos:
-    <tr>
-        <td>$moduleInfo[0]</td>
-        <td>$moduleInfo[1]</td>
-        <td>$moduleInfo[2]</td>
-        <td>$moduleInfo[3]</td>
-        <td>$moduleInfo[4]</td>
-        <td>
-            <form action="/viewModule" method="get">
-                <input type="hidden" name="code" value="$moduleInfo[0]">
-                <input type="submit" value="View Module"/>
-            </form>
-            $if moduleInfo[4][0:6] == 'Active':
-                <form action="/flagAsRemoved/$moduleInfo[0]" method="post">
-                    <input type="submit" value="Flag As Removed"/>
-                </form>
-            $elif moduleInfo[4][0:13] == 'To Be Removed':
-                <form action="/flagAsActive/$moduleInfo[0]" method="post">
-                    <input type="submit" value="Flag As Active"/>
-                </form>
-            $elif moduleInfo[4][0:3] == 'New':
-                <form action="/deleteModule/$moduleInfo[0]" method="post">
-                    <input type="submit" value="Delete Module"/>
-                </form>
-        </td>
-    </tr>
-</table>

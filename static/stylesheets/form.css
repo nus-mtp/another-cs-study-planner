@@ -1,0 +1,20 @@
+body {
+	overflow-x: hidden;
+}
+
+tr > th {
+	text-align: center;
+}
+
+#form-wrapper, #add-module-form-wrapper, #module-mounting-options, #options {
+	border: 1px solid black;
+	padding: 1% 5%;
+}
+
+#add-module-form-wrapper, #module-mounting-options {
+	height: 400px;
+}
+
+#options {
+	height: 30%;
+}

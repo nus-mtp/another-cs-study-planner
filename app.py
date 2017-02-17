@@ -1,31 +1,54 @@
-import os
+'''
+    This module creates an application instance with a configured URL router.
+'''
+
+
+from components import database_adapter, model
+import components.handlers
 import web
-from components import database_adapter
 
-# To manually change this variable to determine if the code
-# is meant for deployment to Heroku or not.
-IS_FOR_DEPLOYMENT = True
 
-# seek templates in specified directory
-render = web.template.render('templates/', base='')
+'''
+    These mappings define to which class the application will direct
+    user requests to. Each mapping is in the form:
 
-# URL structure
-urls = (
-    '/', 'index',                                           # default index url
+        'URL regex' --> 'Class name'
+
+    For example, if a user requests for a page in the application
+    using the URL '/modules', it will be handled by the 'Modules' class.
+'''
+URLS = (
+    '/', 'components.handlers.index.Index',
+    '/modules', 'components.handlers.module_listing.Modules',
+    '/moduleMountingFixed', 'components.handlers.fixed_module_mountings.Fixed',
+    '/moduleMountingTentative', 'components.handlers.tentative_module_mountings.Tentative',
+    '/viewModule', 'components.handlers.module_overview.ViewMod',
+    '/flagAsRemoved/(.*)', 'components.handlers.module_listing.FlagAsRemoved',
+    '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
+    '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
+    '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
-app = web.application(urls, globals())
-connection = database_adapter.connect_db(IS_FOR_DEPLOYMENT)
 
-# defining GET operation
-class index:    
-    def GET(self):
-        web.header('Content-Type', 'text/html')
-        return render.index()
+'''
+    This defines the directory where the application should access
+    to render its webpage templates.
 
-def is_test():
-    if 'WEBPY_ENV' in os.environ:
-        return os.environ['WEBPY_ENV'] == 'test'
+    In this case, this tells the application that it should access the
+    'templates' directory and use the 'base.html' as the base template
+    for all other pages.
+'''
+RENDER = web.template.render('templates', base='base')
 
-if (not is_test()) and __name__ == "__main__":
-    app.run()
+
+'''
+    This creates the application instance with the defined
+    URL routing mappings, and global variables that are obtained using
+    globals().
+'''
+APP = web.application(URLS, globals())
+
+
+if __name__ == '__main__':
+    APP.run()

@@ -1,0 +1,15 @@
+### ABOUT PYLINT CONFIG ###
+- .pylintrc will store all your configurationsfor pylint
+
+- Command to generate .pylintrc file:
+  "pylint [options] --generate-rcfile > .pylintrc" (without the quotes)
+
+- In [options], indicate the errors that you want to disable by typing "--disable=<error-id>" (without the quotes)
+
+- So if I want to disable "invalid-name" and "no-self-use", the command will be:
+  "pylint --disable=invalid-name --disable=no-self-use --generate-rcfile > .pylintrc" (without the quotes)
+
+### DISABLED PYLINT ERRORS ###
+invalid-name (C0103)
+no-self-use
+import-error
