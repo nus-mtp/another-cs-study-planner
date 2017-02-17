@@ -52,15 +52,23 @@ class TestCode(object):
     ]
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        # loads an 'app.py' fixture
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
 
     def test_student_enrollment_valid_response(self):
         '''
             Tests whether user can access page for showing student
             enrollment without request errors.
         ''' 
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_STUDENT_ENROLLMENT)
+        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         assert_equal(root.status, 200)
 
@@ -70,9 +78,7 @@ class TestCode(object):
             Tests if the student enrollment page contains
             the necessary views.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_STUDENT_ENROLLMENT)
+        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         root.mustcontain(self.TABLE_HEADER_SENIORITY)
         root.mustcontain(self.TABLE_HEADER_FOCUS_AREA)
@@ -85,9 +91,7 @@ class TestCode(object):
             listing of all focus areas, inclusive of those who
             have not indicated any focus areas.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_STUDENT_ENROLLMENT)
+        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         root.mustcontain(self.TABLE_FOCUS_AREAS[0],
                          self.TABLE_FOCUS_AREAS[1],
@@ -109,9 +113,7 @@ class TestCode(object):
             Currently assumes that the most senior student is up
             to year 4 of study.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_STUDENT_ENROLLMENT)
+        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         root.mustcontain(self.TABLE_YEARS_OF_STUDY[0],
                          self.TABLE_YEARS_OF_STUDY[1],

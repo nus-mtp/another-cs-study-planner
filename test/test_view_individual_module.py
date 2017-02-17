@@ -62,15 +62,23 @@ class TestCode(object):
     CONTENT_CLASS_QUOTA_BLANK = "<p></p>"
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        # loads an 'app.py' fixture
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
+
     def test_view_individual_module_valid_response(self):
         '''
             Tests whether user can access page for showing module overview
             if target module is valid.
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -84,11 +92,8 @@ class TestCode(object):
 
             NOTE: this test case is supposed to FAIL
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+        self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
 
     '''
@@ -101,12 +106,9 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_individual_module_invalid_ay_sem_response(self):
-        # loads a 'modules.py' fixture
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
         # AY-Semester used here is '16/18 Sem 1'
         # an exception WILL be encountered here
-        root = testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+        root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
     '''
 
 
@@ -120,12 +122,9 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_invalid_module_overview_invalid_quota_response(self):
-        # loads a 'modules.py' fixture
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
         # Quota used here is '70' (actual is '60')
         # an exception WILL be encountered here
-        root = testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+        root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
     '''
 
 
@@ -138,9 +137,7 @@ class TestCode(object):
             NOTE: This is also hidden from shipping product so this
                   test case is commented out for now.
         """
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -157,9 +154,7 @@ class TestCode(object):
             Tests if all the necessary info is displayed in the individual
             module view page.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.CONTENT_SUMMARY + self.CONTENT_TARGET_AY_SEM)
         root.mustcontain(self.CONTENT_CODE)
@@ -180,9 +175,7 @@ class TestCode(object):
         '''
             Tests the contents when there is no quota specified
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
+        root = self.test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
 
@@ -193,9 +186,7 @@ class TestCode(object):
         """
             Tests if user can go to the page for editing the module.
         """
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
         response = root.goto("Edit Module URL", method='get')
         assert_equal(response.code, 200)
     '''
