@@ -1,6 +1,6 @@
 '''
-test_queries.py
-Contains test cases for database query related functions.
+test_oversubscribed_modules_queries.py
+Contains test cases for oversubscribed modules query related functions.
 '''
 from nose.tools import assert_equal
 from components import model
@@ -13,7 +13,8 @@ from components import model
 
 class TestCode(object):
     '''
-        This class runs the test cases for database query related functions.
+        This class runs the test cases for oversubscribed modules
+        query related functions.
     '''
     def __init__(self):
         pass
@@ -33,12 +34,12 @@ class TestCode(object):
 
         list_of_oversub_mod = model.get_oversub_mod()
         required_list = [('CS3230', 'AY 16/17 Sem 2', 0, 3),
-                        ('CS4244', 'AY 16/17 Sem 2', 0, 1),
-                        ('CS3242', 'AY 16/17 Sem 2', 0, 1),
-                        ('CS3243', 'AY 16/17 Sem 2', 0, 1),
-                        ('CS3247', 'AY 16/17 Sem 2', 0, 1),
-                        ('CS4221', 'AY 16/17 Sem 2', 0, 1),
-                        ('CS3223', 'AY 16/17 Sem 2', 0, 1)]
+                         ('CS4244', 'AY 16/17 Sem 2', 0, 1),
+                         ('CS3242', 'AY 16/17 Sem 2', 0, 1),
+                         ('CS3243', 'AY 16/17 Sem 2', 0, 1),
+                         ('CS3247', 'AY 16/17 Sem 2', 0, 1),
+                         ('CS4221', 'AY 16/17 Sem 2', 0, 1),
+                         ('CS3223', 'AY 16/17 Sem 2', 0, 1)]
                         #,
                         #('CS6101', 'AY 17/18 Sem 1', 0, 1)]
 
