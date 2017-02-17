@@ -1,0 +1,11 @@
+$def with (yr_of_study_count_table, focus_count_table)
+
+$for year_count_pair in yr_of_study_count_table:
+	<span>Number of year $year_count_pair[0] students: <!-- Year--></span>
+	<span>$year_count_pair[1] <!-- Number of students in that year--></span>
+	<br>
+
+$for focus_count_pair in focus_count_table:
+	<span>Number of $focus_count_pair[0] students: <!-- Focus Area--></span>
+	<span>$focus_count_pair[1] <!-- Number of students in that focus--></span>
+	<br>
