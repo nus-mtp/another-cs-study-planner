@@ -40,7 +40,7 @@ class Index(object):
             return RENDER.index(modules, form, SESSION['keyError'])
 
         # else add module to db and refresh page
-        outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc)
+        outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'Active')
         if outcome is False:
             SESSION['keyError'] = True
             SESSION['displayErrorMessage'] = True

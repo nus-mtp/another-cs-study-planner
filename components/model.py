@@ -6,6 +6,7 @@
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 
+
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
 DB_CURSOR = CONNECTION.cursor()
@@ -81,14 +82,14 @@ def get_number_students_planning(code):
     return DB_CURSOR.fetchall()
 
 
-def add_module(code, name, description, module_credits):
+def add_module(code, name, description, module_credits, status):
     '''
-        Insert a new module into the module table.
+        Insert a module into the module table.
         Returns true if successful, false if duplicate primary key detected
     '''
-    sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,'New')"
+    sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,%s)"
     try:
-        DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
+        DB_CURSOR.execute(sql_command, (code, name, description, module_credits, status))
         CONNECTION.commit()
     except psycopg2.IntegrityError:        # duplicate key error
         CONNECTION.rollback()
