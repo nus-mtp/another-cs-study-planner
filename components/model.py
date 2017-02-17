@@ -52,6 +52,16 @@ def get_all_tenta_mounted_modules():
     return DB_CURSOR.fetchall()
 
 
+def get_first_fixed_mounting():
+    '''
+        Get the first mounting from the fixed mounting table
+        This is used for reading the current AY
+    '''
+    sql_command = "SELECT acadYearAndSem FROM moduleMounted LIMIT(1)"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchone()
+
+
 def get_fixed_mounting_and_quota(code):
     '''
         Get the fixed AY/Sem and quota of a mounted module
@@ -126,4 +136,27 @@ def delete_module(code):
     # Perform the normal delete.
     sql_command = "DELETE FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
+    CONNECTION.commit()
+
+
+def add_fixed_mounting(code, sem, quota):
+    '''
+        Insert a new mounting into fixed mounting table
+    '''
+    try:
+        sql_command = "INSERT INTO modulemounted VALUES (%s,%s,%s)"
+        DB_CURSOR.execute(sql_command, (code, sem, quota))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def delete_fixed_mounting(code, sem):
+    '''
+        Delete a mounting from the fixed mounting table
+    '''
+    sql_command = "DELETE FROM modulemounted WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, sem))
     CONNECTION.commit()

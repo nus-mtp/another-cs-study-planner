@@ -4,17 +4,59 @@ Contains test cases for database related functions.
 '''
 from nose.tools import assert_equal, assert_true
 from components.handlers.fixed_module_mountings import Fixed as fixed_module_mountings
+from components import model
 
 
 class TestCode(object):
     '''
-    This class runs the test cases for database related functions.
+        This class runs the test cases related to fixed module mountings.
     '''
     def __init__(self):
+        self.number_of_tests_left = None
+        self.fixed_module_mountings = None
+        self.current_ay = None
+
+
+    def setUp(self):
+        '''
+            Add dummy modules and mountings into database,
+            Then retrieve all fixed module mountings from database 
+        '''
         self.fixed_module_mountings = fixed_module_mountings()
+        self.current_ay = self.fixed_module_mountings.get_current_ay()
+
+        model.add_module('BB1001', 'Dummy Module 1', 
+                         'This module is mounted in both semesters.', 1, 'Active')
+        model.add_module('BB1002', 'Dummy Module 2', 
+                         'This module is mounted in semester 1 only.', 2, 'Active')
+        model.add_module('BB1003', 'Dummy Module 3', 
+                         'This module is mounted in semester 2 only.', 3, 'Active')
+        model.add_module('BB1004', 'Dummy Module 4', 
+                         'This module is mounted in not mounted in any semester.', 4, 'Active')
+
+        model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)
+        model.add_fixed_mounting('BB1001', self.current_ay+' Sem 2', 20)
+        model.add_fixed_mounting('BB1002', self.current_ay+' Sem 1', 30)
+        model.add_fixed_mounting('BB1003', self.current_ay+' Sem 2', 40)
+
         self.fixed_module_mountings.populate_module_code_and_name()
         self.fixed_module_mountings.populate_mounting_values()
+
         assert_true(len(self.fixed_module_mountings.full_mounting_plan) > 0)
+
+
+    def tearDown(self):
+        '''
+            Clean up the database after all test cases are ran
+        '''
+        model.delete_fixed_mounting('BB1001', self.current_ay+' Sem 1')
+        model.delete_fixed_mounting('BB1001', self.current_ay+' Sem 2')
+        model.delete_fixed_mounting('BB1002', self.current_ay+' Sem 1')
+        model.delete_fixed_mounting('BB1003', self.current_ay+' Sem 2')
+        model.delete_module('BB1001')
+        model.delete_module('BB1002')
+        model.delete_module('BB1003')
+        model.delete_module('BB1004')
 
 
     def test_mounted_in_both_sems(self):
@@ -23,7 +65,7 @@ class TestCode(object):
             will have the mounting values '1' and '1'
         '''
         full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
-        test_module_code = "CS1010"
+        test_module_code = "BB1001"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
         has_test_module = False
@@ -46,7 +88,7 @@ class TestCode(object):
             will have the mounting values '1' and '-1'
         '''
         full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
-        test_module_code = "CG1001"
+        test_module_code = "BB1002"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
         has_test_module = False
@@ -69,7 +111,7 @@ class TestCode(object):
             will have the mounting values '-1' and '1'
         '''
         full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
-        test_module_code = "CS3247"
+        test_module_code = "BB1003"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
         has_test_module = False
@@ -85,13 +127,14 @@ class TestCode(object):
         assert_equal(test_module_sem_1, -1)
         assert_equal(test_module_sem_2, 1)
 
+
     def test_not_mounted(self):
         '''
             Tests that a module that is not mounted in any sem
             will have the mounting values '-1' and '-1'
         '''
         full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
-        test_module_code = "CS4344"
+        test_module_code = "BB1004"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
         has_test_module = False
