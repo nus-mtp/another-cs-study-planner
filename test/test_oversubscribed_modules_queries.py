@@ -23,6 +23,9 @@ class TestCode(object):
     def test_query_oversubscribed_modules(self):
         '''
             Tests querying the list of oversubscribed modules.
+
+            Note to developers: Please check that you have repopulated
+            your database if this test fails.
         '''
         # No modules in future sem are currently oversubscribed, thus we need to
         # inject data to database to test.
