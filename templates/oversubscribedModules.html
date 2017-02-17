@@ -1,5 +1,12 @@
 $def with (list_of_oversub_mod)
 
-This page lists modules which are oversubscribed
+This page lists modules which are oversubscribed:
 
-$list_of_oversub_mod
+<p>
+$for moduleinfo in list_of_oversub_mod:
+	Module: $moduleinfo[0] <!-- Module code -->, mounted in 
+	$moduleinfo[1] <!-- AY/Sem -->, with 
+	$moduleinfo[2] <!-- Available quota --> slots, and demand of: 
+	$moduleinfo[3] <!-- Number students planning -->
+	<br>
+</p>
