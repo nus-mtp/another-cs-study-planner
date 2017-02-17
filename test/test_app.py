@@ -56,7 +56,9 @@ class TestCode(object):
 
 
     def setUp(self):
-        # loads an 'app.py' fixture
+        '''
+            Sets up the 'app.py' fixture
+        '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
 
