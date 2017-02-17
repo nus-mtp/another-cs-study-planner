@@ -24,7 +24,7 @@ class TestCode(object):
         '''
             Tests querying number of students at each year of study
         '''
-        num_in_year = [4, 3, 3, 3]
+        num_in_year = [4, 3, 3, 3, 0, 0]
 
         table_of_year_of_study_with_count = \
             model.get_num_students_by_yr_study()
@@ -50,7 +50,7 @@ class TestCode(object):
         sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
         model.DB_CURSOR.execute(sql_command)
 
-        num_in_year = [4, 3, 3, 3, 1]
+        num_in_year = [4, 3, 3, 3, 1, 0]
 
         table_of_year_of_study_with_count = \
             model.get_num_students_by_yr_study()
