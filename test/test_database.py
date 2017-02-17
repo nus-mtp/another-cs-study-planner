@@ -86,7 +86,7 @@ class TestCode(object):
         '''
             Tests addition and deletion of modules.
         '''
-        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
+        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1, "New")
         module_info = model.get_module("AA1111")
         assert_true(module_info is not None)
         assert_equal("New", module_info[4].rstrip())
@@ -100,14 +100,14 @@ class TestCode(object):
         '''
             Tests adding of module with duplicated code. Should fail.
         '''
-        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
+        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1, "New")
 
         # Not duplicate code --> success
-        outcome = model.add_module("AA2222", "Dummy Module", "Dummy Description", 1)
+        outcome = model.add_module("AA2222", "Dummy Module", "Dummy Description", 1, "New")
         assert_true(outcome)
 
         # Duplicate code --> fail
-        outcome = model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
+        outcome = model.add_module("AA1111", "Dummy Module", "Dummy Description", 1, "New")
         assert_false(outcome)
 
         model.delete_module("AA1111")
