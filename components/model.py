@@ -52,6 +52,18 @@ def get_all_tenta_mounted_modules():
     return DB_CURSOR.fetchall()
 
 
+def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
+    '''
+        Get the module code, name, AY/Sem and quota of all tentative mounted modules of a selected AY
+    '''
+    sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                  "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                  "AND M2.acadYearAndSem LIKE '" + selected_ay + "%' " +\
+                  "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
 def get_first_fixed_mounting():
     '''
         Get the first mounting from the fixed mounting table
@@ -139,13 +151,13 @@ def delete_module(code):
     CONNECTION.commit()
 
 
-def add_fixed_mounting(code, sem, quota):
+def add_fixed_mounting(code, ay_sem, quota):
     '''
         Insert a new mounting into fixed mounting table
     '''
     try:
         sql_command = "INSERT INTO modulemounted VALUES (%s,%s,%s)"
-        DB_CURSOR.execute(sql_command, (code, sem, quota))
+        DB_CURSOR.execute(sql_command, (code, ay_sem, quota))
         CONNECTION.commit()
     except psycopg2.IntegrityError:        # duplicate key error
         CONNECTION.rollback()
@@ -153,10 +165,33 @@ def add_fixed_mounting(code, sem, quota):
     return True
 
 
-def delete_fixed_mounting(code, sem):
+def delete_fixed_mounting(code, ay_sem):
     '''
         Delete a mounting from the fixed mounting table
     '''
     sql_command = "DELETE FROM modulemounted WHERE moduleCode=%s AND acadYearAndSem=%s"
-    DB_CURSOR.execute(sql_command, (code, sem))
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    CONNECTION.commit()
+
+
+def add_tenta_mounting(code, ay_sem, quota):
+    '''
+        Insert a new mounting into tentative mounting table
+    '''
+    try:
+        sql_command = "INSERT INTO moduleMountTentative VALUES (%s,%s,%s)"
+        DB_CURSOR.execute(sql_command, (code, ay_sem, quota))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def delete_tenta_mounting(code, ay_sem):
+    '''
+        Delete a mounting from the tentative mounting table
+    '''
+    sql_command = "DELETE FROM moduleMountTentative WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
     CONNECTION.commit()
