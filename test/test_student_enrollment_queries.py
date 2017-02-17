@@ -1,6 +1,6 @@
 '''
-test_queries.py
-Contains test cases for database query related functions.
+test_student_enrollment_queries.py
+Contains test cases for student enrollment query functions.
 '''
 from nose.tools import assert_equal
 from components import model
@@ -13,7 +13,7 @@ from components import model
 
 class TestCode(object):
     '''
-        This class runs the test cases for database query related functions.
+        This class runs the test cases for student enrollment query functions.
     '''
     def __init__(self):
         self.num_column_for_each_year = 2
