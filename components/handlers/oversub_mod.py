@@ -19,7 +19,6 @@ class OversubModule(object):
             Renders the oversubscribed modules page if users requested
             for the page through the GET method.
         '''
-        #table_of_year_of_study_with_count = model.get_num_students_by_yr_study()
-        #table_of_focus_area_with_count = model.get_num_students_by_focus_areas()
+        list_of_oversub_mod = model.get_oversub_mod()
 
-        return RENDER.oversubscribedModules()
+        return RENDER.oversubscribedModules(list_of_oversub_mod)
