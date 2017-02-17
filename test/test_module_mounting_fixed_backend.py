@@ -149,3 +149,19 @@ class TestCode(object):
         assert_true(has_test_module)
         assert_equal(test_module_sem_1, -1)
         assert_equal(test_module_sem_2, -1)
+
+
+    def test_all_fixed_mountings_in_same_ay(self):
+        '''
+            Tests that all the fixed module mountings
+            are in the same AY (current AY)
+        '''
+        mounted_module_infos = model.get_all_fixed_mounted_modules()
+        current_ay = self.current_ay
+        is_same_ay = True
+        for info in mounted_module_infos:
+            ay = info[2][0:8]
+            if ay != current_ay:
+                is_same_ay = False
+                break
+        assert_true(is_same_ay)
