@@ -13,9 +13,11 @@
     will be handled by its corresponding test cases.
 '''
 
+
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
 from app import APP
+
 
 class TestCode(object):
     '''
@@ -29,19 +31,28 @@ class TestCode(object):
 
     FORM_ALL_MODULES = '<form class="navForm" action="/modules" method="post">'
     FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" ' +\
-                              'type="submit" value="Go To All Modules">'
+                              'type="submit" value="Go To All Modules" />'
     FORM_FIXED_MOUNTING = '<form class="navForm" action=' +\
                           '"/moduleMountingFixed" ' +\
                           'method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
                                  'type="submit" value="Go To Fixed ' +\
-                                 'Module Mountings">'
+                                 'Module Mountings" />'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
-    TABLE_HEADER_MOUNTING = '<th>Mounted In</th>'
-    TABLE_HEADER_MC = '<th>Quota</th>'
+    TABLE_HEADER_MOUNTING_SEM_1 = '<th>Mounted In Sem 1</th>'
+    TABLE_HEADER_MOUNTING_SEM_2 = '<th>Mounted In Sem 2</th>'
     TABLE_HEADER_ACTION = '<th>Action</th>'
+    TABLE_MOUNTING_SYMBOL_MOUNTED = '<span class="glyphicon glyphicon-ok" ' +\
+                                    'data-toggle="tooltip" data-placement="bottom" ' +\
+                                    'title="Mounted"></span>'
+    TABLE_MOUNTING_SYMBOL_UNMOUNTED = '<span class="glyphicon glyphicon-remove" ' +\
+                                      'data-toggle="tooltip" data-placement="bottom' +\
+                                      '" title="Unmounted"></span>'
+    TABLE_MOUNTING_SYMBOL_NOT_MOUNTED = '<span class="glyphicon glyphicon-minus" ' +\
+                                        'data-toggle="tooltip" data-placement="' +\
+                                        'bottom" title="Not Mounted"></span>'
 
 
     def test_tentative_module_mounting_valid_response(self):
@@ -105,12 +116,12 @@ class TestCode(object):
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
         # Checks the existence of the handler for viewing fixed mounting plan
-        root.__contains__(self.FORM_ALL_MODULES)
-        root.__contains__(self.FORM_ALL_MODULES_BUTTON)
+        root.mustcontain(self.FORM_ALL_MODULES)
+        root.mustcontain(self.FORM_ALL_MODULES_BUTTON)
 
         # Checks the existence of the handler for viewing tentative mounting plan
-        root.__contains__(self.FORM_FIXED_MOUNTING)
-        root.__contains__(self.FORM_FIXED_MOUNTING_BUTTON)
+        root.mustcontain(self.FORM_FIXED_MOUNTING)
+        root.mustcontain(self.FORM_FIXED_MOUNTING_BUTTON)
 
 
     def test_tentative_module_mounting_module_listing(self):
@@ -122,8 +133,10 @@ class TestCode(object):
         testApp = TestApp(APP.wsgifunc(*middleware))
         root = testApp.get(self.URL_MODULE_MOUNTING_TENTATIVE)
 
-        root.__contains__(self.TABLE_HEADER_CODE)
-        root.__contains__(self.TABLE_HEADER_NAME)
-        root.__contains__(self.TABLE_HEADER_MOUNTING)
-        root.__contains__(self.TABLE_HEADER_MC)
-        root.__contains__(self.TABLE_HEADER_ACTION)
+        root.mustcontain(self.TABLE_HEADER_CODE)
+        root.mustcontain(self.TABLE_HEADER_NAME)
+        root.mustcontain(self.TABLE_HEADER_MOUNTING_SEM_1)
+        root.mustcontain(self.TABLE_HEADER_MOUNTING_SEM_2)
+        root.mustcontain(self.TABLE_HEADER_ACTION)
+        root.mustcontain(self.TABLE_MOUNTING_SYMBOL_MOUNTED)
+        root.mustcontain(self.TABLE_MOUNTING_SYMBOL_UNMOUNTED)

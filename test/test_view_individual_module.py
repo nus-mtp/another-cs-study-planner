@@ -47,8 +47,12 @@ class TestCode(object):
     CONTENT_CODE = "BT5110"
     CONTENT_NAME = "Data Management and Warehousing"
     CONTENT_MC = "(4 MCs)"
-    CONTENT_BUTTON_EDIT = '<button class="btn btn-lg btn-primary" action="#">' +\
-                          'Edit Module</button>'
+    CONTENT_BUTTON_EDIT = '<input class="btn btn-lg btn-primary" ' +\
+                          'type="submit" value="Edit Module" />'
+    CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
+                                      'value="BT5110" />'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
+                                        'type="submit" value="Back to Overview" />'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
@@ -125,12 +129,15 @@ class TestCode(object):
     '''
 
 
+    '''
     def test_view_individual_module_search_form(self):
-        '''
+        """
             Tests if the module-search form exists.
 
             NOTE: the current form is NON_FUNCTIONAL at the moment.
-        '''
+            NOTE: This is also hidden from shipping product so this
+                  test case is commented out for now.
+        """
         middleware = []
         test_app = TestApp(APP.wsgifunc(*middleware))
         root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
@@ -142,12 +149,13 @@ class TestCode(object):
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
+    '''
 
 
     def test_view_individual_module_contents(self):
         '''
-            Tests if all the necessary info is displayed in the module
-            overview page.
+            Tests if all the necessary info is displayed in the individual
+            module view page.
         '''
         middleware = []
         test_app = TestApp(APP.wsgifunc(*middleware))
@@ -158,6 +166,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_NAME)
         root.mustcontain(self.CONTENT_MC)
         root.mustcontain(self.CONTENT_BUTTON_EDIT)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
@@ -175,3 +185,17 @@ class TestCode(object):
         root = test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
+
+
+    '''
+        [NOTE]: Edit Module backend is not up yet.
+    def test_view_individual_module_goto_edit_module(self):
+        """
+            Tests if user can go to the page for editing the module.
+        """
+        middleware = []
+        test_app = TestApp(APP.wsgifunc(*middleware))
+        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        response = root.goto("Edit Module URL", method='get')
+        assert_equal(response.code, 200)
+    '''

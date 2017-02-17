@@ -34,13 +34,13 @@ class TestCode(object):
                                      'Module Mountings">'
     FORM_VALIDATION_MSG_REQ = '<strong class="wrong">Required</strong>'
     FORM_VALIDATION_MSG_MOD_CODE = '<strong class="wrong">Module' +\
-                                          ' code should be alphanumeric.' +\
-                                          '</strong>'
+                                   ' code should be alphanumeric.' +\
+                                   '</strong>'
     FORM_VALIDATION_MSG_MOD_NAME = '<strong class="wrong">Module' +\
-                                          ' name should be alphanumeric.' +\
-                                          '</strong>'
+                                   ' name should be alphanumeric.' +\
+                                   '</strong>'
     FORM_VALIDATION_MSG_MOD_MC = '<strong class="wrong">Number of MCs' +\
-                                        ' should be a number.</strong>'
+                                 ' should be a number.</strong>'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
@@ -48,12 +48,6 @@ class TestCode(object):
     TABLE_HEADER_MC = '<th>MCs</th>'
     TABLE_HEADER_STATUS = '<th>Status</th>'
     TABLE_HEADER_ACTIONS = '<th>Actions</th>'
-
-    middleware = None
-    test_app = None
-
-    def __init__(self):
-        pass
 
 
     def test_index_valid_response(self):

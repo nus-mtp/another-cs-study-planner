@@ -15,13 +15,13 @@ $code:
         return 0
 
 <!--bottom half module info-->
-<div clas="container-fluid">
+<div class="container-fluid">
 	<div class="row"><!--left half of module info-->
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
 				<!--search bar-->
-					<form class="search-form" id="search-form" action"#">
+					<!--<form class="search-form" id="search-form" action"#">
 						<h2>Search Module</h2>
 						<br>
 						<div class="form-group">
@@ -39,7 +39,7 @@ $code:
 							</select>
 						</div>
 						<button type="submit" class="btn btn-primary">Search</button>
-					</form>
+					</form>-->
 					<br>
 					<hr>
 				</div>
@@ -50,12 +50,13 @@ $code:
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
+                        <button class="btn btn-lg btn-primary" action="#">Edit Module</button>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>
 					<p>
-						$moduleDescription
+						$:moduleDescription
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
@@ -69,7 +70,7 @@ $code:
 				</div>
 				<div  class="col-md-12">
 					<!--mountingAndQuota-->
-					<table class="table table-bordered table-hover" id="mountingAndQuota">
+					<table class="table table-bordered table-hover text-center" id="mountingAndQuota">
 						<thead>
 							<tr>
 								<th>Mounted In</th>
@@ -116,6 +117,7 @@ $code:
 								</td>
 							$if entry[1] == None:
 								<td>?</td>
+								<td></td>
 							$else:
 								<td>$entry[1] (Tentative)</td>
 								<td>?</td>
@@ -129,8 +131,6 @@ $code:
 			<div class="page-header text-center">
 				<h2>Module Statistics</h2>
 			</div>
-			<h4><b>Student Demand:</b></h4>
-			<p>315</p>
 		</div>
 	</div>
 </div>

@@ -12,7 +12,7 @@ tr > th {
 }
 
 #add-module-form-wrapper, #module-mounting-options {
-	height: 65%;
+	height: 400px;
 }
 
 #options {

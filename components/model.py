@@ -144,10 +144,10 @@ def get_oversub_mod():
             ay_sem = num_plan_aysem_pair[1]
             quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
-            if (quota == None):
+            if quota is None:
                 quota = 0
 
-            if (num_student_planning > quota):
+            if num_student_planning > quota:
                 oversub_info = (mod_code, ay_sem, quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
@@ -162,9 +162,132 @@ def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
     '''
     for aysem_quota_pair in aysem_quota_merged_list:
         aysem_in_pair = aysem_quota_pair[0]
-        if (ay_sem == aysem_in_pair):
+        if ay_sem == aysem_in_pair:
             quota_in_pair = aysem_quota_pair[1]
 
             return quota_in_pair
 
     return None # quota not found in list
+
+
+def get_num_students_by_yr_study():
+    '''
+        Retrieves the number of students at each year of study as a table
+        Each row will contain (year, number of students) pair.
+        e.g. [(1, 4), (2, 3)] means four year 1 students
+        and two year 3 students
+    '''
+    INDEX_FIRST_ELEM = 0
+
+    sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
+        " ORDER BY year"
+    DB_CURSOR.execute(sql_command)
+
+    table_with_non_zero_students = DB_CURSOR.fetchall()
+    final_table = append_missing_year_of_study(table_with_non_zero_students)
+
+    # Sort the table based on year
+    final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    return final_table
+
+
+def append_missing_year_of_study(initial_table):
+    '''
+        Helper function to append missing years of study to the
+        given initial table.
+        initial_table given in lists of (year, number of students)
+        pair.
+        e.g. If year 5 is missing from table, appends (5,0) to table
+        and returns the table
+    '''
+    MAX_POSSIBLE_YEAR = 6
+    for index in range(0, MAX_POSSIBLE_YEAR):
+        year = index + 1
+        year_exists_in_table = False
+
+        for year_count_pair in initial_table:
+            req_year = year_count_pair[0]
+            if req_year == year:
+                year_exists_in_table = True
+                break
+
+        if not year_exists_in_table:
+            initial_table.append((year, 0))
+
+    return initial_table
+
+
+def get_num_students_by_focus_area_non_zero():
+    '''
+        Retrieves the number of students for each focus area as a table,
+        if no student is taking that focus area, that row will not be
+        returned.
+        Each row will contain (focus area, number of students) pair.
+        See: get_num_students_by_focus_areas() for more details.
+    '''
+    sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
+        " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
+def get_focus_areas_with_no_students_taking():
+    '''
+        Retrieves a list of focus areas with no students taking.
+    '''
+    sql_command = "SELECT f2.name FROM focusarea f2 WHERE NOT EXISTS(" + \
+        "SELECT f.name FROM focusarea f, takesfocusarea t " + \
+        "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
+        "AND f2.name = f.name GROUP BY f.name)"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
+def get_number_students_without_focus_area():
+    '''
+        Retrieves the number of students who have not indicated their focus
+        area.
+    '''
+    sql_command = "SELECT COUNT(*) FROM takesfocusarea WHERE " + \
+        "focusarea1 IS NULL AND focusarea2 IS NULL"
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchone()
+
+
+def get_num_students_by_focus_areas():
+    '''
+        Retrieves the number of students for each focus area as a table
+        Each row will contain (focus area, number of students) pair
+        e.g. [(AI, 4), (Database, 3)] means four students taking AI as
+        focus area and three students taking database as focus area.
+        Note: A student taking double focus on AI and Database will be
+        reflected once for AI and once for database (i.e. double counting)
+    '''
+    INDEX_FIRST_ELEM = 0
+
+    table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
+    table_with_zero_students = get_focus_areas_with_no_students_taking()
+
+    temp_table = table_with_non_zero_students
+
+    # Loops through all focus areas with no students taking and add them to
+    # the table with (focus area, number of students) pair.
+    for focus_area_name in table_with_zero_students:
+        temp_table.append((focus_area_name[INDEX_FIRST_ELEM], 0))
+
+    # Sort the table based on focus area
+    temp_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    # Build the final table with info of students without focus area.
+    num_students_without_focus = \
+    get_number_students_without_focus_area()[INDEX_FIRST_ELEM]
+
+    temp_table.insert(INDEX_FIRST_ELEM,
+                      ("Have Not Indicated", num_students_without_focus))
+    final_table = temp_table
+
+    return final_table
