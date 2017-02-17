@@ -1,6 +1,6 @@
 '''
-test_queries.py
-Contains test cases for database query related functions.
+test_student_enrollment_queries.py
+Contains test cases for student enrollment query functions.
 '''
 from nose.tools import assert_equal
 from components import model
@@ -13,7 +13,7 @@ from components import model
 
 class TestCode(object):
     '''
-        This class runs the test cases for database query related functions.
+        This class runs the test cases for student enrollment query functions.
     '''
     def __init__(self):
         self.num_column_for_each_year = 2
@@ -24,7 +24,7 @@ class TestCode(object):
         '''
             Tests querying number of students at each year of study
         '''
-        num_in_year = [4, 3, 3, 3]
+        num_in_year = [4, 3, 3, 3, 0, 0]
 
         table_of_year_of_study_with_count = \
             model.get_num_students_by_yr_study()
@@ -50,7 +50,7 @@ class TestCode(object):
         sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
         model.DB_CURSOR.execute(sql_command)
 
-        num_in_year = [4, 3, 3, 3, 1]
+        num_in_year = [4, 3, 3, 3, 1, 0]
 
         table_of_year_of_study_with_count = \
             model.get_num_students_by_yr_study()

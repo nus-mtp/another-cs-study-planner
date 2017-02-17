@@ -128,11 +128,45 @@ def get_num_students_by_yr_study():
         e.g. [(1, 4), (2, 3)] means four year 1 students
         and two year 3 students
     '''
+    INDEX_FIRST_ELEM = 0
+
     sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
         " ORDER BY year"
     DB_CURSOR.execute(sql_command)
 
-    return DB_CURSOR.fetchall()
+    table_with_non_zero_students = DB_CURSOR.fetchall()
+    final_table = append_missing_year_of_study(table_with_non_zero_students)
+
+    # Sort the table based on year
+    final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    return final_table
+
+
+def append_missing_year_of_study(initial_table):
+    '''
+        Helper function to append missing years of study to the
+        given initial table.
+        initial_table given in lists of (year, number of students)
+        pair.
+        e.g. If year 5 is missing from table, appends (5,0) to table
+        and returns the table
+    '''
+    MAX_POSSIBLE_YEAR = 6
+    for index in range(0, MAX_POSSIBLE_YEAR):
+        year = index + 1
+        year_exists_in_table = False
+
+        for year_count_pair in initial_table:
+            req_year = year_count_pair[0]
+            if req_year == year:
+                year_exists_in_table = True
+                break
+
+        if not year_exists_in_table:
+            initial_table.append((year, 0))
+
+    return initial_table
 
 
 def get_num_students_by_focus_area_non_zero():
