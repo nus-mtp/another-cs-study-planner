@@ -52,15 +52,25 @@ class TestCode(object):
     CONTENT_STATS = "Module Statistics"
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        '''
+            Sets up the 'app.py' fixture
+        '''
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
+
     def test_view_valid_module_overview_valid_response(self):
         '''
             Tests whether user can access page for showing module overview
             if target module is valid.
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -74,11 +84,8 @@ class TestCode(object):
 
             NOTE: this test case is supposed to FAIL
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        test_app.get(self.URL_VIEW_MODULE_INVALID)
+        self.test_app.get(self.URL_VIEW_MODULE_INVALID)
 
 
     def test_view_module_overview_goto_valid_individual_module(self):
@@ -89,9 +96,7 @@ class TestCode(object):
             (i.e. navigation to module info for valid target module and
             valid target AY-semester and quota)
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
@@ -109,9 +114,7 @@ class TestCode(object):
             (i.e. navigation to module info for invalid target module and
             valid target AY-semester and quota)
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         root.goto(url, method='get')
@@ -129,9 +132,7 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
-        middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
-        root = test_app.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
@@ -150,9 +151,7 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_quota(self):
-        middleware = []
-        test_app = TestApp(app.wsgifunc(*middleware))
-        root = test_app.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=70'
         response = root.goto(url, method='get')
@@ -165,9 +164,7 @@ class TestCode(object):
 
             NOTE: the current form is NON_FUNCTIONAL at the moment.
         '''
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -183,9 +180,7 @@ class TestCode(object):
             Tests if all the necessary info is displayed in the module
             overview page.
         '''
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
-        root = testApp.get(self.URL_VIEW_MODULE_VALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
 
         root.mustcontain(self.CONTENT_SUMMARY)
         root.mustcontain(self.CONTENT_CODE)

@@ -56,15 +56,25 @@ class TestCode(object):
                                         'bottom" title="Not Mounted"></span>'
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        '''
+            Sets up the 'app.py' fixture
+        '''
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
+
     def test_fixed_module_mounting_valid_response(self):
         '''
             Tests whether user can access page for showing fixed module
             mountings without request errors.
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -76,9 +86,7 @@ class TestCode(object):
             Tests if navigation to a module overview page with
             a valid target module code is successful.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
         response = root.goto(self.URL_MODULE_VIEW_OVERVIEW, method='get')
 
         # checks if HTTP response code is 200 (= OK)
@@ -100,9 +108,7 @@ class TestCode(object):
 
             NOTE: this test case is supposed to FAIL.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
         # an exception WILL be encountered here
         root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
 
@@ -112,9 +118,7 @@ class TestCode(object):
             Tests if navigations to full module listing and tentative
             module mounting plans exist.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         # Checks the existence of the handler for viewing fixed mounting plan
         root.mustcontain(self.FORM_ALL_MODULES)
@@ -130,9 +134,7 @@ class TestCode(object):
             Tests if a table displaying list of modules for fixed
             module mounting exists.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
 
         # This is hardcoded for now, but should reflect current AY at any time
         root.mustcontain("Fixed Module Mountings for <b>AY 16/17</b></h1>")
