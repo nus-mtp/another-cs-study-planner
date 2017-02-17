@@ -27,7 +27,7 @@ URLS = (
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
     '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
-    '/dummyQuery', 'components.handlers.dummy_query.DummyQuery'
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
 
