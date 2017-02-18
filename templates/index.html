@@ -36,7 +36,7 @@ $var title:Module Listing
             <br>
             <h1 class="text-center">All Modules</h1>
 
-            <table class="table table-bordered table-hover">
+            <table class="table display dataTable table-bordered table-hover" id="module-listing-table">
                 <thead>
                     <tr>
                         <th>Code</th>
@@ -47,8 +47,8 @@ $var title:Module Listing
                         <th>Actions</th>
                     </tr>
                 </thead>
-            $for moduleInfo in moduleInfos:
                 <tbody>
+                $for moduleInfo in moduleInfos:
                     <tr>
                         <td class="text-center">$moduleInfo[0]</td>
                         <td>$moduleInfo[1]</td>
