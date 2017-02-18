@@ -20,18 +20,18 @@ class TestCode(object):
     def setUp(self):
         '''
             Add dummy modules and mountings into database,
-            Then retrieve all fixed module mountings from database 
+            Then retrieve all fixed module mountings from database
         '''
         self.fixed_mounting_handler = Fixed()
         self.current_ay = self.fixed_mounting_handler.get_current_ay()
 
-        model.add_module('BB1001', 'Dummy Module 1', 
+        model.add_module('BB1001', 'Dummy Module 1',
                          'This module is mounted in both semesters.', 1, 'Active')
-        model.add_module('BB1002', 'Dummy Module 2', 
+        model.add_module('BB1002', 'Dummy Module 2',
                          'This module is mounted in semester 1 only.', 2, 'Active')
-        model.add_module('BB1003', 'Dummy Module 3', 
+        model.add_module('BB1003', 'Dummy Module 3',
                          'This module is mounted in semester 2 only.', 3, 'Active')
-        model.add_module('BB1004', 'Dummy Module 4', 
+        model.add_module('BB1004', 'Dummy Module 4',
                          'This module is mounted in not mounted in any semester.', 4, 'Active')
 
         model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)

@@ -14,7 +14,7 @@ class Tentative(object):
     '''
         This class contains the implementations of the GET and POST requests.
         It generates a full mounting plan that states whether each module is
-        mounted or not mounted in a semester of the selected future AY. 
+        mounted or not mounted in a semester of the selected future AY.
     '''
     def __init__(self):
         '''
@@ -72,7 +72,7 @@ class Tentative(object):
         fixed_mounting_handler.populate_mounting_values()
         fixed_full_mounting_plan = fixed_mounting_handler.full_mounting_plan
 
-        # Mark module that are unmounted 
+        # Mark module that are unmounted
         # (i.e. mounted in current AY, but will no longer be mounted in future AY)
         for i in range(len(fixed_full_mounting_plan)):
             fixed_subplan = fixed_full_mounting_plan[i]

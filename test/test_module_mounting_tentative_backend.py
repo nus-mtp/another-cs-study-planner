@@ -18,7 +18,7 @@ class TestCode(object):
         self.tentative_mounting_handler = None
         self.current_ay = None
         self.next_ay = None
-        self.selected_tentative_mountings = None
+        self.selected_tenta_mountings = None
 
 
     def get_next_ay(self, ay):
@@ -38,18 +38,19 @@ class TestCode(object):
 
         self.tentative_mounting_handler = Tentative()
         self.next_ay = self.get_next_ay(self.current_ay)
-        self.selected_tentative_mountings = model.get_all_tenta_mounted_modules_of_selected_ay(self.next_ay)
+        self.selected_tenta_mountings = \
+             model.get_all_tenta_mounted_modules_of_selected_ay(self.next_ay)
 
         # Dummy modules
-        model.add_module('BB1001', 'Dummy Module 1', 
+        model.add_module('BB1001', 'Dummy Module 1',
                          'This module is mounted in both sems in both AYs.', 1, 'Active')
-        model.add_module('BB1002', 'Dummy Module 2', 
+        model.add_module('BB1002', 'Dummy Module 2',
                          'This module is mounted in sem 1 only, in both AYs.', 2, 'Active')
-        model.add_module('BB1003', 'Dummy Module 3', 
+        model.add_module('BB1003', 'Dummy Module 3',
                          'This module is mounted in sem 2 only, in both AYs.', 3, 'Active')
-        model.add_module('BB1004', 'Dummy Module 4', 
+        model.add_module('BB1004', 'Dummy Module 4',
                          'This module is not mounted in any sem, in both AYs.', 4, 'Active')
-        model.add_module('BB9999', 'Dummy Module X', 
+        model.add_module('BB9999', 'Dummy Module X',
                          'This module is mounted 20 years in the future!', 0, 'Active')
 
         # Dummy fixed mountings
@@ -61,11 +62,11 @@ class TestCode(object):
         self.load_fixed_full_mounting_plan()
 
         # Dummy tentative mountings
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20) 
-        model.add_tenta_mounting('BB1002', self.next_ay+' Sem 1', 30) 
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20)
+        model.add_tenta_mounting('BB1002', self.next_ay+' Sem 1', 30)
         model.add_tenta_mounting('BB1003', self.next_ay+' Sem 2', 40)
-        model.add_tenta_mounting('BB9999', 'AY 36/37 Sem 1', 999)  
+        model.add_tenta_mounting('BB9999', 'AY 36/37 Sem 1', 999)
 
         self.load_tenta_full_mounting_plan()
 
@@ -87,6 +88,7 @@ class TestCode(object):
         model.delete_module('BB1002')
         model.delete_module('BB1003')
         model.delete_module('BB1004')
+        model.delete_module('BB9999')
 
 
     def load_fixed_full_mounting_plan(self):
@@ -104,7 +106,7 @@ class TestCode(object):
         '''
         self.tentative_mounting_handler.populate_module_code_and_name()
         self.tentative_mounting_handler.populate_mounting_values(self.next_ay)
-        assert_true(len(self.tentative_mounting_handler.full_mounting_plan) > 0) 
+        assert_true(len(self.tentative_mounting_handler.full_mounting_plan) > 0)
 
 
     def test_tenta_mountings_of_selected_ay(self):
@@ -113,7 +115,7 @@ class TestCode(object):
             only contains mountings from the same AY
         '''
         selected_ay = self.next_ay
-        mounted_module_infos = self.selected_tentative_mountings
+        mounted_module_infos = self.selected_tenta_mountings
         is_same_ay = True
         for info in mounted_module_infos:
             ay = info[2][0:8]
@@ -129,7 +131,7 @@ class TestCode(object):
             the tentative mounting list of its AY
         '''
         test_module_code = "BB9999"
-        mounted_module_infos = self.selected_tentative_mountings
+        mounted_module_infos = self.selected_tenta_mountings
 
         # BB9999 should NOT appear in tentative list for next AY
         is_in_list = False
@@ -283,8 +285,8 @@ class TestCode(object):
         assert_equal(test_module_sem_1, 0)
         assert_equal(test_module_sem_2, -1)
 
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
-        model.add_tenta_mounting('BB1002', self.next_ay+' Sem 1', 30) 
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)
+        model.add_tenta_mounting('BB1002', self.next_ay+' Sem 1', 30)
         self.load_tenta_full_mounting_plan()
 
 
@@ -330,8 +332,8 @@ class TestCode(object):
         assert_equal(test_module_sem_1, -1)
         assert_equal(test_module_sem_2, 0)
 
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20)    
-        model.add_tenta_mounting('BB1003', self.next_ay+' Sem 2', 40) 
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20)
+        model.add_tenta_mounting('BB1003', self.next_ay+' Sem 2', 40)
         self.load_tenta_full_mounting_plan()
 
 
@@ -361,6 +363,6 @@ class TestCode(object):
         assert_equal(test_module_sem_1, 0)
         assert_equal(test_module_sem_2, 0)
 
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
-        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20) 
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20)
         self.load_tenta_full_mounting_plan()

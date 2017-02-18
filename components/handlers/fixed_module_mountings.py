@@ -13,7 +13,7 @@ class Fixed(object):
     '''
         This class contains the implementations of the GET and POST requests.
         It generates a full mounting plan that states whether each module is
-        mounted or not mounted in a semester of the current AY. 
+        mounted or not mounted in a semester of the current AY.
     '''
     def __init__(self):
         '''
