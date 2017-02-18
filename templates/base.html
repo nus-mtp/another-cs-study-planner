@@ -2,7 +2,6 @@ $def with (page)
 
 <html>
 	<head>
-		$# <!-- TODO: change this to accept a $title argument (both here and the .py file) and pass it to <title> attribute -->
 		<title>Template</title>
 		<link rel="stylesheet" type="text/css" href="static/stylesheets/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="static/stylesheets/bootstrap-theme.min.css">
@@ -24,14 +23,13 @@ $def with (page)
         <!--
 		<button class="btn btn-primary" id="movebtn" onclick="moveToTop()"><span class="glyphicon glyphicon-triangle-top"></span> Back to Top</button>
         -->
-        <a class="btn btn-primary back-to-top-btn page-scroll" href="#page-top">Back to top</a>
+        <a class="btn btn-primary back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a>
         <div id="page-top"></div>
-		<nav class="navbar navbar-default">
 
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 			    <form class="navbar-form navbar-left">
-				    <button type="button" class="btn btn-primary" onclick="openSidebar()">
+				    <button type="button" class="btn btn-lg btn-primary" onclick="openSidebar()">
 				   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 				   	</button>
 				</form>
@@ -50,8 +48,8 @@ $def with (page)
 			<a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
 			<h3>Module Views</h3>
 			<ul>
-				<!--li><a href="#">Oversubscribed Modules</a></li>
-				<li><a href="#">View by Focus Area</a></li-->
+				<li><a href="/oversubscribedModules">Oversubscribed Modules</a></li>
+				<!--li><a href="#">View by Focus Area</a></li-->
 				<li><a href="/">Module Information</a></li>
 				<!--li><a href="#">Sort/Filter Modules</a></li>
 				<li><a href="#">Recently Removed Modules</a></li>
