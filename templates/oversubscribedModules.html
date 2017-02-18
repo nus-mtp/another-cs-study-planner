@@ -1,12 +1,34 @@
 $def with (list_of_oversub_mod)
 
-This page lists modules which are oversubscribed:
-
-<p>
-$for moduleinfo in list_of_oversub_mod:
-	Module: $moduleinfo[0] <!-- Module code -->, mounted in 
-	$moduleinfo[1] <!-- AY/Sem -->, with 
-	$moduleinfo[2] <!-- Available quota --> slots, and demand of: 
-	$moduleinfo[3] <!-- Number students planning -->
+<div class="container-fluid">
+	<h1>Oversubscribed Modules</h1>
+	<p>Shows all modules with <b>demand &gt; supply</b></p>
 	<br>
-</p>
+	<table class="table table-bordered table-hover text-center">
+		<thead>
+			<tr>
+				<th>Code</th>
+				<th>AY-Semester</th>
+				<th>Class Quota</th>
+				<th>Student Demand</th>
+			</tr>
+		</thead>
+		<tbody>
+			$if list_of_oversub_mod == None:
+				<tr>
+					<th>Nil</th>
+					<th>Nil</th>
+					<th>Nil</th>
+					<th>Nil</th>
+				</tr>
+			$else:
+				$for module in list_of_oversub_mod:
+					<tr>
+						<td>$module[0]</td>
+						<td>$module[1]</td>
+						<td>$module[2]</td>
+						<td>$module[3]</td>
+					</tr>
+		</tbody>
+	</table>
+</div>
