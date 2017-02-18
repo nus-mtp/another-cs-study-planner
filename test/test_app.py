@@ -47,7 +47,7 @@ class TestCode(object):
     TABLE_HEADER_DESCRIPTION = '<th>Description</th>'
     TABLE_HEADER_MC = '<th>MCs</th>'
     TABLE_HEADER_STATUS = '<th>Status</th>'
-    TABLE_HEADER_ACTIONS = '<th>Actions</th>'
+    TABLE_HEADER_ACTIONS = '<th data-sortable="false">Actions</th>'
 
 
     def __init__(self):
