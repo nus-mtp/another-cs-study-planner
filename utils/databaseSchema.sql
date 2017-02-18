@@ -25,7 +25,8 @@ FOREIGN KEY (moduleCode) REFERENCES module(code)
 
 CREATE TABLE admin (
 staffId VARCHAR(9) PRIMARY KEY,
-password VARCHAR(64) NOT NULL,
+salt VARCHAR(32),
+password VARCHAR(256) NOT NULL,
 isSuper BOOLEAN,
 isActivated BOOLEAN
 );
