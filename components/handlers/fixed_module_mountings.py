@@ -39,6 +39,7 @@ class Fixed(object):
             Populate full mounting plan with subplans
             Populate each subplan with module code and name
         '''
+        del self.full_mounting_plan[:]
         module_infos = model.get_all_modules()
         for info in module_infos:
             code = info[0]

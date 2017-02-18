@@ -42,15 +42,15 @@ class TestCode(object):
 
         # Dummy modules
         model.add_module('BB1001', 'Dummy Module 1', 
-                         'This module is mounted in both semesters.', 1, 'Active')
+                         'This module is mounted in both sems in both AYs.', 1, 'Active')
         model.add_module('BB1002', 'Dummy Module 2', 
-                         'This module is mounted in semester 1 only.', 2, 'Active')
+                         'This module is mounted in sem 1 only, in both AYs.', 2, 'Active')
         model.add_module('BB1003', 'Dummy Module 3', 
-                         'This module is mounted in semester 2 only.', 3, 'Active')
+                         'This module is mounted in sem 2 only, in both AYs.', 3, 'Active')
         model.add_module('BB1004', 'Dummy Module 4', 
-                         'This module is not mounted in any semester.', 4, 'Active')
+                         'This module is not mounted in any sem, in both AYs.', 4, 'Active')
         model.add_module('BB9999', 'Dummy Module X', 
-                 'This module is mounted 20 years in the future!', 0, 'Active')
+                         'This module is mounted 20 years in the future!', 0, 'Active')
 
         # Dummy fixed mountings
         model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)
@@ -58,10 +58,7 @@ class TestCode(object):
         model.add_fixed_mounting('BB1002', self.current_ay+' Sem 1', 30)
         model.add_fixed_mounting('BB1003', self.current_ay+' Sem 2', 40)
 
-        # Loads fixed mountings into mounting plan
-        self.fixed_mounting_handler.populate_module_code_and_name()
-        self.fixed_mounting_handler.populate_mounting_values()
-        assert_true(len(self.fixed_mounting_handler.full_mounting_plan) > 0)
+        self.load_fixed_full_mounting_plan()
 
         # Dummy tentative mountings
         model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
@@ -70,10 +67,7 @@ class TestCode(object):
         model.add_tenta_mounting('BB1003', self.next_ay+' Sem 2', 40)
         model.add_tenta_mounting('BB9999', 'AY 36/37 Sem 1', 999)  
 
-        # Loads tentative mountings into mounting plan
-        self.tentative_mounting_handler.populate_module_code_and_name()
-        self.tentative_mounting_handler.populate_mounting_values(self.next_ay)
-        assert_true(len(self.tentative_mounting_handler.full_mounting_plan) > 0) 
+        self.load_tenta_full_mounting_plan()
 
 
     def tearDown(self):
@@ -93,6 +87,24 @@ class TestCode(object):
         model.delete_module('BB1002')
         model.delete_module('BB1003')
         model.delete_module('BB1004')
+
+
+    def load_fixed_full_mounting_plan(self):
+        '''
+            Retrieve fixed mounting data from database and generate full mounting plan
+        '''
+        self.fixed_mounting_handler.populate_module_code_and_name()
+        self.fixed_mounting_handler.populate_mounting_values()
+        assert_true(len(self.fixed_mounting_handler.full_mounting_plan) > 0)
+
+
+    def load_tenta_full_mounting_plan(self):
+        '''
+            Retrieve tentative mounting data from database and generate full mounting plan
+        '''
+        self.tentative_mounting_handler.populate_module_code_and_name()
+        self.tentative_mounting_handler.populate_mounting_values(self.next_ay)
+        assert_true(len(self.tentative_mounting_handler.full_mounting_plan) > 0) 
 
 
     def test_tenta_mountings_of_selected_ay(self):
@@ -227,3 +239,128 @@ class TestCode(object):
         assert_true(has_test_module)
         assert_equal(test_module_sem_1, -1)
         assert_equal(test_module_sem_2, -1)
+
+
+    def test_unmounted_from_sem_1(self):
+        '''
+            Tests that a module that is unmounted from sem 1
+            will have the tentative-mounting value of '0' for sem 1
+        '''
+        model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 1')
+        model.delete_tenta_mounting('BB1002', self.next_ay+' Sem 1')
+        self.load_tenta_full_mounting_plan()
+        full_mounting_plan = self.tentative_mounting_handler.full_mounting_plan
+
+        test_module_code = "BB1001"
+        test_module_sem_1 = -2
+        test_module_sem_2 = -2
+        has_test_module = False
+
+        for subplan in full_mounting_plan:
+            if subplan[0] == test_module_code:
+                has_test_module = True
+                test_module_sem_1 = subplan[2]
+                test_module_sem_2 = subplan[3]
+                break
+
+        assert_true(has_test_module)
+        assert_equal(test_module_sem_1, 0)
+        assert_equal(test_module_sem_2, 1)
+
+        test_module_code = "BB1002"
+        test_module_sem_1 = -2
+        test_module_sem_2 = -2
+        has_test_module = False
+
+        for subplan in full_mounting_plan:
+            if subplan[0] == test_module_code:
+                has_test_module = True
+                test_module_sem_1 = subplan[2]
+                test_module_sem_2 = subplan[3]
+                break
+
+        assert_true(has_test_module)
+        assert_equal(test_module_sem_1, 0)
+        assert_equal(test_module_sem_2, -1)
+
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
+        model.add_tenta_mounting('BB1002', self.next_ay+' Sem 1', 30) 
+        self.load_tenta_full_mounting_plan()
+
+
+    def test_unmounted_from_sem_2(self):
+        '''
+            Tests that a module that is unmounted from sem 2
+            will have the tentative-mounting value of '0' for sem 2
+        '''
+        model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 2')
+        model.delete_tenta_mounting('BB1003', self.next_ay+' Sem 2')
+        self.load_tenta_full_mounting_plan()
+        full_mounting_plan = self.tentative_mounting_handler.full_mounting_plan
+
+        test_module_code = "BB1001"
+        test_module_sem_1 = -2
+        test_module_sem_2 = -2
+        has_test_module = False
+
+        for subplan in full_mounting_plan:
+            if subplan[0] == test_module_code:
+                has_test_module = True
+                test_module_sem_1 = subplan[2]
+                test_module_sem_2 = subplan[3]
+                break
+
+        assert_true(has_test_module)
+        assert_equal(test_module_sem_1, 1)
+        assert_equal(test_module_sem_2, 0)
+
+        test_module_code = "BB1003"
+        test_module_sem_1 = -2
+        test_module_sem_2 = -2
+        has_test_module = False
+
+        for subplan in full_mounting_plan:
+            if subplan[0] == test_module_code:
+                has_test_module = True
+                test_module_sem_1 = subplan[2]
+                test_module_sem_2 = subplan[3]
+                break
+
+        assert_true(has_test_module)
+        assert_equal(test_module_sem_1, -1)
+        assert_equal(test_module_sem_2, 0)
+
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20)    
+        model.add_tenta_mounting('BB1003', self.next_ay+' Sem 2', 40) 
+        self.load_tenta_full_mounting_plan()
+
+
+    def test_unmounted_from_both_sems(self):
+        '''
+            Tests that a module that is unmounted from both sems
+            will have the tentative-mounting values '0' and '0'
+        '''
+        model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 1')
+        model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 2')
+        self.load_tenta_full_mounting_plan()
+        full_mounting_plan = self.tentative_mounting_handler.full_mounting_plan
+
+        test_module_code = "BB1001"
+        test_module_sem_1 = -2
+        test_module_sem_2 = -2
+        has_test_module = False
+
+        for subplan in full_mounting_plan:
+            if subplan[0] == test_module_code:
+                has_test_module = True
+                test_module_sem_1 = subplan[2]
+                test_module_sem_2 = subplan[3]
+                break
+
+        assert_true(has_test_module)
+        assert_equal(test_module_sem_1, 0)
+        assert_equal(test_module_sem_2, 0)
+
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)    
+        model.add_tenta_mounting('BB1001', self.next_ay+' Sem 2', 20) 
+        self.load_tenta_full_mounting_plan()

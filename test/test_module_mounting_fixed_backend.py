@@ -1,6 +1,6 @@
 '''
-test_database.py
-Contains test cases for database related functions.
+    test_module_mounting_fixed_backend.py
+    Contains test cases related to the backend functions of fixed module mountings.
 '''
 from nose.tools import assert_equal, assert_true
 from components.handlers.fixed_module_mountings import Fixed
