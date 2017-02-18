@@ -3,7 +3,7 @@ test_database.py
 Contains test cases for database related functions.
 '''
 from nose.tools import assert_equal, assert_true
-from components.handlers.fixed_module_mountings import Fixed as fixed_module_mountings
+from components.handlers.fixed_module_mountings import Fixed
 from components import model
 
 
@@ -13,7 +13,7 @@ class TestCode(object):
     '''
     def __init__(self):
         self.number_of_tests_left = None
-        self.fixed_module_mountings = None
+        self.fixed_mounting_handler = None
         self.current_ay = None
 
 
@@ -22,8 +22,8 @@ class TestCode(object):
             Add dummy modules and mountings into database,
             Then retrieve all fixed module mountings from database 
         '''
-        self.fixed_module_mountings = fixed_module_mountings()
-        self.current_ay = self.fixed_module_mountings.get_current_ay()
+        self.fixed_mounting_handler = Fixed()
+        self.current_ay = self.fixed_mounting_handler.get_current_ay()
 
         model.add_module('BB1001', 'Dummy Module 1', 
                          'This module is mounted in both semesters.', 1, 'Active')
@@ -39,10 +39,10 @@ class TestCode(object):
         model.add_fixed_mounting('BB1002', self.current_ay+' Sem 1', 30)
         model.add_fixed_mounting('BB1003', self.current_ay+' Sem 2', 40)
 
-        self.fixed_module_mountings.populate_module_code_and_name()
-        self.fixed_module_mountings.populate_mounting_values()
+        self.fixed_mounting_handler.populate_module_code_and_name()
+        self.fixed_mounting_handler.populate_mounting_values()
 
-        assert_true(len(self.fixed_module_mountings.full_mounting_plan) > 0)
+        assert_true(len(self.fixed_mounting_handler.full_mounting_plan) > 0)
 
 
     def tearDown(self):
@@ -64,7 +64,7 @@ class TestCode(object):
             Tests that a module that is mounted in both sems
             will have the mounting values '1' and '1'
         '''
-        full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
+        full_mounting_plan = self.fixed_mounting_handler.full_mounting_plan
         test_module_code = "BB1001"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
@@ -87,7 +87,7 @@ class TestCode(object):
             Tests that a module that is mounted in sem 1 only
             will have the mounting values '1' and '-1'
         '''
-        full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
+        full_mounting_plan = self.fixed_mounting_handler.full_mounting_plan
         test_module_code = "BB1002"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
@@ -110,7 +110,7 @@ class TestCode(object):
             Tests that a module that is mounted in sem 2 only
             will have the mounting values '-1' and '1'
         '''
-        full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
+        full_mounting_plan = self.fixed_mounting_handler.full_mounting_plan
         test_module_code = "BB1003"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
@@ -133,7 +133,7 @@ class TestCode(object):
             Tests that a module that is not mounted in any sem
             will have the mounting values '-1' and '-1'
         '''
-        full_mounting_plan = self.fixed_module_mountings.full_mounting_plan
+        full_mounting_plan = self.fixed_mounting_handler.full_mounting_plan
         test_module_code = "BB1004"
         test_module_sem_1 = -2
         test_module_sem_2 = -2
