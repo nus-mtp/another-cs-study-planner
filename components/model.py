@@ -4,6 +4,8 @@
 '''
 
 import components.database_adapter # database_adaptor.py handles the connection to database
+import uuid
+import hashlib
 
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
@@ -121,14 +123,14 @@ def delete_module(code):
     CONNECTION.commit()
 
 
-def add_admin(username, hashed_pass):
+def add_admin(username, salt, hashed_pass):
     '''
         Register an admin into the database.
         Note: to change last argument to false once
         activation done
     '''
-    sql_command = "INSERT INTO admin VALUES (%s, %s, FALSE, TRUE)"
-    DB_CURSOR.execute(sql_command, (username, hashed_pass))
+    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
     CONNECTION.commit()
 
 
@@ -145,17 +147,18 @@ def delete_admin(username):
     CONNECTION.commit()
 
 
-def validate_admin(username, hashed_pass):
+def validate_admin(username, unhashed_pass):
     '''
         Check if a provided admin-password pair is valid.
     '''
-    sql_command = "SELECT password FROM admin WHERE staffID=%s"
+    sql_command = "SELECT salt, password FROM admin WHERE staffID=%s"
     DB_CURSOR.execute(sql_command, (username,))
     admin = DB_CURSOR.fetchall()
     if not admin:
         return False
     else:
-        is_valid = (admin[0][0] == hashed_pass)
+        hashed_pass = hashlib.sha512(unhashed_pass + admin[0][0]).hexdigest()
+        is_valid = (admin[0][1] == hashed_pass)
         return is_valid
 
 
