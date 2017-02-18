@@ -47,8 +47,12 @@ class TestCode(object):
     CONTENT_CODE = "BT5110"
     CONTENT_NAME = "Data Management and Warehousing"
     CONTENT_MC = "(4 MCs)"
-    CONTENT_BUTTON_EDIT = '<button class="btn btn-lg btn-primary" action="#">' +\
-                          'Edit Module</button>'
+    CONTENT_BUTTON_EDIT = '<input class="btn btn-lg btn-primary" ' +\
+                          'type="submit" value="Edit Module" />'
+    CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
+                                      'value="BT5110" />'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
+                                        'type="submit" value="Back to Overview" />'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
@@ -58,15 +62,25 @@ class TestCode(object):
     CONTENT_CLASS_QUOTA_BLANK = "<p></p>"
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        '''
+            Sets up the 'app.py' fixture
+        '''
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
+
     def test_view_individual_module_valid_response(self):
         '''
             Tests whether user can access page for showing module overview
             if target module is valid.
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -80,11 +94,8 @@ class TestCode(object):
 
             NOTE: this test case is supposed to FAIL
         '''
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
         # an exception WILL be encountered here
-        test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+        self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
 
     '''
@@ -97,12 +108,9 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_individual_module_invalid_ay_sem_response(self):
-        # loads a 'modules.py' fixture
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
         # AY-Semester used here is '16/18 Sem 1'
         # an exception WILL be encountered here
-        root = testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+        root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
     '''
 
 
@@ -116,24 +124,22 @@ class TestCode(object):
     '''
     @raises(Exception)
     def test_view_invalid_module_overview_invalid_quota_response(self):
-        # loads a 'modules.py' fixture
-        middleware = []
-        testApp = TestApp(APP.wsgifunc(*middleware))
         # Quota used here is '70' (actual is '60')
         # an exception WILL be encountered here
-        root = testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+        root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
     '''
 
 
+    '''
     def test_view_individual_module_search_form(self):
-        '''
+        """
             Tests if the module-search form exists.
 
             NOTE: the current form is NON_FUNCTIONAL at the moment.
-        '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+            NOTE: This is also hidden from shipping product so this
+                  test case is commented out for now.
+        """
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.FORM_SEARCH_MODULE)
         root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
@@ -142,22 +148,23 @@ class TestCode(object):
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
         root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
+    '''
 
 
     def test_view_individual_module_contents(self):
         '''
-            Tests if all the necessary info is displayed in the module
-            overview page.
+            Tests if all the necessary info is displayed in the individual
+            module view page.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
 
         root.mustcontain(self.CONTENT_SUMMARY + self.CONTENT_TARGET_AY_SEM)
         root.mustcontain(self.CONTENT_CODE)
         root.mustcontain(self.CONTENT_NAME)
         root.mustcontain(self.CONTENT_MC)
         root.mustcontain(self.CONTENT_BUTTON_EDIT)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
+        root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
@@ -170,8 +177,18 @@ class TestCode(object):
         '''
             Tests the contents when there is no quota specified
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
+        root = self.test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
+
+
+    '''
+        [NOTE]: Edit Module backend is not up yet.
+    def test_view_individual_module_goto_edit_module(self):
+        """
+            Tests if user can go to the page for editing the module.
+        """
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+        response = root.goto("Edit Module URL", method='get')
+        assert_equal(response.code, 200)
+    '''
