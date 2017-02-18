@@ -5,13 +5,15 @@ $ moduleName = moduleInfo[1]
 $ moduleDescription = moduleInfo[2]
 $ moduleMC = moduleInfo[3]
 
-<div clas="container-fluid">
+$ overviewURL = '/viewModule'
+
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
 					<!--search form-->
-					<form class="search-form" id="search-form" action"#">
+					<!--<form class="search-form" id="search-form" action"#">
 						<h2>Search Module</h2>
 						<br>
 						<div class="form-group">
@@ -29,7 +31,7 @@ $ moduleMC = moduleInfo[3]
 							</select>
 						</div>
 						<button type="submit" class="btn btn-primary">Search</button>
-					</form>
+					</form>-->
 					<br>
 					<hr>
 				</div>
@@ -40,15 +42,19 @@ $ moduleMC = moduleInfo[3]
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)"</h3>
-						<button class="btn btn-lg btn-primary" action="#">Edit Module</button>
-						<br>
-						<br>
+						<form action="#" method="get">
+							<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
+						</form>
+						<form action="$overviewURL" method="get">
+							<input type="hidden" name="code" value="$moduleCode" />
+							<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
+						</form>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>
 					<p>
-						$moduleDescription
+						$:moduleDescription
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>

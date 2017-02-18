@@ -27,4 +27,4 @@ class ViewMod(object):
 
     def POST(self):
         ''' Redirect '''
-        raise web.seeother('/')
+        raise web.seeother('/viewModule')
