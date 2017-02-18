@@ -11,27 +11,27 @@ class TestCode(object):
         This class runs the test cases to test app home page
     '''
 
-    FORM_ADD_MODULE = '<form id="addModForm" action method="post">'
+    FORM_ADD_MODULE = '<form id="addModForm" action="" method="post">'
     FORM_LABEL_CODE = '<label for="code">Code</label>'
-    FORM_INPUT_CODE = '<input type="text" id="code" name="code">'
+    FORM_INPUT_CODE = '<input type="text" id="code" name="code"/>'
     FORM_LABEL_NAME = '<label for="name">Name</label>'
-    FORM_INPUT_NAME = '<input type="text" id="name" name="name">'
+    FORM_INPUT_NAME = '<input type="text" id="name" name="name"/>'
     FORM_LABEL_DESCRIPTION = '<label for="description">Description</label>'
     FORM_INPUT_DESCRIPTION = '<textarea rows="5" id="description" ' +\
-                             '"name="description" cols="55"></textarea>'
+                             'name="description" cols="55"></textarea>'
     FORM_LABEL_MC = '<label for="mc">MCs</label>'
-    FORM_INPUT_MC = '<input type="text" id="mc" name="mc">'
+    FORM_INPUT_MC = '<input type="text" id="mc" name="mc"/>'
     FORM_INPUT_BUTTON = '<button id="Add Module" name="Add Module" ' +\
                         'class="btn btn-primary">Add Module</button>'
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
                                  'type="submit" value="Go To Fixed Module ' +\
-                                 'Mountings">'
+                                 'Mountings" />'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
     FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
                                      'type="submit" value="Go To Tentative ' +\
-                                     'Module Mountings">'
+                                     'Module Mountings" />'
     FORM_VALIDATION_MSG_REQ = '<strong class="wrong">Required</strong>'
     FORM_VALIDATION_MSG_MOD_CODE = '<strong class="wrong">Module' +\
                                    ' code should be alphanumeric.' +\
@@ -50,15 +50,24 @@ class TestCode(object):
     TABLE_HEADER_ACTIONS = '<th>Actions</th>'
 
 
+    def __init__(self):
+        self.middleware = None
+        self.test_app = None
+
+
+    def setUp(self):
+        '''
+            Sets up the 'app.py' fixture
+        '''
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
+
     def test_index_valid_response(self):
         '''
             Tests if user can access the index page without request errors.
         '''
-
-        # loads a 'modules.py' fixture
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -68,10 +77,7 @@ class TestCode(object):
         '''
             Tests if navigation to 'Fixed Module Mountings' is successful.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
         response = root.goto('/moduleMountingFixed', method='post')
 
         # checks if HTTP response code is 303 (= See Other)
@@ -84,10 +90,7 @@ class TestCode(object):
         '''
             Tests if navigation to 'Tentative Module Mountings' is successful.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
         response = root.goto('/moduleMountingTentative', method='post')
 
         # checks if HTTP response code is 303 (= See Other)
@@ -101,10 +104,7 @@ class TestCode(object):
             Tests if navigation to a module overview page with
             a valid target module code is successful.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
         response = root.goto('/viewModule?code=BT5110', method='get')
 
         # checks if HTTP response code is 200 (= OK)
@@ -128,9 +128,7 @@ class TestCode(object):
 
             NOTE: this test case is supposed to FAIL.
         '''
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
         # an exception WILL be encountered here
         root.goto('/viewModule?code=CS0123', method='get')
 
@@ -146,30 +144,27 @@ class TestCode(object):
             4. MCs --> 'mc': has label and text input field
             5. 'Add Module' button --> 'Add Module'
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         # These check for the existence of labels and input fields
         # Checks if form attribute exists
-        root.__contains__(self.FORM_ADD_MODULE)
+        root.mustcontain(self.FORM_ADD_MODULE)
 
         # For 'Code' input
-        root.__contains__(self.FORM_LABEL_CODE)
-        root.__contains__(self.FORM_INPUT_CODE)
+        root.mustcontain(self.FORM_LABEL_CODE)
+        root.mustcontain(self.FORM_INPUT_CODE)
         # For 'Name' input
-        root.__contains__(self.FORM_LABEL_NAME)
-        root.__contains__(self.FORM_INPUT_NAME)
+        root.mustcontain(self.FORM_LABEL_NAME)
+        root.mustcontain(self.FORM_INPUT_NAME)
         # For 'Description' input
-        root.__contains__(self.FORM_LABEL_DESCRIPTION)
-        root.__contains__(self.FORM_INPUT_DESCRIPTION)
+        root.mustcontain(self.FORM_LABEL_DESCRIPTION)
+        root.mustcontain(self.FORM_INPUT_DESCRIPTION)
         # For 'MCs' input
-        root.__contains__(self.FORM_LABEL_MC)
-        root.__contains__(self.FORM_INPUT_MC)
+        root.mustcontain(self.FORM_LABEL_MC)
+        root.mustcontain(self.FORM_INPUT_MC)
 
         # checks for 'Add Module' button presence
-        root.__contains__(self.FORM_INPUT_BUTTON)
+        root.mustcontain(self.FORM_INPUT_BUTTON)
 
 
     def test_index_add_module_form_submit_blanks(self):
@@ -177,10 +172,7 @@ class TestCode(object):
             Tests if 'Required' validation message appears after submitting
             a blank add-module form.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
         response = add_module_form.submit()
@@ -193,10 +185,7 @@ class TestCode(object):
             an add-module form with module code containing non-alphanumeric
             character(s).
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
         add_module_form.__setitem__("code", "CS123#")
@@ -210,10 +199,7 @@ class TestCode(object):
             an add-module form with module name containing non-alphanumeric
             character(s).
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
         add_module_form.__setitem__("name", "Introduction to #")
@@ -227,10 +213,7 @@ class TestCode(object):
             an add-module form with module MCs containing non-numeric
             character(s).
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
         add_module_form.__setitem__("mc", "a")
@@ -243,10 +226,7 @@ class TestCode(object):
             Tests if 'numeric' validation message appears after submitting
             an add-module form with module MCs containing a negative number.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         add_module_form = root.forms__get()["addModForm"]
         add_module_form.__setitem__("mc", "-1")
@@ -262,33 +242,27 @@ class TestCode(object):
             Each navigation is tied to a form that will handle the
             navigation redirections.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         # Checks the existence of the handler for viewing fixed mounting plan
-        root.__contains__(self.FORM_FIXED_MOUNTING)
-        root.__contains__(self.FORM_FIXED_MOUNTING_BUTTON)
+        root.mustcontain(self.FORM_FIXED_MOUNTING)
+        root.mustcontain(self.FORM_FIXED_MOUNTING_BUTTON)
 
         # Checks the existence of the handler for viewing tentative mounting plan
-        root.__contains__(self.FORM_TENTATIVE_MOUNTING)
-        root.__contains__(self.FORM_TENTATIVE_MOUNTING_BUTTON)
+        root.mustcontain(self.FORM_TENTATIVE_MOUNTING)
+        root.mustcontain(self.FORM_TENTATIVE_MOUNTING_BUTTON)
 
 
     def test_index_modules_listing(self):
         '''
             Tests if a table displaying a list of all modules exist.
         '''
-
-        middleware = []
-        test_app = TestApp(APP.wsgifunc(*middleware))
-        root = test_app.get('/')
+        root = self.test_app.get('/')
 
         # Checks the existence of the handler for viewing fixed mounting plan
-        root.__contains__(self.TABLE_HEADER_CODE)
-        root.__contains__(self.TABLE_HEADER_NAME)
-        root.__contains__(self.TABLE_HEADER_DESCRIPTION)
-        root.__contains__(self.TABLE_HEADER_MC)
-        root.__contains__(self.TABLE_HEADER_STATUS)
-        root.__contains__(self.TABLE_HEADER_ACTIONS)
+        root.mustcontain(self.TABLE_HEADER_CODE)
+        root.mustcontain(self.TABLE_HEADER_NAME)
+        root.mustcontain(self.TABLE_HEADER_DESCRIPTION)
+        root.mustcontain(self.TABLE_HEADER_MC)
+        root.mustcontain(self.TABLE_HEADER_STATUS)
+        root.mustcontain(self.TABLE_HEADER_ACTIONS)
