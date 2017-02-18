@@ -36,13 +36,13 @@ class TestCode(object):
         model.DB_CURSOR.execute(sql_command)
 
         list_of_oversub_mod = model.get_oversub_mod()
-        required_list = [('CS3230', 'AY 16/17 Sem 2', 0, 3),
-                         ('CS4244', 'AY 16/17 Sem 2', 0, 1),
-                         ('CS3242', 'AY 16/17 Sem 2', 0, 1),
-                         ('CS3243', 'AY 16/17 Sem 2', 0, 1),
-                         ('CS3247', 'AY 16/17 Sem 2', 0, 1),
-                         ('CS4221', 'AY 16/17 Sem 2', 0, 1),
-                         ('CS3223', 'AY 16/17 Sem 2', 0, 1),
+        required_list = [('CS3230', 'AY 16/17 Sem 2', '?', 3),
+                         ('CS4244', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3242', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3243', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3247', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS4221', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3223', 'AY 16/17 Sem 2', '?', 1),
                          ('CS6101', 'AY 17/18 Sem 1', 0, 1)]
 
         assert_equal(len(list_of_oversub_mod), len(required_list))
