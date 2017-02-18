@@ -142,13 +142,17 @@ def get_oversub_mod():
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
-            quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+            real_quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
-            if quota is None:
+            # ensures that quota will be a number which is not None
+            if real_quota is None:
                 quota = 0
+                real_quota = '?'
+            else:
+                quota = real_quota
 
             if num_student_planning > quota:
-                oversub_info = (mod_code, ay_sem, quota, num_student_planning)
+                oversub_info = (mod_code, ay_sem, real_quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
