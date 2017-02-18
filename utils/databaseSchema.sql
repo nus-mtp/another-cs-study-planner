@@ -101,7 +101,6 @@ isTaken BOOLEAN,
 moduleCode VARCHAR(10),
 acadYearAndSem VARCHAR(20),
 PRIMARY KEY (studentId, moduleCode, acadYearAndSem),
-FOREIGN KEY (moduleCode, acadYearAndSem) REFERENCES moduleMounted(moduleCode, acadYearAndSem),
 FOREIGN KEY (studentId) REFERENCES student(nusnetId)
 );
  

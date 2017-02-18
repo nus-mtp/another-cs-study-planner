@@ -121,6 +121,55 @@ def delete_module(code):
     CONNECTION.commit()
 
 
+def get_oversub_mod():
+    '''
+        Retrieves a list of modules which are oversubscribed.
+        Returns module, AY/Sem, quota, number students interested
+        i.e. has more students interested than the quota
+    '''
+    list_of_oversub_with_info = []
+    list_all_mod_info = get_all_modules()
+
+    for module_info in list_all_mod_info:
+        mod_code = module_info[0]
+
+        aysem_quota_fixed_list = get_fixed_mounting_and_quota(mod_code)
+        aysem_quota_tenta_list = get_tenta_mounting_and_quota(mod_code)
+        aysem_quota_merged_list = aysem_quota_fixed_list + \
+                                aysem_quota_tenta_list
+
+        num_student_plan_aysem_list = get_number_students_planning(mod_code)
+        for num_plan_aysem_pair in num_student_plan_aysem_list:
+            num_student_planning = num_plan_aysem_pair[0]
+            ay_sem = num_plan_aysem_pair[1]
+            quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+
+            if quota is None:
+                quota = 0
+
+            if num_student_planning > quota:
+                oversub_info = (mod_code, ay_sem, quota, num_student_planning)
+                list_of_oversub_with_info.append(oversub_info)
+
+    return list_of_oversub_with_info
+
+
+def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
+    '''
+        This is a helper function.
+        Retrieves the correct quota from ay_sem listed inside
+        aysem_quota_merged_list parameter.
+    '''
+    for aysem_quota_pair in aysem_quota_merged_list:
+        aysem_in_pair = aysem_quota_pair[0]
+        if ay_sem == aysem_in_pair:
+            quota_in_pair = aysem_quota_pair[1]
+
+            return quota_in_pair
+
+    return None # quota not found in list
+
+
 def get_num_students_by_yr_study():
     '''
         Retrieves the number of students at each year of study as a table
