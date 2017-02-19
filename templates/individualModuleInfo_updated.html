@@ -1,4 +1,4 @@
-$def with (moduleInfo, ay, quota)
+$def with (moduleInfo, ay, mountingStatus, quota)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -46,6 +46,14 @@ $ moduleMC = moduleInfo[3]
 					</div>
 				</div>
 				<div class="col-md-12">
+					<h4><b>Mounting Status:</b></h4>
+					<p>$mountingStatus</p>
+					<br>
+					<h4><b>Class Quota:</b></h4>
+					<p>$quota</p>
+					<p>------------------------------------------------------------------------------------------------</p>
+				</div>
+				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>
 					<p>
 						$moduleDescription
@@ -57,8 +65,6 @@ $ moduleMC = moduleInfo[3]
 					<h4><b>Module Prerequisites:</b></h4>
 					<p>--none loaded</p>
 					<br>
-					<h4><b>Class Quota:</b></h4>
-					<p>$quota</p>
 				</div>
 			</div>
 		</div>
@@ -72,3 +78,4 @@ $ moduleMC = moduleInfo[3]
 		</div>
 	</div>
 </div>
+

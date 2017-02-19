@@ -82,7 +82,7 @@ class IndividualModule(object):
 
         self.load_mounting_info(module_code, target_ay_sem)
 
-        return RENDER.individualModuleInfo(module_info, target_ay_sem,
+        return RENDER.individualModuleInfo_updated(module_info, target_ay_sem,
                                            self.mounting_status, self.quota)
 
 

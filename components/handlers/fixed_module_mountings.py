@@ -85,7 +85,7 @@ class Fixed(object):
         self.populate_mounting_values()
         current_ay = self.get_current_ay()
 
-        return RENDER.moduleMountingFixed(current_ay, self.full_mounting_plan)
+        return RENDER.moduleMountingFixed_updated(current_ay, self.full_mounting_plan)
 
 
     def POST(self):

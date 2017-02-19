@@ -1,4 +1,4 @@
-$def with (mountedModuleInfos)  
+$def with (selectedAY, fullMountingPlan)  
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -22,26 +22,23 @@ $def with (mountedModuleInfos)
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th>Mounted In</th>
-                        <th>Quota</th>
+                        <th>Sem 1</th>
+                        <th>Sem 2</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-            $for mountedModuleInfo in mountedModuleInfos:
+            $for subplan in fullMountingPlan:
                 <tbody>
-                    <tr>
-                        <td>$mountedModuleInfo[0]</td>
-                        <td>$mountedModuleInfo[1]</td>
-                        <td>$mountedModuleInfo[2]</td>
-                        $if mountedModuleInfo[3] == None:
-                            <td>?</td>
-                        $else:
-                            <td>$mountedModuleInfo[3]</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$mountedModuleInfo[0]">
-                                <input type="submit" value="View Module"/>
-                            </form>
+                <tr>
+                    <td>$subplan[0]</td>
+                    <td>$subplan[1]</td>
+                    <td>$subplan[2]</td>
+                    <td>$subplan[3]</td>
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$subplan[0]">
+                            <input type="submit" value="View Module"/>
+                        </form>
                         </td>
                     </tr>
                 </tbody>

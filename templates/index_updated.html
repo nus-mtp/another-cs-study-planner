@@ -1,4 +1,4 @@
-$def with (moduleInfos, form)  
+$def with (moduleInfos, form, keyError)  
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -8,6 +8,8 @@ $def with (moduleInfos, form)
                     <div id="add-module-form-wrapper">
                         <h2>Add a new module</h2>
                         <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
+                        $if keyError is True:
+                            <p style="color:red">Error: Module code already exists</p>  
                         <form id="addModForm" action="" method="post">
                             $:form.render()
                         </form>
