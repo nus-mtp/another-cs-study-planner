@@ -52,6 +52,15 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
+'''
+    Global variables for handling accounts page.
+'''
+web.account_page_response = 0
+web.ACCOUNT_CREATED_SUCCESSFUL = 1
+web.ACCOUNT_CREATED_UNSUCCESSFUL = -1
+web.ACCOUNT_LOGIN_SUCCESSFUL = 2
+web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
+
 
 if __name__ == '__main__':
     APP.run()
