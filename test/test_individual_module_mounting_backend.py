@@ -4,6 +4,7 @@
 '''
 from nose.tools import assert_equal, assert_true
 from components.handlers.module_overview import ViewMod
+from components.handlers.module_view_in_ay_sem import IndividualModule
 from components import model
 
 
@@ -30,6 +31,7 @@ class TestCode(object):
             Add dummy modules and mountings into database
         '''
         self.module_overview_handler = ViewMod()
+        self.mounting_view_handler = IndividualModule()
         self.current_ay = model.get_first_fixed_mounting()[0][0:8]
         self.next_ay = self.get_next_ay(self.current_ay)
 
@@ -105,6 +107,22 @@ class TestCode(object):
         assert_equal(tenta_sem_1_quota, 10)
         assert_equal(tenta_sem_2_quota, 20)
 
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 10)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 20)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 10)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 20)
+
 
     def test_mounted_in_sem_1_only(self):
         '''
@@ -136,6 +154,22 @@ class TestCode(object):
         assert_equal(tenta_sem_2_mounting_value, -1)
         assert_equal(tenta_sem_1_quota, 30)
         assert_equal(tenta_sem_2_quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 30)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 30)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
 
 
     def test_mounted_in_sem_2_only(self):
@@ -169,6 +203,22 @@ class TestCode(object):
         assert_equal(tenta_sem_1_quota, '-')
         assert_equal(tenta_sem_2_quota, 40)
 
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 40)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 40)
+
 
     def test_not_mounted(self):
         '''
@@ -201,6 +251,22 @@ class TestCode(object):
         assert_equal(tenta_sem_1_quota, '-')
         assert_equal(tenta_sem_2_quota, '-')
 
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, -1)
+        assert_equal(self.mounting_view_handler.quota, '-')
+
 
     def test_unmounted_from_sem_1(self):
         '''
@@ -219,6 +285,14 @@ class TestCode(object):
         tenta_sem_1_quota = tenta_mounting_plan[0][2]
         assert_equal(tenta_sem_1_mounting_value, 0)
         assert_equal(tenta_sem_1_quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 30)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 0)
+        assert_equal(self.mounting_view_handler.quota, '-')
 
         model.add_tenta_mounting(test_module_code, self.next_ay+' Sem 1', 30)
 
@@ -240,6 +314,14 @@ class TestCode(object):
         tenta_sem_2_quota = tenta_mounting_plan[1][2]
         assert_equal(tenta_sem_2_mounting_value, 0)
         assert_equal(tenta_sem_2_quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 40)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 0)
+        assert_equal(self.mounting_view_handler.quota, '-')
 
         model.add_tenta_mounting(test_module_code, self.next_ay+' Sem 2', 40)
 
@@ -266,6 +348,20 @@ class TestCode(object):
         assert_equal(tenta_sem_1_quota, '-')
         assert_equal(tenta_sem_2_mounting_value, 0)
         assert_equal(tenta_sem_2_quota, '-')
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 10)
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.current_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 1)
+        assert_equal(self.mounting_view_handler.quota, 20)
+
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 1')
+        assert_equal(self.mounting_view_handler.mounting_status, 0)
+        assert_equal(self.mounting_view_handler.quota, '-')
+        self.mounting_view_handler.load_mounting_info(test_module_code, self.next_ay+' Sem 2')
+        assert_equal(self.mounting_view_handler.mounting_status, 0)
+        assert_equal(self.mounting_view_handler.quota, '-')
 
         model.add_tenta_mounting(test_module_code, self.next_ay+' Sem 1', 10)
         model.add_tenta_mounting(test_module_code, self.next_ay+' Sem 2', 20)

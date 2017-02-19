@@ -97,7 +97,7 @@ def get_fixed_mounting_and_quota(code):
         Get the fixed AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted " +\
-                    "WHERE moduleCode=%s ORDER BY acadYearAndSem"
+                  "WHERE moduleCode=%s ORDER BY acadYearAndSem"
     DB_CURSOR.execute(sql_command, (code, ))
     return DB_CURSOR.fetchall()
 
@@ -107,8 +107,28 @@ def get_tenta_mounting_and_quota(code):
         Get the tentative AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative " +\
-                    "WHERE moduleCode=%s ORDER BY acadYearAndSem"
+                  "WHERE moduleCode=%s ORDER BY acadYearAndSem"
     DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchall()
+
+
+def get_quota_of_target_fixed_ay_sem(code, ay_sem):
+    '''
+        Get the quota of a mod in a target fixed AY/Sem (if any)
+    '''
+    sql_command = "SELECT quota FROM moduleMounted " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    return DB_CURSOR.fetchall()
+
+
+def get_quota_of_target_tenta_ay_sem(code, ay_sem):
+    '''
+        Get the quota of a mod in a target tentative AY/Sem (if any)
+    '''
+    sql_command = "SELECT quota FROM moduleMountTentative " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
     return DB_CURSOR.fetchall()
 
 
