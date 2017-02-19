@@ -78,7 +78,8 @@ def get_all_fixed_ay_sems():
     '''
         Get all the distinct AY/Sem in the fixed mounting table
     '''
-    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted"
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted " +\
+                  "ORDER BY acadYearAndSem ASC"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -87,7 +88,8 @@ def get_all_tenta_ay_sems():
     '''
         Get all the distinct AY/Sem in the tentative mounting table
     '''
-    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative"
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative " +\
+                  "ORDER BY acadYearAndSem ASC"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -97,7 +99,7 @@ def get_fixed_mounting_and_quota(code):
         Get the fixed AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted " +\
-                  "WHERE moduleCode=%s ORDER BY acadYearAndSem"
+                  "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
     DB_CURSOR.execute(sql_command, (code, ))
     return DB_CURSOR.fetchall()
 
@@ -107,7 +109,7 @@ def get_tenta_mounting_and_quota(code):
         Get the tentative AY/Sem and quota of a mounted module
     '''
     sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative " +\
-                  "WHERE moduleCode=%s ORDER BY acadYearAndSem"
+                  "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
     DB_CURSOR.execute(sql_command, (code, ))
     return DB_CURSOR.fetchall()
 
