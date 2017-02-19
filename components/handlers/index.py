@@ -17,10 +17,13 @@ class Index(object):
 
 
     def GET(self):
-        ''' This function is called when the '/' page (index.html) is loaded '''
-        module_infos = model.get_all_modules()
-        form = self.form()
-        return RENDER.index(module_infos, form)
+        if (web.account_page_response != web.ACCOUNT_LOGIN_SUCCESSFUL):
+            raise web.seeother('/login')
+        else:
+            ''' This function is called when the '/' page (index.html) is loaded '''
+            module_infos = model.get_all_modules()
+            form = self.form()
+            return RENDER.index(module_infos, form)
 
 
     def POST(self):
