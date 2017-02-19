@@ -1,0 +1,11 @@
+$def with (loginform, registerform)
+
+<form id="loginForm" action="/verifyLogin" method="post">
+	$:loginform.render()
+</form>
+
+<br>
+
+<form id="registerForm" action="" method="post">
+	$:registerform.render()
+</form>

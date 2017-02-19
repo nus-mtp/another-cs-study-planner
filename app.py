@@ -28,6 +28,8 @@ URLS = (
     '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
+    '/login', 'components.handlers.login.Login',
+    '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
