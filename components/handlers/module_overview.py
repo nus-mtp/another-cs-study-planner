@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 
@@ -98,8 +98,12 @@ class ViewMod(object):
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)
 
+        system_message = SESSION['editModMsg']
+        SESSION['editModMsg'] = None
+
         return RENDER.viewModule_updated(module_info, self.fixed_mounting_plan,
-                                 self.tenta_mounting_plan, number_of_student_planning)
+                                         self.tenta_mounting_plan, number_of_student_planning,
+                                         system_message)
 
 
     def POST(self):

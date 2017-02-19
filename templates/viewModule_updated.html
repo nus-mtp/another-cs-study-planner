@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, systemMessage)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -41,6 +41,8 @@ $code:
 					</form>
 					<br>
 					<hr>
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
 				</div>
 				<div class="col-md-12 text-center">
 					<h2><b>Module Info Overview</b></h2>
@@ -49,6 +51,12 @@ $code:
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
+						<br>
+						<form action="/editModule" method="post">
+							<input type="hidden" name="status" value="load">
+							<input type="hidden" name="code" value="$moduleCode">
+                            <input class="btn btn-primary" type="submit" value="Edit Module" />
+                        </form>
 					</div>
 				</div>
 				<div class="col-md-12">

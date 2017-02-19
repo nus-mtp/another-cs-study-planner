@@ -24,6 +24,7 @@ URLS = (
     '/flagAsRemoved/(.*)', 'components.handlers.module_listing.FlagAsRemoved',
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
     '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
+    '/editModule', 'components.handlers.module_edit.EditMod',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule'
 )
 
@@ -47,7 +48,8 @@ RENDER = web.template.render('templates', base='base')
 APP = web.application(URLS, globals())
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
                               initializer={'keyError': False,
-                                           'displayErrorMessage': False})._initializer
+                                           'displayErrorMessage': False,
+                                           'editModMsg': None})._initializer
 
 if __name__ == '__main__':
     APP.run()

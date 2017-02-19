@@ -157,6 +157,21 @@ def add_module(code, name, description, module_credits, status):
     return True
 
 
+def update_module(code, name, description, module_credits):
+    '''
+        Update a module with edited info
+    '''
+    sql_command = "UPDATE module SET name=%s, description=%s, mc=%s " +\
+                  "WHERE code=%s"
+    try:
+        DB_CURSOR.execute(sql_command, (name, description, module_credits, code))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 def flag_module_as_removed(code):
     '''
         Change the status of a module to 'To Be Removed'
