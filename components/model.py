@@ -243,10 +243,30 @@ def add_tenta_mounting(code, ay_sem, quota):
     return True
 
 
+def update_quota(code, ay_sem, quota):
+    '''
+        Update the quota of a module in a target tentative AY/Sem
+    '''
+    sql_command = "UPDATE moduleMountTentative SET quota=%s " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
+    try:
+        DB_CURSOR.execute(sql_command, (quota, code, ay_sem))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 def delete_tenta_mounting(code, ay_sem):
     '''
         Delete a mounting from the tentative mounting table
     '''
     sql_command = "DELETE FROM moduleMountTentative WHERE moduleCode=%s AND acadYearAndSem=%s"
-    DB_CURSOR.execute(sql_command, (code, ay_sem))
-    CONNECTION.commit()
+    try:
+        DB_CURSOR.execute(sql_command, (code, ay_sem))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True

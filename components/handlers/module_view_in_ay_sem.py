@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 
@@ -16,6 +16,7 @@ class IndividualModule(object):
     def __init__(self):
         self.mounting_status = -1
         self.quota = None
+        self.is_current_ay = False
 
 
     def get_current_ay(self):
@@ -33,13 +34,13 @@ class IndividualModule(object):
         '''
         fixed_mounting_status = -1
         fixed_quota = None
-        is_fixed_mounting = False
+        is_current_ay = False
 
         # Get mounting status in current AY
         target_ay = target_ay_sem[0:8]
         current_ay = self.get_current_ay()
         if target_ay == current_ay:
-            is_fixed_mounting = True
+            is_current_ay = True
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, target_ay_sem)
         else:
             target_sem = target_ay_sem[9:14]
@@ -51,7 +52,7 @@ class IndividualModule(object):
             fixed_mounting_status = 1
             fixed_quota = fixed_quota[0][0]
 
-        if is_fixed_mounting:
+        if is_current_ay:
             self.mounting_status = fixed_mounting_status
             self.quota = fixed_quota
         else:
@@ -70,6 +71,8 @@ class IndividualModule(object):
             self.mounting_status = tenta_mounting_status
             self.quota = tenta_quota
 
+        self.is_current_ay = is_current_ay
+
 
     def GET(self):
         '''
@@ -81,9 +84,14 @@ class IndividualModule(object):
         target_ay_sem = input_data.targetAY
 
         self.load_mounting_info(module_code, target_ay_sem)
+        is_future_ay = not self.is_current_ay
 
-        return RENDER.individualModuleInfo_updated(module_info, target_ay_sem,
-                                           self.mounting_status, self.quota)
+        system_message = SESSION['editMountMsg']
+        SESSION['editMountMsg'] = None
+
+        return RENDER.individualModuleInfo_updated(module_info, is_future_ay,
+                                                   target_ay_sem, self.mounting_status,
+                                                   self.quota, system_message)
 
 
     def POST(self):

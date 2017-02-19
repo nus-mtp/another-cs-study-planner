@@ -97,6 +97,8 @@ class TestCode(object):
                                      self.test_module_quota2)
 
             mounting_data = model.get_fixed_mounting_and_quota(self.test_module_code)
+            assert_equal(self.test_module_mounted_count, len(mounting_data))
+
             mounting_s1 = mounting_data[0][0]
             mounting_s2 = mounting_data[1][0]
             quota_s1 = mounting_data[0][1]
@@ -130,6 +132,8 @@ class TestCode(object):
                                      self.test_module_quota2)
 
             mounting_data = model.get_tenta_mounting_and_quota(self.test_module_code)
+            assert_equal(self.test_module_mounted_count, len(mounting_data))
+
             mounting_s1 = mounting_data[0][0]
             mounting_s2 = mounting_data[1][0]
             quota_s1 = mounting_data[0][1]
@@ -170,7 +174,6 @@ class TestCode(object):
         '''
             Tests that a module cannot have more than one mounting in the same AY/Sem
         '''
-        # Not duplicate code --> success
         outcome = model.add_tenta_mounting(self.test_module_code,
                                            self.test_module_tenta_mounting_s1,
                                            123)
@@ -205,3 +208,20 @@ class TestCode(object):
         outcome = model.update_module(self.test_module_code, "Dummy module 2",
                                       "Dummy description 2", "abc")
         assert_false(outcome)
+
+
+    def test_update_quota(self):
+        '''
+            Tests updating of module's quota for a target tentative AY/Sem
+        '''
+        model.update_quota(self.test_module_code,
+                           self.test_module_tenta_mounting_s1, 999)
+
+        mounting_data = model.get_tenta_mounting_and_quota(self.test_module_code)
+        assert_equal(1, len(mounting_data))
+
+        mounting_s1 = mounting_data[0][0]
+        quota_s1 = mounting_data[0][1]
+
+        assert_equal(mounting_s1, self.test_module_tenta_mounting_s1)
+        assert_equal(quota_s1, 999)

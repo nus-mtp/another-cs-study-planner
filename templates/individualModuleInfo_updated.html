@@ -1,4 +1,4 @@
-$def with (moduleInfo, ay, mountingStatus, quota)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, systemMessage)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -34,24 +34,49 @@ $ moduleMC = moduleInfo[3]
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
-					<h3>Module Info for <b><u>$ay</u></b></h3>
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
+					<h3>Module Info for <b><u>$aySem</u></b></h3>
 				</div>
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)"</h3>
-						<button class="btn btn-lg btn-primary" action="#">Edit Module</button>
 						<br>
-						<br>
+						<table>
+							<tr>
+								<td>
+									<form action="/editModule" style="display:inline-block" method="post">
+										<input type="hidden" name="status" value="load">
+										<input type="hidden" name="code" value="$moduleCode">
+			                            <button class="btn btn-primary" action="#">Edit Module Info</button>
+			                        </form>
+			                    </td>
+		                    $if isFutureAY is True:
+								<td>
+			                        <form action="/editMounting" style="display:inline-block" method="post">
+			                        	<input type="hidden" name="status" value="load">
+			                        	<input type="hidden" name="code" value="$moduleCode">
+			                        	<input type="hidden" name="aySem" value="$aySem">
+			                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
+			                        	<input type="hidden" name="quota" value="$quota">
+			                        	<button class="btn btn-primary" style="display:inline-block" action="#">Edit Mounting Info</button>
+									</form>
+			                    </td>
+			                </tr>
+			             </table>
 					</div>
 				</div>
 				<div class="col-md-12">
-					<h4><b>Mounting Status:</b></h4>
-					<p>$mountingStatus</p>
+					<h4><b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>$mountingStatus</h4>
 					<br>
-					<h4><b>Class Quota:</b></h4>
-					<p>$quota</p>
-					<p>------------------------------------------------------------------------------------------------</p>
+					<h4><b>Class Quota:&nbsp;&nbsp;&nbsp;</b>
+						$if quota is None:
+							?
+						$else:
+							$quota
+					</h4>
+					<hr>
 				</div>
 				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>

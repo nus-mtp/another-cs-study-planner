@@ -41,10 +41,10 @@ $code:
 					</form>
 					<br>
 					<hr>
-					$if systemMessage is not None:
-						<p style="color:red; text-align:center">$systemMessage</p>
 				</div>
 				<div class="col-md-12 text-center">
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
 					<h2><b>Module Info Overview</b></h2>
 				</div>
 				<div class="col-md-12 module-header">
@@ -55,7 +55,7 @@ $code:
 						<form action="/editModule" method="post">
 							<input type="hidden" name="status" value="load">
 							<input type="hidden" name="code" value="$moduleCode">
-                            <input class="btn btn-primary" type="submit" value="Edit Module" />
+                            <input class="btn btn-primary" type="submit" value="Edit Module Info" />
                         </form>
 					</div>
 				</div>
@@ -76,6 +76,7 @@ $code:
 				</div>
 				<div  class="col-md-12">
 					<!--mountingAndQuota-->
+					<h4><b>Current AY (Fixed)</b><h4>
 					<table class="table table-bordered table-hover" id="mountingAndQuota">
 						<thead>
 							<tr>
@@ -95,7 +96,7 @@ $code:
 										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
-							<td>$entry[1]</td>
+								<td>$entry[1]</td>
 							$ numberTaking = getNumStudents(entry[0])
 							$if entry[2] == None:
 								<td>?</td>
@@ -104,6 +105,19 @@ $code:
 								<td>$entry[2]</td>
 								<td>$numberTaking</td>
 							</tr>
+						</tbody>
+					</table>
+					<h4><b>Future AYs (Tentative)</b><h4>
+					<table class="table table-bordered table-hover" id="mountingAndQuota">
+						<thead>
+							<tr>
+								<th>AY/Sem</th>
+								<th>Mounted In</th>
+								<th>Quota</th>
+								<th>Students Planning to Take</th>
+							</tr>
+						</thead>
+						<tbody>
 						$for entry in tentaMountingPlan:
 							<tr>
 								<td>
@@ -113,7 +127,7 @@ $code:
 										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
-							<td>$entry[1]</td>
+								<td>$entry[1]</td>
 							$if entry[2] == None:
 								<td>?</td>
 								<td>?</td>
