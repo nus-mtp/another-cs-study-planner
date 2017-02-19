@@ -26,7 +26,8 @@ URLS = (
     '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
     '/editModule', 'components.handlers.module_edit.EditModuleInfo',
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
-    '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule'
+    '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
 
