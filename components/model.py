@@ -187,6 +187,18 @@ def add_admin(username, salt, hashed_pass):
     CONNECTION.commit()
 
 
+def is_userid_taken(userid):
+    '''
+        Retrieves all account ids for testing if a user id supplied
+        during account creation
+    '''
+    sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (userid,))
+
+    result = DB_CURSOR.fetchall()
+    return len(result) != 0
+
+
 def delete_admin(username):
     '''
         Delete an admin from the database.
