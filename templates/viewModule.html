@@ -1,6 +1,5 @@
-$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentsPlanning)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning)
 
-$ hasMountingAndQuota = (len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0)
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
 $ moduleDescription = moduleInfo[2]
@@ -64,7 +63,8 @@ $code:
 					<h4><b>Module Prerequisites:</b></h4>
 					<p>--not parsed yet</p>
 					<br>
-					<h4><b>Class Quota for AY-Semesters:</b></h4>
+					<h4><b>Information for each AY/Sem:</b></h4>
+					<h4 style="text-decoration: line-through"><b>Class Quota for AY-Semesters</b></h4>
 					<br>
 				</div>
 				<div  class="col-md-12">
@@ -72,21 +72,14 @@ $code:
 					<table class="table table-bordered table-hover" id="mountingAndQuota">
 						<thead>
 							<tr>
+								<th>AY/Sem</th>
 								<th>Mounted In</th>
 								<th>Quota</th>
 								<th>Students Planning to Take</th>
 							</tr>
 						</thead>
 						<tbody>
-					$if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
-						<tr>
-							<td>Nil</td>
-							<td>Nil</td>
-							<td>Nil</td>
-						</tr>
-						</tbody>
-					$else:
-						$for entry in fixedMountingAndQuota:
+						$for entry in fixedMountingPlan:
 							<tr>
 								<td>
 									<form action="/individualModuleInfo" method="get">
@@ -96,15 +89,16 @@ $code:
 										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
+							<td>$entry[1]</td>
 							$ numberTaking = getNumStudents(entry[0])
-							$if entry[1] == None:
+							$if entry[2] == None:
 								<td>?</td>
 								<td>$numberTaking</td>
 							$else:
-								<td>$entry[1]</td>
+								<td>$entry[2]</td>
 								<td>$numberTaking</td>
 							</tr>
-						$for entry in tentativeMountingAndQuota:
+						$for entry in tentaMountingPlan:
 							<tr>
 								<td>
 									<form action="/individualModuleInfo" method="get">
@@ -114,10 +108,12 @@ $code:
 										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
-							$if entry[1] == None:
+							<td>$entry[1]</td>
+							$if entry[2] == None:
+								<td>?</td>
 								<td>?</td>
 							$else:
-								<td>$entry[1] (Tentative)</td>
+								<td>$entry[2]</td>
 								<td>?</td>
 							</tr>
 						</tbody>

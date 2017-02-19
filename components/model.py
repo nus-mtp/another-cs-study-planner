@@ -54,7 +54,7 @@ def get_all_tenta_mounted_modules():
 
 def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     '''
-        Get the module code, name, AY/Sem and quota of all tentative mounted modules of a selected AY
+        Get the module code, name, AY/Sem and quota of all tenta mounted mods of a selected AY
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
                   "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
@@ -72,6 +72,24 @@ def get_first_fixed_mounting():
     sql_command = "SELECT acadYearAndSem FROM moduleMounted LIMIT(1)"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchone()
+
+
+def get_all_fixed_ay_sems():
+    '''
+        Get all the distinct AY/Sem in the fixed mounting table
+    '''
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
+def get_all_tenta_ay_sems():
+    '''
+        Get all the distinct AY/Sem in the tentative mounting table
+    '''
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def get_fixed_mounting_and_quota(code):
