@@ -1,11 +1,56 @@
-$def with (loginform, registerform)
+$def with (loginform, registerform, response=0)
 
-<form id="loginForm" action="/verifyLogin" method="post">
-	$:loginform.render()
-</form>
+$var title:Login to CSModify
 
-<br>
+$# Account is successfully created
+$if response == 1:
+	<script type="text/javascript">
+		window.alert("Your account has been created successfully.");
+	</script>
 
-<form id="registerForm" action="" method="post">
-	$:registerform.render()
-</form>
+$# Account ID is taken
+$if response == -1:
+	<script type="text/javascript">
+		window.alert("The username has been taken. Please register with a different username.");
+	</script>
+
+$# User login is unsuccessful
+$if response == -2:
+	<script type="text/javascript">
+		window.alert("Login credentials are incorrect. Please try again.");
+	</script>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="page-header text-center">
+			<h1>CSModify</h1>
+			<p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 text-center account-form-wrapper">
+		<h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
+		<br>
+		$if response == 2:
+			<h2>You have already logged in.</h2>
+			<br>
+			<a href="/"><button class="btn btn-primary">Enter</button></a>
+		$else:
+			<form id="loginForm" action="/verifyLogin" method="post">
+				$:loginform.render()
+			</form>
+		<br>
+		<br>
+	</div>
+	<div class="col-md-6 text-center account-form-wrapper" id="register-form-wrapper">
+		<h2 class="text-center"><span class="glyphicon glyphicon-pencil"></span> Account Registration</h2>
+		<br>
+		<form id="registerForm" action="" method="post">
+			$:registerform.render()
+		</form>
+		<br>
+		<br>
+	</div>
+</div>
