@@ -1,5 +1,5 @@
 '''
-    Dummy handler for registration and logging in.
+    This module handles account registration and logging in.
 '''
 
 from app import RENDER
@@ -8,17 +8,18 @@ from components import model
 import hashlib
 import uuid
 
-def create_login_form(self):
+def create_login_form():
         '''
             Creates a 'Login' form that will appear on the webpage
         '''
-
         username_textbox = web.form.Textbox('username',
                                             web.form.notnull,
+                                            post="<br><br>",
                                             description="Username")
 
         password_textbox = web.form.Password('password',
                                              web.form.notnull,
+                                             post="<br><br>",
                                              description="Password")
 
         login_button = web.form.Button('Login',
@@ -29,17 +30,16 @@ def create_login_form(self):
                                    login_button)
         return login_form
 
+
 ## For login test
 class Login(object):
     '''
         Class handles registration (put user in database)
         and login (verifying if user is in database)
     '''
-
-
     def __init__(self):
         model.CONNECTION.rollback()
-        self.login_form = create_login_form(self)
+        self.login_form = create_login_form()
         self.registration_form = self.create_registration_form()
 
 
@@ -47,23 +47,36 @@ class Login(object):
         '''
             This function is called when /login is accessed.
         '''
-        return RENDER.login(self.login_form, self.registration_form)
+        login_form = self.login_form()
+        registration_form = self.registration_form()
+        return RENDER.login(login_form, registration_form, web.account_page_response)
 
 
     def POST(self):
         '''
             This function is called when the register button is clicked.
-            If both fields are not empty, admin is added.
+            
+            1) If both fields are empty, form will show error messages.
+            2) If username is taken, an alert will indicate that username
+               is taken.
+            3) If all validations pass, the account is inserted into the database.
         '''
-        form = self.registration_form()
+        login_form = self.login_form()
+        registration_form = self.registration_form()
         
         # returns to page without creating
-        if not form.validates(): 
-            return RENDER.login(self.login_form, self.registration_form)
+        if not registration_form.validates():
+            return RENDER.login(login_form, registration_form)
         else:
-            salt = uuid.uuid4().hex
-            hashed_password = hashlib.sha512(form.d.password + salt).hexdigest()
-            model.add_admin(form.d.username, salt, hashed_password)
+            if (model.is_userid_taken(registration_form.d.username)):
+                web.account_page_response = web.ACCOUNT_CREATED_UNSUCCESSFUL
+            else:
+                salt = uuid.uuid4().hex
+                hashed_password = hashlib.sha512(registration_form.d.password
+                                                 + salt).hexdigest()
+                model.add_admin(registration_form.d.username, salt, hashed_password)
+                web.account_page_response = web.ACCOUNT_CREATED_SUCCESSFUL
+
             raise web.seeother('/login')
 
 
@@ -71,13 +84,18 @@ class Login(object):
         '''
             Creates a 'Register' form that will appear on the webpage
         '''
+        username_validation_alphanumeric = web.form.regexp(
+            r"^\w+$", 'Username should be alphanumeric.')
 
         username_textbox = web.form.Textbox('username',
                                             web.form.notnull,
+                                            username_validation_alphanumeric,
+                                            post="<br><br>",
                                             description="Username")
 
         password_textbox = web.form.Password('password',
                                              web.form.notnull,
+                                             post="<br><br>",
                                              description="Password")
 
         register_button = web.form.Button('Register',
@@ -87,23 +105,30 @@ class Login(object):
                                           password_textbox,
                                           register_button)
         return registration_form
-    
+
+
 class verifyLogin(object):
+    '''
+        Class handles login authentication.
+    '''
     def POST(self):
         '''
             This function is called when the login button is clicked.
             If both fields are empty, return to login page.
         '''
-        form = create_login_form(self)
+        form = create_login_form()
         # returns to login page
-        if not form.validates(): 
+        if not form.validates():
+            web.account_page_response = web.ACCOUNT_LOGIN_UNSUCCESSFUL
             raise web.seeother('/login')
         else:
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
+                web.account_page_response = web.ACCOUNT_LOGIN_SUCCESSFUL
                 raise web.seeother('/')
             # Else go to error page
             else:
-                raise web.seeother('/404')
+                web.account_page_response = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+                raise web.seeother('/login')
             
