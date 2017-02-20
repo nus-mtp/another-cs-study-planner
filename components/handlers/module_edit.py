@@ -24,7 +24,7 @@ class EditModuleInfo(object):
 
         if form_status == "load":
             module_info = model.get_module(module_code)
-            return RENDER.moduleEdit_stub(module_info)
+            return RENDER.moduleEdit(module_info)
 
         elif form_status == "submit":
             module_name = data.name
