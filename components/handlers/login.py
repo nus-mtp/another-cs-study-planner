@@ -2,33 +2,34 @@
     This module handles account registration and logging in.
 '''
 
+import hashlib
+import uuid
 from app import RENDER, SESSION
 import web
 from components import model
-import hashlib
-import uuid
+
 
 def create_login_form():
-        '''
-            Creates a 'Login' form that will appear on the webpage
-        '''
-        username_textbox = web.form.Textbox('username',
-                                            web.form.notnull,
-                                            post="<br><br>",
-                                            description="Username")
+    '''
+        Creates a 'Login' form that will appear on the webpage
+    '''
+    username_textbox = web.form.Textbox('username',
+                                        web.form.notnull,
+                                        post="<br><br>",
+                                        description="Username")
 
-        password_textbox = web.form.Password('password',
-                                             web.form.notnull,
-                                             post="<br><br>",
-                                             description="Password")
+    password_textbox = web.form.Password('password',
+                                         web.form.notnull,
+                                         post="<br><br>",
+                                         description="Password")
 
-        login_button = web.form.Button('Login',
-                                       class_="btn btn-primary")
+    login_button = web.form.Button('Login',
+                                   class_="btn btn-primary")
 
-        login_form = web.form.Form(username_textbox,
-                                   password_textbox,
-                                   login_button)
-        return login_form
+    login_form = web.form.Form(username_textbox,
+                               password_textbox,
+                               login_button)
+    return login_form
 
 
 ## For login test
@@ -55,7 +56,7 @@ class Login(object):
     def POST(self):
         '''
             This function is called when the register button is clicked.
-            
+
             1) If both fields are empty, form will show error messages.
             2) If username is taken, an alert will indicate that username
                is taken.
@@ -63,12 +64,12 @@ class Login(object):
         '''
         login_form = self.login_form()
         registration_form = self.registration_form()
-        
+
         # returns to page without creating
         if not registration_form.validates():
             return RENDER.login(login_form, registration_form)
         else:
-            if (model.is_userid_taken(registration_form.d.username)):
+            if model.is_userid_taken(registration_form.d.username):
                 SESSION['id'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
             else:
                 salt = uuid.uuid4().hex

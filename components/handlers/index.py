@@ -17,10 +17,13 @@ class Index(object):
 
 
     def GET(self):
-        if (SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL):
+        '''
+            This function is called when the '/' page (index.html) is loaded
+            If user is not logged in, they are redirected to the login page.
+        '''
+        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
         else:
-            ''' This function is called when the '/' page (index.html) is loaded '''
             module_infos = model.get_all_modules()
             form = self.form()
             return RENDER.index(module_infos, form)
