@@ -16,7 +16,7 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from app import APP
+from app import APP, SESSION
 
 
 class TestCode(object):
@@ -42,8 +42,10 @@ class TestCode(object):
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
-    TABLE_HEADER_MOUNTING_SEM_1 = '<th>Mounted In Sem 1</th>'
-    TABLE_HEADER_MOUNTING_SEM_2 = '<th>Mounted In Sem 2</th>'
+    TABLE_HEADER_MOUNTING_SEM_1 = '<th data-sortable="false">' +\
+                                  'Mounted In Sem 1</th>'
+    TABLE_HEADER_MOUNTING_SEM_2 = '<th data-sortable="false">' +\
+                                  'Mounted In Sem 2</th>'
     TABLE_HEADER_ACTION = '<th>Action</th>'
     TABLE_MOUNTING_SYMBOL_MOUNTED = '<span class="glyphicon glyphicon-ok" ' +\
                                     'data-toggle="tooltip" data-placement="bottom" ' +\
@@ -65,6 +67,7 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
+        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
 

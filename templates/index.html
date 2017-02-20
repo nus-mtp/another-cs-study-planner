@@ -1,4 +1,6 @@
-$def with (moduleInfos, form)  
+$def with (moduleInfos, form)
+
+$var title:Module Listing
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -34,7 +36,7 @@ $def with (moduleInfos, form)
             <br>
             <h1 class="text-center">All Modules</h1>
 
-            <table class="table table-bordered table-hover">
+            <table class="table display dataTable table-bordered table-hover" id="module-listing-table">
                 <thead>
                     <tr>
                         <th>Code</th>
@@ -42,11 +44,11 @@ $def with (moduleInfos, form)
                         <th>Description</th>
                         <th>MCs</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th data-sortable="false">Actions</th>
                     </tr>
                 </thead>
-            $for moduleInfo in moduleInfos:
                 <tbody>
+                $for moduleInfo in moduleInfos:
                     <tr>
                         <td class="text-center">$moduleInfo[0]</td>
                         <td>$moduleInfo[1]</td>
@@ -66,6 +68,8 @@ $def with (moduleInfos, form)
                     </tr>
                 </tbody>
             </table>
+            <br>
+            <br>
         </div>
     </div>
 </div>

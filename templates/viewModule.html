@@ -14,6 +14,10 @@ $code:
                 return mounting[0]
         return 0
 
+$ title_string = 'View Info for ' + moduleCode
+
+$var title:$title_string
+
 <!--bottom half module info-->
 <div class="container-fluid">
 	<div class="row"><!--left half of module info-->
@@ -94,7 +98,7 @@ $code:
 										<input type="hidden" name="code" value="$moduleCode">
 										<input type="hidden" name="targetAY" value="$entry[0]">
 										<input type="hidden" name="quota" value="$entry[1]">
-										<input type="submit" value="$entry[0]">
+										<input class="btn btn-primary" type="submit" value="$entry[0]">
 									</form>
 								</td>
 							$ numberTaking = getNumStudents(entry[0])
@@ -112,7 +116,7 @@ $code:
 										<input type="hidden" name="code" value="$moduleCode">
 										<input type="hidden" name="targetAY" value="$entry[0]">
 										<input type="hidden" name="quota" value="$entry[1]">
-										<input type="submit" value="$entry[0]">
+										<input class="btn btn-primary" type="submit" value="$entry[0]">
 									</form>
 								</td>
 							$if entry[1] == None:

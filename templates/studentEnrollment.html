@@ -1,10 +1,13 @@
 $def with (yr_of_study_count_table, focus_count_table)
 
+$var title:View Student Enrollment
+
 <div class="container-fluid">
 	<h1 class="text-center"><b>Student Enrollment Information</b></h1>
 	<hr>
 	<h2>Student Enrollment by Year of Study</h2>
-	<table class="table table-bordered table-hover text-center">
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="student-year-table">
 		<thead>
 			<tr>
 				<th>Year of Study</th>
@@ -21,7 +24,8 @@ $def with (yr_of_study_count_table, focus_count_table)
 	</table>
 	<br>
 	<h2>Student Enrollment by Focus Area</h2>
-	<table class="table table-bordered table-hover text-center">
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="student-focus-area-table">
 		<thead>
 			<tr>
 				<th>Focus Area</th>
@@ -36,4 +40,6 @@ $def with (yr_of_study_count_table, focus_count_table)
 				</tr>
 		</tbody>
 	</table>
+	<br>
+	<br>
 </div>

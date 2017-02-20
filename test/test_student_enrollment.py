@@ -15,8 +15,8 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP
+from nose.tools import assert_equal
+from app import APP, SESSION
 
 
 class TestCode(object):
@@ -44,11 +44,15 @@ class TestCode(object):
         'Software Engineering'
     ]
 
+    # Single-degree students have highest candidature period of 5 years
+    # Double-degree students have highest candidature period of 6 years
     TABLE_YEARS_OF_STUDY = [
         '<td>1</td>',
         '<td>2</td>',
         '<td>3</td>',
-        '<td>4</td>'
+        '<td>4</td>',
+        '<td>5</td>',
+        '<td>6</td>'
     ]
 
 
@@ -61,6 +65,7 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
+        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
 
@@ -69,7 +74,7 @@ class TestCode(object):
         '''
             Tests whether user can access page for showing student
             enrollment without request errors.
-        ''' 
+        '''
         root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         assert_equal(root.status, 200)

@@ -1,4 +1,6 @@
-$def with (mountedModuleInfos)  
+$def with (mountedModuleInfos)
+
+$var title:Tentative Module Mountings for AY 17/18
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -9,26 +11,30 @@ $def with (mountedModuleInfos)
                     <input class="btn btn-primary" type="submit" value="Go To All Modules" />
                 </form>
                 <form class="navForm" action="/moduleMountingFixed" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
+                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mounting for AY 16/17" />
                 </form>
+                <!--form class="navForm" action="/" method="post">
+                    <input class="btn btn-primary" type="submit" value="Go To All Tentative Module Mountings" />
+                </form-->
             </div>
         </div>
 
         <div class="col-md-12">
-            <h1>Module Mountings (Tentative)</h1>
+            <h1>Module Mountings For <b>AY 17/18 (Tentative)</b></h1>
+            <br>
 
-            <table class="table table-bordered table-hover text-center">
+            <table class="table display dataTable table-bordered table-hover text-center" id="tentative-mounting-table">
                 <thead>
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th>Mounted In Sem 1</th>
-                        <th>Mounted In Sem 2</th>
+                        <th data-sortable="false">Mounted In Sem 1</th>
+                        <th data-sortable="false">Mounted In Sem 2</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-            $for mountedModuleInfo in mountedModuleInfos:
                 <tbody>
+                $for mountedModuleInfo in mountedModuleInfos:
                     <tr>
                         <td>$mountedModuleInfo[0]</td>
                         <td>$mountedModuleInfo[1]</td>
@@ -37,12 +43,14 @@ $def with (mountedModuleInfos)
                         <td>
                             <form action="/viewModule" method="get">
                                 <input type="hidden" name="code" value="$mountedModuleInfo[0]">
-                                <input type="submit" value="View Module"/>
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <br>
+            <br>
         </div>
     </div>
 </div>
