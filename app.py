@@ -53,14 +53,16 @@ RENDER = web.template.render('templates', base='base')
 APP = web.application(URLS, globals())
 
 '''
-    Global variables for handling accounts page.
+    Variables for handling accounts page.
 '''
-web.account_page_response = 0
 web.ACCOUNT_CREATED_SUCCESSFUL = 1
 web.ACCOUNT_CREATED_UNSUCCESSFUL = -1
 web.ACCOUNT_LOGIN_SUCCESSFUL = 2
 web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 
+web.config.session_parameters['ignore_expiry'] = False
+
+SESSION = web.session.Session(APP, web.session.DiskStore('sessions'), initializer={'id': None})._initializer
 
 if __name__ == '__main__':
     APP.run()

@@ -3,7 +3,7 @@
     the home page.
 '''
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 
@@ -17,7 +17,7 @@ class Index(object):
 
 
     def GET(self):
-        if (web.account_page_response != web.ACCOUNT_LOGIN_SUCCESSFUL):
+        if (SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL):
             raise web.seeother('/login')
         else:
             ''' This function is called when the '/' page (index.html) is loaded '''

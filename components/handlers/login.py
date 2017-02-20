@@ -2,7 +2,7 @@
     This module handles account registration and logging in.
 '''
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 import hashlib
@@ -49,7 +49,7 @@ class Login(object):
         '''
         login_form = self.login_form()
         registration_form = self.registration_form()
-        return RENDER.login(login_form, registration_form, web.account_page_response)
+        return RENDER.login(login_form, registration_form, SESSION['id'])
 
 
     def POST(self):
@@ -69,13 +69,13 @@ class Login(object):
             return RENDER.login(login_form, registration_form)
         else:
             if (model.is_userid_taken(registration_form.d.username)):
-                web.account_page_response = web.ACCOUNT_CREATED_UNSUCCESSFUL
+                SESSION['id'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
             else:
                 salt = uuid.uuid4().hex
                 hashed_password = hashlib.sha512(registration_form.d.password
                                                  + salt).hexdigest()
                 model.add_admin(registration_form.d.username, salt, hashed_password)
-                web.account_page_response = web.ACCOUNT_CREATED_SUCCESSFUL
+                SESSION['id'] = web.ACCOUNT_CREATED_SUCCESSFUL
 
             raise web.seeother('/login')
 
@@ -119,16 +119,16 @@ class verifyLogin(object):
         form = create_login_form()
         # returns to login page
         if not form.validates():
-            web.account_page_response = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+            SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
             raise web.seeother('/login')
         else:
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
-                web.account_page_response = web.ACCOUNT_LOGIN_SUCCESSFUL
+                SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
                 raise web.seeother('/')
             # Else go to error page
             else:
-                web.account_page_response = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+                SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
                 raise web.seeother('/login')
             
