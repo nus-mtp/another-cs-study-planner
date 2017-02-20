@@ -1,4 +1,4 @@
-$def with (currentAY, fullMountingPlan)
+$def with (selectedAY, fullMountingPlan)  
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -8,14 +8,14 @@ $def with (currentAY, fullMountingPlan)
                 <form class="navForm" action="/modules" method="post">
                     <input class="btn btn-primary" type="submit" value="Go To All Modules" />
                 </form>
-                <form class="navForm" action="/moduleMountingTentative" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
+                <form class="navForm" action="/moduleMountingFixed" method="post">
+                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
                 </form>
             </div>
         </div>
 
         <div class="col-md-12">
-            <h1>Fixed Module Mountings for <b>$currentAY</b></h1>
+            <h1>Tentative Module Mountings for <b>$selectedAY</b></h1>
 
             <table class="table table-bordered table-hover text-center">
                 <thead>
@@ -36,6 +36,10 @@ $def with (currentAY, fullMountingPlan)
                     <td>
                         <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
                     </td>
+                $elif subplan[2] == 0:
+                    <td>
+                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                    </td>
                 $elif subplan[2] == -1:
                     <td>
                         <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
@@ -43,6 +47,10 @@ $def with (currentAY, fullMountingPlan)
                 $if subplan[3] == 1:
                     <td>
                         <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                    </td>
+                $elif subplan[3] == 0:
+                    <td>
+                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
                     </td>
                 $elif subplan[3] == -1:
                     <td>
@@ -54,8 +62,8 @@ $def with (currentAY, fullMountingPlan)
                             <input type="hidden" name="code" value="$subplan[0]">
                             <input type="submit" value="View Module"/>
                         </form>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
