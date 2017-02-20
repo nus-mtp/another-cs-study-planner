@@ -270,7 +270,7 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
-  
+
 
 def get_num_students_by_yr_study():
     '''
