@@ -25,7 +25,7 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from app import APP
+from app import APP, SESSION
 from components import model
 import hashlib
 import uuid
@@ -87,7 +87,7 @@ class TestCode(object):
         '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        web.account_page_response = 0
+        SESSION['id'] = 0
         model.delete_admin("user")
         model.delete_admin("user2")
         self.create_dummy_user()
@@ -160,7 +160,7 @@ class TestCode(object):
         # Checks if page contains title of All Modules page
         redirected.mustcontain("All Modules")
 
-
+        #FAIL
     def test_blank_username_login_submission_response(self):
         '''
             Tests if user should fail to login if username
@@ -182,7 +182,7 @@ class TestCode(object):
         redirected.mustcontain("User Login")
         redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
 
-
+        #FAIL
     def test_blank_password_login_submission_response(self):
         '''
             Tests if user should fail to login if password
@@ -226,7 +226,7 @@ class TestCode(object):
         redirected.mustcontain("User Login")
         redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
 
-
+        #FAIL
     def test_already_logged_in_response(self):
         '''
             Tests if user should not see the login form if he has

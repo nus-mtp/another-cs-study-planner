@@ -3,7 +3,7 @@
 '''
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from app import APP
+from app import APP, SESSION
 import web
 
 
@@ -64,7 +64,7 @@ class TestCode(object):
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
         # Sets up the simulated 'login' state
-        web.account_page_response = web.ACCOUNT_LOGIN_SUCCESSFUL
+        SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
 
 
     def test_index_valid_response(self):
