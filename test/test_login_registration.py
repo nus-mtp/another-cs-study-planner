@@ -23,13 +23,13 @@
 '''
 
 
-from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP, SESSION
-from components import model
 import hashlib
 import uuid
-import web
+from paste.fixture import TestApp
+from nose.tools import assert_equal
+from app import APP, SESSION
+from components import model
+
 
 
 class TestCode(object):
@@ -51,7 +51,7 @@ class TestCode(object):
                                      'name="password"/>'
     FORM_USER_LOGIN_BUTTON = '<input class="btn btn-primary" ' +\
                               'type="submit" value="Login" />'
-    
+
     FORM_USER_REGISTRATION = '<form id="registerForm" action="" method="post">'
     FORM_USER_REGISTRATION_USERNAME_LABEL = '<label for="username">Username</label>'
     FORM_USER_REGISTRATION_USERNAME_FIELD = '<input type="text" id="username" ' +\
@@ -296,7 +296,7 @@ class TestCode(object):
         response.mustcontain("Required")
 
 
-    def test_blank_username_registration_submission_response(self):
+    def test_blank_password_registration_submission_response(self):
         '''
             Tests if account registration with no password triggers validation.
         '''
