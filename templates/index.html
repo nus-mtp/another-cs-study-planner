@@ -1,75 +1,116 @@
-$def with (moduleInfos, form)
+
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, systemMessage)
 
 $var title:Module Listing
 
-<div class="container-fluid" id="main">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-7">
-                    <div id="add-module-form-wrapper">
-                        <h2><span class="glyphicon glyphicon-pencil"></span> Add a new module</h2>
-                        <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
-                        <form id="addModForm" action="" method="post">
-                            $:form.render()
-                        </form>
-                    </div>
-                </div>
+$ moduleCode = moduleInfo[0]
+$ moduleName = moduleInfo[1]
+$ moduleDescription = moduleInfo[2]
+$ moduleMC = moduleInfo[3]
 
-                <div class="col-md-5">
-                    <div id="module-mounting-options">
-                        <h2><span class="glyphicon glyphicon-list"></span> View Module Mountings</h2>
-                        <p>View your mounting plans here.</p>
-                        <br>
-                        <form action="/moduleMountingFixed" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
-                        </form>
-                        <form action="/moduleMountingTentative" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <br>
-            <h1 class="text-center">All Modules</h1>
-
-            <table class="table display dataTable table-bordered table-hover" id="module-listing-table">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>MCs</th>
-                        <th>Status</th>
-                        <th data-sortable="false">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                $for moduleInfo in moduleInfos:
-                    <tr>
-                        <td class="text-center">$moduleInfo[0]</td>
-                        <td>$moduleInfo[1]</td>
-                        <td>$moduleInfo[2]</td>
-                        <td class="text-center">$moduleInfo[3]</td>
-                        <td class="text-center">$moduleInfo[4]</td>
-                        <td class="text-center">
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$moduleInfo[0]">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                            $if moduleInfo[4][0:3] == 'New':
-                                <form action="/deleteModule/$moduleInfo[0]" method="post">
-                                    <input class="btn btn-primary" type="submit" value="Delete Module"/>
-                                </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br>
-            <br>
-        </div>
-    </div>
+<div clas="container-fluid">
+	<div class="row">
+		<div class="col-md-6 module-info-wrapper">
+			<div class="row">
+				<div class="col-md-12">
+					<!--search form-->
+					<form class="search-form" id="search-form" action"#">
+						<h2>Search Module</h2>
+						<br>
+						<div class="form-group">
+							<label for="module-code">Enter Module Code: </label>
+							<input type="text" class="form-control" name="module-code" pattern="[a-zA-Z0-9]+" placeholder="Module Code" required>
+						</div>
+						<div class="form-group">
+							<label for="ay-sem">Select Target AY &amp; Semester: </label>
+							<br>
+							<select name="ay-sem" form="search-form">
+								<option value="1">AY 2016/2017 Sem 1</option>
+								<option value="2">AY 2016/2017 Sem 2</option>
+								<option value="3">AY 2016/2017 Special Term I</option>
+								<option value="4">AY 2016/2017 Special Term II</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary">Search</button>
+					</form>
+					<br>
+					<hr>
+				</div>
+				<div class="col-md-12 text-center">
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
+					<h3>Module Info for <b><u>$aySem</u></b></h3>
+				</div>
+				<div class="col-md-12 module-header">
+					<div class="page-header">
+						<h1><b>$moduleCode</b></h1>
+						<h3>$moduleName ($moduleMC MCs)"</h3>
+						<br>
+						<table style="border-spacing: 5px; border-collapse: separate;">
+							<tr>
+								<td>
+									<form action="/editModule" style="display:inline-block" method="post">
+										<input type="hidden" name="status" value="load">
+										<input type="hidden" name="code" value="$moduleCode">
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
+			                        </form>
+			                    </td>
+		                    $if isFutureAY is True:
+								<td>
+			                        <form action="/editMounting" style="display:inline-block" method="post">
+			                        	<input type="hidden" name="status" value="load">
+			                        	<input type="hidden" name="code" value="$moduleCode">
+			                        	<input type="hidden" name="aySem" value="$aySem">
+			                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
+			                        	<input type="hidden" name="quota" value="$quota">
+			                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Mounting" />
+									</form>
+			                    </td>
+		                    $if True:
+		                    	<td>
+									<form action="/viewModule" style="display:inline-block" method="get">
+										<input type="hidden" name="code" value="$moduleCode" />
+										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
+									</form>
+								</td>
+			                </tr>
+			             </table>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<h4><b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>$mountingStatus</h4>
+					<br>
+					<h4><b>Class Quota:&nbsp;&nbsp;&nbsp;</b>
+						$if quota is None:
+							?
+						$else:
+							$quota
+					</h4>
+					<hr>
+				</div>
+				<div class="col-md-12">
+					<h4><b>Module Description:</b></h4>
+					<p>
+						$moduleDescription
+					</p>
+					<br>
+					<h4><b>Module Preclusions:</b></h4>
+					<p>--none loaded</p>
+					<br>
+					<h4><b>Module Prerequisites:</b></h4>
+					<p>--none loaded</p>
+					<br>
+				</div>
+			</div>
+		</div>
+		<!--module statistics, in other view-->
+		<div class="col-md-6 module-analysis-wrapper">
+			<div class="page-header text-center">
+				<h2>Module Statistics</h2>
+			</div>
+			<h4><b>Student Demand:</b></h4>
+			<p>--none loaded</p>
+		</div>
+	</div>
 </div>
+
