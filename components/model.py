@@ -3,9 +3,9 @@
     Handles queries to the database
 '''
 
+import hashlib
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
-
 
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
@@ -227,13 +227,17 @@ def get_oversub_mod():
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
-            quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+            real_quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
-            if quota is None:
+            # ensures that quota will be a number which is not None
+            if real_quota is None:
                 quota = 0
+                real_quota = '?'
+            else:
+                quota = real_quota
 
             if num_student_planning > quota:
-                oversub_info = (mod_code, ay_sem, quota, num_student_planning)
+                oversub_info = (mod_code, ay_sem, real_quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
@@ -253,6 +257,58 @@ def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
             return quota_in_pair
 
     return None # quota not found in list
+
+
+def add_admin(username, salt, hashed_pass):
+    '''
+        Register an admin into the database.
+        Note: to change last argument to false once
+        activation done
+    '''
+    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+    CONNECTION.commit()
+
+
+def is_userid_taken(userid):
+    '''
+        Retrieves all account ids for testing if a user id supplied
+        during account creation
+    '''
+    sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (userid,))
+
+    result = DB_CURSOR.fetchall()
+    return len(result) != 0
+
+
+def delete_admin(username):
+    '''
+        Delete an admin from the database.
+    '''
+    # Delete the foreign key references first.
+    sql_command = "DELETE FROM starred WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+
+    sql_command = "DELETE FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    CONNECTION.commit()
+
+
+def validate_admin(username, unhashed_pass):
+    '''
+        Check if a provided admin-password pair is valid.
+    '''
+    sql_command = "SELECT salt, password FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    admin = DB_CURSOR.fetchall()
+    if not admin:
+        return False
+    else:
+        hashed_pass = hashlib.sha512(unhashed_pass + admin[0][0]).hexdigest()
+        is_valid = (admin[0][1] == hashed_pass)
+        return is_valid
+
 
 def add_fixed_mounting(code, ay_sem, quota):
     '''
@@ -318,7 +374,6 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
-
 
 
 def get_num_students_by_yr_study():

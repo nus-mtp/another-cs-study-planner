@@ -16,7 +16,7 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-from app import APP
+from app import APP, SESSION
 
 
 class TestCode(object):
@@ -66,6 +66,7 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
+        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
 

@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 from components.handlers.fixed_module_mountings import Fixed
@@ -94,6 +94,9 @@ class Tentative(object):
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
+        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+            raise web.seeother('/login')
+            
         #input_data = web.input()
         #selected_ay = input_data.ay        # User will select the AY that he wants to see
         selected_ay = "AY 17/18"        # Hardcoded for now

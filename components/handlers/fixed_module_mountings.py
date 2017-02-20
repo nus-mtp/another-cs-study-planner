@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER
+from app import RENDER, SESSION
 import web
 from components import model
 
@@ -81,6 +81,9 @@ class Fixed(object):
             Renders the fixed mounting page if users requested
             for the page through the GET method.
         '''
+        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+            raise web.seeother('/login')
+
         self.populate_module_code_and_name()
         self.populate_mounting_values()
         current_ay = self.get_current_ay()

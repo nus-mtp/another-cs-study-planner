@@ -28,6 +28,8 @@ URLS = (
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
+    '/login', 'components.handlers.login.Login',
+    '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
@@ -49,11 +51,24 @@ RENDER = web.template.render('templates', base='base')
     globals().
 '''
 APP = web.application(URLS, globals())
+
+'''
+    Variables for handling accounts page.
+'''
+web.ACCOUNT_CREATED_SUCCESSFUL = 1
+web.ACCOUNT_CREATED_UNSUCCESSFUL = -1
+web.ACCOUNT_LOGIN_SUCCESSFUL = 2
+web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
+
+web.config.session_parameters['ignore_expiry'] = False
+
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'keyError': False,
+                              initializer={'id': None,
+                                           'keyError': False,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,
                                            'editMountMsg': None})._initializer
+
 
 if __name__ == '__main__':
     APP.run()

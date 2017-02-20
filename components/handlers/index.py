@@ -17,16 +17,21 @@ class Index(object):
 
 
     def GET(self):
-        ''' This function is called when the '/' page (index.html) is loaded '''
-        module_infos = model.get_all_modules()
-        form = self.form()
-
-        if SESSION['displayErrorMessage'] is True:
-            SESSION['displayErrorMessage'] = False
+        '''
+            This function is called when the '/' page (index.html) is loaded
+            If user is not logged in, they are redirected to the login page.
+        '''
+        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+            raise web.seeother('/login')
         else:
-            SESSION['keyError'] = False
+            module_infos = model.get_all_modules()
+            form = self.form()
+            if SESSION['displayErrorMessage'] is True:
+                SESSION['displayErrorMessage'] = False
+            else:
+                SESSION['keyError'] = False
 
-        return RENDER.index(module_infos, form, SESSION['keyError'])
+            return RENDER.index_updated(module_infos, form, SESSION['keyError'])
 
 
     def POST(self):

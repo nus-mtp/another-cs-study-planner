@@ -1,5 +1,7 @@
 $def with (currentAY, fullMountingPlan)
 
+$var title:Fixed Module Mountings for AY 16/17
+
 <div class="container-fluid" id="main">
     <div class="row">
         <div class="col-md-12">
@@ -17,45 +19,46 @@ $def with (currentAY, fullMountingPlan)
         <div class="col-md-12">
             <h1>Fixed Module Mountings for <b>$currentAY</b></h1>
 
-            <table class="table table-bordered table-hover text-center">
+            <table class="table display dataTable table-bordered table-hover text-center" id="fixed-mounting-table">
                 <thead>
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th>Mounted In Sem 1</th>
-                        <th>Mounted In Sem 2</th>
+                        <th data-sortable="false">Mounted In Sem 1</th>
+                        <th data-sortable="false">Mounted In Sem 2</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-            $for subplan in fullMountingPlan:
+            
                 <tbody>
-                <tr>
-                    <td>$subplan[0]</td>
-                    <td>$subplan[1]</td>
-                $if subplan[2] == 1:
-                    <td>
-                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                    </td>
-                $elif subplan[2] == -1:
-                    <td>
-                        <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                    </td>
-                $if subplan[3] == 1:
-                    <td>
-                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                    </td>
-                $elif subplan[3] == -1:
-                    <td>
-                        <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                    </td>
-                $if True:
-                    <td>
-                        <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$subplan[0]">
-                            <input type="submit" value="View Module"/>
-                        </form>
-                    </td>
-                </tr>
+                $for subplan in fullMountingPlan:
+                    <tr>
+                        <td>$subplan[0]</td>
+                        <td>$subplan[1]</td>
+                        $if subplan[2] == 1:
+                            <td>
+                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                            </td>
+                        $elif subplan[2] == -1:
+                            <td>
+                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                            </td>
+                        $if subplan[3] == 1:
+                            <td>
+                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                            </td>
+                        $elif subplan[3] == -1:
+                            <td>
+                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                            </td>
+                        $if True:
+                            <td>
+                                <form action="/viewModule" method="get">
+                                    <input type="hidden" name="code" value="$subplan[0]">
+                                    <input type="submit" value="View Module"/>
+                                </form>
+                            </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

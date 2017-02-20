@@ -225,3 +225,22 @@ class TestCode(object):
 
         assert_equal(mounting_s1, self.test_module_tenta_mounting_s1)
         assert_equal(quota_s1, 999)
+
+
+    def test_add_validate_and_delete_admin(self):
+        '''
+            Tests addition, validation, and deletion of admins.
+        '''
+        salted_pass = "7064b94a4296650fcf5af42f25a41f5e70000fb140baa56623c" +\
+                        "df4da2a2bc25f0db5168f57b1ebd96b10c40737c1a73285907" +\
+                        "265f619ac85b281cd2fc5f4207d"
+        is_admin_valid = model.validate_admin("Admin 1", "pass")
+        assert_false(is_admin_valid)
+
+        model.add_admin("Admin 1", "salt", salted_pass)
+        is_admin_valid = model.validate_admin("Admin 1", "pass")
+        assert_true(is_admin_valid)
+
+        model.delete_admin("Admin 1")
+        is_admin_valid = model.validate_admin("Admin 1", "pass")
+        assert_false(is_admin_valid)
