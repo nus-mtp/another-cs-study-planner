@@ -3,9 +3,8 @@
     Handles queries to the database
 '''
 
-import components.database_adapter # database_adaptor.py handles the connection to database
-import uuid
 import hashlib
+import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 
 ## Connects to the postgres database
