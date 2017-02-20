@@ -15,7 +15,7 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP
 
 
@@ -73,7 +73,7 @@ class TestCode(object):
         '''
             Tests whether user can access page for showing student
             enrollment without request errors.
-        ''' 
+        '''
         root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         assert_equal(root.status, 200)
