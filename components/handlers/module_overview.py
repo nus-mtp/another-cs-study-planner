@@ -101,7 +101,7 @@ class ViewMod(object):
         system_message = SESSION['editModMsg']
         SESSION['editModMsg'] = None
 
-        return RENDER.viewModule_updated(module_info, self.fixed_mounting_plan,
+        return RENDER.viewModule(module_info, self.fixed_mounting_plan,
                                          self.tenta_mounting_plan, number_of_student_planning,
                                          system_message)
 
