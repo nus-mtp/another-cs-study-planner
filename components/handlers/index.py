@@ -26,7 +26,12 @@ class Index(object):
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            return RENDER.index(module_infos, form)
+            if SESSION['displayErrorMessage'] is True:
+                SESSION['displayErrorMessage'] = False
+            else:
+                SESSION['keyError'] = False
+
+            return RENDER.index_updated(module_infos, form, SESSION['keyError'])
 
 
     def POST(self):
@@ -37,10 +42,13 @@ class Index(object):
         form = self.form()
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.index(modules, form)
+            return RENDER.index_updated(modules, form, SESSION['keyError'])
 
         # else add module to db and refresh page
-        model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc)
+        outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
+        if outcome is False:
+            SESSION['keyError'] = True
+            SESSION['displayErrorMessage'] = True
         raise web.seeother('/')        # load index.html again
 
 

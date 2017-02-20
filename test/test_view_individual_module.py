@@ -59,7 +59,7 @@ class TestCode(object):
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
     CONTENT_STATS = "Module Statistics"
-    CONTENT_CLASS_QUOTA_BLANK = "<p></p>"
+    CONTENT_CLASS_QUOTA_BLANK = "?"
 
 
     def __init__(self):

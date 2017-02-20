@@ -1,9 +1,8 @@
 '''
-test_database.py
-Contains test cases for database related functions.
+    test_database.py
+    Contains test cases for database related functions.
 '''
-import psycopg2
-from nose.tools import assert_equal, assert_false, assert_in, assert_true
+from nose.tools import assert_equal, assert_false, assert_true
 from components import model
 
 
@@ -18,112 +17,214 @@ class TestCode(object):
     This class runs the test cases for database related functions.
     '''
     def __init__(self):
-        self.test_module_code = "CS2103T"
-
-        self.mounting_table_column_count = 3
+        self.test_module_code = "AA1111"
+        self.test_module_name = "Dummy Module"
+        self.test_module_desc = "Dummy Description"
+        self.test_module_mc = 1
+        self.test_module_status = "Active"
         self.test_module_mounted_count = 2
-        self.test_module_tenta_mount_ay_s1 = "AY 17/18 Sem 1"
-        self.test_module_tenta_mount_ay_s2 = "AY 17/18 Sem 2"
-        self.test_module_quota1 = 190
-        self.test_module_quota2 = 160
+        self.test_module_fixed_mounting_s1 = "AY 16/17 Sem 1"
+        self.test_module_fixed_mounting_s2 = "AY 16/17 Sem 2"
+        self.test_module_tenta_mounting_s1 = "AY 17/18 Sem 1"
+        self.test_module_tenta_mounting_s2 = "AY 17/18 Sem 2"
+        self.test_module_quota1 = 10
+        self.test_module_quota2 = 20
+        self.module_CRD_tested = False
+        self.fixed_mounting_CRD_tested = False
+        self.tenta_mounting_CRD_tested = False
 
 
-    def test_get_module(self):
+    def setUp(self):
         '''
-            Tests getting of modules.
+            Add dummy modules and mountings into database
         '''
-        module_table_column_count = 5
-        test_module_name = "Software Engineering"
-        test_module_desc = "This module introduces the necessary conceptual and analytical "+\
-                            "tools for systematic and rigorous development of software systems."
+        self.test_module_CRD()
+        self.module_CRD_tested = True
+        model.add_module(self.test_module_code, self.test_module_name, self.test_module_desc,
+                         self.test_module_mc, self.test_module_status)
 
-        test_module_status = "Active"
-        test_module_mc = 4
+        self.test_fixed_mounting_CRD()
+        self.fixed_mounting_CRD_tested = True
 
-        module_info = model.get_module(self.test_module_code)
-        assert_equal(module_table_column_count, len(module_info))
-        assert_equal(self.test_module_code, module_info[0])
-        assert_equal(test_module_name, module_info[1])
-        assert_in(test_module_desc, module_info[2])
-        assert_equal(test_module_mc, module_info[3])
-        assert_equal(test_module_status, module_info[4].rstrip())
+        self.test_tenta_mounting_CRD()
+        self.tenta_mounting_CRD_tested = True
+        model.add_tenta_mounting(self.test_module_code,
+                                 self.test_module_tenta_mounting_s1,
+                                 self.test_module_quota1)
 
 
-    def test_get_fixed_mount_and_quota(self):
+    def tearDown(self):
         '''
-            Tests getting of fixed mountings and quota.
+            Clean up the database after all test cases are ran
         '''
-        test_module_fixed_mounted_ay_s1 = "AY 16/17 Sem 1"
-        test_module_fixed_mounted_ay_s2 = "AY 16/17 Sem 2"
-
-        mountings = model.get_fixed_mounting_and_quota(self.test_module_code)
-        assert_equal(self.test_module_mounted_count, len(mountings))
-        mounting_and_quota1 = mountings[0]
-        assert_equal(test_module_fixed_mounted_ay_s1, mounting_and_quota1[0])
-        assert_equal(self.test_module_quota1, mounting_and_quota1[1])
-
-        mounting_and_quota2 = mountings[1]
-        assert_equal(test_module_fixed_mounted_ay_s2, mounting_and_quota2[0])
-        assert_equal(self.test_module_quota2, mounting_and_quota2[1])
+        model.delete_tenta_mounting(self.test_module_code, self.test_module_tenta_mounting_s1)
+        model.delete_module(self.test_module_code)
 
 
-    def test_get_tenta_mount_and_quota(self):
+    def test_module_CRD(self):
         '''
-            Tests getting of tentative mountings and quota.
+            Tests creating, reading and deleting of modules.
         '''
-        mountings = model.get_tenta_mounting_and_quota(self.test_module_code)
-        assert_equal(self.test_module_mounted_count, len(mountings))
+        if not self.module_CRD_tested:
+            model.add_module(self.test_module_code, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
 
-        mounting_and_quota1 = mountings[0]
-        assert_equal(self.test_module_tenta_mount_ay_s1, mounting_and_quota1[0])
-        assert_equal(self.test_module_quota1, mounting_and_quota1[1])
+            module_info = model.get_module(self.test_module_code)
+            assert_true(module_info is not None)
 
-        mounting_and_quota2 = mountings[1]
-        assert_equal(self.test_module_tenta_mount_ay_s2, mounting_and_quota2[0])
-        assert_equal(self.test_module_quota2, mounting_and_quota2[1])
+            assert_equal(self.test_module_code, module_info[0])
+            assert_equal(self.test_module_name, module_info[1])
+            assert_equal(self.test_module_desc, module_info[2])
+            assert_equal(self.test_module_mc, module_info[3])
+            assert_equal(self.test_module_status, module_info[4].rstrip())
+
+            model.delete_module(self.test_module_code)
+            module_info = model.get_module(self.test_module_code)
+            assert_true(module_info is None)
+            return
 
 
-    def test_add_and_delete_module(self):
+    def test_fixed_mounting_CRD(self):
         '''
-            Tests addition and deletion of modules.
+            Tests creating, reading and deleting of fixed mountings.
         '''
-        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
-        module_info = model.get_module("AA1111")
-        assert_true(module_info is not None)
-        assert_equal("New", module_info[4].rstrip())
+        if not self.fixed_mounting_CRD_tested:
+            model.add_fixed_mounting(self.test_module_code,
+                                     self.test_module_fixed_mounting_s1,
+                                     self.test_module_quota1)
+            model.add_fixed_mounting(self.test_module_code,
+                                     self.test_module_fixed_mounting_s2,
+                                     self.test_module_quota2)
 
-        model.delete_module("AA1111")
-        module_info = model.get_module("AA1111")
-        assert_true(module_info is None)
+            mounting_data = model.get_fixed_mounting_and_quota(self.test_module_code)
+            assert_equal(self.test_module_mounted_count, len(mounting_data))
+
+            mounting_s1 = mounting_data[0][0]
+            mounting_s2 = mounting_data[1][0]
+            quota_s1 = mounting_data[0][1]
+            quota_s2 = mounting_data[1][1]
+
+            assert_equal(self.test_module_fixed_mounting_s1, mounting_s1)
+            assert_equal(self.test_module_fixed_mounting_s2, mounting_s2)
+            assert_equal(self.test_module_quota1, quota_s1)
+            assert_equal(self.test_module_quota2, quota_s2)
+
+            model.delete_fixed_mounting(self.test_module_code,
+                                        self.test_module_fixed_mounting_s1)
+            model.delete_fixed_mounting(self.test_module_code,
+                                        self.test_module_fixed_mounting_s2)
+
+            mounting_data = model.get_fixed_mounting_and_quota(self.test_module_code)
+            assert_true(len(mounting_data) == 0)
+            return
+
+
+    def test_tenta_mounting_CRD(self):
+        '''
+            Tests creating, reading and deleting of tentative mountings.
+        '''
+        if not self.tenta_mounting_CRD_tested:
+            model.add_tenta_mounting(self.test_module_code,
+                                     self.test_module_tenta_mounting_s1,
+                                     self.test_module_quota1)
+            model.add_tenta_mounting(self.test_module_code,
+                                     self.test_module_tenta_mounting_s2,
+                                     self.test_module_quota2)
+
+            mounting_data = model.get_tenta_mounting_and_quota(self.test_module_code)
+            assert_equal(self.test_module_mounted_count, len(mounting_data))
+
+            mounting_s1 = mounting_data[0][0]
+            mounting_s2 = mounting_data[1][0]
+            quota_s1 = mounting_data[0][1]
+            quota_s2 = mounting_data[1][1]
+
+            assert_equal(self.test_module_tenta_mounting_s1, mounting_s1)
+            assert_equal(self.test_module_tenta_mounting_s2, mounting_s2)
+            assert_equal(self.test_module_quota1, quota_s1)
+            assert_equal(self.test_module_quota2, quota_s2)
+
+            model.delete_tenta_mounting(self.test_module_code,
+                                        self.test_module_tenta_mounting_s1)
+            model.delete_tenta_mounting(self.test_module_code,
+                                        self.test_module_tenta_mounting_s2)
+
+            mounting_data = model.get_tenta_mounting_and_quota(self.test_module_code)
+            assert_true(len(mounting_data) == 0)
+            return
 
 
     def test_add_mod_with_repeat_code(self):
         '''
-            Tests adding of module with duplicated code. Should fail.
+            Tests that adding of module with duplicated code will fail.
         '''
-        has_integrity_error = False
-        error_message = ""
-        model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
+        # Not duplicate code --> success
+        outcome = model.add_module("AA2222", "Dummy Module", "Dummy Description", 1, "New")
+        assert_true(outcome)
 
-        # Not duplicate code --> No error
-        try:
-            model.add_module("AA2222", "Dummy Module", "Dummy Description", 1)
-        except psycopg2.IntegrityError as error:
-            has_integrity_error = True
-        assert_false(has_integrity_error)
+        # Duplicate code --> fail
+        outcome = model.add_module(self.test_module_code, self.test_module_name,
+                                   self.test_module_desc, self.test_module_mc, "New")
+        assert_false(outcome)
 
-        # Duplicate code --> Integrity error
-        try:
-            model.add_module("AA1111", "Dummy Module", "Dummy Description", 1)
-        except psycopg2.IntegrityError as error:
-            has_integrity_error = True
-            error_message = str(error.args)
-        assert_true(has_integrity_error)
-        assert_in("duplicate key value", error_message)
-
-        model.CONNECTION.rollback()
-        model.delete_module("AA1111")
         model.delete_module("AA2222")
+
+
+    def test_add_mounting_with_repeat_code_and_ay_sem(self):
+        '''
+            Tests that a module cannot have more than one mounting in the same AY/Sem
+        '''
+        outcome = model.add_tenta_mounting(self.test_module_code,
+                                           self.test_module_tenta_mounting_s1,
+                                           123)
+        assert_false(outcome)
+
+
+    def test_update_module(self):
+        '''
+            Tests updating of module info
+        '''
+        # Update one field
+        model.update_module(self.test_module_code, "Dummy module 2",
+                            self.test_module_desc, self.test_module_mc)
+        module_info = model.get_module(self.test_module_code)
+        assert_equal(self.test_module_code, module_info[0])
+        assert_equal("Dummy module 2", module_info[1])
+        assert_equal(self.test_module_desc, module_info[2])
+        assert_equal(self.test_module_mc, module_info[3])
+        assert_equal(self.test_module_status, module_info[4].rstrip())
+
+        # Update multiple fields
+        model.update_module(self.test_module_code, "Dummy module 2",
+                            "Dummy description 2", 2)
+        module_info = model.get_module(self.test_module_code)
+        assert_equal(self.test_module_code, module_info[0])
+        assert_equal("Dummy module 2", module_info[1])
+        assert_equal("Dummy description 2", module_info[2])
+        assert_equal(2, module_info[3])
+        assert_equal(self.test_module_status, module_info[4].rstrip())
+
+        # Update fails because MC cannot be a string of alphabets
+        outcome = model.update_module(self.test_module_code, "Dummy module 2",
+                                      "Dummy description 2", "abc")
+        assert_false(outcome)
+
+
+    def test_update_quota(self):
+        '''
+            Tests updating of module's quota for a target tentative AY/Sem
+        '''
+        model.update_quota(self.test_module_code,
+                           self.test_module_tenta_mounting_s1, 999)
+
+        mounting_data = model.get_tenta_mounting_and_quota(self.test_module_code)
+        assert_equal(1, len(mounting_data))
+
+        mounting_s1 = mounting_data[0][0]
+        quota_s1 = mounting_data[0][1]
+
+        assert_equal(mounting_s1, self.test_module_tenta_mounting_s1)
+        assert_equal(quota_s1, 999)
 
 
     def test_add_validate_and_delete_admin(self):
@@ -143,4 +244,3 @@ class TestCode(object):
         model.delete_admin("Admin 1")
         is_admin_valid = model.validate_admin("Admin 1", "pass")
         assert_false(is_admin_valid)
-        

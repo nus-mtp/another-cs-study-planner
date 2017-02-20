@@ -3,8 +3,6 @@
 '''
 
 
-from components import database_adapter, model
-import components.handlers
 import web
 
 
@@ -26,6 +24,8 @@ URLS = (
     '/flagAsRemoved/(.*)', 'components.handlers.module_listing.FlagAsRemoved',
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
     '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
+    '/editModule', 'components.handlers.module_edit.EditModuleInfo',
+    '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
@@ -62,7 +62,13 @@ web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 
 web.config.session_parameters['ignore_expiry'] = False
 
-SESSION = web.session.Session(APP, web.session.DiskStore('sessions'), initializer={'id': None})._initializer
+SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
+                              initializer={'id': None,
+                                           'keyError': False,
+                                           'displayErrorMessage': False,
+                                           'editModMsg': None,
+                                           'editMountMsg': None})._initializer
+
 
 if __name__ == '__main__':
     APP.run()
