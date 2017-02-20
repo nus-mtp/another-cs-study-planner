@@ -26,7 +26,7 @@ class TestCode(object):
                                         'code=BT5110' +\
                                         '&targetAY=AY+16%2F17+Sem+1' +\
                                         '&quota=70'
-    URL_CONRAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
+    URL_CONTAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
                                    '?code=CP3880' +\
                                    '&targetAY=AY+16%2F17+Sem+1'+\
                                    '&quota='
@@ -177,7 +177,7 @@ class TestCode(object):
         '''
             Tests the contents when there is no quota specified
         '''
-        root = self.test_app.get(self.URL_CONRAIN_CODE_AY_NO_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
 
