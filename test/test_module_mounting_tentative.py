@@ -37,7 +37,7 @@ class TestCode(object):
                           'method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
                                  'type="submit" value="Go To Fixed ' +\
-                                 'Module Mounting for AY 16/17" />'
+                                 'Module Mountings" />'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
