@@ -1,4 +1,4 @@
-$def with (moduleInfo, ay, quota)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, systemMessage)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -6,17 +6,17 @@ $ moduleDescription = moduleInfo[2]
 $ moduleMC = moduleInfo[3]
 
 $ overviewURL = '/viewModule'
-$ title_string = 'Module Info for ' + moduleCode + ' in ' + ay
+$ title_string = 'Module Info for ' + moduleCode + ' in ' + aySem
 
 $var title:$title_string
 
-<div class="container-fluid">
+<div clas="container-fluid">
 	<div class="row">
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
 					<!--search form-->
-					<!--<form class="search-form" id="search-form" action"#">
+					<!--<form class="search-form" id="search-form" action="#">
 						<h2>Search Module</h2>
 						<br>
 						<div class="form-group">
@@ -39,25 +39,61 @@ $var title:$title_string
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
-					<h3>Module Info for <b><u>$ay</u></b></h3>
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
+					<h3>Module Info for <b><u>$aySem</u></b></h3>
 				</div>
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
-						<h3>$moduleName ($moduleMC MCs)</h3>
-						<form action="#" method="get">
-							<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
-						</form>
-						<form action="$overviewURL" method="get">
-							<input type="hidden" name="code" value="$moduleCode" />
-							<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
-						</form>
+						<h3>$moduleName ($moduleMC MCs)"</h3>
+						<br>
+						<table style="border-spacing: 5px; border-collapse: separate;">
+							<tr>
+								<td>
+									<form action="/editModule" style="display:inline-block" method="post">
+										<input type="hidden" name="status" value="load">
+										<input type="hidden" name="code" value="$moduleCode">
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
+			                        </form>
+			                    </td>
+		                    $if isFutureAY is True:
+								<td>
+			                        <form action="/editMounting" style="display:inline-block" method="post">
+			                        	<input type="hidden" name="status" value="load">
+			                        	<input type="hidden" name="code" value="$moduleCode">
+			                        	<input type="hidden" name="aySem" value="$aySem">
+			                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
+			                        	<input type="hidden" name="quota" value="$quota">
+			                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Mounting" />
+									</form>
+			                    </td>
+		                    $if True:
+		                    	<td>
+									<form action="/viewModule" style="display:inline-block" method="get">
+										<input type="hidden" name="code" value="$moduleCode" />
+										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
+									</form>
+								</td>
+			                </tr>
+			             </table>
 					</div>
+				</div>
+				<div class="col-md-12">
+					<h4><b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>$mountingStatus</h4>
+					<br>
+					<h4><b>Class Quota:&nbsp;&nbsp;&nbsp;</b>
+						$if quota is None:
+							?
+						$else:
+							$quota
+					</h4>
+					<hr>
 				</div>
 				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>
 					<p>
-						$:moduleDescription
+						$moduleDescription
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
@@ -66,8 +102,6 @@ $var title:$title_string
 					<h4><b>Module Prerequisites:</b></h4>
 					<p>--none loaded</p>
 					<br>
-					<h4><b>Class Quota:</b></h4>
-					<p>$quota</p>
 				</div>
 			</div>
 		</div>
@@ -81,3 +115,4 @@ $var title:$title_string
 		</div>
 	</div>
 </div>
+

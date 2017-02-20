@@ -89,7 +89,7 @@ class IndividualModule(object):
         system_message = SESSION['editMountMsg']
         SESSION['editMountMsg'] = None
 
-        return RENDER.individualModuleInfo_updated(module_info, is_future_ay,
+        return RENDER.individualModuleInfo(module_info, is_future_ay,
                                                    target_ay_sem, self.mounting_status,
                                                    self.quota, system_message)
 
