@@ -43,13 +43,13 @@ $ moduleMC = moduleInfo[3]
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)"</h3>
 						<br>
-						<table>
+						<table style="border-spacing: 5px; border-collapse: separate;">
 							<tr>
 								<td>
 									<form action="/editModule" style="display:inline-block" method="post">
 										<input type="hidden" name="status" value="load">
 										<input type="hidden" name="code" value="$moduleCode">
-			                            <button class="btn btn-lg btn-primary" action="#">Edit Module</button>
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
 			                        </form>
 			                    </td>
 		                    $if isFutureAY is True:
@@ -60,9 +60,16 @@ $ moduleMC = moduleInfo[3]
 			                        	<input type="hidden" name="aySem" value="$aySem">
 			                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
 			                        	<input type="hidden" name="quota" value="$quota">
-			                        	<button class="btn btn-lg btn-primary" style="display:inline-block" action="#">Edit Mounting</button>
+			                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Mounting" />
 									</form>
 			                    </td>
+		                    $if True:
+		                    	<td>
+									<form action="/viewModule" style="display:inline-block" method="get">
+										<input type="hidden" name="code" value="$moduleCode" />
+										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
+									</form>
+								</td>
 			                </tr>
 			             </table>
 					</div>
