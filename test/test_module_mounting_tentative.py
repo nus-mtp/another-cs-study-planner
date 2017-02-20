@@ -143,4 +143,4 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_MOUNTING_SEM_2)
         root.mustcontain(self.TABLE_HEADER_ACTION)
         root.mustcontain(self.TABLE_MOUNTING_SYMBOL_MOUNTED)
-        root.mustcontain(self.TABLE_MOUNTING_SYMBOL_UNMOUNTED)
+        root.mustcontain(self.TABLE_MOUNTING_SYMBOL_NOT_MOUNTED)
