@@ -62,7 +62,7 @@ class EditMountingInfo(object):
 
         if form_status == "load":
             mounting_value = data.mountingValue
-            return RENDER.mountingEdit_stub(module_code, ay_sem, mounting_value, quota)
+            return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota)
 
         elif form_status == "submit":
             old_mounting_value = data.oldMountingValue
