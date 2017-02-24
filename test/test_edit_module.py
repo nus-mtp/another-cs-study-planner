@@ -29,6 +29,7 @@ class TestCode(object):
     
     URL_MODULE_EDIT = '/editModule'
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
+    URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
 
     EDIT_MODULE_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_FORM_NAME = 'edit-module-form'
@@ -47,7 +48,7 @@ class TestCode(object):
 
     def test_module_edit_valid_response(self):
         '''
-            Tests whether user can access correct page for showing module edit from module view page.
+            Tests whether user can access a page for showing module edit from module view page.
         '''
         
         self.b.open(self.URL_MODULE_VIEW)
@@ -56,6 +57,16 @@ class TestCode(object):
         self.b.submit()
 
         assert self.b.path == self.URL_MODULE_EDIT
+
+    def test_module_edit_correct_response(self):
+        '''
+            Tests if the user can access a the correct module edit page
+        '''
+        self.b.open(self.URL_MODULE_VIEW)
+
+        self.b.select_form(name=self.EDIT_MODULE_BUTTON_FORM_NAME)
+        self.b.submit()
+        
         assert 'Edit: BT5110' in self.b.get_text()
 
     def test_module_edit_submit_button(self):
@@ -73,7 +84,18 @@ class TestCode(object):
         
         assert self.b.path == self.URL_MODULE_VIEW
         assert 'BT5110' in self.b.get_text()
-        
+
+    def test_module_edit_access_from_individual_module_info(self):
+        '''
+            tests if the button from individual_module_info page works
+            leads to edit module page as intended.
+        '''
+        self.b.open(self.URL_INDIVIDUAL_MODULE_VIEW)
+        self.b.select_form(name=self.EDIT_MODULE_BUTTON_FORM_NAME)
+        self.b.submit()
+
+        assert self.b.path == self.URL_MODULE_EDIT
+        assert 'Edit: BT5110' in self.b.get_text()
         
 
 
