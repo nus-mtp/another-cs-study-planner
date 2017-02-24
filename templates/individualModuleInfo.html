@@ -46,12 +46,12 @@ $var title:$title_string
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
-						<h3>$moduleName ($moduleMC MCs)"</h3>
+						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
 						<table style="border-spacing: 5px; border-collapse: separate;">
 							<tr>
 								<td>
-									<form action="/editModule" style="display:inline-block" method="post">
+									<form name="edit-module-button" action="/editModule" style="display:inline-block" method="post">
 										<input type="hidden" name="status" value="load">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
@@ -59,7 +59,7 @@ $var title:$title_string
 			                    </td>
 		                    $if isFutureAY is True:
 								<td>
-			                        <form action="/editMounting" style="display:inline-block" method="post">
+			                        <form name="edit-mounting-button"action="/editMounting" style="display:inline-block" method="post">
 			                        	<input type="hidden" name="status" value="load">
 			                        	<input type="hidden" name="code" value="$moduleCode">
 			                        	<input type="hidden" name="aySem" value="$aySem">
@@ -70,7 +70,7 @@ $var title:$title_string
 			                    </td>
 		                    $if True:
 		                    	<td>
-									<form action="/viewModule" style="display:inline-block" method="get">
+									<form name="view-module-button" action="/viewModule" style="display:inline-block" method="get">
 										<input type="hidden" name="code" value="$moduleCode" />
 										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
 									</form>
