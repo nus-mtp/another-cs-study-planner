@@ -1,9 +1,8 @@
-
+'''
+    this class tests editModule.html and links to it
+'''
 import web
-from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
 from app import APP, SESSION
-from components.handlers.module_edit import EditModuleInfo
 
 class TestCode(object):
     '''
@@ -22,18 +21,18 @@ class TestCode(object):
         '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
         '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
         '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
-        '/login', 'components.handlers.login.Login',
+        '/login', 'componentpys.handlers.login.Login',
         '/verifyLogin', 'components.handlers.login.verifyLogin',
         '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
     )
-    
+
     URL_MODULE_EDIT = '/editModule'
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
     URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
 
     EDIT_MODULE_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_FORM_NAME = 'edit-module-form'
-    
+
     def __init__(self):
         self.b = None
 
@@ -44,13 +43,12 @@ class TestCode(object):
         SESSION['id'] = 2
         app = web.application(self.URLS, globals())
         self.b = app.browser()
-        
 
     def test_module_edit_valid_response(self):
         '''
             Tests whether user can access a page for showing module edit from module view page.
         '''
-        
+
         self.b.open(self.URL_MODULE_VIEW)
 
         self.b.select_form(name=self.EDIT_MODULE_BUTTON_FORM_NAME)
@@ -66,7 +64,7 @@ class TestCode(object):
 
         self.b.select_form(name=self.EDIT_MODULE_BUTTON_FORM_NAME)
         self.b.submit()
-        
+
         assert 'Edit: BT5110' in self.b.get_text()
 
     def test_module_edit_submit_button(self):
@@ -81,7 +79,7 @@ class TestCode(object):
 
         self.b.select_form(name=self.EDIT_MODULE_FORM_NAME)
         self.b.submit()
-        
+
         assert self.b.path == self.URL_MODULE_VIEW
         assert 'BT5110' in self.b.get_text()
 
@@ -96,21 +94,3 @@ class TestCode(object):
 
         assert self.b.path == self.URL_MODULE_EDIT
         assert 'Edit: BT5110' in self.b.get_text()
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
