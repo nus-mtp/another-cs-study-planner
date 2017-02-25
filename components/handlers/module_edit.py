@@ -84,4 +84,3 @@ class EditMountingInfo(object):
 
             raise web.seeother("individualModuleInfo?code="+module_code+"&targetAY="+\
                                ay_sem.replace(' ', '+').replace('/', '%2F'))
-
