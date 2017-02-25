@@ -51,7 +51,7 @@ $var title:$title_string
 						<table style="border-spacing: 5px; border-collapse: separate;">
 							<tr>
 								<td>
-									<form name="edit-module-button" action="/editModule" style="display:inline-block" method="post">
+									<form id="edit-module-button" name="edit-module-button" action="/editModule" style="display:inline-block" method="post">
 										<input type="hidden" name="status" value="load">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
@@ -59,7 +59,7 @@ $var title:$title_string
 			                    </td>
 		                    $if isFutureAY is True:
 								<td>
-			                        <form name="edit-mounting-button"action="/editMounting" style="display:inline-block" method="post">
+			                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" style="display:inline-block" method="post">
 			                        	<input type="hidden" name="status" value="load">
 			                        	<input type="hidden" name="code" value="$moduleCode">
 			                        	<input type="hidden" name="aySem" value="$aySem">
@@ -70,7 +70,7 @@ $var title:$title_string
 			                    </td>
 		                    $if True:
 		                    	<td>
-									<form name="view-module-button" action="/viewModule" style="display:inline-block" method="get">
+									<form id="view-module-button" action="/viewModule" style="display:inline-block" method="get">
 										<input type="hidden" name="code" value="$moduleCode" />
 										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
 									</form>
