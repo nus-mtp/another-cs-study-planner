@@ -31,7 +31,7 @@ class Index(object):
             else:
                 SESSION['keyError'] = False
 
-            return RENDER.index_updated(module_infos, form, SESSION['keyError'])
+            return RENDER.index(module_infos, form, SESSION['keyError'])
 
 
     def POST(self):
