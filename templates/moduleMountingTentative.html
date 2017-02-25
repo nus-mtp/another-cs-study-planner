@@ -28,46 +28,47 @@ $var title:$title_string
                         <th>Name</th>
                         <th data-sortable="false">Mounted In Sem 1</th>
                         <th data-sortable="false">Mounted In Sem 2</th>
-                        <th>Action</th>
+                        <th data-sortable="false">Action</th>
                     </tr>
                 </thead>
-            $for subplan in fullMountingPlan:
-                <tbody>
-                <tr>
-                    <td>$subplan[0]</td>
-                    <td>$subplan[1]</td>
-                $if subplan[2] == 1:
-                    <td>
-                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                    </td>
-                $elif subplan[2] == 0:
-                    <td>
-                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
-                    </td>
-                $elif subplan[2] == -1:
-                    <td>
-                        <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                    </td>
-                $if subplan[3] == 1:
-                    <td>
-                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                    </td>
-                $elif subplan[3] == 0:
-                    <td>
-                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
-                    </td>
-                $elif subplan[3] == -1:
-                    <td>
-                        <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                    </td>
-                $if True:
-                    <td>
-                        <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$subplan[0]">
-                            <input type="submit" value="View Module"/>
-                        </form>
-                        </td>
-                    </tr>
+                <tbody> 
+                    $for subplan in fullMountingPlan:
+
+                        <tr>
+                            <td>$subplan[0]</td>
+                            <td>$subplan[1]</td>
+                        $if subplan[2] == 1:
+                            <td>
+                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                            </td>
+                        $elif subplan[2] == 0:
+                            <td>
+                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                            </td>
+                        $elif subplan[2] == -1:
+                            <td>
+                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                            </td>
+                        $if subplan[3] == 1:
+                            <td>
+                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                            </td>
+                        $elif subplan[3] == 0:
+                            <td>
+                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                            </td>
+                        $elif subplan[3] == -1:
+                            <td>
+                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                            </td>
+                        $if True:
+                            <td>
+                                <form action="/viewModule" method="get">
+                                    <input type="hidden" name="code" value="$subplan[0]">
+                                    <input type="submit" value="View Module"/>
+                                </form>
+                                </td>
+                            </tr>
                 </tbody>
             </table>
         </div>
