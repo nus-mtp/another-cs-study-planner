@@ -1,9 +1,8 @@
-
+'''
+    this class tests edit module mounting
+'''
 import web
-from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
 from app import APP, SESSION
-from components.handlers.module_edit import EditModuleInfo
 
 class TestCode(object):
     '''
@@ -14,7 +13,7 @@ class TestCode(object):
     URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
     EDIT_MOUNTING_BUTTON_NAME = 'edit-mounting-button'
     EDIT_MOUNTING_FORM_NAME = 'edit-mounting-form'
-    
+
     URLS = (
         '/', 'components.handlers.index.Index',
         '/modules', 'components.handlers.module_listing.Modules',
@@ -52,7 +51,7 @@ class TestCode(object):
         self.b.open(self.URL_INDIVIDUAL_MODULE_VIEW)
         self.b.select_form(name=self.EDIT_MOUNTING_BUTTON_NAME)
         self.b.submit()
-        
+
         assert self.b.path == self.URL_MOUNTING_EDIT
 
     def test_mounting_edit_correct_response(self):
