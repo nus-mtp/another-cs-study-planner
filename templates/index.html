@@ -60,7 +60,7 @@ $var title:Module Listing
                         <td>
                             <form action="/viewModule" method="get">
                                 <input type="hidden" name="code" value="$moduleInfo[0]">
-                                <input  class="btn btn-primary" type="submit" value="View Module"/>
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
                             $if moduleInfo[4][0:6] == 'Active':
                                 <form action="/flagAsRemoved/$moduleInfo[0]" method="post">
