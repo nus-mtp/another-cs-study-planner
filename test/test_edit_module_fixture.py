@@ -8,7 +8,7 @@ from app import APP, SESSION
 
 class TestCode(object):
     '''
-        go to page, press submit, check if edit is loaded correctly
+        go to pages linking to edit, press edit, check if edit is loaded correctly
     '''
 
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
