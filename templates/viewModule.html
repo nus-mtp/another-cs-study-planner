@@ -1,6 +1,5 @@
-$def with (moduleInfo, fixedMountingAndQuota, tentativeMountingAndQuota, numberOfStudentsPlanning)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, systemMessage)
 
-$ hasMountingAndQuota = (len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0)
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
 $ moduleDescription = moduleInfo[2]
@@ -24,43 +23,31 @@ $var title:$title_string
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
-				<!--search bar-->
-					<!--<form class="search-form" id="search-form" action"#">
-						<h2>Search Module</h2>
-						<br>
-						<div class="form-group">
-							<label for="module-code">Enter Module Code: </label>
-							<input type="text" class="form-control" name="module-code" pattern="[a-zA-Z0-9]+" placeholder="Module Code" required>
-						</div>
-						<div class="form-group">
-							<label for="ay-sem">Select Target AY &amp; Semester: </label>
-							<br>
-							<select name="ay-sem" form="search-form">
-								<option value="1">AY 2016/2017 Sem 1</option>
-								<option value="2">AY 2016/2017 Sem 2</option>
-								<option value="3">AY 2016/2017 Special Term I</option>
-								<option value="4">AY 2016/2017 Special Term II</option>
-							</select>
-						</div>
-						<button type="submit" class="btn btn-primary">Search</button>
-					</form>-->
+				
 					<br>
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
+					$if systemMessage is not None:
+						<p style="color:red; text-align:center">$systemMessage</p>
 					<h2><b>Module Info Overview</b></h2>
 				</div>
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
-                        <button class="btn btn-lg btn-primary" action="#">Edit Module</button>
+						<br>
+						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
+							<input type="hidden" name="status" value="load">
+							<input type="hidden" name="code" value="$moduleCode">
+                            <input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
+                        </form>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<h4><b>Module Description:</b></h4>
 					<p>
-						$:moduleDescription
+						$moduleDescription
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
@@ -74,56 +61,63 @@ $var title:$title_string
 				</div>
 				<div  class="col-md-12">
 					<!--mountingAndQuota-->
+					<h4><b>Current AY (Fixed)</b><h4>
 					<table class="table table-bordered table-hover text-center" id="mountingAndQuota">
 						<thead>
 							<tr>
+								<th>AY/Sem</th>
 								<th>Mounted In</th>
 								<th>Quota</th>
 								<th>Students Planning to Take</th>
 							</tr>
 						</thead>
 						<tbody>
-					$if len(fixedMountingAndQuota) == 0 and len(tentativeMountingAndQuota) == 0:
-						<tr>
-							<td>Nil</td>
-							<td>Nil</td>
-							<td>Nil</td>
-						</tr>
-						</tbody>
-					$else:
-						$for entry in fixedMountingAndQuota:
+						$for entry in fixedMountingPlan:
 							<tr>
 								<td>
 									<form action="/individualModuleInfo" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input type="hidden" name="targetAY" value="$entry[0]">
-										<input type="hidden" name="quota" value="$entry[1]">
-										<input class="btn btn-primary" type="submit" value="$entry[0]">
+										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
+								<td>$entry[1]</td>
 							$ numberTaking = getNumStudents(entry[0])
-							$if entry[1] == None:
+							$if entry[2] == None:
 								<td>?</td>
 								<td>$numberTaking</td>
 							$else:
-								<td>$entry[1]</td>
+								<td>$entry[2]</td>
 								<td>$numberTaking</td>
 							</tr>
-						$for entry in tentativeMountingAndQuota:
+						</tbody>
+					</table>
+					<h4><b>Future AYs (Tentative)</b><h4>
+					<table class="table table-bordered table-hover" id="mountingAndQuota">
+						<thead>
+							<tr>
+								<th>AY/Sem</th>
+								<th>Mounted In</th>
+								<th>Quota</th>
+								<th>Students Planning to Take</th>
+							</tr>
+						</thead>
+						<tbody>
+						$for entry in tentaMountingPlan:
 							<tr>
 								<td>
 									<form action="/individualModuleInfo" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input type="hidden" name="targetAY" value="$entry[0]">
-										<input type="hidden" name="quota" value="$entry[1]">
-										<input class="btn btn-primary" type="submit" value="$entry[0]">
+										<input type="submit" value="$entry[0]">
 									</form>
 								</td>
-							$if entry[1] == None:
+								<td>$entry[1]</td>
+							$if entry[2] == None:
 								<td>?</td>
-								<td></td>
+								<td>?</td>
 							$else:
-								<td>$entry[1] (Tentative)</td>
+								<td>$entry[2]</td>
 								<td>?</td>
 							</tr>
 						</tbody>
@@ -135,6 +129,8 @@ $var title:$title_string
 			<div class="page-header text-center">
 				<h2>Module Statistics</h2>
 			</div>
+			<h4><b>Student Demand:</b></h4>
+			<p>315</p>
 		</div>
 	</div>
 </div>

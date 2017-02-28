@@ -80,7 +80,7 @@ class IndividualModule(object):
         '''
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
-        
+
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
@@ -92,9 +92,9 @@ class IndividualModule(object):
         system_message = SESSION['editMountMsg']
         SESSION['editMountMsg'] = None
 
-        return RENDER.individualModuleInfo_updated(module_info, is_future_ay,
-                                                   target_ay_sem, self.mounting_status,
-                                                   self.quota, system_message)
+        return RENDER.individualModuleInfo(module_info, is_future_ay,
+                                           target_ay_sem, self.mounting_status,
+                                           self.quota, system_message)
 
 
     def POST(self):

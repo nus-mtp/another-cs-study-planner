@@ -31,7 +31,7 @@ class Index(object):
             else:
                 SESSION['keyError'] = False
 
-            return RENDER.index_updated(module_infos, form, SESSION['keyError'])
+            return RENDER.index(module_infos, form, SESSION['keyError'])
 
 
     def POST(self):
@@ -42,7 +42,7 @@ class Index(object):
         form = self.form()
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.index_updated(modules, form, SESSION['keyError'])
+            return RENDER.index(modules, form, SESSION['keyError'])
 
         # else add module to db and refresh page
         outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')

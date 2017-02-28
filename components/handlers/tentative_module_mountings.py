@@ -96,7 +96,7 @@ class Tentative(object):
         '''
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
-            
+
         #input_data = web.input()
         #selected_ay = input_data.ay        # User will select the AY that he wants to see
         selected_ay = "AY 17/18"        # Hardcoded for now
@@ -104,7 +104,7 @@ class Tentative(object):
         self.populate_module_code_and_name()
         self.populate_mounting_values(selected_ay)
 
-        return RENDER.moduleMountingTentative_updated(selected_ay, self.full_mounting_plan)
+        return RENDER.moduleMountingTentative(selected_ay, self.full_mounting_plan)
 
 
     def POST(self):
