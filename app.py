@@ -30,7 +30,8 @@ URLS = (
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
-    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
+    '/modifiedModules', 'components.handlers.modified_modules.Modified'
 )
 
 

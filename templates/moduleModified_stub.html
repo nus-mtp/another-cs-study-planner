@@ -1,0 +1,37 @@
+$def with (modifiedModules)
+
+$var title:View modified modules
+
+<div class="container-fluid">
+	<h1 class="text-center"><b>Modified Modules</b></h1>
+	<p class="text-center">Shows all modules that have been modified</p>
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
+		<thead>
+			<tr>
+				<th>Code</th>
+				<th>Current AY-Semester</th>
+				<th>Current Quota</th>
+				<th>Target AY-Semester</th>
+				<th>Target Quota</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for module in modifiedModules:
+				<tr>
+					<th>$module[0]</th>
+					<th>$module[1]</th>
+				$if module[2] is None:
+					<th>?</th>
+				$else:
+					<th>$module[2]</th>
+				$if True:
+					<th>$module[3]</th>
+				$if module[4] is None:
+					<th>?</th>
+				$else:
+					<th>$module[4]</th>
+				</tr>
+		</tbody>
+	</table>
+</div>

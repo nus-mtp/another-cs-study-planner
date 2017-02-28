@@ -376,6 +376,27 @@ def delete_tenta_mounting(code, ay_sem):
     return True
 
 
+def get_modules_with_modified_quota():
+    '''
+        Find modules whose quota in target AY/Sem is different from quota in current AY/Sem
+        and return the module code, current AY/Sem, current quota,
+        target AY/Sem, and modified quota
+    '''
+    sql_command = "SELECT m1.moduleCode, m1.acadYearAndSem, m1.quota, " +\
+                  "m2.acadYearAndSem, m2.quota " +\
+                  "FROM moduleMounted m1, moduleMountTentative m2 " +\
+                  "WHERE m1.moduleCode = m2.moduleCode " +\
+                  "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
+                  "AND (" +\
+                  "    m1.quota != m2.quota " +\
+                  "    OR (m1.quota IS NULL AND m2.quota IS NOT NULL) " +\
+                  "    OR (m2.quota IS NULL AND m1.quota IS NOT NULL) " +\
+                  ") " +\
+                  "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
 def get_num_students_by_yr_study():
     '''
         Retrieves the number of students at each year of study as a table
