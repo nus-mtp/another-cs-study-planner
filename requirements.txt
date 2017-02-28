@@ -2,5 +2,3 @@ psycopg2==2.6.2
 web.py==0.38
 paste==2.0.3
 nose==1.3.7
-ClientForm==0.2.10
-BeautifulSoup==3.2.1
