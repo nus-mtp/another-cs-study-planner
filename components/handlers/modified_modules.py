@@ -20,6 +20,7 @@ class Modified(object):
     def __init__(self):
         '''
             Define the number of future AYs that will be included
+            By right, this value should be set by the superadmin
         '''
         self.number_of_future_ays = 1
 
