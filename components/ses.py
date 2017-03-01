@@ -2,7 +2,7 @@
     This module creates an application instance with a configured URL router.
 '''
 
-
+import os
 import web
 import base64, pickle, sys
 sys.argv=[] # pickle needs sys.argv... 
@@ -29,16 +29,30 @@ def init_session(app):
 
 def get_session(app):
     session_id = web.cookies().get('webpy_session_id')
-    session = open('./sessions/'+session_id)
-    pickled = base64.decodestring(session.read())
-    session_instance = pickle.loads(pickled)
-    print('Got Session,', session_instance)
-    return session_instance
+    if not session_id:
+        return None
+    session = web.session.Session(app, disk_store, initializer=init_values)
+    #web.session.Session._load(session)
+    encoded_session = open('./sessions/'+session_id)
+    pickled = base64.decodestring(encoded_session.read())
+    session_decoded = pickle.loads(pickled)
+    encoded_session.close()
+    return session_decoded
 
-def get_session_value(session, key):
-    return session[key]
-
-                              
+def set_session_value(session, key, value):
+    '''
+    session[key] = value
+    session._save()
+    '''
+    session[key] = value
+    pickled = pickle.dumps(session)
+    encoded_session = base64.encodestring(pickled)
+    path = './sessions/'+session['session_id']
+    print('ENC', encoded_session)
+    encoded_session_file = open(path, 'wb')
+    encoded_session_file.write(encoded_session)
+    encoded_session_file.close()
+    
 
 '''
 THIS CODE SHOULD CREATE A FILE IN THE SESSION FOLDER + WEB CONFIG SESSION (total = 2)

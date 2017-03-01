@@ -22,7 +22,7 @@ class Index(object):
             This function is called when the '/' page (index.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if self.SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not self.SESSION or self.SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()

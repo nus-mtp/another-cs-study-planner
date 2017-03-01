@@ -43,14 +43,15 @@ class Login(object):
         self.login_form = create_login_form()
         self.registration_form = self.create_registration_form()
         self.SESSION = ses.get_session(APP)
-
     def GET(self):
         '''
             This function is called when /login is accessed.
         '''
-        
+        if not self.SESSION:
+            raise web.seeother('/login')
         login_form = self.login_form()
         registration_form = self.registration_form()
+        print(self.SESSION)
         return RENDER.login(login_form, registration_form, self.SESSION['id'])
 
 
@@ -71,13 +72,13 @@ class Login(object):
             return RENDER.login(login_form, registration_form)
         else:
             if model.is_userid_taken(registration_form.d.username):
-                self.SESSION['id'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
+                ses.set_session_value(self.SESSION, 'id', web.ACCOUNT_CREATED_UNSUCCESSFUL)
             else:
                 salt = uuid.uuid4().hex
                 hashed_password = hashlib.sha512(registration_form.d.password
                                                  + salt).hexdigest()
                 model.add_admin(registration_form.d.username, salt, hashed_password)
-                self.SESSION['id'] = web.ACCOUNT_CREATED_SUCCESSFUL
+                ses.set_session_value(self.SESSION, 'id', web.ACCOUNT_CREATED_SUCCESSFUL)
 
             raise web.seeother('/login')
 
@@ -122,16 +123,16 @@ class verifyLogin(object):
         self.SESSION = ses.get_session(APP)
         # returns to login page
         if not form.validates():
-            self.SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+            ses.set_session_value(self.SESSION, 'id', web.ACCOUNT_LOGIN_UNSUCCESSFUL)
             raise web.seeother('/login')
         else:
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
-                self.SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+                ses.set_session_value(self.SESSION, 'id', web.ACCOUNT_LOGIN_SUCCESSFUL)
                 raise web.seeother('/')
             # Else go to error page
             else:
-                self.SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+                ses.set_session_value(self.SESSION, 'id', web.ACCOUNT_LOGIN_UNSUCCESSFUL)
                 raise web.seeother('/login')
             
