@@ -45,3 +45,23 @@ class TestCode(object):
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
+
+
+    def test_query_module_taken_together_entire_list(self):
+        '''
+            Tests querying the list of modules taken together
+            in the same semester
+        '''
+
+        list_of_mod_taken_together = \
+            model.get_all_mods_taken_together()
+
+        required_list = [('CS1010', 'CS1231', 'AY 16/17 Sem 1', 3),
+                         ('CS1010', 'CS2105', 'AY 16/17 Sem 1', 2),
+                         ('CS1010', 'CS2106', 'AY 16/17 Sem 1', 1),
+                         ('BT5110', 'CS4246', 'AY 16/17 Sem 1', 1),
+                         ('CS1231', 'CS2105', 'AY 16/17 Sem 1', 2),
+                         ('CS1231', 'CS2106', 'AY 16/17 Sem 1', 1)]
+
+        assert_equal(len(list_of_mod_taken_together), len(required_list))
+        assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
