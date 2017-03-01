@@ -3,9 +3,9 @@
     the home page.
 '''
 
-from app import RENDER, SESSION
+from app import RENDER, APP
 import web
-from components import model
+from components import model, ses
 
 
 class Index(object):
@@ -14,6 +14,7 @@ class Index(object):
     '''
     def __init__(self):
         self.form = self.create_form()
+        self.SESSION = ses.get_session(APP)
 
 
     def GET(self):
@@ -21,17 +22,17 @@ class Index(object):
             This function is called when the '/' page (index.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if self.SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            if SESSION['displayErrorMessage'] is True:
-                SESSION['displayErrorMessage'] = False
+            if self.SESSION['displayErrorMessage'] is True:
+                self.SESSION['displayErrorMessage'] = False
             else:
-                SESSION['keyError'] = False
+                self.SESSION['keyError'] = False
 
-            return RENDER.index(module_infos, form, SESSION['keyError'])
+            return RENDER.index(module_infos, form, self.SESSION['keyError'])
 
 
     def POST(self):
@@ -42,13 +43,13 @@ class Index(object):
         form = self.form()
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.index(modules, form, SESSION['keyError'])
+            return RENDER.index(modules, form, self.SESSION['keyError'])
 
         # else add module to db and refresh page
         outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
         if outcome is False:
-            SESSION['keyError'] = True
-            SESSION['displayErrorMessage'] = True
+            self.SESSION['keyError'] = True
+            self.SESSION['displayErrorMessage'] = True
         raise web.seeother('/')        # load index.html again
 
 
