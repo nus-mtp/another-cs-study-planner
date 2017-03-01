@@ -503,7 +503,7 @@ def get_mod_taken_together_with(code):
         Retrieves the list of modules taken together with the specified
         module code in the same semester.
 
-        Returns a table of lists (up to 10 top results). Each list contains 
+        Returns a table of lists (up to 10 top results). Each list contains
         (specified code, module code of mod taken together, aySem, number of students)
 
         e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students

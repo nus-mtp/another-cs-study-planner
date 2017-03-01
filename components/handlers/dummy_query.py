@@ -21,7 +21,7 @@ class DummyQuery(object):
         '''
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
-        
+
         list_of_mod_taken_with_1010 = model.get_mod_taken_together_with('CS1010')
 
         return RENDER.dummyQuery(list_of_mod_taken_with_1010)
