@@ -3,7 +3,7 @@ test_mod_taken_together_queries.py
 Contains test cases for querying modules taken together in the same semester
 '''
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 from components import model
 
 # HOW TO RUN NOSE TESTS
@@ -36,6 +36,7 @@ class TestCode(object):
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(list_of_mod_taken_together, required_list)
+        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
         list_of_mod_taken_together = \
             model.get_mod_taken_together_with('CS2105')
@@ -45,6 +46,7 @@ class TestCode(object):
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
+        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
 
     def test_query_module_taken_together_entire_list(self):
@@ -65,3 +67,36 @@ class TestCode(object):
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
+        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
+
+
+    def is_count_in_non_ascending_order(self, list_of_mods):
+        '''
+            Returns true if the last item in each row of given list
+            are arranged in non-ascending order.
+            Returns false otherwise
+        '''
+
+        num_of_items = len(list_of_mods)
+
+        # when there is 0 or 1 item in the list, it is always in
+        # non-ascending order.
+        if num_of_items <= 1:
+            return True
+
+        first_row = list_of_mods[0]
+        num_of_cols = len(first_row)
+        last_param = num_of_cols - 1
+
+        previous_item = first_row[last_param]
+
+        for row_number in range(1, num_of_items):
+            current_row = list_of_mods[row_number]
+            current_item = current_row[last_param]
+
+            if current_item > previous_item:
+                return False
+            else:
+                previous_item = current_item
+
+        return True
