@@ -46,7 +46,7 @@ class TestCode(object):
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
     CONTENT_QUOTA = "Class Quota for AY-Semesters"
-    CONTENT_TABLE_AY_SEM = "<th>Mounted In</th>"
+    CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
     CONTENT_STATS = "Module Statistics"
@@ -192,7 +192,7 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
-        root.mustcontain(self.CONTENT_TABLE_AY_SEM)
+        root.mustcontain(self.CONTENT_TABLE_MOUNT_FLAG)
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
