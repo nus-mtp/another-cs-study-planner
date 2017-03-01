@@ -1,78 +1,100 @@
-$def with (moduleInfos, form, keyError)  
+$var title:Home
 
-$var title:Module Listing
-
-<div class="container-fluid" id="main">
+<h1 class="text-center"><b>Welcome to CSModify</b></h1>
+<br>
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-7">
-                    <div id="add-module-form-wrapper">
-                        <h2><span class="glyphicon glyphicon-pencil"></span> Add a new module</h2>
-                        <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
-                        $if keyError is True:
-                            <p style="color:red">Error: Module code already exists</p>  
-                        <form id="addModForm" action="" method="post">
-                            $:form.render()
-                        </form>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseModuleView">
+                                <span class="glyphicon glyphicon-align-left"></span>&nbsp;&nbsp;&nbsp;<b>Module View</b>
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="collapseModuleView" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <li><a href="/oversubscribedModules">Oversubscribed Modules</a></li>
+                            <li>View By Focus Area</a></li>
+                            <li><a href="/modules">Module Information</a></li>
+                            <li>Sort/Filter Modules</li>
+                            <li>Recently Removed Modules</li>
+                            <li>Starred Modules</li>
+                            <li><a href="/moduleMountingFixed">View Modules For Current AY</a></li>
+                            <li><a href="/moduleMountingTentative">View Modules For Next AY</a></li>
+                            <li>Past Module Demand</li>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-5">
-                    <div id="module-mounting-options">
-                        <h2><span class="glyphicon glyphicon-list"></span> View Module Mountings</h2>
-                        <p>View your mounting plans here.</p>
-                        <br>
-                        <form action="/moduleMountingFixed" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
-                        </form>
-                        <form action="/moduleMountingTentative" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
-                        </form>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseChangeCurriculum">
+                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;<b>Change Curriculum</b>
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="collapseChangeCurriculum" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <li>Change Module Quota</li>
+                            <li>Change Preclusions/Prerequisites</l>
+                            <li>Edit Module</li>
+                            <li>Add module</li>
+                            <li>Delete Modules</li>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseModuleRelations">
+                                <span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;<b>Module Relations</b>
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="collapseModuleRelations" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <li>Commonly Overlapping Modules</li>
+                            <li>Module Info by Semester</l>
+                            <li>Prior Modules Taken
+                                <ul>
+                                    <li>Before Specified Module</li>
+                                    <li>Before Internship</li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            <a data-toggle="collapse" href="#collapseStudentStatistics">
+                                <span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;<b>Student Statistics</b>
+                            </a>
+                        </h2>
+                    </div>
+                    <div id="collapseStudentStatistics" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <li>Module Demand</li>
+                                <ul>
+                                    <li>Current Semester</li>
+                                    <li>Next Semester</li>
+                                    <li>In Specific Semester</li>
+                                </ul>
+                            <li><a href="/studentEnrollment">Student Enrollment Info</a></li>
+                            <li>Module Timeline</li>
+                            <li>Non-Overlapping Modules</li>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-12">
-            <br>
-            <h1 class="text-center">All Modules</h1>
-
-            <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>MCs</th>
-                        <th>Status</th>
-                        <th data-sortable="false">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                $for moduleInfo in moduleInfos:
-                    <tr>
-                        <td class="text-center">$moduleInfo[0]</td>
-                        <td>$moduleInfo[1]</td>
-                        <td>$moduleInfo[2]</td>
-                        <td class="text-center">$moduleInfo[3]</td>
-                        <td class="text-center">$moduleInfo[4]</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$moduleInfo[0]">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                            
-                            $if moduleInfo[4][0:3] == 'New':
-                                <form action="/deleteModule/$moduleInfo[0]" method="post">
-                                    <input  class="btn btn-primary" type="submit" value="Delete Module"/>
-                                </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br>
-            <br>
-        </div>
     </div>
 </div>
+<br>
+<br>
