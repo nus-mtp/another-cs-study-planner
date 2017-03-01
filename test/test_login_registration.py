@@ -157,8 +157,8 @@ class TestCode(object):
         assert_equal(redirected.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains title of All Modules page
-        redirected.mustcontain("All Modules")
+        # Checks if page contains home page's title
+        redirected.mustcontain("Welcome to CSModify")
 
         #FAIL
     def test_blank_username_login_submission_response(self):
@@ -245,8 +245,8 @@ class TestCode(object):
         assert_equal(redirected.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains title of All Modules page
-        redirected.mustcontain("All Modules")
+        # Checks if page contains home page's title
+        redirected.mustcontain("Welcome to CSModify")
 
         login_page = redirected.goto(self.URL_DEFAULT_LOGIN, method="get")
         assert_equal(login_page.status, 200)
