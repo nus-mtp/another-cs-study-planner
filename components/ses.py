@@ -4,6 +4,8 @@
 
 
 import web
+import base64, pickle, sys
+sys.argv=[] # pickle needs sys.argv... 
 
 init_values = {'id': None,
                'keyError': False,
@@ -27,12 +29,14 @@ def init_session(app):
 
 def get_session(app):
     session_id = web.cookies().get('webpy_session_id')
-    print('Getting Session, id is ', session_id)
-    session = web.session.Session(app, disk_store,
-                                      initializer=init_values)
-    session = web.session.Session._load(session)
-    print('leaving loop with:', session._initializer)
-    return session._initializer
+    session = open('./sessions/'+session_id)
+    pickled = base64.decodestring(session.read())
+    session_instance = pickle.loads(pickled)
+    print('Got Session,', session_instance)
+    return session_instance
+
+def get_session_value(session, key):
+    return session[key]
 
                               
 
