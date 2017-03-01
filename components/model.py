@@ -64,14 +64,16 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     return DB_CURSOR.fetchall()
 
 
-def get_first_fixed_mounting():
+def get_current_ay():
     '''
-        Get the first mounting from the fixed mounting table
-        This is used for reading the current AY
+        Get the current AY from the fixed mounting table.
+        All fixed mountings should be from the same AY,
+        so just get the AY from the first entry.
+        Test case will ensure that all entries in fixed mountings have the same AY
     '''
-    sql_command = "SELECT acadYearAndSem FROM moduleMounted LIMIT(1)"
+    sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
     DB_CURSOR.execute(sql_command)
-    return DB_CURSOR.fetchone()
+    return DB_CURSOR.fetchone()[0]
 
 
 def get_all_fixed_ay_sems():

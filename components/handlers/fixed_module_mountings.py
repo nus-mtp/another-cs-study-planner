@@ -25,15 +25,6 @@ class Fixed(object):
         self.full_mounting_plan = []
 
 
-    def get_current_ay(self):
-        '''
-            All fixed mountings should be from the same AY,
-            so just get the AY from the first entry
-            Test case will ensure that all entries in fixed mountings have the same AY
-        '''
-        return model.get_first_fixed_mounting()[0][0:8]
-
-
     def populate_module_code_and_name(self):
         '''
             Populate full mounting plan with subplans
@@ -86,7 +77,7 @@ class Fixed(object):
 
         self.populate_module_code_and_name()
         self.populate_mounting_values()
-        current_ay = self.get_current_ay()
+        current_ay = model.get_current_ay()
 
         return RENDER.moduleMountingFixed(current_ay, self.full_mounting_plan)
 

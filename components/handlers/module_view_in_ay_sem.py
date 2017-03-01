@@ -19,15 +19,6 @@ class IndividualModule(object):
         self.is_current_ay = False
 
 
-    def get_current_ay(self):
-        '''
-            All fixed mountings should be from the same AY,
-            so just get the AY from the first entry
-            Test case will ensure that all entries in fixed mountings have the same AY
-        '''
-        return model.get_first_fixed_mounting()[0][0:8]
-
-
     def load_mounting_info(self, module_code, target_ay_sem):
         '''
             Load the mounting status and quota of the target module and AY/Sem
@@ -38,7 +29,7 @@ class IndividualModule(object):
 
         # Get mounting status in current AY
         target_ay = target_ay_sem[0:8]
-        current_ay = self.get_current_ay()
+        current_ay = model.get_current_ay()
         if target_ay == current_ay:
             is_current_ay = True
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, target_ay_sem)

@@ -32,7 +32,7 @@ class TestCode(object):
         '''
         self.module_overview_handler = ViewMod()
         self.mounting_view_handler = IndividualModule()
-        self.current_ay = model.get_first_fixed_mounting()[0][0:8]
+        self.current_ay = model.get_current_ay()
         self.next_ay = self.get_next_ay(self.current_ay)
 
         # Dummy modules
