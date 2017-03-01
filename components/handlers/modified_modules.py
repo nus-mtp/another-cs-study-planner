@@ -24,6 +24,17 @@ class Modified(object):
             raise web.seeother('/login')
 
         modified_modules = model.get_modules_with_modified_quota()
+        modified_modules = [list(module) for module in modified_modules]
+        for module in modified_modules:
+            current_quota = module[3]
+            modified_quota = module[4]
+            if current_quota is None:
+                quota_difference = modified_quota
+            elif modified_quota is None:
+                quota_difference = -current_quota
+            else:
+                quota_difference = modified_quota - current_quota
+            module.append(quota_difference)
 
         return RENDER.moduleModified_stub(modified_modules)
 

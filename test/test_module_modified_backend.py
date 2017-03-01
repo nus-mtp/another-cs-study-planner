@@ -140,8 +140,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
 
@@ -175,8 +175,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
 
@@ -210,8 +210,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
 
@@ -245,8 +245,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
 
@@ -282,8 +282,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
             current_index += 1
@@ -306,8 +306,8 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
                 current_aysem = module[1]
-                current_quota = module[2]
-                target_aysem = module[3]
+                target_aysem = module[2]
+                current_quota = module[3]
                 modified_quota = module[4]
                 break
 

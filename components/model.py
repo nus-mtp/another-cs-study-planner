@@ -382,8 +382,8 @@ def get_modules_with_modified_quota():
         and return the module code, current AY/Sem, current quota,
         target AY/Sem, and modified quota
     '''
-    sql_command = "SELECT m1.moduleCode, m1.acadYearAndSem, m1.quota, " +\
-                  "m2.acadYearAndSem, m2.quota " +\
+    sql_command = "SELECT m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem, " +\
+                  "m1.quota, m2.quota " +\
                   "FROM moduleMounted m1, moduleMountTentative m2 " +\
                   "WHERE m1.moduleCode = m2.moduleCode " +\
                   "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
