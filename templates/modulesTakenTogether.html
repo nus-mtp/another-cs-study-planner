@@ -1,124 +1,48 @@
-<html>
-	<head>
-		<title>$:page.title</title>
-		<link rel="stylesheet" type="text/css" href="../static/stylesheets/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="../static/stylesheets/bootstrap-theme.min.css">
-		<link rel="stylesheet" type="text/css" href="../static/stylesheets/dataTables.bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/stylesheets/csmodify.css">
-		<script type="text/javascript" src="../static/javascripts/jquery-2.2.4.min.js"></script>
-		<script type="text/javascript" src="../static/javascripts/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../static/javascripts/jquery.dataTables.min.js"></script>
-		<script type="text/javascript" src="../static/javascripts/dataTables.bootstrap.min.js"></script>
-		<script type="text/javascript" src="../static/javascripts/jquery.easing.min.js"></script>
-		<script type="text/javascript" src="../static/javascripts/csmodify.js"></script>
-        
-	</head>
+$def with (common_mod, lst_of_mods)
 
-	<body>
-	        <a class="btn btn-primary back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a>
-	        <div id="page-top"></div>
+$ page_title = None
+$if len(common_mod) > 0:
+    $ page_title = "Modules taken together same semester with " + common_mod
+$else:
+    $ page_title = "Modules taken together in the same semester"
 
-			<nav class="navbar navbar-default">
-				<div class="container-fluid">
-				    <form class="navbar-form navbar-left">
-					    <button type="button" class="btn btn-lg btn-primary" onclick="openSidebar()">
-					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
-					   	</button>
-					</form>
-				    <!--form class="navbar-form navbar-right">
-				        <button type="submit" class="btn btn-danger">Logout</button>
-				    </form-->
-				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				    	<ul class="nav navbar-nav navbar-right">
-				      		<!--li><a href="javascript:void(0)">(User ID goes here)</a></li-->
-					    </ul>
-					</div><!-- /.navbar-collapse -->
-				</div><!-- /.container-fluid -->
-			</nav>
 
-			<div id="sidebar" class="sidebar">
-				<a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
-				<h3><span class="glyphicon glyphicon-align-left"></span> Module Views</h3>
-				<ul>
-					<li><a href="/oversubscribedModules">Oversubscribed Modules</a></li>
-					<!--li><a href="#">View by Focus Area</a></li-->
-					<li><a href="/">Module Information</a></li>
-					<!--li><a href="#">Sort/Filter Modules</a></li>
-					<li><a href="#">Recently Removed Modules</a></li>
-					<li><a href="#">Starred Modules</a></li>
-					<li><a href="#">View Modules for Current Semester</a></li>
-					<li><a href="#">View Modules for Next Semester</a></li>
-					<li><a href="#">View Past Module Demand</a></li-->
-				</ul>
-				<!--h3>Change Curriculum</h3>
-				<ul>
-					<li><a href="#">Change Module Quota</a></li>
-					<li><a href="#">Change preclusions/prerequisites</a></li>
-					<li><a href="#">Edit Module</a></li>
-					<li><a href="#">Add Module</a></li>
-					<li><a href="#">Delete Module</a></li>
-				</ul-->
-				<!--h3>Module Relations</h3>
-				<ul>
-					<li><a href="#">Commonly Overlapping Modules</a></li>
-					<li><a href="#">Module Info by Semester</a></li>
-					<li><a href="javascript:void(0)">Prior Modules Taken</a></li>
-						<ul>
-							<li><a href="#">Before Specified Module</a></li>
-							<li><a href="#">Before Internship</a></li>
-						</ul>
-				</ul-->
-				<h3><span class="glyphicon glyphicon-education"></span> Student Statistics</h3>
-				<ul>
-					<!--li><a href="javascript:void(0)">Module Demand</a></li>
-						<ul>
-							<li><a href="#">Current Semester</a></li>
-							<li><a href="#">Next Semester</a></li>
-							<li><a href="#">In Specific Semester</a></li>
-						</ul-->
-					<li><a href="/studentEnrollment">Student Enrollment Info</a></li>
-					<!--li><a href="#">Module Timeline</a></li>
-					<li><a href="#">Non-Overlapping Modules</a></li-->
-				</ul>
-			</div>
+$var title:$page_title
 
-        <body class="container container-block">
-            <div class="row">
-                <h1 class="text-center"> Modules usually taken together</h1>
+<body class="container container-block">
+    <div class="row">
+        <h1 class="text-center"> Modules usually taken together</h1>
+    </div>
+    <div class="row">
+        <!--calls method post-->
+        <form id="search-modules-taken-tgt-form" action="/modulesTakenTogether" method="post">
+            <div class="form-group">
+                <label for="find-modules-taken-with">Find modules usually taken with:</label>
+                <input type="text" id="code" name="code" class="form-control form-control-lg" placeholder="e.g. CS2010">
+                <input type="submit" class="modules-taken-together btn btn-primary col-md-2" value="Submit">
             </div>
-            <div class="row">
-                <form>
-                    <div class="form-group">
-                        <label for="find-modules-taken-with">Find modules usually taken with:</label>
-                            <input type="text" id="find-modules-taken-with" class="modules-taken-together form-control form-control-lg" placeholder="e.g. CS2010" pattern="">
-                            
-                            <button type="submit" style="margin: 20px 0px" class="modules-taken-together btn btn-primary col-md-2">Submit</button>
-                           
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <h2>Results:</h2>
-                <table class="table table-bordered table-hover display dataTable">
+        </form>
+    </div>
+    <div class="row">
+        <h2>Results for $page_title:</h2>
+        <table id="common-module-table" class="table table-bordered table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>Module 1</th>
+                    <th data-sortable="false">Module 2</th>
+                    <th>For AY-Sem</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                $for row in lst_of_mods:
                     <tr>
-                        <thead>
-                            <th>Module 1</th>
-                            <th data-sortable="false">Module 2</th>
-                            <th>For AY-Sem</th>
-                            <th>Count</th>
-                        </thead>
+                        <td class="text-center">$row[0]</td>
+                        <td class="text-center">$row[1]</td>
+                        <td class="text-center">$row[2]</td>
+                        <td class="text-center">$row[3]</td>
                     </tr>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">placeholder</td>
-                            <td class="text-center">placeholder</td>
-                            <td class="text-center">placeholder</td>
-                            <td class="text-center">placeholder</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </body>
-
-	</body>
-</html>
+            </tbody>
+        </table>
+    </div>
+</body>

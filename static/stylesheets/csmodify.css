@@ -137,7 +137,7 @@ tr > th {
 /* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
 /*************************************************************************/
 
-button.modules-taken-together{
+.modules-taken-together{
     margin: 20px 0px;
     float: right;
 }
