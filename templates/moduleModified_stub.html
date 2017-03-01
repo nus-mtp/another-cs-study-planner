@@ -1,4 +1,4 @@
-$def with (modifiedModules)
+$def with (modify_type, modifiedModules)
 
 $var title:View modified modules
 
@@ -6,6 +6,16 @@ $var title:View modified modules
     <h1 class="text-center"><b>Modified Modules</b></h1>
     <p class="text-center">Shows all modules that have been modified</p>
     <br>
+    <form class="text-center" action="/modifiedModules" method="GET">
+        <select name="modifyType" onchange="submit()">
+            <option selected disabled>Select type of information modified</option>
+            <option value="all">All</option>
+            <option value="mounting">Mounting</option>
+            <option value="quota">Quota</option>
+            <option value="moduleDetails">Module Details</option>
+        </select>
+    </form> 
+$if modify_type == "quota":
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -33,6 +43,26 @@ $var title:View modified modules
                     <td>$module[4]</td>
                 $if True:
                     <td>$module[5]</td>
+                </tr>
+        </tbody>
+    </table>
+$elif modify_type == "mounting":
+    <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Current AY-Semester</th>
+                <th>Target AY-Semester</th>
+                <th>Mounting Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            $for module in modifiedModules:
+                <tr>
+                    <td>$module[0]</td>
+                    <td>$module[1]</td>
+                    <td>$module[2]</td>
+                    <td>$module[3]</td>
                 </tr>
         </tbody>
     </table>
