@@ -11,7 +11,7 @@ from components import model
 
 class OverlappingModules(object):
     '''
-        
+        define get and post for overlappingModules.html
     '''
     def GET(self):
         '''
@@ -23,17 +23,16 @@ class OverlappingModules(object):
         data = web.input()
         try:
             common_mod = data.code
-        except (AttributeError):
+        except AttributeError:
             common_mod = ""
         if len(common_mod) > 0:
             #if invalid, empty table will be returned
             lst_of_mods = model.get_mod_taken_together_with(common_mod)
         else:
             lst_of_mods = model.get_all_mods_taken_together()
-        
+
         return RENDER.overlappingModules(common_mod.upper(), lst_of_mods)
 
-    
     def POST(self):
         '''
             Handles the loading of new searches
@@ -41,35 +40,5 @@ class OverlappingModules(object):
 
         data = web.input()
         common_mod = data.code
-        if len(common_mod) > 0:
-            #if invalid, empty table will be returned
-            lst_of_mods = model.get_mod_taken_together_with(common_mod)
-        else:
-            lst_of_mods = model.get_all_mods_taken_together()
 
         raise web.seeother('/overlappingModules?code='+common_mod.upper())
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
