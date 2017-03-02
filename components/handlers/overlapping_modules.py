@@ -9,7 +9,7 @@ import web
 from components import model
 
 
-class ModuleUsuallyTakenTogether(object):
+class OverlappingModules(object):
     '''
         
     '''
@@ -28,7 +28,7 @@ class ModuleUsuallyTakenTogether(object):
         else:
             lst_of_mods = model.get_all_mods_taken_together()
         
-        return RENDER.modulesTakenTogether(common_mod.upper(), lst_of_mods)
+        return RENDER.overlappingModules(common_mod.upper(), lst_of_mods)
 
     
     def POST(self):
@@ -44,7 +44,7 @@ class ModuleUsuallyTakenTogether(object):
         else:
             lst_of_mods = model.get_all_mods_taken_together()
 
-        raise web.seeother('/modulesTakenTogether?code='+common_mod.upper())
+        raise web.seeother('/overlappingModules?code='+common_mod.upper())
 
         
 

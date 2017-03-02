@@ -41,7 +41,7 @@ class TestCode(object):
     def test_goto_oversubscribed_modules(self):
         root = self.test_app.get('/')
 
-        response = root.click(linkid="main", href="/oversubscribedModules")
+        response = root.click(linkid="home-page", href="/oversubscribedModules")
 
         assert_equal(response.status, 200)
 
@@ -49,7 +49,7 @@ class TestCode(object):
     def test_goto_module_listing(self):
         root = self.test_app.get('/')
 
-        response = root.click(linkid="main", href="/modules")
+        response = root.click(linkid="home-page", href="/modules")
 
         assert_equal(response.status, 200)
 
@@ -57,7 +57,7 @@ class TestCode(object):
     def test_goto_fixed_module_mounting(self):
         root = self.test_app.get('/')
 
-        response = root.click(linkid="main", href="/moduleMountingFixed")
+        response = root.click(linkid="home-page", href="/moduleMountingFixed")
 
         assert_equal(response.status, 200)
 
@@ -65,7 +65,7 @@ class TestCode(object):
     def test_goto_tentative_module_mounting(self):
         root = self.test_app.get('/')
 
-        response = root.click(linkid="main", href="/moduleMountingTentative")
+        response = root.click(linkid="home-page", href="/moduleMountingTentative")
 
         assert_equal(response.status, 200)
     
@@ -73,6 +73,13 @@ class TestCode(object):
     def test_goto_student_enrollment(self):
         root = self.test_app.get('/')
 
-        response = root.click(linkid="main", href="/studentEnrollment")
+        response = root.click(linkid="home-page", href="/studentEnrollment")
+
+        assert_equal(response.status, 200)
+
+    def test_goto_overlapping_modules(self):
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/overlappingModules")
 
         assert_equal(response.status, 200)
