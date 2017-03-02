@@ -30,6 +30,7 @@ URLS = (
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
+    '/logout', 'components.handlers.logout.Logout',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
 )
 
@@ -61,14 +62,19 @@ web.ACCOUNT_LOGIN_SUCCESSFUL = 2
 web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 
 web.config.session_parameters['ignore_expiry'] = False
+web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None,
+                              initializer={'id': 0,
                                            'keyError': False,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,
-                                           'editMountMsg': None})._initializer
+                                           'editMountMsg': None})
+
+def session_hook():
+    web.ctx.session = SESSION
 
 
 if __name__ == '__main__':
+    APP.add_processor(web.loadhook(session_hook))
     APP.run()
