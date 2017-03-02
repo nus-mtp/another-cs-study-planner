@@ -21,7 +21,10 @@ class OverlappingModules(object):
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
         data = web.input()
-        common_mod = data.code
+        try:
+            common_mod = data.code
+        except (AttributeError):
+            common_mod = ""
         if len(common_mod) > 0:
             #if invalid, empty table will be returned
             lst_of_mods = model.get_mod_taken_together_with(common_mod)
