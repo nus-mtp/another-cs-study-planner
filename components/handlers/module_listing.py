@@ -13,6 +13,8 @@ class Modules(object):
     '''
         This class handles the 'Add Module' form and the displaying of list of modules
     '''
+    URL_THIS_PAGE = '/modules'
+
     def __init__(self):
         self.form = self.create_form()
 
@@ -38,9 +40,21 @@ class Modules(object):
     def POST(self):
         '''
             This function is called when the 'Add Module' form is submitted
-            if form input is invalid, reload the page and shows error message besides field
+            if form input is invalid, reload the page and shows error message besides field.
+            This function might also be called from button links from other pages.
         '''
+
+        # Detects if this function is called from button links from another page.
+        referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
+        parts = referrer_page.split("/")
+        referrer_page_shortform = "/" + parts[len(parts) - 1]
+        # If referred from another page, direct to this page straight away.
+        if referrer_page_shortform != self.URL_THIS_PAGE:
+            raise web.seeother(self.URL_THIS_PAGE)
+
+        # When 'Add Module' form is submitted
         form = self.form()
+        # If module add is unsuccessful
         if not form.validates():
             modules = model.get_all_modules()
             return RENDER.moduleListing(modules, form, SESSION['keyError'])
@@ -50,7 +64,7 @@ class Modules(object):
         if outcome is False:
             SESSION['keyError'] = True
             SESSION['displayErrorMessage'] = True
-        raise web.seeother('/modules')        # load index.html again
+        raise web.seeother(self.URL_THIS_PAGE)        # load index.html again
 
 
     def create_form(self):
@@ -105,15 +119,17 @@ class FlagAsRemoved(object):
     '''
         This class handles the flagging of a module as 'To Be Removed'
     '''
+    URL_THIS_PAGE = '/modules'
+
     def GET(self):
         ''' Redirect '''
-        raise web.seeother('/modules')
+        raise web.seeother(self.URL_THIS_PAGE)
 
 
     def POST(self, module_code):
         ''' Flag module as removed '''
         model.flag_module_as_removed(module_code)
-        raise web.seeother('/modules')
+        raise web.seeother(self.URL_THIS_PAGE)
 
 
 
@@ -121,12 +137,14 @@ class DeleteMod(object):
     '''
         This class handles the deletion of module
     '''
+    URL_THIS_PAGE = '/modules'
+
     def GET(self):
         ''' Redirect '''
-        raise web.seeother('/modules')
+        raise web.seeother(self.URL_THIS_PAGE)
 
 
     def POST(self, module_code):        # module_code is obtained from the end of the URL
         ''' Delete the module '''
         model.delete_module(module_code)
-        raise web.seeother('/modules')
+        raise web.seeother(self.URL_THIS_PAGE)
