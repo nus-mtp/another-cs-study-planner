@@ -1,6 +1,15 @@
-$def with (moduleInfos, form, keyError)  
+$def with (moduleInfos, form, keyError, deleteError=None)  
 
 $var title:Module Listing
+
+$# Delete Error occurred
+$if deleteError != None:
+    $ errorMessage = "Module " + deleteError + " currently has " +\
+                        $ "mountings that refer to it. " +\
+                        $ "Remove all mountings before deleting module!"
+    <script type="text/javascript">
+        window.alert("$errorMessage");
+    </script>
 
 <div class="container-fluid" id="main">
     <div class="row">

@@ -33,8 +33,9 @@ class Modules(object):
                 SESSION['displayErrorMessage'] = False
             else:
                 SESSION['keyError'] = False
+                SESSION['deleteError'] = None
 
-            return RENDER.moduleListing(module_infos, form, SESSION['keyError'])
+            return RENDER.moduleListing(module_infos, form, SESSION['keyError'], SESSION['deleteError'])
 
 
     def POST(self):
@@ -146,5 +147,8 @@ class DeleteMod(object):
 
     def POST(self, module_code):        # module_code is obtained from the end of the URL
         ''' Delete the module '''
-        model.delete_module(module_code)
+        outcome = model.delete_module(module_code)
+        if outcome is False:
+            SESSION['deleteError'] = module_code
+            SESSION['displayErrorMessage'] = True
         raise web.seeother(self.URL_THIS_PAGE)
