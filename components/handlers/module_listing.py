@@ -19,7 +19,7 @@ class Modules(object):
 
     def GET(self):
         '''
-            This function is called when the '/' page (index.html) is loaded
+            This function is called when the '/modules' page (moduleListing.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
