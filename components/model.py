@@ -515,14 +515,14 @@ def get_mod_taken_together_with(code):
 
     sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
                 "FROM studentPlans sp1, studentPlans sp2 " + \
-                "WHERE sp1.moduleCode = '" + code + "' AND " + \
+                "WHERE sp1.moduleCode = %s AND " + \
                 "sp2.moduleCode <> sp1.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
                 "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
                 "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
                 "ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    DB_CURSOR.execute(sql_command, (code,))
 
     return DB_CURSOR.fetchmany(NUM_TOP_RESULTS_TO_RETURN)
 
