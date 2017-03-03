@@ -35,7 +35,8 @@ class Modules(object):
                 SESSION['keyError'] = False
                 SESSION['deleteError'] = None
 
-            return RENDER.moduleListing(module_infos, form, SESSION['keyError'], SESSION['deleteError'])
+            return RENDER.moduleListing(module_infos, form,
+                                        SESSION['keyError'], SESSION['deleteError'])
 
 
     def POST(self):
