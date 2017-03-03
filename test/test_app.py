@@ -2,7 +2,7 @@
     test_app.py test the application's home page
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP, SESSION
 import web
 
@@ -14,6 +14,9 @@ class TestCode(object):
 
 
     def __init__(self):
+        '''
+            Initialise testcode
+        '''
         self.middleware = None
         self.test_app = None
 
@@ -39,6 +42,9 @@ class TestCode(object):
 
 
     def test_goto_oversubscribed_modules(self):
+        '''
+            Tests if user can access the over subscribed page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/oversubscribedModules")
@@ -47,6 +53,9 @@ class TestCode(object):
 
 
     def test_goto_module_listing(self):
+        '''
+            Tests if user can access the module listing page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/modules")
@@ -55,6 +64,9 @@ class TestCode(object):
 
 
     def test_goto_fixed_module_mounting(self):
+        '''
+            Tests if user can access the fixed module mounting page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/moduleMountingFixed")
@@ -63,14 +75,20 @@ class TestCode(object):
 
 
     def test_goto_tentative_module_mounting(self):
+        '''
+            Tests if user can access the tentative module mounting page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/moduleMountingTentative")
 
         assert_equal(response.status, 200)
-    
+
 
     def test_goto_student_enrollment(self):
+        '''
+            Tests if user can access the student enrollment page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/studentEnrollment")
@@ -78,6 +96,9 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
     def test_goto_overlapping_modules(self):
+        '''
+            Tests if user can access the overlapping modules page without request errors.
+        '''
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/overlappingModules")
