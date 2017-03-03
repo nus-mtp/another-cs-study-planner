@@ -24,7 +24,8 @@ $if modify_type == "quota":
                 <th>Target AY-Semester</th>
                 <th data-sortable="false">Current Quota</th>
                 <th data-sortable="false">Modified Quota</th>
-                <th>Quota Difference</th>
+                <th>Quota Change</th>
+                <th data-sortable="false">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,12 @@ $if modify_type == "quota":
                     <td>$module[4]</td>
                 $if True:
                     <td>$module[5]</td>
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$module[0]">
+                            <input class="btn btn-primary" type="submit" value="View Module"/>
+                        </form>
+                    </td>
                 </tr>
         </tbody>
     </table>
@@ -54,6 +61,7 @@ $elif modify_type == "mounting":
                 <th>Current AY-Semester</th>
                 <th>Target AY-Semester</th>
                 <th>Mounting Change</th>
+                <th data-sortable="false">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -62,7 +70,17 @@ $elif modify_type == "mounting":
                     <td>$module[0]</td>
                     <td>$module[1]</td>
                     <td>$module[2]</td>
-                    <td>$module[3]</td>
+                $if module[3] == 0:
+                    <td>Unmounted &#8594; Mounted</td>
+                $elif module[3] == 1:
+                    <td>Mounted &#8594; Unmounted</td>
+                $if True:
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$module[0]">
+                            <input class="btn btn-primary" type="submit" value="View Module"/>
+                        </form>
+                    </td>
                 </tr>
         </tbody>
     </table>
@@ -74,37 +92,46 @@ $elif modify_type == "moduleDetails":
                 <th>Name modified?</th>
                 <th>Description modified?</th>
                 <th>Number of MCs modified?</th>
-                <th data-sortable="false">Remarks</th>
+                <th data-sortable="false">Actions</th>
             </tr>
         </thead>
         <tbody>
             $for module in modifiedModules:
                 <tr>
                     <td>$module[0]</td>
-                    <td>$module[1]</td>
-                    <td>$module[2]</td>
-                    <td>$module[3]</td>
-                $ remarks = ""
-                    <td>
-                $if module[4][0] is not None:
-                        <b><u>Name</u> is modified from</b><br> 
-                        <i>"$module[4][0][0]</i>"<br>
-                        <b>to</b><br>
-                        <i>"$module[4][0][1]</i>"<br>
-                        <br>
-                $if module[4][1] is not None:
-                        <b><u>Description</u> is modified from</b><br> 
-                        <i>"$module[4][1][0]</i>"<br>
-                        <b>to</b><br>
-                        <i>"$module[4][1][1]</i>"<br>
-                        <br>
-                $if module[4][2] is not None:
-                        <b><u>Number of MCs</u> is modified from</b>&nbsp;
-                        <i>'$module[4][2][0]'</i>&nbsp;&nbsp;
-                        <b>to</b>&nbsp;&nbsp;
-                        <i>'$module[4][2][1]'</i>
-                        <br><br>
+                $if module[1][0] is not None:
+                     <td>
+                        <b>Modified from</b><br><br>
+                        <i>"$module[1][0][0]</i>"<br><br>
+                        <b>to</b><br><br>
+                        <i>"$module[1][0][1]</i>"<br><br>
+                    </td>
+                $else:
+                    <td>Not modified</td>
+                $if module[1][1] is not None:
+                     <td>
+                        <b>Modified from</b><br><br>
+                        <i>"$module[1][1][0]</i>"<br><br>
+                        <b>to</b><br><br>
+                        <i>"$module[1][1][1]</i>"<br><br>
+                    </td>
+                $else:
+                    <td>Not modified</td>
+                $if module[1][2] is not None:
+                     <td>
+                        <b>Modified from</b><br><br> 
+                        <i>"$module[1][2][0]</i>"<br><br>
+                        <b>to</b><br><br>
+                        <i>"$module[1][2][1]</i>"<br><br>
+                    </td>
+                $else:
+                    <td>Not modified</td>
                 $if True:
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$module[0]">
+                            <input class="btn btn-primary" type="submit" value="View Module"/>
+                        </form>
                     </td>
                 </tr>
         </tbody>

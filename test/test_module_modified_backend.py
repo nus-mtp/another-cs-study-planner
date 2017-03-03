@@ -388,7 +388,7 @@ class TestCode(object):
         test_module_code = 'BB2001'
         test_current_aysem = self.current_ay+" Sem 1"
         test_target_aysem = self.next_ay+" Sem 1"
-        test_mounting_change = "Unmounted"
+        test_mounting_change = 0
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
         is_in_modified_modules = False
@@ -419,7 +419,7 @@ class TestCode(object):
         test_module_code = 'BB2002'
         test_current_aysem = self.current_ay+" Sem 2"
         test_target_aysem = self.next_ay+" Sem 2"
-        test_mounting_change = "Mounted"
+        test_mounting_change = 1
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
         is_in_modified_modules = False
@@ -450,7 +450,7 @@ class TestCode(object):
         test_module_code = 'BB2003'
         test_current_aysem = self.current_ay+" Sem 1"
         test_target_aysem = self.next_ay+" Sem 1"
-        test_mounting_change = "Unmounted"
+        test_mounting_change = 0
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
         is_in_modified_modules = False
@@ -476,7 +476,7 @@ class TestCode(object):
 
         test_current_aysem = self.current_ay+" Sem 2"
         test_target_aysem = self.next_ay+" Sem 2"
-        test_mounting_change = "Mounted"
+        test_mounting_change = 1
 
         is_in_modified_modules = False
         for module in modified_modules[current_index+1:]:
@@ -503,7 +503,7 @@ class TestCode(object):
         test_module_code = 'BB1001'   # not mounted in next next AY
         test_current_aysem = self.current_ay+" Sem 1"
         test_target_aysem = self.next_next_ay+" Sem 1"
-        test_mounting_change = "Unmounted"
+        test_mounting_change = 0
 
         # Set modified module to check for modifications in next two AYs
         self.modified_modules_handler.number_of_future_ays = 2
@@ -596,9 +596,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1]
-                is_desc_modified = module[2]
-                is_mc_modified = module[3]
+                is_name_modified = module[1][0] is not None
+                is_desc_modified = module[1][1] is not None
+                is_mc_modified = module[1][2] is not None
         assert_true(is_in_modified_modules)
         assert_true(is_name_modified)
         assert_false(is_desc_modified)
@@ -626,9 +626,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1]
-                is_desc_modified = module[2]
-                is_mc_modified = module[3]
+                is_name_modified = module[1][0] is not None
+                is_desc_modified = module[1][1] is not None
+                is_mc_modified = module[1][2] is not None
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_true(is_desc_modified)
@@ -656,9 +656,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1]
-                is_desc_modified = module[2]
-                is_mc_modified = module[3]
+                is_name_modified = module[1][0] is not None
+                is_desc_modified = module[1][1] is not None
+                is_mc_modified = module[1][2] is not None
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_false(is_desc_modified)
@@ -693,9 +693,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1]
-                is_desc_modified = module[2]
-                is_mc_modified = module[3]
+                is_name_modified = module[1][0] is not None
+                is_desc_modified = module[1][1] is not None
+                is_mc_modified = module[1][2] is not None
         assert_true(is_in_modified_modules)
         assert_true(is_name_modified)
         assert_true(is_desc_modified)

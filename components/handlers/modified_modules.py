@@ -45,12 +45,16 @@ class Modified(object):
             current_quota = module[3]
             modified_quota = module[4]
             if current_quota is None:
-                quota_difference = modified_quota
+                quota_change = '+' + str(modified_quota)
             elif modified_quota is None:
-                quota_difference = -current_quota
+                quota_change = str(-current_quota)
             else:
-                quota_difference = modified_quota - current_quota
-            module.append(quota_difference)
+                quota_change = modified_quota - current_quota
+                if quota_change > 0:
+                    quota_change = '+' + str(quota_change)
+                else:
+                    quota_change = str(quota_change)
+            module.append(quota_change)
         return modified_modules
 
 
@@ -93,17 +97,17 @@ class Modified(object):
 
                 if tenta_sem_1_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                             target_ay+" Sem 1", "Unmounted"])
+                                             target_ay+" Sem 1", 0])  # Unmounted --> Mounted
                 elif tenta_sem_1_mounting == 1 and fixed_sem_1_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                             target_ay+" Sem 1", "Mounted"])
+                                             target_ay+" Sem 1", 1])  # Mounted --> Unmounted
 
                 if tenta_sem_2_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                             target_ay+" Sem 2", "Unmounted"])
+                                             target_ay+" Sem 2", 0])  # Unmounted --> Mounted
                 elif tenta_sem_2_mounting == 1 and fixed_sem_2_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                             target_ay+" Sem 2", "Mounted"])
+                                             target_ay+" Sem 2", 1])  # Mounted --> Unmounted
 
         return modified_modules
 
@@ -138,18 +142,15 @@ class Modified(object):
                 del modified_modules[i]
                 continue
 
-            modified_modules[i][1] = is_name_modified
-            modified_modules[i][2] = is_desc_modified
-            modified_modules[i][3] = is_mc_modified
-
-            modification_remarks = [None, None, None]
+            modifications = [None, None, None]
             if is_name_modified:
-                modification_remarks[0] = (old_module_name, current_module_name)
+                modifications[0] = (old_module_name, current_module_name)
             if is_desc_modified:
-                modification_remarks[1] = (old_module_desc, current_module_desc)
+                modifications[1] = (old_module_desc, current_module_desc)
             if is_mc_modified:
-                modification_remarks[2] = (old_module_mc, current_module_mc)
-            modified_modules[i].append(modification_remarks)
+                modifications[2] = (old_module_mc, current_module_mc)
+
+            modified_modules[i] = (module_code, modifications)
             i += 1
 
         return modified_modules
