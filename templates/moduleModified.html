@@ -97,9 +97,9 @@ $elif modify_type == "mounting":
                     <td>$module[0]</td>
                     <td>$module[1]</td>
                     <td>$module[2]</td>
-                $if module[3] == 0:
+                $if module[3] == 1:
                     <td>Unmounted &#8594; Mounted</td>
-                $elif module[3] == 1:
+                $elif module[3] == 0:
                     <td>Mounted &#8594; Unmounted</td>
                 $if True:
                     <td>

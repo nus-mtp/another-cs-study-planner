@@ -211,7 +211,7 @@ class Modified(object):
         elif modify_type == "all":
             modified_modules = self.get_all_modified_modules()
 
-        return RENDER.moduleModified_stub(modify_type, modified_modules)
+        return RENDER.moduleModified(modify_type, modified_modules)
 
 
     def POST(self):
@@ -222,4 +222,4 @@ class Modified(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
-        raise web.seeother('/moduleMountingTentative')
+        raise web.seeother('/modifiedModules')
