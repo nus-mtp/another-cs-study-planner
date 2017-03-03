@@ -154,6 +154,17 @@ class TestCode(object):
             return
 
 
+    def test_delete_module_with_mounting(self):
+        '''
+            Tests deleting of modules with tentative mounting.
+        '''
+        outcome = model.delete_module(self.test_module_code)
+        assert_false(outcome)
+        module_info = model.get_module(self.test_module_code)
+        assert_true(module_info is not None)
+        return
+
+
     def test_add_mod_with_repeat_code(self):
         '''
             Tests that adding of module with duplicated code will fail.
