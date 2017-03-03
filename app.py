@@ -66,6 +66,7 @@ web.config.session_parameters['ignore_expiry'] = False
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
                               initializer={'id': None,
                                            'keyError': False,
+                                           'deleteError': None,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,
                                            'editMountMsg': None})._initializer
