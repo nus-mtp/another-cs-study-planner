@@ -127,7 +127,7 @@ def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     if result is not None:
         return result[0]
     else:
-        return None
+        return False
 
 
 def get_quota_of_target_tenta_ay_sem(code, ay_sem):
@@ -141,7 +141,7 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
     if result is not None:
         return result[0]
     else:
-        return None
+        return False
 
 
 def get_number_students_planning(code):
