@@ -50,7 +50,7 @@ class Modules(object):
         if outcome is False:
             SESSION['keyError'] = True
             SESSION['displayErrorMessage'] = True
-        raise web.seeother('/moduleListing')        # load index.html again
+        raise web.seeother('/modules')        # load index.html again
 
 
     def create_form(self):
@@ -107,13 +107,13 @@ class FlagAsRemoved(object):
     '''
     def GET(self):
         ''' Redirect '''
-        raise web.seeother('/moduleListing')
+        raise web.seeother('/modules')
 
 
     def POST(self, module_code):
         ''' Flag module as removed '''
         model.flag_module_as_removed(module_code)
-        raise web.seeother('/moduleListing')
+        raise web.seeother('/modules')
 
 
 
@@ -123,10 +123,10 @@ class DeleteMod(object):
     '''
     def GET(self):
         ''' Redirect '''
-        raise web.seeother('/moduleListing')
+        raise web.seeother('/modules')
 
 
     def POST(self, module_code):        # module_code is obtained from the end of the URL
         ''' Delete the module '''
         model.delete_module(module_code)
-        raise web.seeother('/moduleListing')
+        raise web.seeother('/modules')
