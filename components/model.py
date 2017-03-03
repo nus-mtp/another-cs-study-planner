@@ -176,6 +176,33 @@ def update_module(code, name, description, module_credits):
     return True
 
 
+def store_original_module_info(code, name, description, module_credits):
+    '''
+        Store the original name, description and MC of a module
+        so that 1. Can track which module has been modified, 2. Can reset module to original state
+        If original info already exists in table, the original info will NOT be overwritten
+        (the prmary key constraint will prevent that)
+    '''
+    sql_command = "INSERT INTO moduleBackup VALUES (%s,%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def remove_original_module_info(code):
+    '''
+        Remove the original info of the module from module backup
+        (when the original module info has been restored)
+    '''
+    sql_command = "DELETE FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    CONNECTION.commit()
+
+
 def flag_module_as_removed(code):
     '''
         Change the status of a module to 'To Be Removed'
@@ -200,6 +227,10 @@ def delete_module(code):
     '''
     # Delete the foreign key reference first.
     sql_command = "DELETE FROM modulemounted WHERE modulecode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    sql_command = "DELETE FROM modulemountTentative WHERE modulecode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    sql_command = "DELETE FROM moduleBackup WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
 
     # Perform the normal delete.
@@ -376,6 +407,16 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
+
+
+def get_modules_with_modified_details():
+    '''
+        Get all modules whose details (name/description/MC) has been modified.
+        Return the module's code, old name, old description, and old MC
+    '''
+    sql_command = "SELECT * FROM moduleBackup ORDER BY code ASC"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def get_modules_with_modified_quota():

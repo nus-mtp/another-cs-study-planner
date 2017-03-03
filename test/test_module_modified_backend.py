@@ -2,9 +2,11 @@
     test_modified_modules_backend.py
     Contains test cases related to the backend functions of modified modules.
 '''
-from nose.tools import assert_equal, assert_true, assert_false
+from nose.tools import assert_equal, assert_not_equal, assert_true, assert_false
 from components import model
 from components.handlers.modified_modules import Modified
+from components.handlers.module_edit import EditModuleInfo
+import web
 
 
 class TestCode(object):
@@ -134,6 +136,9 @@ class TestCode(object):
         model.delete_module('BB1004')
         model.delete_module('BB1005')
         model.delete_module('BB1006')
+        model.delete_module('BB2001')
+        model.delete_module('BB2002')
+        model.delete_module('BB2003')
 
 
     def test_quota_not_modified(self):
@@ -525,3 +530,193 @@ class TestCode(object):
         assert_equal(test_target_aysem, target_aysem)
         assert_equal(test_mounting_change, mounting_change)
 
+
+    class TestEditModuleData(object):
+        '''
+            Emulate the data submitted by the web form of the 'Edit Module' page
+        '''
+        def __init__(self, status, code, name, desc, mc):
+            self.status = status
+            self.code = code
+            self.name = name
+            self.desc = desc
+            self.mc = mc
+
+
+    def test_module_edit_but_same_info(self):
+        '''
+            Test that for Edit Module, if module info is exactly the same as before the edit,
+            a backup of the module's original info will NOT be inserted into database
+        '''
+        test_module_code = 'BB1001'
+        test_module_name = "Dummy Module 1"
+        test_module_desc = "This module's quota is NOT modified"
+        test_module_mc = 1
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+
+        assert_false(is_in_modified_modules)
+
+
+    def test_module_edit_backup(self):
+        '''
+            Test that for Edit Module, if module info has been modified after the edit,
+            a backup of the module's original info will be inserted into database
+        '''
+        number_of_modified_modules = len(model.get_modules_with_modified_details())
+
+        # Name has been modified
+        test_module_code = 'BB1001'
+        test_module_name = "Dummy Module NAME MODIFIED"
+        test_module_desc = "This module's quota is NOT modified"
+        test_module_mc = 1
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        assert_not_equal(number_of_modified_modules, len(modified_modules))
+        number_of_modified_modules = len(modified_modules)
+
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1]
+                is_desc_modified = module[2]
+                is_mc_modified = module[3]
+        assert_true(is_in_modified_modules)
+        assert_true(is_name_modified)
+        assert_false(is_desc_modified)
+        assert_false(is_mc_modified)
+
+        # Description has been modified
+        test_module_code = 'BB1002'
+        test_module_name = "Dummy Module 2"
+        test_module_desc = "This module's description has been MODIFIED"
+        test_module_mc = 2
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        assert_not_equal(number_of_modified_modules, len(modified_modules))
+        number_of_modified_modules = len(modified_modules)
+
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1]
+                is_desc_modified = module[2]
+                is_mc_modified = module[3]
+        assert_true(is_in_modified_modules)
+        assert_false(is_name_modified)
+        assert_true(is_desc_modified)
+        assert_false(is_mc_modified)
+
+        # MC has been modified
+        test_module_code = 'BB1003'
+        test_module_name = "Dummy Module 3"
+        test_module_desc = "This module's quota for sem 2 is modified"
+        test_module_mc = 10
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        assert_not_equal(number_of_modified_modules, len(modified_modules))
+        number_of_modified_modules = len(modified_modules)
+
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1]
+                is_desc_modified = module[2]
+                is_mc_modified = module[3]
+        assert_true(is_in_modified_modules)
+        assert_false(is_name_modified)
+        assert_false(is_desc_modified)
+        assert_true(is_mc_modified)
+
+
+    def test_module_edit_back_to_original(self):
+        '''
+            Test that if a module's detail is previously modified, but is then edited back to original,
+            it will disappear from the module backup table
+        '''
+        number_of_modified_modules = len(model.get_modules_with_modified_details())
+
+        # Details modified
+        test_module_code = 'BB2001'
+        test_module_name = "Dummy Module NAME MODIFIED"
+        test_module_desc = "This module's description has been MODIFIED"
+        test_module_mc = 10
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        assert_not_equal(number_of_modified_modules, len(modified_modules))  # Original info inserted into backup
+
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1]
+                is_desc_modified = module[2]
+                is_mc_modified = module[3]
+        assert_true(is_in_modified_modules)
+        assert_true(is_name_modified)
+        assert_true(is_desc_modified)
+        assert_true(is_mc_modified)
+
+        # Details edited back to original
+        test_module_code = 'BB2001'
+        test_module_name = 'Dummy Module 1'
+        test_module_desc = "This module is unmounted from sem 1"
+        test_module_mc = 1
+
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        assert_equal(number_of_modified_modules, len(modified_modules))  # Original info removed from backup
+
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+        assert_false(is_in_modified_modules)

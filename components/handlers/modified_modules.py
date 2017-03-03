@@ -36,7 +36,7 @@ class Modified(object):
     def get_modules_with_modified_quota(self):
         '''
             Get all modules whose quota has been modified in a future AY.
-            Return the module code, current AY-Sem, target AY-Sem, current quota, 
+            Return the module code, current AY-Sem, target AY-Sem, current quota,
             modified quota, and quota difference
         '''
         modified_modules = model.get_modules_with_modified_quota()
@@ -57,8 +57,7 @@ class Modified(object):
     def get_modules_with_modified_mounting(self):
         '''
             Get all modules whose mounting has been modified in a future AY.
-            Return the module code, current AY-Sem, target AY-Sem, current quota, 
-            modified quota, and quota difference
+            Return the module code, current AY-Sem, target AY-Sem, and mounting change
         '''
         # Generate fixed mounting plan
         fixed_mounting_handler = Fixed()
@@ -87,7 +86,6 @@ class Modified(object):
                 tenta_subplan = tenta_full_mounting_plan[i]
                 module_code = fixed_subplan[0]
 
-                fixed_ay_sem = fixed_subplan[1]
                 fixed_sem_1_mounting = fixed_subplan[2]
                 tenta_sem_1_mounting = tenta_subplan[2]
                 fixed_sem_2_mounting = fixed_subplan[3]
@@ -95,17 +93,64 @@ class Modified(object):
 
                 if tenta_sem_1_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                               target_ay+" Sem 1", "Unmounted"])
+                                             target_ay+" Sem 1", "Unmounted"])
                 elif tenta_sem_1_mounting == 1 and fixed_sem_1_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                               target_ay+" Sem 1", "Mounted"])
+                                             target_ay+" Sem 1", "Mounted"])
 
                 if tenta_sem_2_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                               target_ay+" Sem 2", "Unmounted"])
+                                             target_ay+" Sem 2", "Unmounted"])
                 elif tenta_sem_2_mounting == 1 and fixed_sem_2_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                               target_ay+" Sem 2", "Mounted"])
+                                             target_ay+" Sem 2", "Mounted"])
+
+        return modified_modules
+
+
+    def get_modules_with_modified_details(self):
+        '''
+            Get all modules whose details (name/description/MC) has been modified.
+            Return the module code, whether name is changed, whether desc is changed,
+            whether MC is changed, and the comparison of the old and new data
+        '''
+        modified_modules = model.get_modules_with_modified_details()
+        modified_modules = [list(module) for module in modified_modules]
+
+        i = 0
+        while i < len(modified_modules):
+            module_details = modified_modules[i]
+            module_code = module_details[0]
+            old_module_name = module_details[1]
+            old_module_desc = module_details[2]
+            old_module_mc = module_details[3]
+
+            current_module_info = model.get_module(module_code)
+            current_module_name = current_module_info[1]
+            current_module_desc = current_module_info[2]
+            current_module_mc = current_module_info[3]
+
+            is_name_modified = (current_module_name != old_module_name)
+            is_desc_modified = (current_module_desc != old_module_desc)
+            is_mc_modified = (current_module_mc != old_module_mc)
+            if not is_name_modified and not is_desc_modified and not is_mc_modified:
+                model.remove_original_module_info(module_code)
+                del modified_modules[i]
+                continue
+
+            modified_modules[i][1] = is_name_modified
+            modified_modules[i][2] = is_desc_modified
+            modified_modules[i][3] = is_mc_modified
+
+            modification_remarks = [None, None, None]
+            if is_name_modified:
+                modification_remarks[0] = (old_module_name, current_module_name)
+            if is_desc_modified:
+                modification_remarks[1] = (old_module_desc, current_module_desc)
+            if is_mc_modified:
+                modification_remarks[2] = (old_module_mc, current_module_mc)
+            modified_modules[i].append(modification_remarks)
+            i += 1
 
         return modified_modules
 
@@ -124,14 +169,16 @@ class Modified(object):
         try:
             input_data = web.input()
             modify_type = input_data.modifyType
-        except Exception:
-            modify_type = "all"
+        except AttributeError:
+            raise web.seeother("/modifiedModules?modifyType=all")
 
         modified_modules = None
         if modify_type == "mounting":
             modified_modules = self.get_modules_with_modified_mounting()
         elif modify_type == "quota":
             modified_modules = self.get_modules_with_modified_quota()
+        elif modify_type == "moduleDetails":
+            modified_modules = self.get_modules_with_modified_details()
 
         return RENDER.moduleModified_stub(modify_type, modified_modules)
 

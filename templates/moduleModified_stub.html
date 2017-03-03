@@ -66,4 +66,47 @@ $elif modify_type == "mounting":
                 </tr>
         </tbody>
     </table>
+$elif modify_type == "moduleDetails":
+    <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name modified?</th>
+                <th>Description modified?</th>
+                <th>Number of MCs modified?</th>
+                <th data-sortable="false">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            $for module in modifiedModules:
+                <tr>
+                    <td>$module[0]</td>
+                    <td>$module[1]</td>
+                    <td>$module[2]</td>
+                    <td>$module[3]</td>
+                $ remarks = ""
+                    <td>
+                $if module[4][0] is not None:
+                        <b><u>Name</u> is modified from</b><br> 
+                        <i>"$module[4][0][0]</i>"<br>
+                        <b>to</b><br>
+                        <i>"$module[4][0][1]</i>"<br>
+                        <br>
+                $if module[4][1] is not None:
+                        <b><u>Description</u> is modified from</b><br> 
+                        <i>"$module[4][1][0]</i>"<br>
+                        <b>to</b><br>
+                        <i>"$module[4][1][1]</i>"<br>
+                        <br>
+                $if module[4][2] is not None:
+                        <b><u>Number of MCs</u> is modified from</b>&nbsp;
+                        <i>'$module[4][2][0]'</i>&nbsp;&nbsp;
+                        <b>to</b>&nbsp;&nbsp;
+                        <i>'$module[4][2][1]'</i>
+                        <br><br>
+                $if True:
+                    </td>
+                </tr>
+        </tbody>
+    </table>
 </div>
