@@ -9,6 +9,9 @@ from components import model
 
 
 class Index(object):
+    '''
+        This class is responsible for methods corresponding to the home page.
+    '''
     def GET(self):
         '''
             This function is called when the '/' page (index.html) is loaded
