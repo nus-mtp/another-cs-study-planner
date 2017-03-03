@@ -58,9 +58,11 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
                   "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
-                  "AND M2.acadYearAndSem LIKE '" + selected_ay + "%' " +\
+                  "AND M2.acadYearAndSem LIKE %s" + \
                   "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-    DB_CURSOR.execute(sql_command)
+    processed_ay = selected_ay + "%"
+
+    DB_CURSOR.execute(sql_command, (processed_ay,))
     return DB_CURSOR.fetchall()
 
 
