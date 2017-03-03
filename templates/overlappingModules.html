@@ -2,20 +2,20 @@ $def with (common_mod, lst_of_mods)
 
 $ page_title = None
 $if len(common_mod) > 0:
-    $ page_title = "Modules taken together same semester with " + common_mod
+    $ page_title = "Modules Taken Together Same Semester With " + common_mod
 $else:
-    $ page_title = "Modules taken together in the same semester"
+    $ page_title = "Modules Taken Together In The Same Semester"
 
 
 $var title:$page_title
 
-<body class="container container-block">
+<div class="container container-block">
     <div class="row">
-        <h1 class="text-center"> Modules usually taken together</h1>
+        <h1 class="text-center"> Modules Usually Taken Together</h1>
     </div>
     <div class="row">
         <!--calls method post-->
-        <form id="search-modules-taken-tgt-form" action="/overlappingModules" method="post">
+        <form id="search-modules-taken-tgt-form" class="search-form" action="/overlappingModules" method="post">
             <div class="form-group">
                 <label for="find-modules-taken-with">Find modules usually taken with:</label>
                 <input type="text" id="code" name="code" class="form-control form-control-lg" placeholder="e.g. CS2010">
@@ -45,4 +45,4 @@ $var title:$page_title
             </tbody>
         </table>
     </div>
-</body>
+</div>

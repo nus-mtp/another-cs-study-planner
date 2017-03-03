@@ -51,7 +51,7 @@ class TestCode(object):
             tests if contents are as expected when there is no code
         '''
         page = self.test_app.get(self.URL_ALL)
-        page.mustcontain("Modules taken together in the same semester")
+        page.mustcontain("Modules Taken Together In The Same Semester")
 
     def test_page_example_contents(self):
         '''
@@ -59,7 +59,7 @@ class TestCode(object):
         '''
         page_cs1010 = self.test_app.get(self.URL_CS1010)
 
-        page_cs1010.mustcontain("Results for Modules taken together same semester with CS1010")
+        page_cs1010.mustcontain("Results for Modules Taken Together Same Semester With CS1010")
 
     def test_form(self):
         '''
