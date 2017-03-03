@@ -97,17 +97,17 @@ class Modified(object):
 
                 if tenta_sem_1_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                             target_ay+" Sem 1", 0])  # Unmounted --> Mounted
+                                             target_ay+" Sem 1", 0])  # Mounted --> Unmounted
                 elif tenta_sem_1_mounting == 1 and fixed_sem_1_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 1",
-                                             target_ay+" Sem 1", 1])  # Mounted --> Unmounted
+                                             target_ay+" Sem 1", 1])  # Unmounted --> Mounted
 
                 if tenta_sem_2_mounting == 0:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                             target_ay+" Sem 2", 0])  # Unmounted --> Mounted
+                                             target_ay+" Sem 2", 0])  # Mounted --> Unmounted
                 elif tenta_sem_2_mounting == 1 and fixed_sem_2_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 2",
-                                             target_ay+" Sem 2", 1])  # Mounted --> Unmounted
+                                             target_ay+" Sem 2", 1])  # Unmounted --> Mounted
 
         return modified_modules
 
@@ -222,4 +222,4 @@ class Modified(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
-        raise web.seeother('/modifiedModules')
+        raise web.seeother('/modifiedModules?modifyType=all')

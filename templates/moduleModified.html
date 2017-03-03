@@ -76,9 +76,9 @@ $if modify_type == "quota":
                             <input type="hidden" name="code" value="$module[0]">
                             <input class="btn btn-primary" type="submit" value="View Module"/>
                         </form>
-                        <form id="restoreModuleForm" action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
+                        <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
                             <input type="hidden" name="code" value="$module[0]">
-                            <input type="hidden" name="aySem" value="$module[2]">
+                            <input type="hidden" name="targetAySem" value="$module[2]">
                             <input type="hidden" name="quota" value="$module[3]">
                             <input type="hidden" name="restoreType" value="quota">
                             <input class="btn btn-primary" type="submit" value="Restore Quota"/>
@@ -113,6 +113,14 @@ $elif modify_type == "mounting":
                         <form action="/viewModule" method="get">
                             <input type="hidden" name="code" value="$module[0]">
                             <input class="btn btn-primary" type="submit" value="View Module"/>
+                        </form>
+                        <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting?')){event.preventDefault();}">
+                            <input type="hidden" name="code" value="$module[0]">
+                            <input type="hidden" name="currentAySem" value="$module[1]">
+                            <input type="hidden" name="targetAySem" value="$module[2]">
+                            <input type="hidden" name="mountingChange" value="$module[3]">
+                            <input type="hidden" name="restoreType" value="mounting">
+                            <input class="btn btn-primary" type="submit" value="Restore Mounting"/>
                         </form>
                     </td>
                 </tr>

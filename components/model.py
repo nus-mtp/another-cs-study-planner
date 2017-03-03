@@ -116,12 +116,40 @@ def get_tenta_mounting_and_quota(code):
     return DB_CURSOR.fetchall()
 
 
+def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
+    '''
+        Get the mounting status of a module in a target fixed AY/Sem
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMounted " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    result = DB_CURSOR.fetchone()
+    if result[0] == 1:
+        return True  # Mounted
+    else:
+        return False  # Not Mounted
+
+
+def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
+    '''
+        Get the mounting status of a module in a target tentative AY/Sem
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMountTentative " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    result = DB_CURSOR.fetchone()
+    if result[0] == 1:
+        return True  # Mounted
+    else:
+        return False  # Not Mounted
+
+
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     '''
         Get the quota of a mod in a target fixed AY/Sem (if any)
     '''
     sql_command = "SELECT quota FROM moduleMounted " +\
-                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
     result = DB_CURSOR.fetchone()
     if result is not None:
@@ -135,7 +163,7 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
         Get the quota of a mod in a target tentative AY/Sem (if any)
     '''
     sql_command = "SELECT quota FROM moduleMountTentative " +\
-                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
     result = DB_CURSOR.fetchone()
     if result is not None:

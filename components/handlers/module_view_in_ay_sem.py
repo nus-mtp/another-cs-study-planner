@@ -37,7 +37,6 @@ class IndividualModule(object):
             target_sem = target_ay_sem[9:14]
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code,
                                                                  current_ay+" "+target_sem)
-        print fixed_quota
         if fixed_quota is False:
             fixed_quota = '-'
         else:

@@ -17,22 +17,40 @@ class RestoreModule(object):
 		'''
 			Handles the restoration of module info
 		'''
-		if test_data:
+		if test_data:  # for testing purposes
 			data = test_data[0]
 		else:
 			data = web.input()
 
 		restore_type = data.restoreType
 		module_code = data.code
-		ay_sem = data.aySem
-		quota = data.quota
-		if quota == "?":
-			quota = None
 
 		if restore_type == "quota":
+			ay_sem = data.targetAySem
+			quota = data.quota
+			if quota == "?":
+				quota = None
+
 			outcome = model.update_quota(module_code, ay_sem, quota)
+
 			if outcome is True:
 				outcome = True  # Todo: show message
-
 			if not test_data:
 				raise web.seeother('/modifiedModules?modifyType=quota')
+
+		elif restore_type == "mounting":
+			target_ay_sem = data.targetAySem
+			mounting_change = int(data.mountingChange)
+
+			outcome = None
+			if mounting_change == 1:  # Is mounted, so should revert to unmounted
+				outcome = model.delete_tenta_mounting(module_code, target_ay_sem)
+			elif mounting_change == 0:  # Is unmounted, so should revert to mounted
+				current_ay_sem = data.currentAySem
+				quota = model.get_quota_of_target_fixed_ay_sem(module_code, current_ay_sem)
+				outcome = model.add_tenta_mounting(module_code, target_ay_sem, quota) 
+
+			if outcome is True:
+				outcome = True  # Todo: show message
+			if not test_data:
+				raise web.seeother('/modifiedModules?modifyType=mounting')

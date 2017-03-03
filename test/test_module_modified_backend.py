@@ -59,7 +59,11 @@ class TestCode(object):
         model.add_module('BB3001', 'Dummy Module 1',
                          "This module's quota is modified and will be restored", 1, 'Active')
         model.add_module('BB3002', 'Dummy Module 2',
-                         "This module's quota has become unspecified and will be restored", 2, 'Active')
+                         "This module's quota has been specified and will be restored to unspecified", 2, 'Active')
+        model.add_module('BB3003', 'Dummy Module 3',
+                         "This module's has been mounted and will be restored to unmounted", 3, 'Active')
+        model.add_module('BB3004', 'Dummy Module 4',
+                         "This module's has been unmounted and will be restored to mounted", 4, 'Active')
 
         # Dummy fixed mountings
         model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)
@@ -81,7 +85,8 @@ class TestCode(object):
         model.add_fixed_mounting('BB2003', self.current_ay+' Sem 1', 30)
 
         model.add_fixed_mounting('BB3001', self.current_ay+' Sem 1', 10)
-        model.add_fixed_mounting('BB3002', self.current_ay+' Sem 1', 20)
+        model.add_fixed_mounting('BB3002', self.current_ay+' Sem 1', None)
+        model.add_fixed_mounting('BB3004', self.current_ay+' Sem 2', 40)
 
         # Dummy tentative mountings
         model.add_tenta_mounting('BB1001', self.next_ay+' Sem 1', 10)
@@ -103,7 +108,8 @@ class TestCode(object):
         model.add_tenta_mounting('BB2003', self.next_ay+' Sem 2', 30)
 
         model.add_tenta_mounting('BB3001', self.next_ay+' Sem 1', 999)
-        model.add_tenta_mounting('BB3002', self.next_ay+' Sem 1', None)
+        model.add_tenta_mounting('BB3002', self.next_ay+' Sem 1', 999)
+        model.add_tenta_mounting('BB3003', self.next_ay+' Sem 2', 999)
 
 
     def tearDown(self):
@@ -128,6 +134,7 @@ class TestCode(object):
         model.delete_fixed_mounting('BB2003', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB3001', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB3002', self.current_ay+' Sem 1')
+        model.delete_fixed_mounting('BB3004', self.current_ay+' Sem 2')
 
         model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 1')
         model.delete_tenta_mounting('BB1001', self.next_ay+' Sem 2')
@@ -147,6 +154,8 @@ class TestCode(object):
         model.delete_tenta_mounting('BB2003', self.next_ay+' Sem 2')
         model.delete_tenta_mounting('BB3001', self.next_ay+' Sem 1')
         model.delete_tenta_mounting('BB3002', self.next_ay+' Sem 1')
+        model.delete_tenta_mounting('BB3003', self.next_ay+' Sem 2')
+        model.delete_tenta_mounting('BB3004', self.next_ay+' Sem 2')
 
         model.delete_module('BB1001')
         model.delete_module('BB1002')
@@ -159,6 +168,8 @@ class TestCode(object):
         model.delete_module('BB2003')
         model.delete_module('BB3001')
         model.delete_module('BB3002')
+        model.delete_module('BB3003')
+        model.delete_module('BB3004')
 
 
     def test_quota_not_modified(self):
@@ -813,11 +824,13 @@ class TestCode(object):
         '''
             Emulate the data submitted by the 'Restore Module' button on the 'Modified Modules' pages
         '''
-        def __init__(self, restoreType, code, aySem, quota):
+        def __init__(self, restoreType, code, currentAySem, targetAySem, quota, mountingChange):
             self.restoreType = restoreType
             self.code = code
-            self.aySem = aySem
+            self.currentAySem = currentAySem
+            self.targetAySem = targetAySem
             self.quota = quota
+            self.mountingChange = mountingChange
 
 
     def test_quota_restore(self):
@@ -825,7 +838,7 @@ class TestCode(object):
             Test if a module's whose quota is modified can be restored
             and if the module will disappear from the table of modules with modified quota 
         '''
-        # First dummy module
+        # Restore quota to original number
         test_module_code = 'BB3001'
         test_current_quota = 10
         test_target_aysem = self.next_ay+" Sem 1"
@@ -848,7 +861,8 @@ class TestCode(object):
         assert_equal(test_current_quota, current_quota)
         assert_equal(test_modified_quota, modified_quota)
 
-        test_post_data = self.TestRestoreModuleData("quota", test_module_code, test_target_aysem, test_current_quota)
+        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None, 
+                                                    test_target_aysem, test_current_quota, None)
         self.module_restore_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_quota()
@@ -865,11 +879,11 @@ class TestCode(object):
         restored_quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
         assert_equal(restored_quota, test_current_quota)
 
-        # Second dummy module
+        # Restore quota to unspecified
         test_module_code = 'BB3002'
-        test_current_quota = 20
+        test_current_quota = None
         test_target_aysem = self.next_ay+" Sem 1"
-        test_modified_quota = None
+        test_modified_quota = 999
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_quota()
         is_in_modified_modules = False
@@ -888,7 +902,8 @@ class TestCode(object):
         assert_equal(test_current_quota, current_quota)
         assert_equal(test_modified_quota, modified_quota)
 
-        test_post_data = self.TestRestoreModuleData("quota", test_module_code, test_target_aysem, test_current_quota)
+        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None, 
+                                                    test_target_aysem, test_current_quota, None)
         self.module_restore_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_quota()
@@ -904,3 +919,78 @@ class TestCode(object):
 
         restored_quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
         assert_equal(restored_quota, test_current_quota)
+
+
+    def test_mounting_restore(self):
+        '''
+            Test if a module's whose mounting is modified can be restored
+            and if the module will disappear from the table of modules with modified mounting 
+        '''
+        # Restore to unmounted
+        test_module_code = 'BB3003'
+        test_target_aysem = self.next_ay+" Sem 2"
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        mounting_change = None
+
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                mounting_change = module[3]
+                break
+
+        assert_true(is_in_modified_modules)
+        assert_equal(mounting_change, 1)  # Mounted
+
+        test_post_data = self.TestRestoreModuleData("mounting", test_module_code, None, 
+                                                    test_target_aysem, None, mounting_change)
+        self.module_restore_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_false(is_in_modified_modules)
+
+        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
+        assert_equal(restored_mounting, False)  # Not Mounted
+
+        # Restore to mounted
+        test_module_code = 'BB3004'
+        test_current_aysem = self.current_ay+" Sem 2"
+        test_target_aysem = self.next_ay+" Sem 2"
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        mounting_change = None
+
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                mounting_change = module[3]
+                break
+
+        assert_true(is_in_modified_modules)
+        assert_equal(mounting_change, 0)  # Not Mounted
+
+        test_post_data = self.TestRestoreModuleData("mounting", test_module_code, test_current_aysem, 
+                                                    test_target_aysem, None, mounting_change)
+        self.module_restore_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_false(is_in_modified_modules)
+
+        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
+        assert_equal(restored_mounting, True)  # Mounted
