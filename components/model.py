@@ -196,17 +196,17 @@ def flag_module_as_active(code):
 
 def delete_module(code):
     '''
-        Delete a module from the module table
+        Delete a newly added module from the module table
+        if and only if no (tentative) mountings refer to it.
     '''
-    # Delete the foreign key reference first.
-    sql_command = "DELETE FROM modulemounted WHERE modulecode=%s"
-    DB_CURSOR.execute(sql_command, (code,))
-
-    # Perform the normal delete.
-    sql_command = "DELETE FROM module WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code,))
-    CONNECTION.commit()
-
+    try:
+        sql_command = "DELETE FROM module WHERE code=%s"
+        DB_CURSOR.execute(sql_command, (code,))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
 
 def get_oversub_mod():
     '''
