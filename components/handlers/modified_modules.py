@@ -37,7 +37,7 @@ class Modified(object):
         '''
             Get all modules whose quota has been modified in a future AY.
             Return the module code, current AY-Sem, target AY-Sem, current quota,
-            modified quota, and quota difference
+            modified quota, and quota change
         '''
         modified_modules = model.get_modules_with_modified_quota()
         modified_modules = [list(module) for module in modified_modules]
@@ -115,8 +115,8 @@ class Modified(object):
     def get_modules_with_modified_details(self):
         '''
             Get all modules whose details (name/description/MC) has been modified.
-            Return the module code, whether name is changed, whether desc is changed,
-            whether MC is changed, and the comparison of the old and new data
+            Return the module code, name modification, desc modification,
+            and MC modification (if any)
         '''
         modified_modules = model.get_modules_with_modified_details()
         modified_modules = [list(module) for module in modified_modules]
@@ -156,6 +156,34 @@ class Modified(object):
         return modified_modules
 
 
+    def get_all_modified_modules(self):
+        '''
+            Get all modules that have been modified in some way or another.
+            Return the module code, whether mounting is modified,
+            whether quota is modified, and whether module details are modified
+        '''
+        modified_mounting_modules = self.get_modules_with_modified_mounting()
+        modified_quota_modules = self.get_modules_with_modified_quota()
+        modified_details_modules = self.get_modules_with_modified_details()
+        modified_mounting_module_codes = [module[0] for module in modified_mounting_modules]
+        modified_quota_module_codes = [module[0] for module in modified_quota_modules]
+        modified_details_module_codes = [module[0] for module in modified_details_modules]
+
+        modified_module_codes = modified_mounting_module_codes + modified_quota_module_codes +\
+                                modified_details_module_codes
+        modified_modules = []
+        for module_code in modified_module_codes:
+            if module_code in [module[0] for module in modified_modules]:
+                continue
+            is_mounting_modified = module_code in modified_mounting_module_codes
+            is_quota_modified = module_code in modified_quota_module_codes
+            is_details_modified = module_code in modified_details_module_codes
+            modified_modules.append((module_code, is_mounting_modified,
+                                     is_quota_modified, is_details_modified))
+
+        return modified_modules
+
+
     def GET(self):
         '''
             Renders the modified modules page if users requested
@@ -180,6 +208,8 @@ class Modified(object):
             modified_modules = self.get_modules_with_modified_quota()
         elif modify_type == "moduleDetails":
             modified_modules = self.get_modules_with_modified_details()
+        elif modify_type == "all":
+            modified_modules = self.get_all_modified_modules()
 
         return RENDER.moduleModified_stub(modify_type, modified_modules)
 

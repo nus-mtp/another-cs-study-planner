@@ -7,7 +7,7 @@ $var title:View modified modules
     <p class="text-center">Shows all modules that have been modified</p>
     <br>
     <form class="text-center" action="/modifiedModules" method="GET">
-        <select name="modifyType" onchange="submit()">
+        <select style="height:40px; width:300px;" name="modifyType" onchange="submit()">
             <option selected disabled>Select type of information modified</option>
             <option value="all">All</option>
             <option value="mounting">Mounting</option>
@@ -15,6 +15,33 @@ $var title:View modified modules
             <option value="moduleDetails">Module Details</option>
         </select>
     </form> 
+$if modify_type == "all":
+    <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Is Mounting Modified?</th>
+                <th>Is Quota Modified?</th>
+                <th>Is Module Details Modified?</th>
+                <th data-sortable="false">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            $for module in modifiedModules:
+                <tr>
+                    <td>$module[0]</td>
+                    <td>$module[1]</td>
+                    <td>$module[2]</td>
+                    <td>$module[3]</td>
+                    <td>
+                        <form action="/viewModule" method="get">
+                            <input type="hidden" name="code" value="$module[0]">
+                            <input class="btn btn-primary" type="submit" value="View Module"/>
+                        </form>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
 $if modify_type == "quota":
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>

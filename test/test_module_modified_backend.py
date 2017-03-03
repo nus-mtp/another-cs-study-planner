@@ -720,3 +720,77 @@ class TestCode(object):
             if code == test_module_code:
                 is_in_modified_modules = True
         assert_false(is_in_modified_modules)
+
+
+    def test_module_modify_overview(self):
+        '''
+            Test if the overview for modified modules (modifyType=all)
+            shows the correct boolean for whether a module's
+            mounting/quota/module details have been modified
+        '''
+        modified_modules = self.modified_modules_handler.get_all_modified_modules()
+
+        # Quota is modified
+        test_module_code = 'BB1004'
+        is_in_modified_modules = False
+        is_mounting_modified = None
+        is_quota_modified = None
+        is_module_details_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_mounting_modified = module[1]
+                is_quota_modified = module[2]
+                is_module_details_modified = module[3]
+                break
+        assert_true(is_in_modified_modules)
+        assert_false(is_mounting_modified)
+        assert_true(is_quota_modified)
+        assert_false(is_module_details_modified)
+
+        # Mounting is modified
+        test_module_code = 'BB2002'
+        is_in_modified_modules = False
+        is_mounting_modified = None
+        is_quota_modified = None
+        is_module_details_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_mounting_modified = module[1]
+                is_quota_modified = module[2]
+                is_module_details_modified = module[3]
+                break
+        assert_true(is_in_modified_modules)
+        assert_true(is_mounting_modified)
+        assert_false(is_quota_modified)
+        assert_false(is_module_details_modified)
+
+        # Mounting and module details are modified
+        test_module_code = 'BB2003'
+        test_module_name = 'Dummy Module 1'
+        test_module_desc = "This module's mounting and module details are modified"
+        test_module_mc = 1
+        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        module_edit_handler = EditModuleInfo()
+        module_edit_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_all_modified_modules()
+        is_in_modified_modules = False
+        is_mounting_modified = None
+        is_quota_modified = None
+        is_module_details_modified = None
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_mounting_modified = module[1]
+                is_quota_modified = module[2]
+                is_module_details_modified = module[3]
+                break
+        assert_true(is_in_modified_modules)
+        assert_true(is_mounting_modified)
+        assert_false(is_quota_modified)
+        assert_true(is_module_details_modified)
