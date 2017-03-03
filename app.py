@@ -31,7 +31,8 @@ URLS = (
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
-    '/modifiedModules', 'components.handlers.modified_modules.Modified'
+    '/modifiedModules', 'components.handlers.modified_modules.Modified',
+    '/restoreModule', 'components.handlers.module_restore.RestoreModule'
 )
 
 

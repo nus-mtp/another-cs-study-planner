@@ -37,11 +37,10 @@ class IndividualModule(object):
             target_sem = target_ay_sem[9:14]
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code,
                                                                  current_ay+" "+target_sem)
-        if len(fixed_quota) == 0:
+        if fixed_quota is None:
             fixed_quota = '-'
         else:
             fixed_mounting_status = 1
-            fixed_quota = fixed_quota[0][0]
 
         if is_current_ay:
             self.mounting_status = fixed_mounting_status
@@ -50,7 +49,7 @@ class IndividualModule(object):
             # Get mounting status in target (future) AY
             tenta_quota = model.get_quota_of_target_tenta_ay_sem(module_code, target_ay_sem)
             tenta_mounting_status = -1
-            if len(tenta_quota) == 0:
+            if tenta_quota is None:
                 tenta_quota = '-'
                 if fixed_mounting_status == 1:
                     tenta_mounting_status = 0
@@ -58,7 +57,6 @@ class IndividualModule(object):
                     tenta_mounting_status = -1
             else:
                 tenta_mounting_status = 1
-                tenta_quota = tenta_quota[0][0]
             self.mounting_status = tenta_mounting_status
             self.quota = tenta_quota
 

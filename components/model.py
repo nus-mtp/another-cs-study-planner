@@ -123,7 +123,11 @@ def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     sql_command = "SELECT quota FROM moduleMounted " +\
                   "WHERE moduleCode=%s AND acadYearAndSem=%s "
     DB_CURSOR.execute(sql_command, (code, ay_sem))
-    return DB_CURSOR.fetchall()
+    result = DB_CURSOR.fetchone()
+    if result is not None:
+        return result[0]
+    else:
+        return None
 
 
 def get_quota_of_target_tenta_ay_sem(code, ay_sem):
@@ -133,7 +137,11 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
     sql_command = "SELECT quota FROM moduleMountTentative " +\
                   "WHERE moduleCode=%s AND acadYearAndSem=%s "
     DB_CURSOR.execute(sql_command, (code, ay_sem))
-    return DB_CURSOR.fetchall()
+    result = DB_CURSOR.fetchone()
+    if result is not None:
+        return result[0]
+    else:
+        return None
 
 
 def get_number_students_planning(code):
