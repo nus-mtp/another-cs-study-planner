@@ -4,6 +4,7 @@ $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
 $ moduleDescription = moduleInfo[2]
 $ moduleMC = moduleInfo[3]
+$ moduleStatus = moduleInfo[4]
 
 $code:
     # get number of students who plan to take the module in a certain AY and Sem
@@ -45,6 +46,8 @@ $var title:$title_string
 					</div>
 				</div>
 				<div class="col-md-12">
+					<h4><b>Module Status:</b>&nbsp;&nbsp;&nbsp;$moduleStatus</h4>
+					<br>
 					<h4><b>Module Description:</b></h4>
 					<p>
 						$moduleDescription
@@ -61,38 +64,41 @@ $var title:$title_string
 				</div>
 				<div  class="col-md-12">
 					<!--mountingAndQuota-->
-					<h4><b>Current AY (Fixed)</b><h4>
-					<table class="table table-bordered table-hover text-center" id="mountingAndQuota">
-						<thead>
-							<tr>
-								<th>AY/Sem</th>
-								<th>Mounted In</th>
-								<th>Quota</th>
-								<th>Students Planning to Take</th>
-							</tr>
-						</thead>
-						<tbody>
-						$for entry in fixedMountingPlan:
-							<tr>
-								<td>
-									<form action="/individualModuleInfo" method="get">
-										<input type="hidden" name="code" value="$moduleCode">
-										<input type="hidden" name="targetAY" value="$entry[0]">
-										<input type="submit" value="$entry[0]">
-									</form>
-								</td>
-								<td>$entry[1]</td>
-							$ numberTaking = getNumStudents(entry[0])
-							$if entry[2] == None:
-								<td>?</td>
-								<td>$numberTaking</td>
-							$else:
-								<td>$entry[2]</td>
-								<td>$numberTaking</td>
-							</tr>
-						</tbody>
-					</table>
-					<h4><b>Future AYs (Tentative)</b><h4>
+					<h4><b>Current AY (Fixed)</b></h4>
+					$if moduleStatus[0:3] == "New":
+						<h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
+					$else:
+						<table class="table table-bordered table-hover text-center" id="mountingAndQuota">
+							<thead>
+								<tr>
+									<th>AY/Sem</th>
+									<th>Mounted In</th>
+									<th>Quota</th>
+									<th>Students Planning to Take</th>
+								</tr>
+							</thead>
+							<tbody>
+							$for entry in fixedMountingPlan:
+								<tr>
+									<td>
+										<form action="/individualModuleInfo" method="get">
+											<input type="hidden" name="code" value="$moduleCode">
+											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input type="submit" value="$entry[0]">
+										</form>
+									</td>
+									<td>$entry[1]</td>
+								$ numberTaking = getNumStudents(entry[0])
+								$if entry[2] == None:
+									<td>?</td>
+									<td>$numberTaking</td>
+								$else:
+									<td>$entry[2]</td>
+									<td>$numberTaking</td>
+								</tr>
+							</tbody>
+						</table>
+					<h4><b>Future AYs (Tentative)</b></h4>
 					<table class="table table-bordered table-hover" id="mountingAndQuota">
 						<thead>
 							<tr>

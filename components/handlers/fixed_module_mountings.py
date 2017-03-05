@@ -18,7 +18,7 @@ class Fixed(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 4 attributes (code, name, sem 1 mounting, sem 2 mounting)
+            Each subplan is a list of 5 attributes (code, name, sem 1 mounting, sem 2 mounting, status)
             For fixed mountings, each mounting has 2 possible values (-1 or 1)
             -1 = not mounted; 1 = mounted
         '''
@@ -35,9 +35,11 @@ class Fixed(object):
         for info in module_infos:
             code = info[0]
             name = info[1]
-            subplan = ["", "", -1, -1]
+            status = info[4]
+            subplan = ["", "", -1, -1, -1]
             subplan[0] = code
             subplan[1] = name
+            subplan[4] = status
             self.full_mounting_plan.append(subplan)
 
 
@@ -79,7 +81,11 @@ class Fixed(object):
         self.populate_mounting_values()
         current_ay = model.get_current_ay()
 
-        return RENDER.moduleMountingFixed(current_ay, self.full_mounting_plan)
+        full_mounting_plan = self.full_mounting_plan
+        full_mounting_plan = [subplan for subplan in full_mounting_plan 
+                              if subplan[4].rstrip() == "Active"]  # New modules will not be displayed in fixed mounting
+
+        return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
 
 
     def POST(self):

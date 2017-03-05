@@ -23,7 +23,7 @@ def get_all_modules():
 
 def get_module(code):
     '''
-        Get the module code, name, description and MCs of a single module
+        Get the module code, name, description, MCs and status of a single module
     '''
     sql_command = "SELECT * FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
