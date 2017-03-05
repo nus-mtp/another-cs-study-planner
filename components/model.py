@@ -229,6 +229,15 @@ def store_original_module_info(code, name, description, module_credits):
     return True
 
 
+def get_original_module_info(code):
+    '''
+        Get the original info of a module from module backup
+    '''
+    sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchone()
+
+
 def remove_original_module_info(code):
     '''
         Remove the original info of the module from module backup

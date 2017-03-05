@@ -54,3 +54,15 @@ class RestoreModule(object):
 				outcome = True  # Todo: show message
 			if not test_data:
 				raise web.seeother('/modifiedModules?modifyType=mounting')
+
+		elif restore_type == "moduleDetails":
+			original_module_details = model.get_original_module_info(module_code)
+			model.remove_original_module_info(module_code)
+			outcome = model.update_module(module_code, original_module_details[1], 
+				    					  original_module_details[2], original_module_details[3])
+
+			if outcome is True:
+				outcome = True  # Todo: show message
+			if not test_data:
+				raise web.seeother('/modifiedModules?modifyType=moduleDetails')
+

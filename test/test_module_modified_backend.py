@@ -64,6 +64,10 @@ class TestCode(object):
                          "This module's has been mounted and will be restored to unmounted", 3, 'Active')
         model.add_module('BB3004', 'Dummy Module 4',
                          "This module's has been unmounted and will be restored to mounted", 4, 'Active')
+        model.add_module('BB3005', 'Dummy Module 5',
+                         "This module's name will be restored", 5, 'Active')
+        model.add_module('BB3006', 'Dummy Module 6',
+                         "This module's name, description and MC will be restored", 6, 'Active')
 
         # Dummy fixed mountings
         model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)
@@ -110,6 +114,12 @@ class TestCode(object):
         model.add_tenta_mounting('BB3001', self.next_ay+' Sem 1', 999)
         model.add_tenta_mounting('BB3002', self.next_ay+' Sem 1', 999)
         model.add_tenta_mounting('BB3003', self.next_ay+' Sem 2', 999)
+
+        # Dummy module backup
+        model.store_original_module_info('BB3005', 'Original Module Name',
+                                         "This module's name will be restored", 5)
+        model.store_original_module_info('BB3006', 'Original Module Name',
+                                         "Original Module Description", 0)
 
 
     def tearDown(self):
@@ -170,6 +180,8 @@ class TestCode(object):
         model.delete_module('BB3002')
         model.delete_module('BB3003')
         model.delete_module('BB3004')
+        model.delete_module('BB3005')
+        model.delete_module('BB3006')
 
 
     def test_quota_not_modified(self):
@@ -994,3 +1006,113 @@ class TestCode(object):
 
         restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
         assert_equal(restored_mounting, True)  # Mounted
+
+
+    def test_details_restore(self):
+        '''
+            Test if a module's whose details are modified can be restored
+            and if the module will disappear from the table of modules with modified details
+        '''
+        # Name is modified and will be restored
+        test_module_code = 'BB3005'
+        test_module_name = 'Dummy Module 5'
+        test_module_orig_name = 'Original Module Name'
+
+        module_info = model.get_module(test_module_code)
+        module_name = module_info[1]
+        assert_equal(module_name, test_module_name)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
+                break
+
+        assert_true(is_in_modified_modules)
+        assert_true(is_name_modified)
+        assert_false(is_desc_modified)
+        assert_false(is_mc_modified)
+
+        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code, 
+                                                    None, None, None, None)
+        self.module_restore_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_false(is_in_modified_modules)
+
+        module_info = model.get_module(test_module_code)
+        module_name = module_info[1]
+        assert_equal(module_name, test_module_orig_name)
+
+        # Name, description and MC are modified and will be restored
+        test_module_code = 'BB3006'
+        test_module_name = 'Dummy Module 6'
+        test_module_desc = "This module's name, description and MC will be restored"
+        test_module_mc = 6
+        test_module_orig_name = 'Original Module Name'
+        test_module_orig_desc = 'Original Module Description'
+        test_module_orig_mc = 0
+
+        module_info = model.get_module(test_module_code)
+        module_name = module_info[1]
+        module_desc = module_info[2]
+        module_mc = module_info[3]
+        assert_equal(module_name, test_module_name)
+        assert_equal(module_desc, test_module_desc)
+        assert_equal(module_mc, test_module_mc)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        is_in_modified_modules = False
+        is_name_modified = None
+        is_desc_modified = None
+        is_mc_modified = None
+
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
+                break
+
+        assert_true(is_in_modified_modules)
+        assert_true(is_name_modified)
+        assert_true(is_desc_modified)
+        assert_true(is_mc_modified)
+
+        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code, 
+                                                    None, None, None, None)
+        self.module_restore_handler.POST(test_post_data)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_false(is_in_modified_modules)
+
+        module_info = model.get_module(test_module_code)
+        module_name = module_info[1]
+        module_desc = module_info[2]
+        module_mc = module_info[3]
+        assert_equal(module_name, test_module_orig_name)
+        assert_equal(module_desc, test_module_orig_desc)
+        assert_equal(module_mc, test_module_orig_mc)
