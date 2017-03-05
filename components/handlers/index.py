@@ -6,6 +6,7 @@
 from app import RENDER, SESSION
 import web
 from components import model
+from components.handlers.outcome import Outcome
 
 
 class Index(object):
@@ -26,12 +27,7 @@ class Index(object):
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            if SESSION['displayErrorMessage'] is True:
-                SESSION['displayErrorMessage'] = False
-            else:
-                SESSION['keyError'] = False
-
-            return RENDER.index(module_infos, form, SESSION['keyError'])
+            return RENDER.index(module_infos, form)
 
 
     def POST(self):
@@ -42,14 +38,11 @@ class Index(object):
         form = self.form()
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.index(modules, form, SESSION['keyError'])
+            return RENDER.index(modules, form)
 
         # else add module to db and refresh page
         outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
-        if outcome is False:
-            SESSION['keyError'] = True
-            SESSION['displayErrorMessage'] = True
-        raise web.seeother('/')        # load index.html again
+        return Outcome().POST("add_module", outcome, form.d.code)
 
 
     def create_form(self):

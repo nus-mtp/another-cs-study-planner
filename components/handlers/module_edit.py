@@ -7,6 +7,7 @@
 from app import RENDER, SESSION
 import web
 from components import model
+from components.handlers.outcome import Outcome
 
 
 class EditModuleInfo(object):
@@ -46,13 +47,8 @@ class EditModuleInfo(object):
                                                  old_module_desc, old_module_mc)
                 outcome = model.update_module(module_code, module_name, module_desc, module_mc)
 
-            if outcome is True:
-                SESSION['editModMsg'] = "Module info edited sucessfully!"
-            else:
-                SESSION['editModMsg'] = "Sorry, an error has occurred!"
-
             if not test_data:
-                raise web.seeother('/viewModule?code='+module_code)
+                return Outcome().POST("edit_module", outcome, module_code)
 
 
 class EditMountingInfo(object):
@@ -92,10 +88,5 @@ class EditMountingInfo(object):
             elif mounting_status == "Not Mounted":
                 outcome = model.delete_tenta_mounting(module_code, ay_sem)
 
-            if outcome is True:
-                SESSION['editMountMsg'] = "Mounting info edited sucessfully!"
-            else:
-                SESSION['editMountMsg'] = "Sorry, an error has occurred!"
+            return Outcome().POST("edit_mounting", outcome, module_code, ay_sem)
 
-            raise web.seeother("individualModuleInfo?code="+module_code+"&targetAY="+\
-                               ay_sem.replace(' ', '+').replace('/', '%2F'))

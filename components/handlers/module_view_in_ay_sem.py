@@ -78,12 +78,9 @@ class IndividualModule(object):
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
 
-        system_message = SESSION['editMountMsg']
-        SESSION['editMountMsg'] = None
-
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, system_message)
+                                           self.quota)
 
 
     def POST(self):

@@ -32,7 +32,8 @@ URLS = (
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
-    '/restoreModule', 'components.handlers.module_restore.RestoreModule'
+    '/restoreModule', 'components.handlers.module_restore.RestoreModule',
+    '/outcome', 'components.handlers.outcome.Outcome'
 )
 
 
@@ -65,11 +66,7 @@ web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 web.config.session_parameters['ignore_expiry'] = False
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None,
-                                           'keyError': False,
-                                           'displayErrorMessage': False,
-                                           'editModMsg': None,
-                                           'editMountMsg': None})._initializer
+                              initializer={'id': None})._initializer
 
 
 if __name__ == '__main__':

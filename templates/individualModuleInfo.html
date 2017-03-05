@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, systemMessage)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -20,8 +20,6 @@ $var title:$title_string
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
-					$if systemMessage is not None:
-						<p style="color:red; text-align:center">$systemMessage</p>
 					<h3>Module Info for <b><u>$aySem</u></b></h3>
 				</div>
 				<div class="col-md-12 module-header">

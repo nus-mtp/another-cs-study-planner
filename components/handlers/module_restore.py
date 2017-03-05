@@ -7,6 +7,7 @@
 from app import RENDER, SESSION
 import web
 from components import model
+from components.handlers.outcome import Outcome
 
 
 class RestoreModule(object):
@@ -30,13 +31,10 @@ class RestoreModule(object):
 			quota = data.quota
 			if quota == "?":
 				quota = None
-
 			outcome = model.update_quota(module_code, ay_sem, quota)
 
-			if outcome is True:
-				outcome = True  # Todo: show message
 			if not test_data:
-				raise web.seeother('/modifiedModules?modifyType=quota')
+				return Outcome().POST("restore_module", outcome, module_code)
 
 		elif restore_type == "mounting":
 			target_ay_sem = data.targetAySem
@@ -50,10 +48,8 @@ class RestoreModule(object):
 				quota = model.get_quota_of_target_fixed_ay_sem(module_code, current_ay_sem)
 				outcome = model.add_tenta_mounting(module_code, target_ay_sem, quota) 
 
-			if outcome is True:
-				outcome = True  # Todo: show message
 			if not test_data:
-				raise web.seeother('/modifiedModules?modifyType=mounting')
+				return Outcome().POST("restore_module", outcome, module_code)
 
 		elif restore_type == "moduleDetails":
 			original_module_details = model.get_original_module_info(module_code)
@@ -61,8 +57,6 @@ class RestoreModule(object):
 			outcome = model.update_module(module_code, original_module_details[1], 
 				    					  original_module_details[2], original_module_details[3])
 
-			if outcome is True:
-				outcome = True  # Todo: show message
 			if not test_data:
-				raise web.seeother('/modifiedModules?modifyType=moduleDetails')
+				return Outcome().POST("restore_module", outcome, module_code)
 

@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, systemMessage)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -29,8 +29,6 @@ $var title:$title_string
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
-					$if systemMessage is not None:
-						<p style="color:red; text-align:center">$systemMessage</p>
 					<h2><b>Module Info Overview</b></h2>
 				</div>
 				<div class="col-md-12 module-header">
