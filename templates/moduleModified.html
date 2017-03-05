@@ -1,4 +1,4 @@
-$def with (modify_type, modifiedModules)
+$def with (modify_type, modifiedModules, moduleCode)
 
 $var title:View modified modules
 
@@ -16,6 +16,7 @@ $var title:View modified modules
         </select>
     </form> 
 $if modify_type == "all":
+    <h2>Overview of Modified Modules</h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -30,9 +31,24 @@ $if modify_type == "all":
             $for module in modifiedModules:
                 <tr>
                     <td>$module[0]</td>
-                    <td>$module[1]</td>
-                    <td>$module[2]</td>
-                    <td>$module[3]</td>
+                    <td>
+                    $if module[1] is True:
+                        <u><a href="/modifiedModules?modifyType=mounting&amp;code=$module[0]">Yes</a></u>
+                    $else:
+                        No
+                    </td>
+                    <td>
+                    $if module[2] is True:
+                        <u><a href="/modifiedModules?modifyType=quota&amp;code=$module[0]">Yes</a></u>
+                    $else:
+                        No
+                    </td>
+                    <td>
+                    $if module[3] is True:
+                        <u><a href="/modifiedModules?modifyType=moduleDetails&amp;code=$module[0]">Yes</a></u>
+                    $else:
+                        No
+                    </td>
                     <td>
                         <form action="/viewModule" method="get">
                             <input type="hidden" name="code" value="$module[0]">
@@ -43,6 +59,10 @@ $if modify_type == "all":
         </tbody>
     </table>
 $if modify_type == "quota":
+    $if moduleCode is None:
+        <h2>Modified Quotas</h2><br>
+    $else:
+        <h2>Modified Quota of <b>$moduleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -56,38 +76,45 @@ $if modify_type == "quota":
             </tr>
         </thead>
         <tbody>
-            $for module in modifiedModules:
-                <tr>
-                    <td>$module[0]</td>
-                    <td>$module[1]</td>
-                    <td>$module[2]</td>
-                $if module[3] is None:
-                    <td>?</td>
-                $else:
-                    <td>$module[3]</td>
-                $if module[4] is None:
-                    <td>?</td>
-                $else:
-                    <td>$module[4]</td>
-                $if True:
-                    <td>$module[5]</td>
-                    <td>
-                        <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input class="btn btn-primary" type="submit" value="View Module"/>
-                        </form>
-                        <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input type="hidden" name="targetAySem" value="$module[2]">
-                            <input type="hidden" name="quota" value="$module[3]">
-                            <input type="hidden" name="restoreType" value="quota">
-                            <input class="btn btn-primary" type="submit" value="Restore Quota"/>
-                        </form>
-                    </td>
-                </tr>
+            $if modifiedModules is None or len(modifiedModules) == 0:
+                <tr><td colspan=6>No data found</td></tr>
+            $else:
+                $for module in modifiedModules:
+                    <tr>
+                        <td>$module[0]</td>
+                        <td>$module[1]</td>
+                        <td>$module[2]</td>
+                    $if module[3] is None:
+                        <td>?</td>
+                    $else:
+                        <td>$module[3]</td>
+                    $if module[4] is None:
+                        <td>?</td>
+                    $else:
+                        <td>$module[4]</td>
+                    $if True:
+                        <td>$module[5]</td>
+                        <td>
+                            <form action="/viewModule" method="get">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
+                            </form>
+                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="targetAySem" value="$module[2]">
+                                <input type="hidden" name="quota" value="$module[3]">
+                                <input type="hidden" name="restoreType" value="quota">
+                                <input class="btn btn-primary" type="submit" value="Restore Quota"/>
+                            </form>
+                        </td>
+                    </tr>
         </tbody>
     </table>
 $elif modify_type == "mounting":
+    $if moduleCode is None:
+        <h2>Modified Mountings</h2><br>
+    $else:
+        <h2>Modified Mounting of <b>$moduleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -99,34 +126,41 @@ $elif modify_type == "mounting":
             </tr>
         </thead>
         <tbody>
-            $for module in modifiedModules:
-                <tr>
-                    <td>$module[0]</td>
-                    <td>$module[1]</td>
-                    <td>$module[2]</td>
-                $if module[3] == 1:
-                    <td>Unmounted &#8594; Mounted</td>
-                $elif module[3] == 0:
-                    <td>Mounted &#8594; Unmounted</td>
-                $if True:
-                    <td>
-                        <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input class="btn btn-primary" type="submit" value="View Module"/>
-                        </form>
-                        <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input type="hidden" name="currentAySem" value="$module[1]">
-                            <input type="hidden" name="targetAySem" value="$module[2]">
-                            <input type="hidden" name="mountingChange" value="$module[3]">
-                            <input type="hidden" name="restoreType" value="mounting">
-                            <input class="btn btn-primary" type="submit" value="Restore Mounting"/>
-                        </form>
-                    </td>
-                </tr>
+            $if modifiedModules is None or len(modifiedModules) == 0:
+                <tr><td colspan=5>No data found</td></tr>
+            $else:
+                $for module in modifiedModules:
+                    <tr>
+                        <td>$module[0]</td>
+                        <td>$module[1]</td>
+                        <td>$module[2]</td>
+                    $if module[3] == 1:
+                        <td>Unmounted &#8594; Mounted</td>
+                    $elif module[3] == 0:
+                        <td>Mounted &#8594; Unmounted</td>
+                    $if True:
+                        <td>
+                            <form action="/viewModule" method="get">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
+                            </form>
+                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="currentAySem" value="$module[1]">
+                                <input type="hidden" name="targetAySem" value="$module[2]">
+                                <input type="hidden" name="mountingChange" value="$module[3]">
+                                <input type="hidden" name="restoreType" value="mounting">
+                                <input class="btn btn-primary" type="submit" value="Restore Mounting"/>
+                            </form>
+                        </td>
+                    </tr>
         </tbody>
     </table>
 $elif modify_type == "moduleDetails":
+    $if moduleCode is None:
+        <h2>Modified Module Details</h2><br>
+    $else:
+        <h2>Modified Module Details of <b>$moduleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -138,49 +172,52 @@ $elif modify_type == "moduleDetails":
             </tr>
         </thead>
         <tbody>
-            $for module in modifiedModules:
-                <tr>
-                    <td>$module[0]</td>
-                $if module[1][0] is not None:
-                     <td>
-                        <b>Modified from</b><br><br>
-                        <i>"$module[1][0][0]</i>"<br><br>
-                        <b>to</b><br><br>
-                        <i>"$module[1][0][1]</i>"<br><br>
-                    </td>
-                $else:
-                    <td>Not modified</td>
-                $if module[1][1] is not None:
-                     <td>
-                        <b>Modified from</b><br><br>
-                        <i>"$module[1][1][0]</i>"<br><br>
-                        <b>to</b><br><br>
-                        <i>"$module[1][1][1]</i>"<br><br>
-                    </td>
-                $else:
-                    <td>Not modified</td>
-                $if module[1][2] is not None:
-                     <td>
-                        <b>Modified from</b><br><br> 
-                        <i>"$module[1][2][0]</i>"<br><br>
-                        <b>to</b><br><br>
-                        <i>"$module[1][2][1]</i>"<br><br>
-                    </td>
-                $else:
-                    <td>Not modified</td>
-                $if True:
-                    <td>
-                        <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input class="btn btn-primary" type="submit" value="View Module"/>
-                        </form>
-                        <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
-                            <input type="hidden" name="code" value="$module[0]">
-                            <input type="hidden" name="restoreType" value="moduleDetails">
-                            <input class="btn btn-primary" type="submit" value="Restore Details"/>
-                        </form>
-                    </td>
-                </tr>
+            $if modifiedModules is None or len(modifiedModules) == 0:
+                <tr><td colspan=5>No data found</td></tr>
+            $else:
+                $for module in modifiedModules:
+                    <tr>
+                        <td>$module[0]</td>
+                    $if module[1][0] is not None:
+                         <td>
+                            <b>Modified from</b><br><br>
+                            <i>"$module[1][0][0]</i>"<br><br>
+                            <b>to</b><br><br>
+                            <i>"$module[1][0][1]</i>"<br><br>
+                        </td>
+                    $else:
+                        <td>Not modified</td>
+                    $if module[1][1] is not None:
+                         <td>
+                            <b>Modified from</b><br><br>
+                            <i>"$module[1][1][0]</i>"<br><br>
+                            <b>to</b><br><br>
+                            <i>"$module[1][1][1]</i>"<br><br>
+                        </td>
+                    $else:
+                        <td>Not modified</td>
+                    $if module[1][2] is not None:
+                         <td>
+                            <b>Modified from</b><br><br> 
+                            <i>"$module[1][2][0]</i>"<br><br>
+                            <b>to</b><br><br>
+                            <i>"$module[1][2][1]</i>"<br><br>
+                        </td>
+                    $else:
+                        <td>Not modified</td>
+                    $if True:
+                        <td>
+                            <form action="/viewModule" method="get">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
+                            </form>
+                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="restoreType" value="moduleDetails">
+                                <input class="btn btn-primary" type="submit" value="Restore Details"/>
+                            </form>
+                        </td>
+                    </tr>
         </tbody>
     </table>
 </div>

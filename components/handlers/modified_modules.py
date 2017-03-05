@@ -195,11 +195,16 @@ class Modified(object):
         # User can select the type of modified information they want to see
         # By default, the page will show ALL modified modules
         modify_type = None
+        module_code = None
         try:
             input_data = web.input()
             modify_type = input_data.modifyType
         except AttributeError:
             raise web.seeother("/modifiedModules?modifyType=all")
+        try:
+            module_code = input_data.code
+        except AttributeError:
+            module_code = None     
 
         modified_modules = None
         if modify_type == "mounting":
@@ -211,7 +216,17 @@ class Modified(object):
         elif modify_type == "all":
             modified_modules = self.get_all_modified_modules()
 
-        return RENDER.moduleModified(modify_type, modified_modules)
+        # If module code is specified, only return data for the specified module
+        if module_code is not None and (modify_type == "mounting" 
+                                        or modify_type == "quota" 
+                                        or modify_type == "moduleDetails"):
+            module = [module for module in modified_modules if module[0] == module_code]
+            if len(module) == 0:
+                modified_modules = None
+            else:
+                modified_modules = module
+
+        return RENDER.moduleModified(modify_type, modified_modules, module_code)
 
 
     def POST(self):
