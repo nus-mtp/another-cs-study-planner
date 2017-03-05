@@ -33,31 +33,6 @@ class Modified(object):
         return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
 
 
-    def get_modules_with_modified_quota(self):
-        '''
-            Get all modules whose quota has been modified in a future AY.
-            Return the module code, current AY-Sem, target AY-Sem, current quota,
-            modified quota, and quota change
-        '''
-        modified_modules = model.get_modules_with_modified_quota()
-        modified_modules = [list(module) for module in modified_modules]
-        for module in modified_modules:
-            current_quota = module[3]
-            modified_quota = module[4]
-            if current_quota is None:
-                quota_change = '+' + str(modified_quota)
-            elif modified_quota is None:
-                quota_change = str(-current_quota)
-            else:
-                quota_change = modified_quota - current_quota
-                if quota_change > 0:
-                    quota_change = '+' + str(quota_change)
-                else:
-                    quota_change = str(quota_change)
-            module.append(quota_change)
-        return modified_modules
-
-
     def get_modules_with_modified_mounting(self):
         '''
             Get all modules whose mounting has been modified in a future AY.
@@ -108,6 +83,54 @@ class Modified(object):
                 elif tenta_sem_2_mounting == 1 and fixed_sem_2_mounting == -1:
                     modified_modules.append([module_code, current_ay+" Sem 2",
                                              target_ay+" Sem 2", 1])  # Unmounted --> Mounted
+
+        return modified_modules
+
+
+    def get_modules_with_modified_quota(self):
+        '''
+            Get all modules whose quota has been modified in a future AY.
+            Return the module code, current AY-Sem, target AY-Sem, current quota,
+            modified quota, and quota change
+        '''
+        modified_modules = model.get_modules_with_modified_quota()
+        modified_modules = [list(module) for module in modified_modules]
+
+        for module in modified_modules:
+            current_quota = module[3]
+            modified_quota = module[4]
+            if current_quota is None:
+                quota_change = '+' + str(modified_quota)
+            elif modified_quota is None:
+                quota_change = str(-current_quota)
+            else:
+                quota_change = modified_quota - current_quota
+                if quota_change > 0:
+                    quota_change = '+' + str(quota_change)
+                else:
+                    quota_change = str(quota_change)
+            module.append(quota_change)
+
+        # Include modules with specified quota that have mounting changes
+        modules_wth_modified_mountings = self.get_modules_with_modified_mounting()
+        for module in modules_wth_modified_mountings:
+            mounting_change = module[3]
+            if mounting_change == 1:   # Unmounted --> Mounted
+                code = module[0]
+                current_ay = module[1]
+                target_ay = module[2]
+                quota = model.get_quota_of_target_tenta_ay_sem(code, target_ay)
+                if quota is not None and quota > 0:
+                    modified_modules.append((code, current_ay, target_ay,
+                                            "Unmounted", quota, '+'+str(quota)))
+            elif mounting_change == 0:   # Mounted --> Unmounted
+                code = module[0]
+                current_ay = module[1]
+                target_ay = module[2]
+                quota = model.get_quota_of_target_fixed_ay_sem(code, current_ay)
+                if quota is not None and quota > 0:
+                    modified_modules.append((code, current_ay, target_ay,
+                                            quota, "Unmounted", '-'+str(quota)))
 
         return modified_modules
 

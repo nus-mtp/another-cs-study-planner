@@ -99,6 +99,13 @@ $if modify_type == "quota":
                                 <input type="hidden" name="code" value="$module[0]">
                                 <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
+                        $if module[3] == "Unmounted" or module[4] == "Unmounted":
+                             <form action="/modifiedModules" method="get" onsubmit="alert('To restore this module\'s quota, the module\'s mounting has to be restored.');">
+                                <input type="hidden" name="modifyType" value="mounting">
+                                <input type="hidden" name="code" value="$module[0]">
+                                <input class="btn btn-primary" type="submit" value="Restore Quota"/>
+                            </form>                    
+                        $else:
                             <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
                                 <input type="hidden" name="code" value="$module[0]">
                                 <input type="hidden" name="targetAySem" value="$module[2]">

@@ -55,6 +55,8 @@ class TestCode(object):
                          "This module is remounted in sem 2", 2, 'Active')
         model.add_module('BB2003', 'Dummy Module 3',
                          "This module is changed from mounted in sem 1 to sem 2", 3, 'Active')
+        model.add_module('BB2004', 'Dummy Module 4',
+                         "This module's mounting is modified but quota is not modified", 4, 'Active')
 
         model.add_module('BB3001', 'Dummy Module 1',
                          "This module's quota is modified and will be restored", 1, 'Active')
@@ -87,6 +89,7 @@ class TestCode(object):
         model.add_fixed_mounting('BB2001', self.current_ay+' Sem 2', 10)
         model.add_fixed_mounting('BB2002', self.current_ay+' Sem 1', 20)
         model.add_fixed_mounting('BB2003', self.current_ay+' Sem 1', 30)
+        model.add_fixed_mounting('BB2004', self.current_ay+' Sem 1', None)
 
         model.add_fixed_mounting('BB3001', self.current_ay+' Sem 1', 10)
         model.add_fixed_mounting('BB3002', self.current_ay+' Sem 1', None)
@@ -110,6 +113,8 @@ class TestCode(object):
         model.add_tenta_mounting('BB2002', self.next_ay+' Sem 1', 20)
         model.add_tenta_mounting('BB2002', self.next_ay+' Sem 2', 20)
         model.add_tenta_mounting('BB2003', self.next_ay+' Sem 2', 30)
+        model.add_tenta_mounting('BB2004', self.next_ay+' Sem 1', None)
+        model.add_tenta_mounting('BB2004', self.next_ay+' Sem 2', None)
 
         model.add_tenta_mounting('BB3001', self.next_ay+' Sem 1', 999)
         model.add_tenta_mounting('BB3002', self.next_ay+' Sem 1', 999)
@@ -142,6 +147,7 @@ class TestCode(object):
         model.delete_fixed_mounting('BB2001', self.current_ay+' Sem 2')
         model.delete_fixed_mounting('BB2002', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB2003', self.current_ay+' Sem 1')
+        model.delete_fixed_mounting('BB2004', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB3001', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB3002', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB3004', self.current_ay+' Sem 2')
@@ -162,6 +168,8 @@ class TestCode(object):
         model.delete_tenta_mounting('BB2002', self.next_ay+' Sem 1')
         model.delete_tenta_mounting('BB2002', self.next_ay+' Sem 2')
         model.delete_tenta_mounting('BB2003', self.next_ay+' Sem 2')
+        model.delete_tenta_mounting('BB2004', self.next_ay+' Sem 1')
+        model.delete_tenta_mounting('BB2004', self.next_ay+' Sem 2')
         model.delete_tenta_mounting('BB3001', self.next_ay+' Sem 1')
         model.delete_tenta_mounting('BB3002', self.next_ay+' Sem 1')
         model.delete_tenta_mounting('BB3003', self.next_ay+' Sem 2')
@@ -176,6 +184,7 @@ class TestCode(object):
         model.delete_module('BB2001')
         model.delete_module('BB2002')
         model.delete_module('BB2003')
+        model.delete_module('BB2004')
         model.delete_module('BB3001')
         model.delete_module('BB3002')
         model.delete_module('BB3003')
@@ -763,7 +772,10 @@ class TestCode(object):
         '''
             Test if the overview for modified modules (modifyType=all)
             shows the correct boolean for whether a module's
-            mounting/quota/module details have been modified
+            mounting/quota/module details have been modified.
+
+            Also check that when a module's mounting is modified and the quota is specified,
+            the module's quota will also be considered as modified
         '''
         modified_modules = self.modified_modules_handler.get_all_modified_modules()
 
@@ -802,7 +814,7 @@ class TestCode(object):
                 break
         assert_true(is_in_modified_modules)
         assert_true(is_mounting_modified)
-        assert_false(is_quota_modified)
+        assert_true(is_quota_modified)  # Quota is also considered modified
         assert_false(is_module_details_modified)
 
         # Mounting and module details are modified
@@ -828,7 +840,7 @@ class TestCode(object):
                 break
         assert_true(is_in_modified_modules)
         assert_true(is_mounting_modified)
-        assert_false(is_quota_modified)
+        assert_true(is_quota_modified)  # Quota is also considered modified
         assert_true(is_module_details_modified)
 
 
@@ -1116,3 +1128,54 @@ class TestCode(object):
         assert_equal(module_name, test_module_orig_name)
         assert_equal(module_desc, test_module_orig_desc)
         assert_equal(module_mc, test_module_orig_mc)
+
+
+    def test_mounting_modified_but_not_quota(self):
+        '''
+            Test that a module whose mounting is modified, but quota has not been specified,
+            will only appear in the mounting modified table, but not the quota modified table
+        '''
+        # This module will appear in BOTH modified mounting table and modified quota table
+        test_module_code = 'BB2002'
+        test_current_quota = "Unmounted"
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_true(is_in_modified_modules)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_quota()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            current_quota = module[3]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_true(is_in_modified_modules)
+        assert_equal(current_quota, test_current_quota)
+
+        # This module will ONLY appear in modified mounting table
+        test_module_code = 'BB2004'
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_true(is_in_modified_modules)
+
+        modified_modules = self.modified_modules_handler.get_modules_with_modified_quota()
+        is_in_modified_modules = False
+        for module in modified_modules:
+            code = module[0]
+            if code == test_module_code:
+                is_in_modified_modules = True
+                break
+        assert_false(is_in_modified_modules)
