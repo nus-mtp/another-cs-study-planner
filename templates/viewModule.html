@@ -84,22 +84,42 @@ $var title:$title_string
 										<form action="/individualModuleInfo" method="get">
 											<input type="hidden" name="code" value="$moduleCode">
 											<input type="hidden" name="targetAY" value="$entry[0]">
-											<input type="submit" value="$entry[0]">
-										</form>
+											<input class="btn btn-primary" type="submit" value="$entry[0]">
+										</form>	
 									</td>
-									<td>$entry[1]</td>
+								$if entry[1] == 1:
+									<td>
+										<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+									</td>
+								$elif entry[1] == 0:
+									<td>
+										<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+									</td>
+								$elif entry[1] == -1:
+									<td>
+										<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+									</td>
 								$ numberTaking = getNumStudents(entry[0])
-								$if entry[2] == None:
-									<td>?</td>
-									<td>$numberTaking</td>
-								$else:
-									<td>$entry[2]</td>
-									<td>$numberTaking</td>
+								$if True:
+									$if entry[2] == None:
+										<td>
+											?
+										</td>
+										<td>
+											$numberTaking
+										</td>
+									$else:
+										<td>
+											$entry[2]
+										</td>
+										<td>
+											$numberTaking
+										</td>
 								</tr>
 							</tbody>
 						</table>
 					<h4><b>Future AYs (Tentative)</b></h4>
-					<table class="table table-bordered table-hover" id="mountingAndQuota">
+					<table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
 						<thead>
 							<tr>
 								<th>AY/Sem</th>
@@ -115,17 +135,38 @@ $var title:$title_string
 									<form action="/individualModuleInfo" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input type="hidden" name="targetAY" value="$entry[0]">
-										<input type="submit" value="$entry[0]">
+										<input class="btn btn-primary" type="submit" value="$entry[0]">
 									</form>
 								</td>
-								<td>$entry[1]</td>
-							$if entry[2] == None:
-								<td>?</td>
-								<td>?</td>
-							$else:
-								<td>$entry[2]</td>
-								<td>?</td>
-							</tr>
+								$if entry[1] == 1:
+									<td>
+										<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+									</td>
+								$elif entry[1] == 0:
+									<td>
+										<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+									</td>
+								$elif entry[1] == -1:
+									<td>
+										<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+									</td>
+								$ numberTaking = getNumStudents(entry[0])
+								$if True:
+									$if entry[2] == None:
+										<td>
+											?
+										</td>
+										<td>
+											$numberTaking
+										</td>
+									$else:
+										<td>
+											$entry[2]
+										</td>
+										<td>
+											$numberTaking
+										</td>
+								</tr>
 						</tbody>
 					</table>
 				</div>

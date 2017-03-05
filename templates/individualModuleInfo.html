@@ -61,7 +61,18 @@ $var title:$title_string
 					</div>
 				</div>
 				<div class="col-md-12">
-					<h4><b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>$mountingStatus</h4>
+					<h4>
+						<b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>
+						$if mountingStatus == 1:
+							<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+							&nbsp;&nbsp; (Mounted)
+						$elif mountingStatus == 0:
+							<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+							&nbsp;&nbsp; (Unmounted)
+						$if mountingStatus == -1:
+							<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+							&nbsp;&nbsp; (Not Mounted)
+					</h4>
 					<br>
 					<h4><b>Class Quota:&nbsp;&nbsp;&nbsp;</b>
 						$if quota is None:
