@@ -1,4 +1,4 @@
-$def with (modify_type, modifiedModules, moduleCode)
+$def with (modify_type, modifiedModules, targetModuleCode)
 
 $var title:View modified modules
 
@@ -29,29 +29,33 @@ $if modify_type == "all":
         </thead>
         <tbody>
             $for module in modifiedModules:
+                $ moduleCode = module[0]
+                $ isMountingModified = module[1]
+                $ isQuotaModified = module[2]
+                $ isDetailsModified = module[3]
                 <tr>
-                    <td>$module[0]</td>
+                    <td>$moduleCode</td>
                     <td>
-                    $if module[1] is True:
-                        <u><a href="/modifiedModules?modifyType=mounting&amp;code=$module[0]">Yes</a></u>
+                    $if isMountingModified is True:
+                        <u><a href="/modifiedModules?modifyType=mounting&amp;code=$moduleCode">Yes</a></u>
                     $else:
                         No
                     </td>
                     <td>
-                    $if module[2] is True:
-                        <u><a href="/modifiedModules?modifyType=quota&amp;code=$module[0]">Yes</a></u>
+                    $if isQuotaModified is True:
+                        <u><a href="/modifiedModules?modifyType=quota&amp;code=$moduleCode">Yes</a></u>
                     $else:
                         No
                     </td>
                     <td>
-                    $if module[3] is True:
-                        <u><a href="/modifiedModules?modifyType=moduleDetails&amp;code=$module[0]">Yes</a></u>
+                    $if isDetailsModified is True:
+                        <u><a href="/modifiedModules?modifyType=moduleDetails&amp;code=$moduleCode">Yes</a></u>
                     $else:
                         No
                     </td>
                     <td>
                         <form action="/viewModule" method="get">
-                            <input type="hidden" name="code" value="$module[0]">
+                            <input type="hidden" name="code" value="$moduleCode">
                             <input class="btn btn-primary" type="submit" value="View Module"/>
                         </form>
                     </td>
@@ -59,10 +63,10 @@ $if modify_type == "all":
         </tbody>
     </table>
 $if modify_type == "quota":
-    $if moduleCode is None:
+    $if targetModuleCode is None:
         <h2>Modified Quotas</h2><br>
     $else:
-        <h2>Modified Quota of <b>$moduleCode</b></h2><br>
+        <h2>Modified Quota of <b>$targetModuleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -80,36 +84,42 @@ $if modify_type == "quota":
                 <tr><td colspan=6>No data found</td></tr>
             $else:
                 $for module in modifiedModules:
+                    $ moduleCode = module[0]
+                    $ currentAySem = module[1]
+                    $ targetAySem = module[2]
+                    $ currentQuota = module[3]
+                    $ targetQuota = module[4]
+                    $ quotaChange = module[5]
                     <tr>
-                        <td>$module[0]</td>
-                        <td>$module[1]</td>
-                        <td>$module[2]</td>
-                    $if module[3] is None:
+                        <td>$moduleCode</td>
+                        <td>$currentAySem</td>
+                        <td>$targetAySem</td>
+                    $if currentQuota is None:
                         <td>?</td>
                     $else:
-                        <td>$module[3]</td>
-                    $if module[4] is None:
+                        <td>$currentQuota</td>
+                    $if targetQuota is None:
                         <td>?</td>
                     $else:
-                        <td>$module[4]</td>
+                        <td>$targetQuota</td>
                     $if True:
-                        <td>$module[5]</td>
+                        <td>$quotaChange</td>
                         <td>
                             <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="code" value="$moduleCode">
                                 <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
-                        $if module[3] == "Unmounted" or module[4] == "Unmounted":
+                        $if currentQuota == "Unmounted" or targetQuota == "Unmounted":
                              <form action="/modifiedModules" method="get" onsubmit="alert('To restore this module\'s quota, the module\'s mounting has to be restored.');">
                                 <input type="hidden" name="modifyType" value="mounting">
-                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="code" value="$moduleCode">
                                 <input class="btn btn-primary" type="submit" value="Restore Quota"/>
                             </form>                    
                         $else:
                             <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$module[0]">
-                                <input type="hidden" name="targetAySem" value="$module[2]">
-                                <input type="hidden" name="quota" value="$module[3]">
+                                <input type="hidden" name="code" value="moduleCode">
+                                <input type="hidden" name="targetAySem" value="$targetAySem">
+                                <input type="hidden" name="quota" value="$currentQuota">
                                 <input type="hidden" name="restoreType" value="quota">
                                 <input class="btn btn-primary" type="submit" value="Restore Quota"/>
                             </form>
@@ -118,10 +128,10 @@ $if modify_type == "quota":
         </tbody>
     </table>
 $elif modify_type == "mounting":
-    $if moduleCode is None:
+    $if targetModuleCode is None:
         <h2>Modified Mountings</h2><br>
     $else:
-        <h2>Modified Mounting of <b>$moduleCode</b></h2><br>
+        <h2>Modified Mounting of <b>$targetModuleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -137,25 +147,29 @@ $elif modify_type == "mounting":
                 <tr><td colspan=5>No data found</td></tr>
             $else:
                 $for module in modifiedModules:
+                    $ moduleCode = module[0]
+                    $ currentAySem = module[1]
+                    $ targetAySem = module[2]
+                    $ mountingChange = module[3]
                     <tr>
-                        <td>$module[0]</td>
-                        <td>$module[1]</td>
-                        <td>$module[2]</td>
-                    $if module[3] == 1:
+                        <td>$moduleCode</td>
+                        <td>$currentAySem</td>
+                        <td>$targetAySem</td>
+                    $if mountingChange == 1:
                         <td>Unmounted &#8594; Mounted</td>
-                    $elif module[3] == 0:
+                    $elif mountingChange == 0:
                         <td>Mounted &#8594; Unmounted</td>
                     $if True:
                         <td>
                             <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$module[0]">
+                                <input type="hidden" name="code" value="$moduleCode">
                                 <input class="btn btn-primary" type="submit" value="View Module"/>
                             </form>
                             <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$module[0]">
-                                <input type="hidden" name="currentAySem" value="$module[1]">
-                                <input type="hidden" name="targetAySem" value="$module[2]">
-                                <input type="hidden" name="mountingChange" value="$module[3]">
+                                <input type="hidden" name="code" value="$moduleCode">
+                                <input type="hidden" name="currentAySem" value="$currentAySem">
+                                <input type="hidden" name="targetAySem" value="$targetAySem">
+                                <input type="hidden" name="mountingChange" value="$mountingChange">
                                 <input type="hidden" name="restoreType" value="mounting">
                                 <input class="btn btn-primary" type="submit" value="Restore Mounting"/>
                             </form>
@@ -164,10 +178,10 @@ $elif modify_type == "mounting":
         </tbody>
     </table>
 $elif modify_type == "moduleDetails":
-    $if moduleCode is None:
+    $if targetModuleCode is None:
         <h2>Modified Module Details</h2><br>
     $else:
-        <h2>Modified Module Details of <b>$moduleCode</b></h2><br>
+        <h2>Modified Module Details of <b>$targetModuleCode</b></h2><br>
     <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-table">
         <thead>
             <tr>
@@ -183,32 +197,42 @@ $elif modify_type == "moduleDetails":
                 <tr><td colspan=5>No data found</td></tr>
             $else:
                 $for module in modifiedModules:
+                    $ moduleCode = module[0]
+                    $ isNameModified = module[1][0] is not None
+                    $ isDescModified = module[1][1] is not None
+                    $ isMcModified = module[1][2] is not None
                     <tr>
                         <td>$module[0]</td>
-                    $if module[1][0] is not None:
+                    $if isNameModified is True:
+                        $ originalName = module[1][0][0]
+                        $ modifiedName = module[1][0][1]
                          <td>
                             <b>Modified from</b><br><br>
-                            <i>"$module[1][0][0]</i>"<br><br>
+                            <i>"$originalName"</i>"<br><br>
                             <b>to</b><br><br>
-                            <i>"$module[1][0][1]</i>"<br><br>
+                            <i>"$modifiedName"</i>"<br><br>
                         </td>
                     $else:
                         <td>Not modified</td>
-                    $if module[1][1] is not None:
+                    $if isDescModified is True:
+                        $ originalDesc = module[1][1][0]
+                        $ modifiedDesc = module[1][1][1]
                          <td>
                             <b>Modified from</b><br><br>
-                            <i>"$module[1][1][0]</i>"<br><br>
+                            <i>"$originalDesc"</i>"<br><br>
                             <b>to</b><br><br>
-                            <i>"$module[1][1][1]</i>"<br><br>
+                            <i>"$modifiedDesc"</i>"<br><br>
                         </td>
                     $else:
                         <td>Not modified</td>
-                    $if module[1][2] is not None:
+                    $if isMcModified is True:
+                        $ originalMc = module[1][2][0]
+                        $ modifiedMc = module[1][2][1]
                          <td>
-                            <b>Modified from</b><br><br> 
-                            <i>"$module[1][2][0]</i>"<br><br>
+                            <b>Modified from</b><br><br>
+                            <i>"$originalMc"</i>"<br><br>
                             <b>to</b><br><br>
-                            <i>"$module[1][2][1]</i>"<br><br>
+                            <i>"$modifiedMc"</i>"<br><br>
                         </td>
                     $else:
                         <td>Not modified</td>
