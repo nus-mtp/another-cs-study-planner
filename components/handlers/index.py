@@ -14,8 +14,6 @@ class Index(object):
     '''
     def __init__(self):
         self.form = self.create_form()
-        print("Current session ID is: " + web.ctx.session.session_id)
-
 
     def GET(self):
         '''
