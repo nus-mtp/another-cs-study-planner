@@ -129,6 +129,7 @@ class verifyLogin(object):
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
+                web.ctx.session._initializer['userId'] = form.d.username
                 web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_SUCCESSFUL
                 web.setcookie('user', form.d.username)
                 raise web.seeother('/')
