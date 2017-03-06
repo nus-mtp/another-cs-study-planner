@@ -3,9 +3,9 @@
     the home page.
 '''
 
-from app import RENDER, APP
+from app import RENDER, SESSION
 import web
-from components import model, ses
+from components import model
 
 
 class Index(object):
@@ -14,7 +14,7 @@ class Index(object):
     '''
     def __init__(self):
         self.form = self.create_form()
-        self.SESSION = ses.get_session(APP)
+        print("Current session ID is: " + web.ctx.session.session_id)
 
 
     def GET(self):
@@ -22,17 +22,19 @@ class Index(object):
             This function is called when the '/' page (index.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if not self.SESSION or self.SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        #if SESSION._initializer['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        #if self.user_session._initializer.get("id") != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if web.cookies().get('user') is None:
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            if self.SESSION['displayErrorMessage'] is True:
-                self.SESSION['displayErrorMessage'] = False
+            if web.ctx.session._initializer.get('displayErrorMessage') is True:
+                web.ctx.session._initializer['displayErrorMessage'] = False
             else:
-                self.SESSION['keyError'] = False
+                web.ctx.session._initializer['keyError'] = False
 
-            return RENDER.index(module_infos, form, self.SESSION['keyError'])
+            return RENDER.index(module_infos, form, web.ctx.session._initializer.get('keyError'))
 
 
     def POST(self):
@@ -43,13 +45,13 @@ class Index(object):
         form = self.form()
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.index(modules, form, self.SESSION['keyError'])
+            return RENDER.index(modules, form, web.ctx.session._initializer.get('keyError'))
 
         # else add module to db and refresh page
         outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
         if outcome is False:
-            self.SESSION['keyError'] = True
-            self.SESSION['displayErrorMessage'] = True
+            web.ctx.session._initializer['keyError'] = True
+            web.ctx.session._initializer['displayErrorMessage'] = True
         raise web.seeother('/')        # load index.html again
 
 
