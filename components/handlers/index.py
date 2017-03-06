@@ -5,7 +5,7 @@
 
 from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class Index(object):
@@ -22,7 +22,7 @@ class Index(object):
             This function is called when the '/' page (index.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if web.cookies().get('user') is None:
+        if not session.validate_session():
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()
