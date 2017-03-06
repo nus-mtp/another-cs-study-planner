@@ -79,7 +79,7 @@ class Login(object):
                 hashed_password = hashlib.sha512(registration_form.d.password
                                                  + salt).hexdigest()
                 model.add_admin(registration_form.d.username, salt, hashed_password)
-                web.ctx.session._initializer['id'] = web.ACCOUNT_CREATED_SUCCESSFUL
+                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_CREATED_SUCCESSFUL
 
             raise web.seeother('/login')
 
