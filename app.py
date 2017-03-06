@@ -60,6 +60,7 @@ web.ACCOUNT_CREATED_SUCCESSFUL = 1
 web.ACCOUNT_CREATED_UNSUCCESSFUL = -1
 web.ACCOUNT_LOGIN_SUCCESSFUL = 2
 web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
+web.ACCOUNT_LOGGED_OUT = 0
 
 web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour

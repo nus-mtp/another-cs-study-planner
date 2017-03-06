@@ -13,6 +13,7 @@ class Logout(object):
 		'''
 			This function destroys all cookies related to user session.
 		'''
+		web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGGED_OUT
 		web.ctx.session.kill()
 		web.setcookie('user', '', expires=-1)
 		raise web.seeother('/login')
