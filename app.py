@@ -65,7 +65,7 @@ web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': 0,
+                              initializer={'loginStatus': 0,
                                            'keyError': False,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,

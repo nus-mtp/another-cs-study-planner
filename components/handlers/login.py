@@ -53,7 +53,7 @@ class Login(object):
         if web.cookies().get('user') is None:
             return RENDER.login(login_form, registration_form, 0)
         else:
-            return RENDER.login(login_form, registration_form, web.ctx.session._initializer['id'])
+            return RENDER.login(login_form, registration_form, web.ctx.session._initializer['loginStatus'])
 
 
     def POST(self):
@@ -73,7 +73,7 @@ class Login(object):
             return RENDER.login(login_form, registration_form)
         else:
             if model.is_userid_taken(registration_form.d.username):
-                web.ctx.session._initializer['id'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
+                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
             else:
                 salt = uuid.uuid4().hex
                 hashed_password = hashlib.sha512(registration_form.d.password
@@ -123,17 +123,17 @@ class verifyLogin(object):
         form = create_login_form()
         # returns to login page
         if not form.validates():
-            web.ctx.session._initializer['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+            web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
             raise web.seeother('/login')
         else:
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
-                web.ctx.session._initializer['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_SUCCESSFUL
                 web.setcookie('user', form.d.username)
                 raise web.seeother('/')
             # Else go to error page
             else:
-                web.ctx.session._initializer['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
+                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
                 raise web.seeother('/login')
             
