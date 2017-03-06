@@ -27,7 +27,7 @@ import hashlib
 import uuid
 from paste.fixture import TestApp
 from nose.tools import assert_equal
-from app import APP, SESSION
+import app
 from components import model
 
 
@@ -41,6 +41,7 @@ class TestCode(object):
 
     URL_DEFAULT_LOGIN = '/login'
     URL_INDEX = '/'
+    URL_DEFAULT_LOGOUT = '/logout'
 
     FORM_USER_LOGIN = '<form id="loginForm" action="/verifyLogin" method="post">'
     FORM_USER_LOGIN_USERNAME_LABEL = '<label for="username">Username</label>'
@@ -74,11 +75,9 @@ class TestCode(object):
     SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL = 'window.alert("Login credentials are ' +\
                                         'incorrect. Please try again.");'
 
-
     def __init__(self):
         self.middleware = None
         self.test_app = None
-
 
     def setUp(self):
         '''
@@ -86,8 +85,8 @@ class TestCode(object):
             user accounts states.
         '''
         self.middleware = []
-        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        SESSION['id'] = 0
+        app.APP.add_processor(app.web.loadhook(app.session_hook))
+        self.test_app = TestApp(app.APP.wsgifunc(*self.middleware))
         model.delete_admin("user")
         model.delete_admin("user2")
         self.create_dummy_user()
@@ -96,10 +95,11 @@ class TestCode(object):
     def tearDown(self):
         '''
             Removes any trace of dummy accounts that were present
-            during the invocation of all the test cases.
+            during the invocation of all the test cases and logs out if needed.
         '''
         model.delete_admin("user")
         model.delete_admin("user2")
+        self.test_app.post(self.URL_DEFAULT_LOGOUT)
 
 
     def create_dummy_user(self):
@@ -253,7 +253,6 @@ class TestCode(object):
 
         login_page.mustcontain(self.HEADER_ALREADY_LOGGED_IN)
         login_page.mustcontain(self.BUTTON_ALREADY_LOGGED_IN)
-
 
     def test_valid_registration_submission_response(self):
         '''
