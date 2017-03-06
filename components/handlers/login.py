@@ -4,7 +4,7 @@
 
 import hashlib
 import uuid
-from app import RENDER, SESSION
+from app import RENDER
 import web
 from components import model
 
