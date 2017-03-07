@@ -30,7 +30,8 @@ URLS = (
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
-    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules'
 )
 
 
@@ -65,6 +66,7 @@ web.config.session_parameters['ignore_expiry'] = False
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
                               initializer={'id': None,
                                            'keyError': False,
+                                           'deleteError': None,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,
                                            'editMountMsg': None})._initializer

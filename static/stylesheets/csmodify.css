@@ -133,3 +133,11 @@ tr > th {
 	border-left: 1px solid black;
 	height: 1500px;
 }
+/*************************************************************************/
+/* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
+/*************************************************************************/
+
+.modules-taken-together{
+    margin: 20px 0px;
+    float: right;
+}
