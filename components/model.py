@@ -500,6 +500,7 @@ def get_num_students_by_focus_areas():
 
     return final_table
 
+
 def get_mod_taken_together_with(code):
     '''
         Retrieves the list of modules taken together with the specified
@@ -525,6 +526,7 @@ def get_mod_taken_together_with(code):
     DB_CURSOR.execute(sql_command, (code,))
 
     return DB_CURSOR.fetchall()
+
 
 def get_all_mods_taken_together():
     '''
