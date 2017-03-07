@@ -4,7 +4,7 @@ Contains test cases for querying list of students who plan to take a certain mod
 in a specified semester
 '''
 
-from nose.tools import assert_equal, assert_true
+from nose.tools import assert_equal
 from components import model
 
 # HOW TO RUN NOSE TESTS
@@ -15,7 +15,7 @@ from components import model
 
 class TestCode(object):
     '''
-        This class runs the test cases for querying list of students who plan 
+        This class runs the test cases for querying list of students who plan
         to take a certain mod in a specified semester
     '''
     def __init__(self):
@@ -24,7 +24,7 @@ class TestCode(object):
 
     def test_list_students_take_module_one_focus(self):
         '''
-            Tests querying the list of students who plan 
+            Tests querying the list of students who plan
             to take a certain mod in a specified semester,
             where these students only have one focus area.
         '''
@@ -37,22 +37,22 @@ class TestCode(object):
                          ('D1000001A', 1, 'Computer Graphics and Games', '-')
                         ]
 
+        assert_equal(len(list_of_students_take_mod), len(required_list))
+        assert_equal(sorted(list_of_students_take_mod), sorted(required_list))
+
 
     def test_list_students_take_module_two_focus(self):
         '''
-            Tests querying the list of students who plan 
+            Tests querying the list of students who plan
             to take a certain mod in a specified semester,
             where these students have exactly 2 focus areas.
         '''
 
-        assert_equal(len(list_of_students_take_mod), len(required_list))
-        assert_equal(sorted(list_of_students_take_mod), sorted(required_list))
-
         list_of_students_take_mod = \
             model.get_list_students_take_module('CS4244', 'AY 16/17 Sem 2')
 
-        required_list = [('D4000000A', 4, 'Artificial Intelligence', 
-                         'Computer Graphics and Games')
+        required_list = [('D4000000A', 4, 'Artificial Intelligence',
+                          'Computer Graphics and Games')
                         ]
 
         assert_equal(len(list_of_students_take_mod), len(required_list))
@@ -61,7 +61,7 @@ class TestCode(object):
 
     def test_list_students_take_module_empty(self):
         '''
-            Tests querying the list of students who plan 
+            Tests querying the list of students who plan
             to take a certain mod in a specified semester,
             where these are no students planning to take the module.
         '''
