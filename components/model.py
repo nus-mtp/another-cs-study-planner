@@ -58,9 +58,11 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
                   "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
-                  "AND M2.acadYearAndSem LIKE '" + selected_ay + "%' " +\
+                  "AND M2.acadYearAndSem LIKE %s" + \
                   "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-    DB_CURSOR.execute(sql_command)
+    processed_ay = selected_ay + "%"
+
+    DB_CURSOR.execute(sql_command, (processed_ay,))
     return DB_CURSOR.fetchall()
 
 
@@ -194,17 +196,17 @@ def flag_module_as_active(code):
 
 def delete_module(code):
     '''
-        Delete a module from the module table
+        Delete a newly added module from the module table
+        if and only if no (tentative) mountings refer to it.
     '''
-    # Delete the foreign key reference first.
-    sql_command = "DELETE FROM modulemounted WHERE modulecode=%s"
-    DB_CURSOR.execute(sql_command, (code,))
-
-    # Perform the normal delete.
-    sql_command = "DELETE FROM module WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code,))
-    CONNECTION.commit()
-
+    try:
+        sql_command = "DELETE FROM module WHERE code=%s"
+        DB_CURSOR.execute(sql_command, (code,))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
 
 def get_oversub_mod():
     '''
@@ -513,14 +515,14 @@ def get_mod_taken_together_with(code):
 
     sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
                 "FROM studentPlans sp1, studentPlans sp2 " + \
-                "WHERE sp1.moduleCode = '" + code + "' AND " + \
+                "WHERE sp1.moduleCode = %s AND " + \
                 "sp2.moduleCode <> sp1.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
                 "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
                 "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
                 "ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    DB_CURSOR.execute(sql_command, (code,))
 
     return DB_CURSOR.fetchmany(NUM_TOP_RESULTS_TO_RETURN)
 
