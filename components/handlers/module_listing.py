@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class Modules(object):
@@ -24,19 +24,19 @@ class Modules(object):
             This function is called when the '/modules' page (moduleListing.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            if SESSION['displayErrorMessage'] is True:
-                SESSION['displayErrorMessage'] = False
+            if web.ctx.session._initializer['displayErrorMessage'] is True:
+                web.ctx.session._initializer['displayErrorMessage'] = False
             else:
-                SESSION['keyError'] = False
-                SESSION['deleteError'] = None
+                web.ctx.session._initializer['keyError'] = False
+                web.ctx.session._initializer['deleteError'] = None
 
             return RENDER.moduleListing(module_infos, form,
-                                        SESSION['keyError'], SESSION['deleteError'])
+                                        web.ctx.session._initializer['keyError'], web.ctx.session._initializer['deleteError'])
 
 
     def POST(self):
@@ -59,13 +59,13 @@ class Modules(object):
         # If module add is unsuccessful
         if not form.validates():
             modules = model.get_all_modules()
-            return RENDER.moduleListing(modules, form, SESSION['keyError'])
+            return RENDER.moduleListing(modules, form, web.ctx.session._initializer['keyError'])
 
         # else add module to db and refresh page
         outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
         if outcome is False:
-            SESSION['keyError'] = True
-            SESSION['displayErrorMessage'] = True
+            web.ctx.session._initializer['keyError'] = True
+            web.ctx.session._initializer['displayErrorMessage'] = True
         raise web.seeother(self.URL_THIS_PAGE)        # load index.html again
 
 
@@ -150,6 +150,6 @@ class DeleteMod(object):
         ''' Delete the module '''
         outcome = model.delete_module(module_code)
         if outcome is False:
-            SESSION['deleteError'] = module_code
-            SESSION['displayErrorMessage'] = True
+            web.ctx.session._initializer['deleteError'] = module_code
+            web.ctx.session._initializer['displayErrorMessage'] = True
         raise web.seeother(self.URL_THIS_PAGE)
