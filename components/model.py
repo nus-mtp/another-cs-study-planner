@@ -511,7 +511,7 @@ def get_mod_taken_together_with(code):
         e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
-    NUM_TOP_RESULTS_TO_RETURN = 10
+    #NUM_TOP_RESULTS_TO_RETURN = 10
 
     sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
                 "FROM studentPlans sp1, studentPlans sp2 " + \
@@ -524,7 +524,7 @@ def get_mod_taken_together_with(code):
 
     DB_CURSOR.execute(sql_command, (code,))
 
-    return DB_CURSOR.fetchmany(NUM_TOP_RESULTS_TO_RETURN)
+    return DB_CURSOR.fetchall()
 
 def get_all_mods_taken_together():
     '''
