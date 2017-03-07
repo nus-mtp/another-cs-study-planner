@@ -62,9 +62,13 @@ class TestCode(object):
             Sets up the 'app.py' fixture
         '''
         self.middleware = []
-        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        # Sets up the simulated 'login' state
-        SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+        app.APP.add_processor(app.web.loadhook(app.session_hook))
+        self.test_app = TestApp(app.APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        session.tear_down(self.test_app)
 
 
     def test_index_valid_response(self):
