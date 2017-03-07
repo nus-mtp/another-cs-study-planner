@@ -37,6 +37,9 @@ class TestCode(object):
 
 
     def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
         session.tear_down(self.test_app)
 
 
