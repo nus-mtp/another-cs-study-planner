@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
 from components import model
 
@@ -33,9 +33,9 @@ class EditModuleInfo(object):
 
             outcome = model.update_module(module_code, module_name, description, mc)
             if outcome is True:
-                SESSION['editModMsg'] = "Module info edited sucessfully!"
+                web.ctx.session._initializer['editModMsg'] = "Module info edited sucessfully!"
             else:
-                SESSION['editModMsg'] = "Sorry, an error has occurred!"
+                web.ctx.session._initializer['editModMsg'] = "Sorry, an error has occurred!"
 
             raise web.seeother('/viewModule?code='+module_code)
 
@@ -78,9 +78,9 @@ class EditMountingInfo(object):
                 outcome = model.delete_tenta_mounting(module_code, ay_sem)
 
             if outcome is True:
-                SESSION['editMountMsg'] = "Mounting info edited sucessfully!"
+                web.ctx.session._initializer['editMountMsg'] = "Mounting info edited sucessfully!"
             else:
-                SESSION['editMountMsg'] = "Sorry, an error has occurred!"
+                web.ctx.session._initializer['editMountMsg'] = "Sorry, an error has occurred!"
 
             raise web.seeother("individualModuleInfo?code="+module_code+"&targetAY="+\
                                ay_sem.replace(' ', '+').replace('/', '%2F'))
