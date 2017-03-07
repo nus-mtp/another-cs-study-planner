@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class ViewMod(object):
@@ -99,8 +99,8 @@ class ViewMod(object):
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)
-        system_message = SESSION['editModMsg']
-        SESSION['editModMsg'] = None
+        system_message = web.ctx.session._initializer['editModMsg']
+        web.ctx.session._initializer['editModMsg'] = None
 
         return RENDER.viewModule(module_info, self.fixed_mounting_plan,
                                  self.tenta_mounting_plan, number_of_student_planning,
