@@ -31,7 +31,8 @@ URLS = (
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/logout', 'components.handlers.logout.Logout',
-    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery'
+    '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules'
 )
 
 
@@ -69,6 +70,7 @@ SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
                               initializer={'userId': None,
                                            'loginStatus': 0,
                                            'keyError': False,
+                                           'deleteError': None,
                                            'displayErrorMessage': False,
                                            'editModMsg': None,
                                            'editMountMsg': None})

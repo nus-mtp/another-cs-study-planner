@@ -21,12 +21,15 @@ $def with (page)
 			$:page
 
 		$else:
-	        <a class="btn btn-primary back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a>
+	        <a class="btn btn-info back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up"></span></a>
 	        <div id="page-top"></div>
 
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
 				    <form class="navbar-form navbar-left">
+				    	<a class="btn btn-lg btn-primary" href="/">
+				    		<span class="glyphicon glyphicon-home"></span>
+				    	</a>
 					    <button type="button" class="btn btn-lg btn-primary" onclick="openSidebar()">
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
@@ -51,34 +54,34 @@ $def with (page)
 				<a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
 				<h3><span class="glyphicon glyphicon-align-left"></span> Module Views</h3>
 				<ul>
-					<li><a href="/oversubscribedModules">Oversubscribed Modules</a></li>
+					<li><a id="sidebar" href="/oversubscribedModules">Oversubscribed Modules</a></li>
 					<!--li><a href="#">View by Focus Area</a></li-->
-					<li><a href="/">Module Information</a></li>
+					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<!--li><a href="#">Sort/Filter Modules</a></li>
 					<li><a href="#">Recently Removed Modules</a></li>
-					<li><a href="#">Starred Modules</a></li>
-					<li><a href="#">View Modules for Current Semester</a></li>
-					<li><a href="#">View Modules for Next Semester</a></li>
-					<li><a href="#">View Past Module Demand</a></li-->
+					<li><a href="#">Starred Modules</a></li-->
+					<li><a id="sidebar" href="/moduleMountingFixed">View Modules for Current AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingTentative">View Modules for Next AY</a></li>
+					<!--li><a href="#">View Past Module Demand</a></li-->
 				</ul>
 				<!--h3>Change Curriculum</h3>
 				<ul>
 					<li><a href="#">Change Module Quota</a></li>
-					<li><a href="#">Change preclusions/prerequisites</a></li>
+					<li><a href="#">Change Preclusions/Prerequisites</a></li>
 					<li><a href="#">Edit Module</a></li>
 					<li><a href="#">Add Module</a></li>
 					<li><a href="#">Delete Module</a></li>
 				</ul-->
-				<!--h3>Module Relations</h3>
+				<h3><span class="glyphicon glyphicon-random"></span> Module Relations</h3>
 				<ul>
-					<li><a href="#">Commonly Overlapping Modules</a></li>
-					<li><a href="#">Module Info by Semester</a></li>
+					<li><a id="sidebar" href="/overlappingModules">Commonly Overlapping Modules</a></li>
+					<!--li><a href="#">Module Info by Semester</a></li>
 					<li><a href="javascript:void(0)">Prior Modules Taken</a></li>
-						<ul>
-							<li><a href="#">Before Specified Module</a></li>
-							<li><a href="#">Before Internship</a></li>
-						</ul>
-				</ul-->
+				    <ul>
+					   <li><a href="#">Before Specified Module</a></li>
+				        <li><a href="#">Before Internship</a></li>
+				    </ul-->
+				</ul>
 				<h3><span class="glyphicon glyphicon-education"></span> Student Statistics</h3>
 				<ul>
 					<!--li><a href="javascript:void(0)">Module Demand</a></li>
@@ -87,7 +90,7 @@ $def with (page)
 							<li><a href="#">Next Semester</a></li>
 							<li><a href="#">In Specific Semester</a></li>
 						</ul-->
-					<li><a href="/studentEnrollment">Student Enrollment Info</a></li>
+					<li><a id="sidebar" href="/studentEnrollment">Student Enrollment Info</a></li>
 					<!--li><a href="#">Module Timeline</a></li>
 					<li><a href="#">Non-Overlapping Modules</a></li-->
 				</ul>

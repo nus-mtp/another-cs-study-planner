@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="description" content="first page suer admin sees upon logon">
+        <link rel="stylesheet" type="text/css" href="../static/stylesheets/bootstrap.min.css">
+        <script type="text/javascript" src="../static/javascripts/jquery-2.2.4.min.js"></script>
+        <scrpit type="text/javascript" src="../static/javascripts/bootstrap.min.js"></scrpit>
+    </head>
+    
+    <body>
+        <div class="container container-block">
+            <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2>Modules changed</h2></div>
+                        <div class="panel-body">
+                            <table class="table table-bordered table-hober display dataTable" id="module-changes-table">
+                                <tr>
+                                    <thead>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th>Mounting Changed</th>
+                                        <th>Quota Changed</th>
+                                        <th>Details Changed</th>
+                                    </thead>
+                                </tr>
+                                
+                                <tbody>
+                                    <tr>
+                                        <td>CS1231</td>
+                                        <td>Study of the black box</td>
+                                        <td><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span></td><!--Y/N-->
+                                        <td><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Not changed"></span></td>
+                                        <td><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Details Changed"></span></td><!--Activate/Delete/Deactivate-->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </body>
+</html>
