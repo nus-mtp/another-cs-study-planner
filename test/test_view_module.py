@@ -51,6 +51,10 @@ class TestCode(object):
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
     CONTENT_STATS = "Module Statistics"
 
+    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
+                                        'class="table table-bordered table-hover display ' +\
+                                        'dataTable">'
+
 
     def __init__(self):
         self.middleware = None
@@ -196,3 +200,10 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
+
+    def test_contains_overlapping_module_table(self):
+        '''
+            
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
