@@ -37,9 +37,12 @@ class TestCode(object):
 
 
     def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
         session.tear_down(self.test_app)
 
-        
+
     def test_module_edit_correct_response(self):
         '''
             Tests whether user can access a page for showing module edit from module view page.
@@ -106,4 +109,3 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
         response.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-
