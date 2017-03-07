@@ -20,25 +20,6 @@ class OverlappingModules(object):
         '''
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
-        data = web.input()
-        try:
-            common_mod = data.code
-        except AttributeError:
-            common_mod = ""
-        if len(common_mod) > 0:
-            #if invalid, empty table will be returned
-            lst_of_mods = model.get_mod_taken_together_with(common_mod)
-        else:
-            lst_of_mods = model.get_all_mods_taken_together()
+        lst_of_mods = model.get_all_mods_taken_together()
 
-        return RENDER.overlappingModules(common_mod.upper(), lst_of_mods)
-
-    def POST(self):
-        '''
-            Handles the loading of new searches
-        '''
-
-        data = web.input()
-        common_mod = data.code
-
-        raise web.seeother('/overlappingModules?code='+common_mod.upper())
+        return RENDER.overlappingModules(lst_of_mods)

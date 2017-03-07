@@ -15,8 +15,7 @@ class TestCode(object):
         this class runs the tests cases for overlapping_modules.py
     '''
 
-    URL_ALL = '/overlappingModules?code='
-    URL_CS1010 = '/overlappingModules?code=CS1010'
+    URL_ALL = '/overlappingModules'
     URL_EXCEPTION_HANDLE = '/overlappingModules'
 
     FORM_ID = 'search-modules-taken-tgt-form'
@@ -40,9 +39,6 @@ class TestCode(object):
         page = self.test_app.get(self.URL_ALL)
         assert_equal(page.status, 200)
 
-        page = self.test_app.get(self.URL_CS1010)
-        assert_equal(page.status, 200)
-
         page = self.test_app.get(self.URL_EXCEPTION_HANDLE)
         assert_equal(page.status, 200)
 
@@ -52,29 +48,3 @@ class TestCode(object):
         '''
         page = self.test_app.get(self.URL_ALL)
         page.mustcontain("Modules Taken Together In The Same Semester")
-
-    def test_page_example_contents(self):
-        '''
-            tests if contents as as expected when the code is CS1010
-        '''
-        page_cs1010 = self.test_app.get(self.URL_CS1010)
-
-        page_cs1010.mustcontain("Results for Modules Taken Together Same Semester With CS1010")
-
-    def test_form(self):
-        '''
-            tests if the find modules usually taken with form exists and works
-            as expected
-        '''
-        page = self.test_app.get(self.URL_ALL)
-        form = page.forms__get()[self.FORM_ID]
-        form.__setitem__("code", "CS1010")
-        response = form.submit()
-
-        assert_equal(response.status, 303)
-
-        #followed must be the same as redirection using url
-        redirected = response.follow()
-        page_cs1010 = self.test_app.get(self.URL_CS1010)
-
-        assert_equal(redirected.body, page_cs1010.body)
