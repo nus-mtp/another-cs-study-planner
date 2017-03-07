@@ -78,7 +78,7 @@ class IndividualModule(object):
         '''
             Retrieve and render all the info of a module mounting
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         input_data = web.input()

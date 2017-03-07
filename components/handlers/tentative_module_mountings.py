@@ -94,7 +94,7 @@ class Tentative(object):
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         #input_data = web.input()

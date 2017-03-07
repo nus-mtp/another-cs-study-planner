@@ -91,7 +91,7 @@ class ViewMod(object):
         '''
             Retrieve and render all the info of a module
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         input_data = web.input()
         module_code = input_data.code
