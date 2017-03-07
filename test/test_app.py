@@ -4,7 +4,6 @@
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
 import app
-import web
 from components import session
 
 class TestCode(object):
