@@ -203,7 +203,7 @@ class TestCode(object):
 
     def test_contains_overlapping_module_table(self):
         '''
-            
+            tests if overlapping modules table exists
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)

@@ -99,4 +99,4 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
         response.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        
+

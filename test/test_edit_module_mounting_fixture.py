@@ -79,6 +79,9 @@ class TestCode(object):
         redirect_to_individual_module_info.mustcontain("BT5110")
 
     def test_contains_overlapping_modules_table(self):
+        '''
+            tests if the overlapping modules table exists
+        '''
         root = self.test_app.get(self.URL_INDIVIDUAL_MOUNTING)
         assert_equal(root.status, 200)
         #tests if the correct page is loaded
