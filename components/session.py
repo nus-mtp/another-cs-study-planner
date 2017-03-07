@@ -5,7 +5,7 @@
 import hashlib
 import uuid
 import web
-import model
+import components.model
 
 DUMMY_USER_ID = 'testUser'
 DUMMY_PASSWORD = '12345678'
@@ -21,21 +21,21 @@ def validate_session():
     try:
         # Check if user logged in successfully
         loginStatus = web.ctx.session._initializer.get('loginStatus')
-        if (loginStatus != web.ACCOUNT_LOGIN_SUCCESSFUL):
+        if loginStatus != web.ACCOUNT_LOGIN_SUCCESSFUL:
             return False
-        
+
         # Check if user is the logged in user
         user = web.cookies().get('user')
-        if (web.ctx.session._initializer.get('userId') != user):
+        if web.ctx.session._initializer.get('userId') != user:
             return False
         return True
     except:
         return False
 
-    
+
 def set_up(test_app):
     '''
-        Sets up for test cases by 
+        Sets up for test cases by
         creating a dummy user for logging in sessions
     '''
     delete_dummy_user_for_tests()
@@ -53,12 +53,12 @@ def tear_down(test_app):
 
 def create_dummy_user_for_tests():
     '''
-        Creates a dummy valid user that will be 
+        Creates a dummy valid user that will be
         used for creating sessions for test cases.
     '''
     salt = uuid.uuid4().hex
     hashed_password = hashlib.sha512(DUMMY_PASSWORD + salt).hexdigest()
-    model.add_admin(DUMMY_USER_ID, salt, hashed_password)
+    components.model.add_admin(DUMMY_USER_ID, salt, hashed_password)
 
 
 def login_session_for_tests(test_app):
@@ -69,15 +69,15 @@ def login_session_for_tests(test_app):
     login_form = root.forms__get()["loginForm"]
     login_form.__setitem__("username", DUMMY_USER_ID)
     login_form.__setitem__("password", DUMMY_PASSWORD)
-    response = login_form.submit()
+    login_form.submit()
 
 
 def delete_dummy_user_for_tests():
     '''
-        Deletes the dummy user used for 
+        Deletes the dummy user used for
         creating sessions for test cases.
     '''
-    model.delete_admin(DUMMY_USER_ID)
+    components.model.delete_admin(DUMMY_USER_ID)
 
 
 def logout_session_for_tests(test_app):
