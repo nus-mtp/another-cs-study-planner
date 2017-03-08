@@ -32,9 +32,9 @@ class TestCode(object):
         list_of_students_take_mod = \
             model.get_list_students_take_module('CS1010', 'AY 16/17 Sem 1')
 
-        required_list = [('D1000002A', 1, 'Database Systems', '-'),
-                         ('D1000000A', 1, 'Artificial Intelligence', '-'),
-                         ('D1000001A', 1, 'Computer Graphics and Games', '-')
+        required_list = [['D1000002A', 1, 'Database Systems', '-'],
+                         ['D1000000A', 1, 'Artificial Intelligence', '-'],
+                         ['D1000001A', 1, 'Computer Graphics and Games', '-']
                         ]
 
         assert_equal(len(list_of_students_take_mod), len(required_list))
@@ -51,8 +51,8 @@ class TestCode(object):
         list_of_students_take_mod = \
             model.get_list_students_take_module('CS4244', 'AY 16/17 Sem 2')
 
-        required_list = [('D4000000A', 4, 'Artificial Intelligence',
-                          'Computer Graphics and Games')
+        required_list = [['D4000000A', 4, 'Artificial Intelligence',
+                          'Computer Graphics and Games']
                         ]
 
         assert_equal(len(list_of_students_take_mod), len(required_list))
