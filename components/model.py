@@ -6,6 +6,7 @@
 import hashlib
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
+from psycopg2.extensions import AsIs
 
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
@@ -656,3 +657,43 @@ def get_all_mods_taken_together():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+
+def get_mods_no_one_take():
+    '''
+        Retrieves the list of all modules which no student take together
+        in the same semester.
+
+        Returns a table of lists. Each list contains
+        (module code 1, module code 2, aySem)
+        where module code 1 and module code 2 are the 2 mods no one takes together
+        in the same semester.
+
+        e.g. [(CS1010, CS1231, AY 16/17 Sem 1)] means there are no students
+        taking CS1010 and CS1231 together in AY 16/17 Sem 1.
+    '''
+
+    sql_command = "SELECT mm1.moduleCode, mm2.moduleCode, mm1.acadYearAndSem " + \
+                "FROM %(table)s mm1, %(table)s mm2 WHERE " + \
+                "mm1.moduleCode < mm2.moduleCode AND " + \
+                "mm1.acadYearAndSem = mm2.acadYearAndSem AND NOT EXISTS (" + \
+                "SELECT * FROM studentPlans sp1, studentPlans sp2 WHERE " + \
+                "sp1.studentid = sp2.studentid AND sp1.acadYearAndSem = sp2.acadYearAndSem " + \
+                "AND sp1.acadYearAndSem = mm1.acadYearAndSem AND " + \
+                "sp1.moduleCode = mm1.moduleCode AND sp2.moduleCode = mm2.moduleCode)"
+
+    STRING_MODULE_MOUNTED = "moduleMounted"
+    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
+
+    MAP_TABLE_TO_MODULE_MOUNTED = {"table": AsIs(STRING_MODULE_MOUNTED)}
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {"table": AsIs(STRING_MODULE_MOUNT_TENTA)}
+
+    DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    list_for_mounted_mods = DB_CURSOR.fetchall()
+
+    DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    list_for_mounted_tenta_mods = DB_CURSOR.fetchall()
+
+    merged_modules_list = list_for_mounted_mods + list_for_mounted_tenta_mods
+
+    return merged_modules_list
