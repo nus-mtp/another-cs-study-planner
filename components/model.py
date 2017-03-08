@@ -552,3 +552,53 @@ def get_all_mods_taken_together():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+
+def get_list_students_take_module(code, aysem):
+    '''
+        Retrieves the list of students who take specified module at specified aysem.
+
+        Returns a table of lists. Each list represents a student and it contains
+        (matric number, year of study, focus area 1, focus area 2)
+    '''
+
+    sql_command = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
+                "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                "AND sp.studentid = s.nusnetid AND " + \
+                "sp.studentid = tfa.nusnetid"
+
+    DB_CURSOR.execute(sql_command, (code, aysem))
+
+    current_list_of_students = DB_CURSOR.fetchall()
+
+    return replace_null_with_dash(current_list_of_students)
+
+
+def replace_null_with_dash(table):
+    '''
+        Changes all the NULL values found in the table to '-'
+        This function supports a 2D table.
+    '''
+    table = convert_to_list(table)
+
+    for row in table:
+        row_length = len(row)
+        for col in range(row_length):
+            if row[col] is None:
+                row[col] = '-'
+
+    return table
+
+
+def convert_to_list(table):
+    '''
+        Converts a list of tuples to a list of lists.
+    '''
+    converted_table = list()
+
+    for row in table:
+        conveted_list = list(row)
+        converted_table.append(conveted_list)
+
+    return converted_table
