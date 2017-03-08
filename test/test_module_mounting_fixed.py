@@ -92,37 +92,37 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    def test_fixed_module_mounting_goto_valid_module_overview_page_response(
-            self):
-        '''
-            Tests if navigation to a module overview page with
-            a valid target module code is successful.
-        '''
-        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
-        response = root.goto(self.URL_MODULE_VIEW_OVERVIEW, method='get')
+    # def test_fixed_module_mounting_goto_valid_module_overview_page_response(
+    #         self):
+    #     '''
+    #         Tests if navigation to a module overview page with
+    #         a valid target module code is successful.
+    #     '''
+    #     root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+    #     response = root.goto(self.URL_MODULE_VIEW_OVERVIEW, method='get')
 
-        # checks if HTTP response code is 200 (= OK)
-        assert_equal(response.status, 200)
+    #     # checks if HTTP response code is 200 (= OK)
+    #     assert_equal(response.status, 200)
 
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains title of Module Info Overview page
-        response.mustcontain("Module Info Overview")
-        # Checks if page contains target module
-        response.mustcontain("BT5110")
+    #     # Presence of these elements indicates that the request direction is correct.
+    #     # Checks if page contains title of Module Info Overview page
+    #     response.mustcontain("Module Info Overview")
+    #     # Checks if page contains target module
+    #     response.mustcontain("BT5110")
 
 
-    @raises(Exception)
-    def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
-            self):
-        '''
-            Tests if navigation to a module overview page with
-            an invalid target module code will fail.
+    # @raises(Exception)
+    # def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
+    #         self):
+    #     '''
+    #         Tests if navigation to a module overview page with
+    #         an invalid target module code will fail.
 
-            NOTE: this test case is supposed to FAIL.
-        '''
-        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
-        # an exception WILL be encountered here
-        root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
+    #         NOTE: this test case is supposed to FAIL.
+    #     '''
+    #     root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+    #     # an exception WILL be encountered here
+    #     root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
 
 
     def test_fixed_module_mounting_view_options(self):
