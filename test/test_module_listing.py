@@ -140,11 +140,14 @@ class TestCode(object):
         '''
         root = self.test_app.get('/modules')
         # an exception WILL be encountered here
-        try:
-            root.goto('/viewModule?code=CS0123', method='get')
-            assert_equal(True, False)
-        except Exception:
-            assert_equal(True, True)
+        response = root.goto('/viewModule?code=CS0123', method='get')
+        assert_equal(response.status, 303)
+
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        redirected.mustcontain("NOT FOUND")
 
 
     def test_index_add_module_form_exists(self):
