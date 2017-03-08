@@ -111,18 +111,23 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
-    # @raises(Exception)
-    # def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
-    #         self):
-    #     '''
-    #         Tests if navigation to a module overview page with
-    #         an invalid target module code will fail.
+    def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
+            self):
+        '''
+            Tests if navigation to a module overview page with
+            an invalid target module code will fail.
+        '''
+        root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
+        # an exception WILL be encountered here
+        response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
+        assert_equal(response.status, 303)
 
-    #         NOTE: this test case is supposed to FAIL.
-    #     '''
-    #     root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
-    #     # an exception WILL be encountered here
-    #     root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        redirected.mustcontain("NOT FOUND")
+
 
 
     def test_fixed_module_mounting_view_options(self):
