@@ -17,6 +17,10 @@ class TestCode(object):
     EDIT_MODULE_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_FORM_NAME = 'edit-module-form'
 
+    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
+                                        'class="table table-bordered table-hover display ' +\
+                                        'dataTable">'
+
     def __init__(self):
         self.middleware = None
         self.test_app = None
@@ -80,3 +84,17 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
         response.mustcontain('Edit: BT5110')
+
+    def test_contains_overlapping_modules_table(self):
+        '''
+            Tests if overlapping modules table exist
+        '''
+        root = self.test_app.get(self.URL_INDIVIDUAL_MODULE_VIEW)
+        assert_equal(root.status, 200)
+        submit_button = root.forms__get()[self.EDIT_MODULE_BUTTON_FORM_NAME]
+        response = submit_button.submit()
+
+        assert_equal(response.status, 200)
+
+        response.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
+

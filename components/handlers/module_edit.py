@@ -28,7 +28,8 @@ class EditModuleInfo(object):
 
         if form_status == "load":
             module_info = model.get_module(module_code)
-            return RENDER.moduleEdit(module_info)
+            overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+            return RENDER.moduleEdit(module_info, overlapping_mod_list)
 
         elif form_status == "submit":
             module_name = data.name
@@ -73,7 +74,8 @@ class EditMountingInfo(object):
 
         if form_status == "load":
             mounting_value = data.mountingValue
-            return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota)
+            overlapping_list = model.get_mod_taken_together_with(module_code)
+            return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota, overlapping_list)
 
         elif form_status == "submit":
             old_mounting_value = data.oldMountingValue

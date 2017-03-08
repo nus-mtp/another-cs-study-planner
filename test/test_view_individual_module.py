@@ -61,6 +61,10 @@ class TestCode(object):
     CONTENT_STATS = "Module Statistics"
     CONTENT_CLASS_QUOTA_BLANK = "?"
 
+    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
+                                        'class="table table-bordered table-hover display ' +\
+                                        'dataTable">'
+
 
     def __init__(self):
         self.middleware = None
@@ -181,6 +185,14 @@ class TestCode(object):
         root = self.test_app.get(self.URL_CONTAIN_CODE_AY_NO_QUOTA)
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
+
+    def test_overlapping_table(self):
+        '''
+            Test if the overlapping modules table is available
+        '''
+        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
 
 
     '''

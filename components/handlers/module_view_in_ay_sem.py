@@ -62,7 +62,11 @@ class IndividualModule(object):
 
         self.is_current_ay = is_current_ay
 
-
+    def get_overlapping_mods(self, code):
+        '''
+            Get modules that over lap with this module
+        '''
+        return model.get_mod_taken_together_with(code)
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
@@ -77,10 +81,11 @@ class IndividualModule(object):
 
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
+        overlapping_mod_list = model.get_mod_taken_together_with(module_code)
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota)
+                                           self.quota, overlapping_mod_list)
 
 
     def POST(self):

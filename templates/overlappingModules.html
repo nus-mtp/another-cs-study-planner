@@ -1,0 +1,34 @@
+$def with (lst_of_mods)
+
+$ page_title = "Modules Taken Together In The Same Semester"
+
+
+$var title:$page_title
+
+<div class="container container-block">
+    <div class="row">
+        <h1 class="text-center"> Modules Usually Taken Together</h1>
+    </div>
+    
+    <div class="row">
+        <table id="common-module-table" class="table table-bordered table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>Module 1</th>
+                    <th data-sortable="false">Module 2</th>
+                    <th>For AY-Sem</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                $for row in lst_of_mods:
+                    <tr>
+                        <td class="text-center">$row[0]</td>
+                        <td class="text-center">$row[1]</td>
+                        <td class="text-center">$row[2]</td>
+                        <td class="text-center">$row[3]</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

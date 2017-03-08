@@ -33,6 +33,7 @@ URLS = (
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
     '/outcome', 'components.handlers.outcome.Outcome'
 )
 
@@ -55,6 +56,7 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
+
 '''
     Variables for handling accounts page.
 '''
@@ -66,7 +68,8 @@ web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 web.config.session_parameters['ignore_expiry'] = False
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None})._initializer
+                              initializer={'id': None,
+                                           'deleteError': None})._initializer
 
 
 if __name__ == '__main__':

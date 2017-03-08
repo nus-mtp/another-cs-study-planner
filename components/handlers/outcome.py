@@ -28,7 +28,7 @@ class Outcome(object):
                     redirect_page = "/viewModule?code="+module_code
                 else:
                     outcome_message = "Error: Module code already exists! Please use another module code."
-                    redirect_page = "/"
+                    redirect_page = "/modules"
 
             elif action == "edit_module":
                 if outcome is True:

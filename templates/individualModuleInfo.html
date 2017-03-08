@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -15,7 +15,6 @@ $var title:$title_string
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
-					
 					<br>
 					<hr>
 				</div>
@@ -100,8 +99,28 @@ $var title:$title_string
 			<div class="page-header text-center">
 				<h2>Module Statistics</h2>
 			</div>
+            <br>
+            <br>
 			<h4><b>Student Demand:</b></h4>
-			<p>--none loaded</p>
+			<table id="common-module-table" class="table table-bordered table-hover display dataTable">
+                <thead>
+                    <tr>
+                        <th>Module 1</th>
+                        <th data-sortable="false">Module 2</th>
+                        <th>For AY-Sem</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $for row in overlappingList:
+                        <tr>
+                            <td class="text-center">$row[0]</td>
+                            <td class="text-center">$row[1]</td>
+                            <td class="text-center">$row[2]</td>
+                            <td class="text-center">$row[3]</td>
+                        </tr>
+                </tbody>
+            </table>
 		</div>
 	</div>
 </div>

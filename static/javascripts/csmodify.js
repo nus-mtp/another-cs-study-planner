@@ -85,4 +85,8 @@ $(function() {
     $('#oversubscribed-modules-table').DataTable( {
         "order": [[ 3, "desc" ]]
     } );
+     
+    $('#common-module-table').DataTable( {
+        aaSorting: []
+    } );
 } );
