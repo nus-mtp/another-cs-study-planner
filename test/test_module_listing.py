@@ -135,8 +135,6 @@ class TestCode(object):
         '''
             Tests if navigation to a module overview page with
             an invalid target module code will fail.
-
-            NOTE: this test case is supposed to FAIL.
         '''
         root = self.test_app.get('/modules')
         # an exception WILL be encountered here
