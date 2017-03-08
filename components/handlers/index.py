@@ -6,7 +6,6 @@
 from app import RENDER, SESSION
 import web
 from components import model
-from components.handlers.outcome import Outcome
 
 
 class Index(object):

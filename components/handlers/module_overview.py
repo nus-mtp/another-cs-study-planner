@@ -100,7 +100,7 @@ class ViewMod(object):
         self.tenta_mounting_plan = tenta_mounting_plan
 
 
-    def get_overlapping_mods(self,code):
+    def get_overlapping_mods(self, code):
         '''
             Get modules that over lap with this module
         '''

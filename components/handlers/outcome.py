@@ -3,9 +3,7 @@
     (E.g. adding/editing/restoring a module)
 '''
 
-from app import RENDER, SESSION
-import web
-from components import model
+from app import RENDER
 
 
 class Outcome(object):
@@ -13,6 +11,10 @@ class Outcome(object):
         This class handles the display of a form submission's outcome
     '''
     def POST(self, *received_data):
+        '''
+            POST method will check the type of action executed by the user,
+            and display the corresponding message based on the execution's outcome.
+        '''
         if received_data is not None:
             data = received_data
             action = data[0]
@@ -27,7 +29,8 @@ class Outcome(object):
                     outcome_message = "Module " + module_code + " has been added successfully!"
                     redirect_page = "/viewModule?code="+module_code
                 else:
-                    outcome_message = "Error: Module code already exists! Please use another module code."
+                    outcome_message = "Error: Module code already exists! " +\
+                                      "Please use another module code."
                     redirect_page = "/modules"
 
             elif action == "edit_module":

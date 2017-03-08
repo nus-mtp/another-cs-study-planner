@@ -122,7 +122,7 @@ class Modified(object):
                 quota = model.get_quota_of_target_tenta_ay_sem(code, target_ay)
                 if quota is not None and quota > 0:
                     modified_modules.append((code, current_ay, target_ay,
-                                            "Unmounted", quota, '+'+str(quota)))
+                                             "Unmounted", quota, '+'+str(quota)))
             elif mounting_change == 0:   # Mounted --> Unmounted
                 code = module[0]
                 current_ay = module[1]
@@ -130,7 +130,7 @@ class Modified(object):
                 quota = model.get_quota_of_target_fixed_ay_sem(code, current_ay)
                 if quota is not None and quota > 0:
                     modified_modules.append((code, current_ay, target_ay,
-                                            quota, "Unmounted", '-'+str(quota)))
+                                             quota, "Unmounted", '-'+str(quota)))
 
         return modified_modules
 
@@ -227,7 +227,7 @@ class Modified(object):
         try:
             module_code = input_data.code
         except AttributeError:
-            module_code = None     
+            module_code = None
 
         modified_modules = None
         if modify_type == "mounting":
@@ -240,8 +240,8 @@ class Modified(object):
             modified_modules = self.get_all_modified_modules()
 
         # If module code is specified, only return data for the specified module
-        if module_code is not None and (modify_type == "mounting" 
-                                        or modify_type == "quota" 
+        if module_code is not None and (modify_type == "mounting"
+                                        or modify_type == "quota"
                                         or modify_type == "moduleDetails"):
             module = [module for module in modified_modules if module[0] == module_code]
             if len(module) == 0:

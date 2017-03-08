@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
 from components import model
 from components.handlers.outcome import Outcome
@@ -91,4 +91,3 @@ class EditMountingInfo(object):
                 outcome = model.delete_tenta_mounting(module_code, ay_sem)
 
             return Outcome().POST("edit_mounting", outcome, module_code, ay_sem)
-

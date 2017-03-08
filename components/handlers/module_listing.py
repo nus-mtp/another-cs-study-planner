@@ -64,7 +64,8 @@ class Modules(object):
                 return RENDER.moduleListing(modules, form)
 
             # else add module to db and refresh page
-            outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
+            outcome = model.add_module(form.d.code, form.d.name,
+                                       form.d.description, form.d.mc, 'New')
             return Outcome().POST("add_module", outcome, form.d.code)
 
 

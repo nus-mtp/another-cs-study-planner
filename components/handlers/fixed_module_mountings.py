@@ -18,7 +18,8 @@ class Fixed(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 5 attributes (code, name, sem 1 mounting, sem 2 mounting, status)
+            Each subplan is a list of 5 attributes
+            (code, name, sem 1 mounting, sem 2 mounting, status)
             For fixed mountings, each mounting has 2 possible values (-1 or 1)
             -1 = not mounted; 1 = mounted
         '''
@@ -82,8 +83,9 @@ class Fixed(object):
         current_ay = model.get_current_ay()
 
         full_mounting_plan = self.full_mounting_plan
-        full_mounting_plan = [subplan for subplan in full_mounting_plan 
-                              if subplan[4].rstrip() == "Active"]  # New modules will not be displayed in fixed mounting
+        # New modules will not be displayed in fixed mounting
+        full_mounting_plan = [subplan for subplan in full_mounting_plan
+                              if subplan[4].rstrip() == "Active"]
 
         return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
 

@@ -126,10 +126,7 @@ def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
                   "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
     result = DB_CURSOR.fetchone()
-    if result[0] == 1:
-        return True  # Mounted
-    else:
-        return False  # Not Mounted
+    return result[0] == 1    # True == Mounted, False == Not Mounted
 
 
 def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
@@ -140,10 +137,7 @@ def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
                   "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
     result = DB_CURSOR.fetchone()
-    if result[0] == 1:
-        return True  # Mounted
-    else:
-        return False  # Not Mounted
+    return result[0] == 1    # True == Mounted, False == Not Mounted
 
 
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
