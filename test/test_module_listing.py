@@ -2,7 +2,7 @@
     test_module_listing.py test the module listing view.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal, assert_raises
 import app
 from components import session
 
@@ -131,17 +131,16 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
-    # @raises(Exception)
-    # def test_index_goto_invalid_module_overview_page_response(self):
-    #     '''
-    #         Tests if navigation to a module overview page with
-    #         an invalid target module code will fail.
+    def test_index_goto_invalid_module_overview_page_response(self):
+        '''
+            Tests if navigation to a module overview page with
+            an invalid target module code will fail.
 
-    #         NOTE: this test case is supposed to FAIL.
-    #     '''
-    #     root = self.test_app.get('/modules')
-    #     # an exception WILL be encountered here
-    #     root.goto('/viewModule?code=CS0123', method='get')
+            NOTE: this test case is supposed to FAIL.
+        '''
+        root = self.test_app.get('/modules')
+        # an exception WILL be encountered here
+        assert_raises(Exception, root.goto, '/viewModule?code=CS0123', method='get')
 
 
     def test_index_add_module_form_exists(self):
