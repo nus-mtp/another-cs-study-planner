@@ -32,7 +32,8 @@ URLS = (
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/logout', 'components.handlers.logout.Logout',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
-    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules'
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
+    '/404', 'components.handlers.tempErrorPage.Error'
 )
 
 
