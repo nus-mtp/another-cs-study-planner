@@ -140,7 +140,7 @@ class TestCode(object):
         '''
         root = self.test_app.get('/modules')
         # an exception WILL be encountered here
-        assert_raises(Exception, root.goto, '/viewModule?code=CS0123', method='get')
+        assert_raises(TypeError, root.goto, '/viewModule?code=CS0123', method='get')
 
 
     def test_index_add_module_form_exists(self):
