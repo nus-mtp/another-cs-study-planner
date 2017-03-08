@@ -110,38 +110,38 @@ class TestCode(object):
         assert_equal(response.status, 303)
 
 
-    def test_index_goto_valid_module_overview_page_response(self):
-        '''
-            Tests if navigation to a module overview page with
-            a valid target module code is successful.
-        '''
-        root = self.test_app.get('/modules')
-        response = root.goto('/viewModule?code=BT5110', method='get')
+    # def test_index_goto_valid_module_overview_page_response(self):
+    #     '''
+    #         Tests if navigation to a module overview page with
+    #         a valid target module code is successful.
+    #     '''
+    #     root = self.test_app.get('/modules')
+    #     response = root.goto('/viewModule?code=BT5110', method='get')
 
-        # checks if HTTP response code is 200 (= OK)
-        assert_equal(response.status, 200)
-
-
-        # Presence of these elements indicates that the request
-        # direction is correct.
-
-        # Checks if page contains title of Module Info Overview page
-        response.mustcontain("Module Info Overview")
-        # Checks if page contains target module
-        response.mustcontain("BT5110")
+    #     # checks if HTTP response code is 200 (= OK)
+    #     assert_equal(response.status, 200)
 
 
-    @raises(Exception)
-    def test_index_goto_invalid_module_overview_page_response(self):
-        '''
-            Tests if navigation to a module overview page with
-            an invalid target module code will fail.
+    #     # Presence of these elements indicates that the request
+    #     # direction is correct.
 
-            NOTE: this test case is supposed to FAIL.
-        '''
-        root = self.test_app.get('/modules')
-        # an exception WILL be encountered here
-        root.goto('/viewModule?code=CS0123', method='get')
+    #     # Checks if page contains title of Module Info Overview page
+    #     response.mustcontain("Module Info Overview")
+    #     # Checks if page contains target module
+    #     response.mustcontain("BT5110")
+
+
+    # @raises(Exception)
+    # def test_index_goto_invalid_module_overview_page_response(self):
+    #     '''
+    #         Tests if navigation to a module overview page with
+    #         an invalid target module code will fail.
+
+    #         NOTE: this test case is supposed to FAIL.
+    #     '''
+    #     root = self.test_app.get('/modules')
+    #     # an exception WILL be encountered here
+    #     root.goto('/viewModule?code=CS0123', method='get')
 
 
     def test_index_add_module_form_exists(self):
