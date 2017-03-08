@@ -1,15 +1,6 @@
-$def with (moduleInfos, form, deleteError=None)  
+$def with (moduleInfos, form)  
 
 $var title:Module Listing
-
-$# Delete Error occurred
-$if deleteError != None:
-    $ errorMessage = "Module " + deleteError + " currently has " +\
-                        $ "mountings that refer to it. " +\
-                        $ "Remove all mountings before deleting module!"
-    <script type="text/javascript">
-        window.alert("$errorMessage");
-    </script>
 
 <div class="container-fluid" id="main">
     <div class="row">
@@ -71,8 +62,10 @@ $if deleteError != None:
                             </form>
                             
                             $if moduleInfo[4][0:3] == 'New':
-                                <form action="/deleteModule/$moduleInfo[0]" method="post">
-                                    <input  class="btn btn-primary" type="submit" value="Delete Module"/>
+                                <form action="/modules" method="post" onsubmit="if(!confirm('Are you sure you want to delete this module?')){event.preventDefault();}">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="code" value="$moduleInfo[0]">
+                                    <input class="btn btn-primary" type="submit" value="Delete Module"/>
                                 </form>
                         </td>
                     </tr>

@@ -68,8 +68,7 @@ web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 web.config.session_parameters['ignore_expiry'] = False
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None,
-                                           'deleteError': None})._initializer
+                              initializer={'id': None})._initializer
 
 
 if __name__ == '__main__':
