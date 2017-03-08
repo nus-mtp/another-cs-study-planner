@@ -103,6 +103,8 @@ class ViewMod(object):
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
+        if module_info is None:
+            raise web.seeother('/404')
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)
