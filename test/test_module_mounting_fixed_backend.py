@@ -23,7 +23,7 @@ class TestCode(object):
             Then retrieve all fixed module mountings from database
         '''
         self.fixed_mounting_handler = Fixed()
-        self.current_ay = self.fixed_mounting_handler.get_current_ay()
+        self.current_ay = model.get_current_ay()
 
         model.add_module('BB1001', 'Dummy Module 1',
                          'This module is mounted in both semesters.', 1, 'Active')

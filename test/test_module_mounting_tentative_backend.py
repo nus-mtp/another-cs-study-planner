@@ -34,7 +34,7 @@ class TestCode(object):
             Add dummy modules and mountings into database
         '''
         self.fixed_mounting_handler = Fixed()
-        self.current_ay = self.fixed_mounting_handler.get_current_ay()
+        self.current_ay = model.get_current_ay()
 
         self.tentative_mounting_handler = Tentative()
         self.next_ay = self.get_next_ay(self.current_ay)

@@ -23,7 +23,7 @@ def get_all_modules():
 
 def get_module(code):
     '''
-        Get the module code, name, description and MCs of a single module
+        Get the module code, name, description, MCs and status of a single module
     '''
     sql_command = "SELECT * FROM module WHERE code=%s"
     DB_CURSOR.execute(sql_command, (code,))
@@ -66,14 +66,16 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     return DB_CURSOR.fetchall()
 
 
-def get_first_fixed_mounting():
+def get_current_ay():
     '''
-        Get the first mounting from the fixed mounting table
-        This is used for reading the current AY
+        Get the current AY from the fixed mounting table.
+        All fixed mountings should be from the same AY,
+        so just get the AY from the first entry.
+        Test case will ensure that all entries in fixed mountings have the same AY
     '''
-    sql_command = "SELECT acadYearAndSem FROM moduleMounted LIMIT(1)"
+    sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
     DB_CURSOR.execute(sql_command)
-    return DB_CURSOR.fetchone()
+    return DB_CURSOR.fetchone()[0]
 
 
 def get_all_fixed_ay_sems():
@@ -116,14 +118,40 @@ def get_tenta_mounting_and_quota(code):
     return DB_CURSOR.fetchall()
 
 
+def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
+    '''
+        Get the mounting status of a module in a target fixed AY/Sem
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMounted " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    result = DB_CURSOR.fetchone()
+    return result[0] == 1    # True == Mounted, False == Not Mounted
+
+
+def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
+    '''
+        Get the mounting status of a module in a target tentative AY/Sem
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMountTentative " +\
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (code, ay_sem))
+    result = DB_CURSOR.fetchone()
+    return result[0] == 1    # True == Mounted, False == Not Mounted
+
+
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     '''
         Get the quota of a mod in a target fixed AY/Sem (if any)
     '''
     sql_command = "SELECT quota FROM moduleMounted " +\
-                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
-    return DB_CURSOR.fetchall()
+    result = DB_CURSOR.fetchone()
+    if result is not None:
+        return result[0]
+    else:
+        return False
 
 
 def get_quota_of_target_tenta_ay_sem(code, ay_sem):
@@ -131,9 +159,13 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
         Get the quota of a mod in a target tentative AY/Sem (if any)
     '''
     sql_command = "SELECT quota FROM moduleMountTentative " +\
-                  "WHERE moduleCode=%s AND acadYearAndSem=%s "
+                  "WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
-    return DB_CURSOR.fetchall()
+    result = DB_CURSOR.fetchone()
+    if result is not None:
+        return result[0]
+    else:
+        return False
 
 
 def get_number_students_planning(code):
@@ -176,6 +208,42 @@ def update_module(code, name, description, module_credits):
     return True
 
 
+def store_original_module_info(code, name, description, module_credits):
+    '''
+        Store the original name, description and MC of a module
+        so that 1. Can track which module has been modified, 2. Can reset module to original state
+        If original info already exists in table, the original info will NOT be overwritten
+        (the prmary key constraint will prevent that)
+    '''
+    sql_command = "INSERT INTO moduleBackup VALUES (%s,%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_original_module_info(code):
+    '''
+        Get the original info of a module from module backup
+    '''
+    sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchone()
+
+
+def remove_original_module_info(code):
+    '''
+        Remove the original info of the module from module backup
+        (when the original module info has been restored)
+    '''
+    sql_command = "DELETE FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    CONNECTION.commit()
+
+
 def flag_module_as_removed(code):
     '''
         Change the status of a module to 'To Be Removed'
@@ -200,13 +268,20 @@ def delete_module(code):
         if and only if no (tentative) mountings refer to it.
     '''
     try:
+        # Delete backup of module info
+        sql_command = "DELETE FROM moduleBackup WHERE code=%s"
+        DB_CURSOR.execute(sql_command, (code,))
+        # Delete the module
         sql_command = "DELETE FROM module WHERE code=%s"
         DB_CURSOR.execute(sql_command, (code,))
         CONNECTION.commit()
-    except psycopg2.Error:
+
+    except psycopg2.Error:  # If module has mounting, module deletion will fail
         CONNECTION.rollback()
         return False
+
     return True
+
 
 def get_oversub_mod():
     '''
@@ -376,6 +451,37 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
+
+
+def get_modules_with_modified_details():
+    '''
+        Get all modules whose details (name/description/MC) has been modified.
+        Return the module's code, old name, old description, and old MC
+    '''
+    sql_command = "SELECT * FROM moduleBackup ORDER BY code ASC"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
+def get_modules_with_modified_quota():
+    '''
+        Find modules whose quota in target AY/Sem is different from quota in current AY/Sem
+        and return the module code, current AY/Sem, current quota,
+        target AY/Sem, and modified quota
+    '''
+    sql_command = "SELECT m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem, " +\
+                  "m1.quota, m2.quota " +\
+                  "FROM moduleMounted m1, moduleMountTentative m2 " +\
+                  "WHERE m1.moduleCode = m2.moduleCode " +\
+                  "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
+                  "AND (" +\
+                  "    m1.quota != m2.quota " +\
+                  "    OR (m1.quota IS NULL AND m2.quota IS NOT NULL) " +\
+                  "    OR (m2.quota IS NULL AND m1.quota IS NOT NULL) " +\
+                  ") " +\
+                  "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def get_num_students_by_yr_study():

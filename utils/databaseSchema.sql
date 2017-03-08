@@ -93,3 +93,10 @@ PRIMARY KEY (moduleCode, staffID),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
 FOREIGN KEY (staffID) REFERENCES admin(staffID)
 );
+
+CREATE TABLE moduleBackup (
+code VARCHAR(10) PRIMARY KEY,
+name VARCHAR(64),
+description VARCHAR(4096),
+mc INT
+);

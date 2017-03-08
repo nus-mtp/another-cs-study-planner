@@ -19,15 +19,6 @@ class IndividualModule(object):
         self.is_current_ay = False
 
 
-    def get_current_ay(self):
-        '''
-            All fixed mountings should be from the same AY,
-            so just get the AY from the first entry
-            Test case will ensure that all entries in fixed mountings have the same AY
-        '''
-        return model.get_first_fixed_mounting()[0][0:8]
-
-
     def load_mounting_info(self, module_code, target_ay_sem):
         '''
             Load the mounting status and quota of the target module and AY/Sem
@@ -38,7 +29,7 @@ class IndividualModule(object):
 
         # Get mounting status in current AY
         target_ay = target_ay_sem[0:8]
-        current_ay = self.get_current_ay()
+        current_ay = model.get_current_ay()
         if target_ay == current_ay:
             is_current_ay = True
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, target_ay_sem)
@@ -46,11 +37,10 @@ class IndividualModule(object):
             target_sem = target_ay_sem[9:14]
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code,
                                                                  current_ay+" "+target_sem)
-        if len(fixed_quota) == 0:
+        if fixed_quota is False:
             fixed_quota = '-'
         else:
             fixed_mounting_status = 1
-            fixed_quota = fixed_quota[0][0]
 
         if is_current_ay:
             self.mounting_status = fixed_mounting_status
@@ -59,7 +49,7 @@ class IndividualModule(object):
             # Get mounting status in target (future) AY
             tenta_quota = model.get_quota_of_target_tenta_ay_sem(module_code, target_ay_sem)
             tenta_mounting_status = -1
-            if len(tenta_quota) == 0:
+            if tenta_quota is False:
                 tenta_quota = '-'
                 if fixed_mounting_status == 1:
                     tenta_mounting_status = 0
@@ -67,7 +57,6 @@ class IndividualModule(object):
                     tenta_mounting_status = -1
             else:
                 tenta_mounting_status = 1
-                tenta_quota = tenta_quota[0][0]
             self.mounting_status = tenta_mounting_status
             self.quota = tenta_quota
 
@@ -94,12 +83,9 @@ class IndividualModule(object):
         is_future_ay = not self.is_current_ay
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
 
-        system_message = SESSION['editMountMsg']
-        SESSION['editMountMsg'] = None
-
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, system_message, overlapping_mod_list)
+                                           self.quota, overlapping_mod_list)
 
 
     def POST(self):
