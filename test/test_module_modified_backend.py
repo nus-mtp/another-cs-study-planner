@@ -7,7 +7,6 @@ from components import model
 from components.handlers.modified_modules import Modified
 from components.handlers.module_edit import EditModuleInfo
 from components.handlers.module_restore import RestoreModule
-import web
 
 
 class TestCode(object):
@@ -47,7 +46,8 @@ class TestCode(object):
         model.add_module('BB1005', 'Dummy Module 5',
                          "This module's quota for sem 2 has become unspecified", 5, 'Active')
         model.add_module('BB1006', 'Dummy Module 6',
-                         "This module's quota for both sem 1 & 2 have been modified", 6, 'Active')
+                         "This module's quota for both sem 1 & 2 have been modified",
+                         6, 'Active')
 
         model.add_module('BB2001', 'Dummy Module 1',
                          "This module is unmounted from sem 1", 1, 'Active')
@@ -56,20 +56,25 @@ class TestCode(object):
         model.add_module('BB2003', 'Dummy Module 3',
                          "This module is changed from mounted in sem 1 to sem 2", 3, 'Active')
         model.add_module('BB2004', 'Dummy Module 4',
-                         "This module's mounting is modified but quota is not modified", 4, 'Active')
+                         "This module's mounting is modified but quota is not modified",
+                         4, 'Active')
 
         model.add_module('BB3001', 'Dummy Module 1',
                          "This module's quota is modified and will be restored", 1, 'Active')
         model.add_module('BB3002', 'Dummy Module 2',
-                         "This module's quota has been specified and will be restored to unspecified", 2, 'Active')
+                         "This module's quota has been specified and will be restored" +\
+                         "to unspecified", 2, 'Active')
         model.add_module('BB3003', 'Dummy Module 3',
-                         "This module's has been mounted and will be restored to unmounted", 3, 'Active')
+                         "This module's has been mounted and will be restored to unmounted",
+                         3, 'Active')
         model.add_module('BB3004', 'Dummy Module 4',
-                         "This module's has been unmounted and will be restored to mounted", 4, 'Active')
+                         "This module's has been unmounted and will be restored to mounted",
+                         4, 'Active')
         model.add_module('BB3005', 'Dummy Module 5',
                          "This module's name will be restored", 5, 'Active')
         model.add_module('BB3006', 'Dummy Module 6',
-                         "This module's name, description and MC will be restored", 6, 'Active')
+                         "This module's name, description and MC will be restored", 6,
+                         'Active')
 
         # Dummy fixed mountings
         model.add_fixed_mounting('BB1001', self.current_ay+' Sem 1', 10)
@@ -605,7 +610,9 @@ class TestCode(object):
         test_module_desc = "This module's quota is NOT modified"
         test_module_mc = 1
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
@@ -631,7 +638,9 @@ class TestCode(object):
         test_module_desc = "This module's quota is NOT modified"
         test_module_mc = 1
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
@@ -660,7 +669,9 @@ class TestCode(object):
         test_module_desc = "This module's description has been MODIFIED"
         test_module_mc = 2
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
@@ -689,7 +700,9 @@ class TestCode(object):
         test_module_desc = "This module's quota for sem 2 is modified"
         test_module_mc = 10
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
@@ -715,7 +728,8 @@ class TestCode(object):
 
     def test_module_edit_back_to_original(self):
         '''
-            Test that if a module's detail is previously modified, but is then edited back to original,
+            Test that if a module's detail is previously modified,
+            but is then edited back to original,
             it will disappear from the module backup table
         '''
         number_of_modified_modules = len(model.get_modules_with_modified_details())
@@ -726,11 +740,14 @@ class TestCode(object):
         test_module_desc = "This module's description has been MODIFIED"
         test_module_mc = 10
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
-        assert_not_equal(number_of_modified_modules, len(modified_modules))  # Original info inserted into backup
+        # Original info inserted into backup
+        assert_not_equal(number_of_modified_modules, len(modified_modules))
 
         is_in_modified_modules = False
         is_name_modified = None
@@ -754,11 +771,14 @@ class TestCode(object):
         test_module_desc = "This module is unmounted from sem 1"
         test_module_mc = 1
 
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
-        assert_equal(number_of_modified_modules, len(modified_modules))  # Original info removed from backup
+        # Original info removed from backup
+        assert_equal(number_of_modified_modules, len(modified_modules))
 
         is_in_modified_modules = False
         for module in modified_modules:
@@ -774,7 +794,8 @@ class TestCode(object):
             shows the correct boolean for whether a module's
             mounting/quota/module details have been modified.
 
-            Also check that when a module's mounting is modified and the quota is specified,
+            Also check that when a module's mounting is modified
+            and the quota is specified,
             the module's quota will also be considered as modified
         '''
         modified_modules = self.modified_modules_handler.get_all_modified_modules()
@@ -822,7 +843,9 @@ class TestCode(object):
         test_module_name = 'Dummy Module 1'
         test_module_desc = "This module's mounting and module details are modified"
         test_module_mc = 1
-        test_post_data = self.TestEditModuleData("submit", test_module_code, test_module_name, test_module_desc, test_module_mc)
+        test_post_data = self.TestEditModuleData("submit", test_module_code,
+                                                 test_module_name, test_module_desc,
+                                                 test_module_mc)
         self.module_edit_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_all_modified_modules()
@@ -846,7 +869,8 @@ class TestCode(object):
 
     class TestRestoreModuleData(object):
         '''
-            Emulate the data submitted by the 'Restore Module' button on the 'Modified Modules' pages
+            Emulate the data submitted by the 'Restore Module' button
+            on the 'Modified Modules' pages
         '''
         def __init__(self, restoreType, code, currentAySem, targetAySem, quota, mountingChange):
             self.restoreType = restoreType
@@ -860,7 +884,7 @@ class TestCode(object):
     def test_quota_restore(self):
         '''
             Test if a module's whose quota is modified can be restored
-            and if the module will disappear from the table of modules with modified quota 
+            and if the module will disappear from the table of modules with modified quota
         '''
         # Restore quota to original number
         test_module_code = 'BB3001'
@@ -885,7 +909,7 @@ class TestCode(object):
         assert_equal(test_current_quota, current_quota)
         assert_equal(test_modified_quota, modified_quota)
 
-        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None, 
+        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None,
                                                     test_target_aysem, test_current_quota, None)
         self.module_restore_handler.POST(test_post_data)
 
@@ -926,7 +950,7 @@ class TestCode(object):
         assert_equal(test_current_quota, current_quota)
         assert_equal(test_modified_quota, modified_quota)
 
-        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None, 
+        test_post_data = self.TestRestoreModuleData("quota", test_module_code, None,
                                                     test_target_aysem, test_current_quota, None)
         self.module_restore_handler.POST(test_post_data)
 
@@ -948,7 +972,7 @@ class TestCode(object):
     def test_mounting_restore(self):
         '''
             Test if a module's whose mounting is modified can be restored
-            and if the module will disappear from the table of modules with modified mounting 
+            and if the module will disappear from the table of modules with modified mounting
         '''
         # Restore to unmounted
         test_module_code = 'BB3003'
@@ -968,7 +992,7 @@ class TestCode(object):
         assert_true(is_in_modified_modules)
         assert_equal(mounting_change, 1)  # Mounted
 
-        test_post_data = self.TestRestoreModuleData("mounting", test_module_code, None, 
+        test_post_data = self.TestRestoreModuleData("mounting", test_module_code, None,
                                                     test_target_aysem, None, mounting_change)
         self.module_restore_handler.POST(test_post_data)
 
@@ -981,7 +1005,8 @@ class TestCode(object):
                 break
         assert_false(is_in_modified_modules)
 
-        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
+        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
+                                                                      test_target_aysem)
         assert_equal(restored_mounting, False)  # Not Mounted
 
         # Restore to mounted
@@ -1003,8 +1028,9 @@ class TestCode(object):
         assert_true(is_in_modified_modules)
         assert_equal(mounting_change, 0)  # Not Mounted
 
-        test_post_data = self.TestRestoreModuleData("mounting", test_module_code, test_current_aysem, 
-                                                    test_target_aysem, None, mounting_change)
+        test_post_data = self.TestRestoreModuleData("mounting", test_module_code,
+                                                    test_current_aysem, test_target_aysem,
+                                                    None, mounting_change)
         self.module_restore_handler.POST(test_post_data)
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
@@ -1016,7 +1042,8 @@ class TestCode(object):
                 break
         assert_false(is_in_modified_modules)
 
-        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, test_target_aysem)
+        restored_mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
+                                                                      test_target_aysem)
         assert_equal(restored_mounting, True)  # Mounted
 
 
@@ -1054,7 +1081,7 @@ class TestCode(object):
         assert_false(is_desc_modified)
         assert_false(is_mc_modified)
 
-        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code, 
+        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code,
                                                     None, None, None, None)
         self.module_restore_handler.POST(test_post_data)
 
@@ -1108,7 +1135,7 @@ class TestCode(object):
         assert_true(is_desc_modified)
         assert_true(is_mc_modified)
 
-        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code, 
+        test_post_data = self.TestRestoreModuleData("moduleDetails", test_module_code,
                                                     None, None, None, None)
         self.module_restore_handler.POST(test_post_data)
 
