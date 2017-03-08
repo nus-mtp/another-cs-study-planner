@@ -36,6 +36,7 @@ def repopulate_database(connection):
         cursor.execute(open("utils/modulePopulator.sql", "r").read())
         cursor.execute(open("utils/moduleMountedPopulator.sql", "r").read())
         cursor.execute(open("utils/moduleMountedTentativePopulator.sql", "r").read())
+        cursor.execute(open("utils/modifiedModulePopulator.sql", "r").read())
         cursor.execute(open("utils/studentAndFocusPopulator.sql", "r").read())
         cursor.execute(open("utils/plannerPopulator.sql", "r").read())
     connection.commit()
