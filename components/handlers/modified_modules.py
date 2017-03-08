@@ -157,8 +157,8 @@ class Modified(object):
             current_module_desc = current_module_info[2]
             current_module_mc = current_module_info[3]
 
-            is_name_modified = (current_module_name != old_module_name)
-            is_desc_modified = (current_module_desc != old_module_desc)
+            is_name_modified = (current_module_name.rstrip() != old_module_name.rstrip())
+            is_desc_modified = (current_module_desc.rstrip() != old_module_desc.rstrip())
             is_mc_modified = (current_module_mc != old_module_mc)
             if not is_name_modified and not is_desc_modified and not is_mc_modified:
                 model.remove_original_module_info(module_code)
