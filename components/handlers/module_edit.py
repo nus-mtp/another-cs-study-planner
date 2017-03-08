@@ -7,6 +7,7 @@
 from app import RENDER
 import web
 from components import model
+from components.handlers.outcome import Outcome
 
 
 class EditModuleInfo(object):
@@ -14,11 +15,14 @@ class EditModuleInfo(object):
         This class handles the editing of module info
         (Module name, description and MCs)
     '''
-    def POST(self):
+    def POST(self, *test_data):
         '''
             Handles the loading and submission of the 'edit module' form
         '''
-        data = web.input()
+        if test_data:   # for testing purposes
+            data = test_data[0]
+        else:
+            data = web.input()
         form_status = data.status
         module_code = data.code
 
@@ -29,16 +33,23 @@ class EditModuleInfo(object):
 
         elif form_status == "submit":
             module_name = data.name
-            description = data.desc
-            mc = data.mc
+            module_desc = data.desc
+            module_mc = data.mc
 
-            outcome = model.update_module(module_code, module_name, description, mc)
-            if outcome is True:
-                web.ctx.session._initializer['editModMsg'] = "Module info edited sucessfully!"
-            else:
-                web.ctx.session._initializer['editModMsg'] = "Sorry, an error has occurred!"
+            old_module_info = model.get_module(module_code)
+            old_module_name = old_module_info[1]
+            old_module_desc = old_module_info[2]
+            old_module_mc = old_module_info[3]
 
-            raise web.seeother('/viewModule?code='+module_code)
+            outcome = True
+            if (module_name != old_module_name or module_desc != old_module_desc or
+                    int(module_mc) != int(old_module_mc)):
+                model.store_original_module_info(module_code, old_module_name,
+                                                 old_module_desc, old_module_mc)
+                outcome = model.update_module(module_code, module_name, module_desc, module_mc)
+
+            if not test_data:
+                return Outcome().POST("edit_module", outcome, module_code)
 
 
 class EditMountingInfo(object):
@@ -79,10 +90,4 @@ class EditMountingInfo(object):
             elif mounting_status == "Not Mounted":
                 outcome = model.delete_tenta_mounting(module_code, ay_sem)
 
-            if outcome is True:
-                web.ctx.session._initializer['editMountMsg'] = "Mounting info edited sucessfully!"
-            else:
-                web.ctx.session._initializer['editMountMsg'] = "Sorry, an error has occurred!"
-
-            raise web.seeother("individualModuleInfo?code="+module_code+"&targetAY="+\
-                               ay_sem.replace(' ', '+').replace('/', '%2F'))
+            return Outcome().POST("edit_mounting", outcome, module_code, ay_sem)

@@ -32,7 +32,10 @@ URLS = (
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/logout', 'components.handlers.logout.Logout',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
+    '/modifiedModules', 'components.handlers.modified_modules.Modified',
+    '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
+    '/outcome', 'components.handlers.outcome.Outcome',
     '/404', 'components.handlers.tempErrorPage.Error'
 )
 
@@ -55,6 +58,7 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
+
 '''
     Variables for handling accounts page.
 '''
@@ -69,12 +73,7 @@ web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
                               initializer={'userId': None,
-                                           'loginStatus': 0,
-                                           'keyError': False,
-                                           'deleteError': None,
-                                           'displayErrorMessage': False,
-                                           'editModMsg': None,
-                                           'editMountMsg': None})
+                                           'loginStatus': 0})
 
 def session_hook():
     web.ctx.session = SESSION

@@ -75,13 +75,11 @@ class TestCode(object):
         edit_submit_button = goto_edit_response.forms__get()[self.EDIT_MODULE_FORM_NAME]
         submit_edit_response = edit_submit_button.submit()
         #redirect back to module view
-        assert_equal(submit_edit_response.status, 303)
+        assert_equal(submit_edit_response.status, 200)
 
-        redirect_to_module_view = submit_edit_response.follow()
         #successfully reached original moduleview page
-        redirect_to_module_view.mustcontain("Module info edited sucessfully!")
-        redirect_to_module_view.mustcontain("Module Info Overview")
-        redirect_to_module_view.mustcontain("BT5110")
+        root.mustcontain("Module Info Overview")
+        root.mustcontain("BT5110")
 
 
     def test_access_module_edit_from_individual_module_view(self):

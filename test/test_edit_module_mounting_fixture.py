@@ -79,13 +79,11 @@ class TestCode(object):
 
         submit_edit_mounting_form = response.forms__get()[self.EDIT_MOUNTING_FORM_ID]
         response = submit_edit_mounting_form.submit()
-        assert_equal(response.status, 303)
+        assert_equal(response.status, 200)
 
         #redirect back to individual module info page
-        redirect_to_individual_module_info = response.follow()
-        redirect_to_individual_module_info.mustcontain("Mounting info edited sucessfully!")
-        redirect_to_individual_module_info.mustcontain("Module Info for")
-        redirect_to_individual_module_info.mustcontain("BT5110")
+        root.mustcontain("Module Info for")
+        root.mustcontain("BT5110")
 
     def test_contains_overlapping_modules_table(self):
         '''

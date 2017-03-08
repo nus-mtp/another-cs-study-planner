@@ -7,6 +7,7 @@
 from app import RENDER
 import web
 from components import model, session
+from components.handlers.outcome import Outcome
 
 
 class Modules(object):
@@ -29,14 +30,7 @@ class Modules(object):
         else:
             module_infos = model.get_all_modules()
             form = self.form()
-            if web.ctx.session._initializer['displayErrorMessage'] is True:
-                web.ctx.session._initializer['displayErrorMessage'] = False
-            else:
-                web.ctx.session._initializer['keyError'] = False
-                web.ctx.session._initializer['deleteError'] = None
-
-            return RENDER.moduleListing(module_infos, form,
-                                        web.ctx.session._initializer['keyError'], web.ctx.session._initializer['deleteError'])
+            return RENDER.moduleListing(module_infos, form)
 
 
     def POST(self):
@@ -54,19 +48,25 @@ class Modules(object):
         if referrer_page_shortform != self.URL_THIS_PAGE:
             raise web.seeother(self.URL_THIS_PAGE)
 
-        # When 'Add Module' form is submitted
-        form = self.form()
-        # If module add is unsuccessful
-        if not form.validates():
-            modules = model.get_all_modules()
-            return RENDER.moduleListing(modules, form, web.ctx.session._initializer['keyError'])
+        try:
+            data = web.input()
+            action = data.action  # if action is not 'delete', will trigger AttributeError
+            module_code = data.code
+            outcome = model.delete_module(module_code)
+            return Outcome().POST("delete_module", outcome, module_code)
 
-        # else add module to db and refresh page
-        outcome = model.add_module(form.d.code, form.d.name, form.d.description, form.d.mc, 'New')
-        if outcome is False:
-            web.ctx.session._initializer['keyError'] = True
-            web.ctx.session._initializer['displayErrorMessage'] = True
-        raise web.seeother(self.URL_THIS_PAGE)        # load index.html again
+        except AttributeError:
+            # When 'Add Module' form is submitted
+            form = self.form()
+            # If module add is unsuccessful
+            if not form.validates():
+                modules = model.get_all_modules()
+                return RENDER.moduleListing(modules, form)
+
+            # else add module to db and refresh page
+            outcome = model.add_module(form.d.code, form.d.name,
+                                       form.d.description, form.d.mc, 'New')
+            return Outcome().POST("add_module", outcome, form.d.code)
 
 
     def create_form(self):
@@ -114,42 +114,3 @@ class Modules(object):
                              module_mcs,
                              module_form_submit_button)
         return form
-
-
-
-class FlagAsRemoved(object):
-    '''
-        This class handles the flagging of a module as 'To Be Removed'
-    '''
-    URL_THIS_PAGE = '/modules'
-
-    def GET(self):
-        ''' Redirect '''
-        raise web.seeother(self.URL_THIS_PAGE)
-
-
-    def POST(self, module_code):
-        ''' Flag module as removed '''
-        model.flag_module_as_removed(module_code)
-        raise web.seeother(self.URL_THIS_PAGE)
-
-
-
-class DeleteMod(object):
-    '''
-        This class handles the deletion of module
-    '''
-    URL_THIS_PAGE = '/modules'
-
-    def GET(self):
-        ''' Redirect '''
-        raise web.seeother(self.URL_THIS_PAGE)
-
-
-    def POST(self, module_code):        # module_code is obtained from the end of the URL
-        ''' Delete the module '''
-        outcome = model.delete_module(module_code)
-        if outcome is False:
-            web.ctx.session._initializer['deleteError'] = module_code
-            web.ctx.session._initializer['displayErrorMessage'] = True
-        raise web.seeother(self.URL_THIS_PAGE)

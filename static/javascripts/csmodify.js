@@ -74,6 +74,10 @@ $(function() {
         "aaSorting": []
     } );
 
+    $('#modified-modules-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
     $('#student-focus-area-table').DataTable( {
         "aaSorting": []
     } );
