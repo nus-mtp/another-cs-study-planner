@@ -91,16 +91,16 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    @raises(Exception)
-    def test_view_invalid_module_overview_valid_response(self):
-        '''
-            Tests if user will fail to access page for showing module overview
-            if target module is invalid.
+    # @raises(Exception)
+    # def test_view_invalid_module_overview_valid_response(self):
+    #     '''
+    #         Tests if user will fail to access page for showing module overview
+    #         if target module is invalid.
 
-            NOTE: this test case is supposed to FAIL
-        '''
-        # an exception WILL be encountered here
-        self.test_app.get(self.URL_VIEW_MODULE_INVALID)
+    #         NOTE: this test case is supposed to FAIL
+    #     '''
+    #     # an exception WILL be encountered here
+    #     self.test_app.get(self.URL_VIEW_MODULE_INVALID)
 
 
     def test_view_module_overview_goto_valid_individual_module(self):
@@ -120,19 +120,19 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
 
-    @raises(Exception)
-    def test_view_module_overview_goto_individual_module_invalid_code(self):
-        '''
-            Tests if navigation to an individual module view
-            with invalid module code is unsuccesful.
+    # @raises(Exception)
+    # def test_view_module_overview_goto_individual_module_invalid_code(self):
+    #     '''
+    #         Tests if navigation to an individual module view
+    #         with invalid module code is unsuccesful.
 
-            (i.e. navigation to module info for invalid target module and
-            valid target AY-semester and quota)
-        '''
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
-        root.goto(url, method='get')
+    #         (i.e. navigation to module info for invalid target module and
+    #         valid target AY-semester and quota)
+    #     '''
+    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+    #     url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
+    #           '&quota=60'
+    #     root.goto(url, method='get')
 
 
     '''

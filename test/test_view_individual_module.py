@@ -100,16 +100,16 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    @raises(Exception)
-    def test_view_individual_module_invalid_code_response(self):
-        '''
-            Tests if user will fail to access page for showing module overview
-            if target module is invalid.
+    # @raises(Exception)
+    # def test_view_individual_module_invalid_code_response(self):
+    #     '''
+    #         Tests if user will fail to access page for showing module overview
+    #         if target module is invalid.
 
-            NOTE: this test case is supposed to FAIL
-        '''
-        # an exception WILL be encountered here
-        self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+    #         NOTE: this test case is supposed to FAIL
+    #     '''
+    #     # an exception WILL be encountered here
+    #     self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
 
 
     '''
