@@ -2,7 +2,7 @@
     test_module_listing.py test the module listing view.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, assert_raises
+from nose.tools import assert_equal
 import app
 from components import session
 
