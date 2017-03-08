@@ -1,0 +1,27 @@
+$def with (code, ay_sem, student_lst)
+$ title_string = 'Students Affected By Module Changes'
+$var title:$title_string
+
+<div class="container container-block">
+    <h1 class="text-center">Students Affected By Module Changes</h1>
+    <h3 class="text-center">For <b>$code</b> in <b>$ay_sem</b></h3>
+    <table id="students-taking-module-table" class="table table-bordered table-hover display dataTable">
+        <thead>
+            <tr>
+                <th>Matric No.</th>
+                <th>Year of study</th>
+                <th>Focus Area 1</th>
+                <th>Focus Area 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            $for row in student_lst:
+                <tr>
+                    <td class="text-center">$row[0]</td>
+                    <td class="text-center">$row[1]</td>
+                    <td class="text-center">$row[2]</td>
+                    <td class="text-center">$row[3]</td>
+                </tr>
+        </tbody>
+    </table>
+</div>
