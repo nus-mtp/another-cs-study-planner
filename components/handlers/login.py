@@ -50,7 +50,7 @@ class Login(object):
         '''
         login_form = self.login_form()
         registration_form = self.registration_form()
-        if web.ctx.session._initializer['loginStatus'] == 0:
+        if web.ctx.session._initializer['userId'] == None:
             return RENDER.login(login_form, registration_form, 0)
         else:
             return RENDER.login(login_form, registration_form, web.ctx.session._initializer['loginStatus'])
