@@ -656,3 +656,30 @@ def get_all_mods_taken_together():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+
+def get_modA_taken_prior_to_modB():
+    '''
+        Retrieves the list of pairs of modules where there is at least 1 student
+        who took module A prior to taking module B.
+
+        By 'took', it means that the 'isTaken' attribute is set to True.
+
+        By 'taking', it means that the 'isTaken' attribute can be set to True or False,
+        but the student plan for that module must exist.
+
+        By 'prior', it means that the AY-sem that module A is taken in comes before
+        the AY-sem that module B is taken in or planned to be taken to.
+    '''
+    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, sp2.acadYearAndSem, COUNT(*) " + \
+                  "FROM studentPlans sp1, studentPlans sp2 " + \
+                  "WHERE sp2.moduleCode <> sp1.moduleCode " + \
+                  "AND sp1.studentId = sp2.studentId " + \
+                  "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp1.isTaken = True " + \
+                  "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, sp2.acadYearAndSem " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()

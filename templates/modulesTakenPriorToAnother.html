@@ -1,0 +1,33 @@
+$def with (module_pairs)
+
+$var title:View Modules Taken Prior to Another
+
+<div class="container-fluid">
+	<h1 class="text-center"><b>Modules that are taken prior to other modules</b></h1>
+	<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
+		<thead>
+			<tr>
+				<th>Module A</th>
+				<th>Module B</th>
+				<th>Module A Taken in</th>
+				<th>Module B Taken in</th>
+				<th>Number of Students who took Module A prior to Module B</th>
+			</tr>
+		</thead>
+		<tbody>
+			$if len(module_pairs) == 0 or module_pairs == None:
+				<tr><td colspan=5>No data found</td></tr>
+			$else:
+				$for module_pair in module_pairs:
+					<tr>
+						<td>$module_pair[0]</td>
+						<td>$module_pair[1]</td>
+						<td>$module_pair[2]</td>
+						<td>$module_pair[3]</td>
+						<td>$module_pair[4]</td>
+					</tr>
+		</tbody>
+	</table>
+</div>
