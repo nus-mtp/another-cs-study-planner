@@ -6,8 +6,9 @@
   * The application's home file
 2. /components
   * Contains all logical components
-3. /public
+3. /static
   * This folder is split into:
+    * /fonts (for storing glyphicons)
     * /stylesheets (for CSS resources)
     * /javascripts (for JS scripts)
     * /images (for storing image files)
