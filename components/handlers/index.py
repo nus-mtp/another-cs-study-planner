@@ -21,3 +21,4 @@ class Index(object):
             raise web.seeother('/login')
         else:
             return RENDER.index()
+
