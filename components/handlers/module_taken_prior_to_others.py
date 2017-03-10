@@ -78,7 +78,7 @@ class TakePriorTo(object):
                 module_B = data.moduleB
                 target_ay_sem = data.aySem
             except AttributeError:
-                raise web.seeother("/modulesTakenPriorToOthers")
+                raise web.seeother("/moduleTakenPriorToOthers")
 
         # Check if module codes entered are valid
         module_data = model.get_module(module_A.upper())
