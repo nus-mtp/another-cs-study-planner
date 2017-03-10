@@ -683,3 +683,22 @@ def get_modA_taken_prior_to_modB():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+
+def add_student_plan(student_id, is_taken, module_code, ay_sem):
+    '''
+        Add a student plan into the database
+    '''
+    sql_command = 'INSERT INTO studentPlans VALUES(%s, %s, %s, %s);'
+    DB_CURSOR.execute(sql_command, (student_id, is_taken, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_student_plan(student_id, module_code, ay_sem):
+    '''
+        Delete a student plan from the database
+    '''
+    sql_command = "DELETE FROM studentPlans WHERE studentId = %s " +\
+                  "AND moduleCode = %s AND acadYearAndSem = %s;"
+    DB_CURSOR.execute(sql_command, (student_id, module_code, ay_sem))
+    CONNECTION.commit()
