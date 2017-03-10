@@ -6,6 +6,8 @@
   * The application's home file
 2. /components
   * Contains all logical components
+  * This folder contains:
+    * /handlers (for py file to handle web requests)
 3. /static
   * This folder is split into:
     * /fonts (for storing glyphicons)
