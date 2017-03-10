@@ -691,10 +691,12 @@ def get_mods_no_one_take():
     DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
     list_for_mounted_mods = DB_CURSOR.fetchall()
 
-    #DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
-    #list_for_mounted_tenta_mods = DB_CURSOR.fetchall()
+    DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    list_for_mounted_tenta_mods = DB_CURSOR.fetchall()
 
-    merged_modules_list = list_for_mounted_mods
-    #merged_modules_list = list_for_mounted_mods + list_for_mounted_tenta_mods
+    ### Use this if we only want to show current aysem (those in mounted)
+    #merged_modules_list = list_for_mounted_mods
+
+    merged_modules_list = list_for_mounted_mods + list_for_mounted_tenta_mods
 
     return merged_modules_list
