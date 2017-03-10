@@ -20,8 +20,16 @@ function closeSidebar() {
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+  $('#sidebar-button').click(function(e) {
+    e.stopPropagation();
+    openSidebar();
+  });
+  $('body').click(function(e) {
+    if (e.target.id != 'sidebar') {
+        closeSidebar();
+    }
+  });
 })
-
 
 /*
  * FUNCTIONS FOR SCROLLING TO TOP OF PAGE
