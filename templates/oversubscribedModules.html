@@ -10,6 +10,7 @@ $var title:View Oversubscribed Modules
 		<thead>
 			<tr>
 				<th>Code</th>
+				<th>Name</th>
 				<th>AY-Semester</th>
 				<th>Class Quota</th>
 				<th>Student Demand</th>
@@ -22,6 +23,7 @@ $var title:View Oversubscribed Modules
 					<th>Nil</th>
 					<th>Nil</th>
 					<th>Nil</th>
+					<th>Nil</th>
 				</tr>
 			$else:
 				$for module in list_of_oversub_mod:
@@ -30,6 +32,7 @@ $var title:View Oversubscribed Modules
 						<td>$module[1]</td>
 						<td>$module[2]</td>
 						<td>$module[3]</td>
+						<td>$module[4]</td>
 					</tr>
 		</tbody>
 	</table>
