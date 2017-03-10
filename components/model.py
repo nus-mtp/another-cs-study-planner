@@ -659,23 +659,24 @@ def get_all_mods_taken_together():
     return DB_CURSOR.fetchall()
 
 
-def get_mods_no_one_take():
+def get_mods_no_one_take(aysem):
     '''
         Retrieves the list of all modules which no student take together
-        in the same semester.
+        in the specified semester.
 
         Returns a table of lists. Each list contains
-        (module code 1, module code 2, aySem)
+        (module code 1, module code 2)
         where module code 1 and module code 2 are the 2 mods no one takes together
-        in the same semester.
+        in the specified semester.
 
-        e.g. [(CS1010, CS1231, AY 16/17 Sem 1)] means there are no students
-        taking CS1010 and CS1231 together in AY 16/17 Sem 1.
+        e.g. [(CS1010, CS1231)] means there are no students
+        taking CS1010 and CS1231 together in specified aysem.
     '''
 
-    sql_command = "SELECT mm1.moduleCode, mm2.moduleCode, mm1.acadYearAndSem " + \
+    sql_command = "SELECT mm1.moduleCode, mm2.moduleCode " + \
                 "FROM %(table)s mm1, %(table)s mm2 WHERE " + \
                 "mm1.moduleCode < mm2.moduleCode AND " + \
+                "mm1.acadYearAndSem = %(aysem)s AND " + \
                 "mm1.acadYearAndSem = mm2.acadYearAndSem AND NOT EXISTS (" + \
                 "SELECT * FROM studentPlans sp1, studentPlans sp2 WHERE " + \
                 "sp1.studentid = sp2.studentid AND sp1.acadYearAndSem = sp2.acadYearAndSem " + \
@@ -685,18 +686,39 @@ def get_mods_no_one_take():
     STRING_MODULE_MOUNTED = "moduleMounted"
     STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
 
-    MAP_TABLE_TO_MODULE_MOUNTED = {"table": AsIs(STRING_MODULE_MOUNTED)}
-    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {"table": AsIs(STRING_MODULE_MOUNT_TENTA)}
+    MAP_TABLE_TO_MODULE_MOUNTED = {
+        "table": AsIs(STRING_MODULE_MOUNTED),
+        "aysem": aysem
+    }
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
+        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
+        "aysem": aysem
+    }
 
-    DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    list_for_mounted_mods = DB_CURSOR.fetchall()
+    fixed_sems = get_all_fixed_ay_sems()
+    tenta_sems = get_all_tenta_ay_sems()
 
-    DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
-    list_for_mounted_tenta_mods = DB_CURSOR.fetchall()
+    if is_aysem_in_list(aysem, fixed_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    elif is_aysem_in_list(aysem, tenta_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    else: # No such aysem found
+        return list()
 
-    ### Use this if we only want to show current aysem (those in mounted)
-    #merged_modules_list = list_for_mounted_mods
+    required_list = DB_CURSOR.fetchall()
 
-    merged_modules_list = list_for_mounted_mods + list_for_mounted_tenta_mods
+    return required_list
 
-    return merged_modules_list
+
+def is_aysem_in_list(given_aysem, given_list):
+    '''
+        Returns true if given_aysem is found inside given_list.
+        Example:
+        given_list is a list of [('AY 16/17 Sem 1',), ('AY 16/17 Sem 2',)] structure.
+    '''
+    for aysem_tuple in given_list:
+        retrieved_aysem = aysem_tuple[0]
+        if given_aysem == retrieved_aysem:
+            return True
+
+    return False
