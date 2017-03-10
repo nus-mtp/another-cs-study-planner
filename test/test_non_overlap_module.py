@@ -27,7 +27,6 @@ class TestCode(object):
 
     TABLE_HEADER_MODULE_CODE_ONE = '<th>Module Code 1</th>'
     TABLE_HEADER_MODULE_CODE_TWO = '<th>Module Code 2</th>'
-    TABLE_HEADER_MODULE_AY_SEM = '<th>AY-Semester</th>'
 
 
     def __init__(self):
@@ -63,4 +62,3 @@ class TestCode(object):
 
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE_ONE)
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE_TWO)
-        root.mustcontain(self.TABLE_HEADER_MODULE_AY_SEM)
