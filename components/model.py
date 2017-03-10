@@ -670,6 +670,10 @@ def get_modA_taken_prior_to_modB():
 
         By 'prior', it means that the AY-sem that module A is taken in comes before
         the AY-sem that module B is taken in or planned to be taken to.
+
+        Return module A's code, module B's code, AY-Sem that module A is taken in,
+        AY-Sem that module B is taken in, and the number of students who took module A and B in the
+        specified AY-Sems.
     '''
     sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, sp2.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2 " + \
@@ -681,6 +685,33 @@ def get_modA_taken_prior_to_modB():
                   "ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
+def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, module_B_ay_sem):
+    '''
+        Retrieves the number of students who took module A some time before
+        taking module B in a target AY-Sem.
+
+        Meaning, the student has already taken module A, in an AY-Sem that is prior to
+        the target AY-Sem that the student is going to take module B in.
+
+        Return the AY-Sem that module A is taken in, 
+        and the number of students who took module A and B in the specified AY-Sems.
+    '''
+    sql_command = "SELECT sp1.acadYearAndSem, COUNT(*) " + \
+                  "FROM studentPlans sp1, studentPlans sp2 " + \
+                  "WHERE sp1.moduleCode = %s " + \
+                  "AND sp2.moduleCode = %s " + \
+                  "AND sp1.studentId = sp2.studentId " + \
+                  "AND sp2.acadYearAndSem = %s " + \
+                  "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp1.isTaken = True " + \
+                  "GROUP BY sp1.acadYearAndSem " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command, (module_A, module_B, module_B_ay_sem))
 
     return DB_CURSOR.fetchall()
 
