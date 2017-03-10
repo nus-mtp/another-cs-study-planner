@@ -1,4 +1,4 @@
-$def with (modulePairs, allAySems, studentCounts, totalStudentCount, moduleA, moduleB, targetAySem, studentsInModuleB)
+$def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
 
 $var title:View Modules Taken Prior to Others
 
@@ -80,12 +80,12 @@ $else:
 				<tr>
 					<td style="text-align: right;">Total number of students who took $moduleA 
 					before $moduleB:</td>
-					<td style="padding-left: 30px;"><b>$totalStudentCount</b></td>
+					<td style="padding-left: 30px;"><b>$studentPriorCount</b></td>
 				</tr>
 			$if studentsInModuleB == 0:
 				$ percentage = 0
 			$else:
-				$ percentage = totalStudentCount*1.0/studentsInModuleB*100
+				$ percentage = studentPriorCount*1.0/studentsInModuleB*100
 				<tr>
 					<td style="text-align: right;">Percentage of students who took $moduleA 
 					before $moduleB:</td>

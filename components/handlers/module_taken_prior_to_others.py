@@ -56,7 +56,7 @@ class TakePriorTo(object):
                                                 None, None, None, None)
 
 
-    def POST(self):
+    def POST(self, *test_data):
         '''
             Retrieve and display the total number of students who have taken module A
             prior to taking module B (in a target AY-Sem)
@@ -66,14 +66,18 @@ class TakePriorTo(object):
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
 
-        data = web.input()
-
-        try:
-            module_A = data.moduleA
-            module_B = data.moduleB
-            target_ay_sem = data.aySem
-        except AttributeError:
-            raise web.seeother("/modulesTakenPriorToOthers")
+        if test_data is not None:
+            module_A = test_data[0]
+            module_B = test_data[1]
+            target_ay_sem = test_data[2]
+        else:
+            data = web.input()
+            try:
+                module_A = data.moduleA
+                module_B = data.moduleB
+                target_ay_sem = data.aySem
+            except AttributeError:
+                raise web.seeother("/modulesTakenPriorToOthers")
 
         # Check if module codes entered are valid
         module_data = model.get_module(module_A.upper())
@@ -88,13 +92,15 @@ class TakePriorTo(object):
                                                                                   target_ay_sem)
         students_in_module_B = model.get_number_of_students_taking_module(module_B.upper(), target_ay_sem)
 
-        total_student_count = 0
+        student_prior_count = 0
         for count in student_counts:
             count = count[1]
-            total_student_count += count
+            student_prior_count += count
 
-        module_B = data.moduleB
-        return RENDER.modulesTakenPriorToOthers(None, None, student_counts, total_student_count, 
-                                                module_A.upper(), module_B.upper(), target_ay_sem,
-                                                students_in_module_B)
+        if test_data is not None:
+            return [student_counts, student_prior_count, students_in_module_B]
+        else:
+            return RENDER.modulesTakenPriorToOthers(None, None, student_counts, student_prior_count, 
+                                                    module_A.upper(), module_B.upper(), target_ay_sem,
+                                                    students_in_module_B)
 
