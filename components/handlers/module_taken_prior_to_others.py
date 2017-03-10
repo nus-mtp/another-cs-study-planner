@@ -52,7 +52,7 @@ class TakePriorTo(object):
             all_ay_sems.append(future_ay+" Sem 1")
             all_ay_sems.append(future_ay+" Sem 2")
 
-        return RENDER.modulesTakenPriorToAnother(module_pairs, all_ay_sems, None, None, 
+        return RENDER.modulesTakenPriorToOthers(module_pairs, all_ay_sems, None, None, 
                                                  None, None, None)
 
 
@@ -73,7 +73,7 @@ class TakePriorTo(object):
             module_B = data.moduleB
             target_ay_sem = data.aySem
         except AttributeError:
-            raise web.seeother("/modulesTakenPriorToAnother")
+            raise web.seeother("/modulesTakenPriorToOthers")
 
         # Check if module codes entered are valid
         module_data = model.get_module(module_A.upper())
@@ -93,6 +93,6 @@ class TakePriorTo(object):
             total_student_count += count
 
         module_B = data.moduleB
-        return RENDER.modulesTakenPriorToAnother(None, None, student_counts, total_student_count, 
+        return RENDER.modulesTakenPriorToOthers(None, None, student_counts, total_student_count, 
                                                  module_A.upper(), module_B.upper(), target_ay_sem)
 
