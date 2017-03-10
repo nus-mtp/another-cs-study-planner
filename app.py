@@ -31,7 +31,8 @@ URLS = (
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
-    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules'
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
+    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule'
 )
 
 
