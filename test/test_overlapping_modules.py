@@ -20,7 +20,7 @@ class TestCode(object):
 
     TABLE_COLUMN_MODULE_1 = '<th>Module 1</th>'
     TABLE_COLUMN_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    TABLE_COLUMN_MODULE_2 = '<th data-sortable="false">Module 2</th>'
+    TABLE_COLUMN_MODULE_2 = '<th>Module 2</th>'
     TABLE_COLUMN_MODULE_2_NAME = '<th>Name of Module 2</th>'
     TABLE_COLUMN_AY_SEM = '<th>For AY-Sem</th>'
     TABLE_COLUMN_NUM_STUDENTS = '<th>Number of Students</th>'
