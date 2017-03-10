@@ -684,17 +684,18 @@ def get_mods_no_one_take(aysem):
         in the specified semester.
 
         Returns a table of lists. Each list contains
-        (module code 1, module code 2)
-        where module code 1 and module code 2 are the 2 mods no one takes together
+        (module 1 code, module 1 name, module 2 code, module 2 name)
+        where module 1 and module 2 are the 2 mods no one takes together
         in the specified semester.
 
-        e.g. [(CS1010, CS1231)] means there are no students
-        taking CS1010 and CS1231 together in specified aysem.
+        e.g. [(CS1010, Programming Methodology, CS1231, Discrete Structures)] means
+        there are no students taking CS1010 and CS1231 together in specified aysem.
     '''
 
-    sql_command = "SELECT mm1.moduleCode, mm2.moduleCode " + \
-                "FROM %(table)s mm1, %(table)s mm2 WHERE " + \
-                "mm1.moduleCode < mm2.moduleCode AND " + \
+    sql_command = "SELECT mm1.moduleCode, m1.name, mm2.moduleCode, m2.name " + \
+                "FROM %(table)s mm1, %(table)s mm2, module m1, module m2 WHERE " + \
+                "mm1.moduleCode < mm2.moduleCode AND m1.code = mm1.moduleCode " + \
+                "AND m2.code = mm2.moduleCode AND " + \
                 "mm1.acadYearAndSem = %(aysem)s AND " + \
                 "mm1.acadYearAndSem = mm2.acadYearAndSem AND NOT EXISTS (" + \
                 "SELECT * FROM studentPlans sp1, studentPlans sp2 WHERE " + \
