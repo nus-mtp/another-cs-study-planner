@@ -66,7 +66,8 @@ class TakePriorTo(object):
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
 
-        if test_data is not None:
+        is_testing = (len(test_data) > 0)
+        if is_testing:
             module_A = test_data[0]
             module_B = test_data[1]
             target_ay_sem = test_data[2]
@@ -97,7 +98,7 @@ class TakePriorTo(object):
             count = count[1]
             student_prior_count += count
 
-        if test_data is not None:
+        if is_testing:
             return [student_counts, student_prior_count, students_in_module_B]
         else:
             return RENDER.modulesTakenPriorToOthers(None, None, student_counts, student_prior_count, 
