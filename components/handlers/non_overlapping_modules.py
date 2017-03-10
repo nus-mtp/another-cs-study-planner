@@ -22,6 +22,7 @@ class NonOverlappingModules(object):
         if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
             raise web.seeother('/login')
 
-        list_of_mod_no_one_take = model.get_mods_no_one_take()
+        #TODO: Change hardcoded parameter passed in below.
+        list_of_mod_no_one_take = model.get_mods_no_one_take('AY 16/17 Sem 1')
 
         return RENDER.nonOverlappingModules(list_of_mod_no_one_take)
