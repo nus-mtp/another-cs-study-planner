@@ -91,6 +91,7 @@ $(function() {
     } );
 
     $('#non-overlap-table').DataTable( {
-        aaSorting: []
+        aaSorting: [],
+        "deferRender": true
     } );
 } );
