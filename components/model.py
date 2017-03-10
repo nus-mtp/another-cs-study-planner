@@ -283,10 +283,20 @@ def delete_module(code):
     return True
 
 
+def get_module_name(code):
+    '''
+        Retrieves the module name of a module given its module code.
+    '''
+    sql_command = "SELECT name FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+
+    return DB_CURSOR.fetchone()[0]
+
+
 def get_oversub_mod():
     '''
         Retrieves a list of modules which are oversubscribed.
-        Returns module, AY/Sem, quota, number students interested
+        Returns module code, module name, AY/Sem, quota, number students interested
         i.e. has more students interested than the quota
     '''
     list_of_oversub_with_info = []
@@ -314,7 +324,9 @@ def get_oversub_mod():
                 quota = real_quota
 
             if num_student_planning > quota:
-                oversub_info = (mod_code, ay_sem, real_quota, num_student_planning)
+                module_name = get_module_name(mod_code)
+                oversub_info = (mod_code, module_name, ay_sem,
+                                real_quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
