@@ -8,6 +8,9 @@
   * Contains all logical components
   * This folder contains:
     * /handlers (for py file to handle web requests)
+    * database_adapter.py (handles connection to database and database repopulation)
+    * local_database_data.py (stores data and getters for local database connection)
+    * model.py (handles queries to the database)
 3. /static
   * This folder is split into:
     * /fonts (for storing glyphicons)
