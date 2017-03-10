@@ -133,6 +133,7 @@ tr > th {
 	border-left: 1px solid black;
 	height: 1500px;
 }
+
 /*************************************************************************/
 /* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
 /*************************************************************************/
@@ -140,4 +141,36 @@ tr > th {
 .modules-taken-together{
     margin: 20px 0px;
     float: right;
+}
+
+/*******************************************************************************************/
+/* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
+/*******************************************************************************************/
+
+.modules-taken-prior-search-form{
+    text-align: center; 
+    width: 50%; 
+    margin-left: 25%; 
+    border: 1px solid black; 
+    margin-bottom: 20px;      
+}
+
+.modules-taken-prior-search-form p {
+    margin-top: 10px;
+}
+
+.modules-taken-prior-search-form input {
+    height: 33px;
+}
+
+.modules-taken-prior-title{
+    margin-bottom: 20px; 
+}
+
+.modules-taken-prior-stats{
+    font-size: 18px; 
+}
+
+.modules-taken-prior-stats td {
+    padding-bottom: 15px;
 }

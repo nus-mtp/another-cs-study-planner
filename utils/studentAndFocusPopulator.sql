@@ -15,6 +15,8 @@ INSERT INTO student VALUES('D1000003A', 1);
 INSERT INTO student VALUES('D5000000A', 1);
 INSERT INTO student VALUES('D5000001A', 2);
 INSERT INTO student VALUES('D5000002A', 3);
+INSERT INTO student VALUES('D5000003A', 1);
+INSERT INTO student VALUES('D5000004A', 2);
 
 --Focus Areas--
 INSERT INTO focusArea VALUES('Algorithms & Theory');
@@ -44,4 +46,5 @@ INSERT INTO takesFocusArea VALUES('D4000002A', 'Database Systems', 'Artificial I
 INSERT INTO takesFocusArea VALUES('D5000000A', 'Software Engineering', NULL);
 INSERT INTO takesFocusArea VALUES('D5000001A', 'Software Engineering', NULL);
 INSERT INTO takesFocusArea VALUES('D5000002A', 'Software Engineering', NULL);
-
+INSERT INTO takesFocusArea VALUES('D5000003A', 'Software Engineering', NULL);
+INSERT INTO takesFocusArea VALUES('D5000004A', 'Software Engineering', NULL);

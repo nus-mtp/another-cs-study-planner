@@ -53,7 +53,7 @@ class TakePriorTo(object):
             all_ay_sems.append(future_ay+" Sem 2")
 
         return RENDER.modulesTakenPriorToOthers(module_pairs, all_ay_sems, None, None, 
-                                                 None, None, None)
+                                                None, None, None, None)
 
 
     def POST(self):
@@ -86,6 +86,7 @@ class TakePriorTo(object):
         student_counts = model.get_number_of_students_who_took_modA_prior_to_modB(module_A.upper(), 
                                                                                   module_B.upper(), 
                                                                                   target_ay_sem)
+        students_in_module_B = model.get_number_of_students_taking_module(module_B.upper(), target_ay_sem)
 
         total_student_count = 0
         for count in student_counts:
@@ -94,5 +95,6 @@ class TakePriorTo(object):
 
         module_B = data.moduleB
         return RENDER.modulesTakenPriorToOthers(None, None, student_counts, total_student_count, 
-                                                 module_A.upper(), module_B.upper(), target_ay_sem)
+                                                module_A.upper(), module_B.upper(), target_ay_sem,
+                                                students_in_module_B)
 
