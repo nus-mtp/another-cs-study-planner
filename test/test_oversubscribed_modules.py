@@ -29,6 +29,7 @@ class TestCode(object):
     URL_STUDENT_ENROLLMENT = '/oversubscribedModules'
 
     TABLE_HEADER_MODULE_CODE = '<th>Code</th>'
+    TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_MODULE_AY_SEM = '<th>AY-Semester</th>'
     TABLE_HEADER_MODULE_QUOTA = '<th>Class Quota</th>'
     TABLE_HEADER_MODULE_DEMAND = '<th>Student Demand</th>'
@@ -66,6 +67,7 @@ class TestCode(object):
         root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE)
+        root.mustcontain(self.TABLE_HEADER_MODULE_NAME)
         root.mustcontain(self.TABLE_HEADER_MODULE_AY_SEM)
         root.mustcontain(self.TABLE_HEADER_MODULE_QUOTA)
         root.mustcontain(self.TABLE_HEADER_MODULE_DEMAND)
