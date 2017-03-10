@@ -89,4 +89,9 @@ $(function() {
     $('#common-module-table').DataTable( {
         aaSorting: []
     } );
+
+    $('#non-overlap-table').DataTable( {
+        aaSorting: [],
+        "deferRender": true
+    } );
 } );

@@ -1,0 +1,26 @@
+$def with (list_of_mod_no_one_take)
+
+$var title:Non-Overlapping Modules
+
+<div class="container-fluid">
+	<h1 class="text-center"><b>Non-Overlapping Modules</b></h1>
+	<p class="text-center">Shows all module pairs which no student takes together</p>
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="non-overlap-table">
+		<thead>
+			<tr>
+				<th>Module Code 1</th>
+				<th>Module Code 2</th>
+				<th>AY-Semester</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for module in list_of_mod_no_one_take:
+				<tr>
+					<td>$module[0]</td>
+					<td>$module[1]</td>
+					<td>$module[2]</td>
+				</tr>
+		</tbody>
+	</table>
+</div>
