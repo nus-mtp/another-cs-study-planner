@@ -25,8 +25,10 @@ class TestCode(object):
 
     URL_NON_OVERLAP_MODS = '/nonOverlappingModules'
 
-    TABLE_HEADER_MODULE_CODE_ONE = '<th>Module Code 1</th>'
-    TABLE_HEADER_MODULE_CODE_TWO = '<th>Module Code 2</th>'
+    TABLE_HEADER_MODULE_CODE_ONE = '<th>Module 1</th>'
+    TABLE_HEADER_MODULE_NAME_ONE = '<th>Name of Module 1</th>'
+    TABLE_HEADER_MODULE_CODE_TWO = '<th>Module 2</th>'
+    TABLE_HEADER_MODULE_NAME_TWO = '<th>Name of Module 2</th>'
 
 
     def __init__(self):
@@ -61,4 +63,6 @@ class TestCode(object):
         root = self.test_app.get(self.URL_NON_OVERLAP_MODS)
 
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE_ONE)
+        root.mustcontain(self.TABLE_HEADER_MODULE_NAME_ONE)
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE_TWO)
+        root.mustcontain(self.TABLE_HEADER_MODULE_NAME_TWO)
