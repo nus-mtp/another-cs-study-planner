@@ -10,11 +10,11 @@ $if modulePairs is not None:
 		<div class="modules-taken-prior-search-form">
 			<form action="/moduleTakenPriorToOthers" method="POST">
 				<p>Tell me the number of students who have taken</p>
-				<input type="text" name="moduleA", placeholder="Enter module code here">
+				<input type="text" name="moduleA", placeholder="Enter module code here" required>
 				<p>before they are going to take</p>
-				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here">
+				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" required>
 				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
-				<select style="display:inline-block;" name="aySem">
+				<select style="display:inline-block;" name="aySem" required>
 				$for aySem in allAySems:
 					<option value="$aySem">$aySem</option>
 				</select><br>

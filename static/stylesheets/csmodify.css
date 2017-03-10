@@ -159,7 +159,7 @@ tr > th {
     margin-top: 10px;
 }
 
-.modules-taken-prior-search-form input {
+.modules-taken-prior-search-form input, .modules-taken-prior-search-form select {
     height: 33px;
 }
 
