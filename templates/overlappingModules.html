@@ -4,12 +4,6 @@ $ page_title = "Modules Taken Together In The Same Semester"
 
 $var title:$page_title
 
-$code:
-    def get_formatted_AY_Sem(acadYearSem):
-        first_replace = acadYearSem.replace(' ', '+')
-        second_replace = first_replace.replace('/', '%2F')
-        return second_replace
-
 <div class="container container-block">
     <div class="row">
         <h1 class="text-center"> Modules Usually Taken Together</h1>
@@ -29,8 +23,8 @@ $code:
             </thead>
             <tbody>
                 $for row in lst_of_mods:
-                    $ address1 = '/individualModuleInfo?code=' + row[0] + '&targetAY=' + get_formatted_AY_Sem(row[4])
-                    $ address2 = '/individualModuleInfo?code=' + row[2] + '&targetAY=' + get_formatted_AY_Sem(row[4])
+                    $ address1 = '/viewModule?code=' + row[0]
+                    $ address2 = '/viewModule?code=' + row[2]
                     <tr>
                         <td class="text-center"><a href="$:address1" target="_blank">$row[0]</a></td>
                         <td class="text-center">$row[1]</td>
