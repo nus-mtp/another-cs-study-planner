@@ -18,11 +18,18 @@ class TestCode(object):
     URL_ALL = '/overlappingModules'
     URL_EXCEPTION_HANDLE = '/overlappingModules'
 
-    FORM_ID = 'search-modules-taken-tgt-form'
+    TABLE_COLUMN_MODULE_1 = '<th>Module 1</th>'
+    TABLE_COLUMN_MODULE_1_NAME = '<th>Name of Module 1</th>'
+    TABLE_COLUMN_MODULE_2 = '<th data-sortable="false">Module 2</th>'
+    TABLE_COLUMN_MODULE_2_NAME = '<th>Name of Module 2</th>'
+    TABLE_COLUMN_AY_SEM = '<th>For AY-Sem</th>'
+    TABLE_COLUMN_NUM_STUDENTS = '<th>Number of Students</th>'
+
 
     def __init__(self):
         self.middleware = None
         self.test_app = None
+
 
     def setUp(self):
         '''
@@ -31,6 +38,7 @@ class TestCode(object):
         SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+
 
     def test_page_access(self):
         '''
@@ -42,9 +50,15 @@ class TestCode(object):
         page = self.test_app.get(self.URL_EXCEPTION_HANDLE)
         assert_equal(page.status, 200)
 
+
     def test_page_contents(self):
         '''
-            tests if contents are as expected when there is no code
+            tests if expected contents are present in the page
         '''
         page = self.test_app.get(self.URL_ALL)
-        page.mustcontain("Modules Taken Together In The Same Semester")
+        page.mustcontain(self.TABLE_COLUMN_MODULE_1)
+        page.mustcontain(self.TABLE_COLUMN_MODULE_1_NAME)
+        page.mustcontain(self.TABLE_COLUMN_MODULE_2)
+        page.mustcontain(self.TABLE_COLUMN_MODULE_2_NAME)
+        page.mustcontain(self.TABLE_COLUMN_AY_SEM)
+        page.mustcontain(self.TABLE_COLUMN_NUM_STUDENTS)

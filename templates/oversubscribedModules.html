@@ -2,6 +2,13 @@ $def with (list_of_oversub_mod)
 
 $var title:View Oversubscribed Modules
 
+$code:
+	def get_formatted_AY_Sem(acadYearSem):
+		first_replace = acadYearSem.replace(' ', '+')
+		second_replace = first_replace.replace('/', '%2F')
+		return second_replace
+
+
 <div class="container-fluid">
 	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
 	<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
@@ -27,8 +34,9 @@ $var title:View Oversubscribed Modules
 				</tr>
 			$else:
 				$for module in list_of_oversub_mod:
-					<tr>
-						<td>$module[0]</td>
+					$ address = '/individualModuleInfo?code=' + module[0] + '&targetAY=' + get_formatted_AY_Sem(module[2])
+					<tr>						
+						<td><a href="$:address" target="_blank">$module[0]</a></td>
 						<td>$module[1]</td>
 						<td>$module[2]</td>
 						<td>$module[3]</td>
