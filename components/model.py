@@ -284,10 +284,20 @@ def delete_module(code):
     return True
 
 
+def get_module_name(code):
+    '''
+        Retrieves the module name of a module given its module code.
+    '''
+    sql_command = "SELECT name FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+
+    return DB_CURSOR.fetchone()[0]
+
+
 def get_oversub_mod():
     '''
         Retrieves a list of modules which are oversubscribed.
-        Returns module, AY/Sem, quota, number students interested
+        Returns module code, module name, AY/Sem, quota, number students interested
         i.e. has more students interested than the quota
     '''
     list_of_oversub_with_info = []
@@ -315,7 +325,9 @@ def get_oversub_mod():
                 quota = real_quota
 
             if num_student_planning > quota:
-                oversub_info = (mod_code, ay_sem, real_quota, num_student_planning)
+                module_name = get_module_name(mod_code)
+                oversub_info = (mod_code, module_name, ay_sem,
+                                real_quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
@@ -612,21 +624,25 @@ def get_mod_taken_together_with(code):
         Retrieves the list of modules taken together with the specified
         module code in the same semester.
 
-        Returns a table of lists (up to 10 top results). Each list contains
-        (specified code, module code of mod taken together, aySem, number of students)
+        Returns a table of lists. Each list contains
+        (specified module code, specified module name,
+        module taken together's code, module taken together's name,
+        aySem, number of students)
 
-        e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students
+        e.g. [(CS1010, Programming Methodology, CS1231,
+        Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
-    #NUM_TOP_RESULTS_TO_RETURN = 10
 
-    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
-                "FROM studentPlans sp1, studentPlans sp2 " + \
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name" + \
+                ", sp1.acadYearAndSem, COUNT(*) " + \
+                "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                 "WHERE sp1.moduleCode = %s AND " + \
                 "sp2.moduleCode <> sp1.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
                 "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
-                "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
+                "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, sp1.acadYearAndSem " + \
                 "ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command, (code,))
@@ -638,21 +654,24 @@ def get_all_mods_taken_together():
         Retrieves the list of all modules taken together in the same semester.
 
         Returns a table of lists. Each list contains
-        (module code 1, module code 2, aySem, number of students)
-        where module code 1 and module code 2 are the 2 mods taken together
+        (module 1 code, module 1 name, module 2 code, module 2 name, aySem, number of students)
+        where module 1 and module 2 are the 2 mods taken together
         in the same semester.
 
-        e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students
+        e.g. [(CS1010, Programming Methodology, CS1231,
+        Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
 
-    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
-                "FROM studentPlans sp1, studentPlans sp2 " + \
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name," + \
+                " sp1.acadYearAndSem, COUNT(*) " + \
+                "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                 "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
-                "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
-                "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
-                "ORDER BY COUNT(*) DESC"
+                "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
+                "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
+                "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command)
 
