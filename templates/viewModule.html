@@ -190,9 +190,9 @@ $var title:$title_string
                         	$ address1 = '/viewModule?code=' + row[0]
                     		$ address2 = '/viewModule?code=' + row[2]
                             <tr>
-                                <td class="text-center"><a href="$:address1" target="_blank">$row[0]</a></td>
+                                <td class="text-center"><a href="$:address1" target="_blank" data-toggle="tooltip" title="View general info for $row[0]">$row[0]</a></td>
                                 <td class="text-center">$row[1]</td>
-                                <td class="text-center"><a href="$:address2" target="_blank">$row[2]</a></td>
+                                <td class="text-center"><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
                                 <td class="text-center">$row[3]</td>
                                 <td class="text-center">$row[4]</td>
                                 <td class="text-center">$row[5]</td>

@@ -29,7 +29,7 @@ $var title:View Oversubscribed Modules
 				$for module in list_of_oversub_mod:
 					$ address = '/viewModule?code=' + module[0]
 					<tr>						
-						<td><a href="$:address" target="_blank">$module[0]</a></td>
+						<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
 						<td>$module[1]</td>
 						<td>$module[2]</td>
 						<td>$module[3]</td>
