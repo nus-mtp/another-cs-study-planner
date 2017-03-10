@@ -132,8 +132,8 @@ class TestCode(object):
             module_A_taken_in = module_pair[2]
             module_B_taken_in = module_pair[3]
             if module_A == test_module_A and module_B == test_module_B and (
-            module_A_taken_in == test_module_A_taken_in) and (
-            module_B_taken_in == test_module_B_taken_in):
+                    module_A_taken_in == test_module_A_taken_in) and (
+                        module_B_taken_in == test_module_B_taken_in):
                 is_in_table = True
                 student_count = module_pair[4]
                 break
@@ -156,8 +156,8 @@ class TestCode(object):
             module_A_taken_in = module_pair[2]
             module_B_taken_in = module_pair[3]
             if module_A == test_module_A and module_B == test_module_B and (
-            module_A_taken_in == test_module_A_taken_in) and (
-            module_B_taken_in == test_module_B_taken_in):
+                    module_A_taken_in == test_module_A_taken_in) and (
+                        module_B_taken_in == test_module_B_taken_in):
                 is_in_table = True
                 student_count = module_pair[4]
                 break
@@ -177,12 +177,9 @@ class TestCode(object):
 
         module_pairs = model.get_modA_taken_prior_to_modB()
         is_in_table = False
-        student_count = -1
         for module_pair in module_pairs:
             module_A = module_pair[0]
             module_B = module_pair[1]
-            module_A_taken_in = module_pair[2]
-            module_B_taken_in = module_pair[3]
             if module_A == test_module_A and module_B == test_module_B:
                 is_in_table = True
                 break
@@ -195,12 +192,9 @@ class TestCode(object):
 
         module_pairs = model.get_modA_taken_prior_to_modB()
         is_in_table = False
-        student_count = -1
         for module_pair in module_pairs:
             module_A = module_pair[0]
             module_B = module_pair[1]
-            module_A_taken_in = module_pair[2]
-            module_B_taken_in = module_pair[3]
             if module_A == test_module_A and module_B == test_module_B:
                 is_in_table = True
                 break
@@ -211,7 +205,7 @@ class TestCode(object):
     def test_plan_to_take_prior_to(self):
         '''
             Test that when a module is PLANNED to be taken prior to another module,
-            but has yet to be taken, it will NOT be counted in the table 
+            but has yet to be taken, it will NOT be counted in the table
         '''
         # No student took PT1001 prior to PT1004
         # One student planned to do so, but has yet to take PT1001
@@ -220,12 +214,9 @@ class TestCode(object):
 
         module_pairs = model.get_modA_taken_prior_to_modB()
         is_in_table = False
-        student_count = -1
         for module_pair in module_pairs:
             module_A = module_pair[0]
             module_B = module_pair[1]
-            module_A_taken_in = module_pair[2]
-            module_B_taken_in = module_pair[3]
             if module_A == test_module_A and module_B == test_module_B:
                 is_in_table = True
                 break
@@ -261,4 +252,3 @@ class TestCode(object):
         # Total of 5 students are taking PT1002
         module_B_student_count = result[2]
         assert_equal(module_B_student_count, 5)
-
