@@ -675,13 +675,15 @@ def get_modA_taken_prior_to_modB():
         AY-Sem that module B is taken in, and the number of students who took module A and B in the
         specified AY-Sems.
     '''
-    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, sp2.acadYearAndSem, COUNT(*) " + \
+    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, " +\
+                  "sp1.acadYearAndSem, sp2.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2 " + \
                   "WHERE sp2.moduleCode <> sp1.moduleCode " + \
                   "AND sp1.studentId = sp2.studentId " + \
                   "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
                   "AND sp1.isTaken = True " + \
-                  "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, sp2.acadYearAndSem " + \
+                  "GROUP BY sp1.moduleCode, sp2.moduleCode, " +\
+                  "sp1.acadYearAndSem, sp2.acadYearAndSem " + \
                   "ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command)
@@ -697,7 +699,7 @@ def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, modul
         Meaning, the student has already taken module A, in an AY-Sem that is prior to
         the target AY-Sem that the student is going to take module B in.
 
-        Return the AY-Sem that module A is taken in, 
+        Return the AY-Sem that module A is taken in,
         and the number of students who took module A and B in the specified AY-Sems.
     '''
     sql_command = "SELECT sp1.acadYearAndSem, COUNT(*) " + \
