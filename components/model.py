@@ -368,7 +368,7 @@ def delete_admin(username):
     DB_CURSOR.execute(sql_command, (username,))
     sql_command = "DELETE FROM sessions WHERE staffid=%s"
     DB_CURSOR.execute(sql_command, (username, ))
-    
+
     sql_command = "DELETE FROM admin WHERE staffID=%s"
     DB_CURSOR.execute(sql_command, (username,))
     CONNECTION.commit()
