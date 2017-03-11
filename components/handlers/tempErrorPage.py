@@ -3,9 +3,6 @@
 '''
 
 from app import RENDER
-import web
-from components import model
-
 
 ## Temporary error class
 class Error(object):
