@@ -1,0 +1,100 @@
+$def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
+
+$var title:View Modules Taken Prior to Others
+
+$if modulePairs is not None:
+	<div class="container-fluid">
+		<h1 class="text-center"><b>Modules that are taken prior to other modules</b></h1>
+		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
+		<br>
+		<div class="modules-taken-prior-search-form">
+			<form action="/moduleTakenPriorToOthers" method="POST">
+				<p>Tell me the number of students who have taken</p>
+				<input type="text" name="moduleA", placeholder="Enter module code here" required>
+				<p>before they are going to take</p>
+				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" required>
+				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
+				<select style="display:inline-block;" name="aySem" required>
+				$for aySem in allAySems:
+					<option value="$aySem">$aySem</option>
+				</select><br>
+				<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Go">
+			</form>
+		</div>
+		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
+			<thead>
+				<tr>
+					<th>Module A</th>
+					<th>Module B</th>
+					<th>Module A Taken In</th>
+					<th>Module B Taken In</th>
+					<th>Number of Students who took Module A prior to Module B</th>
+				</tr>
+			</thead>
+			<tbody>
+				$if len(modulePairs) == 0 or modulePairs == None:
+					<tr><td colspan=5>No data found</td></tr>
+				$else:
+					$for modulePair in modulePairs:
+						<tr>
+							<td>$modulePair[0]</td>
+							<td>$modulePair[1]</td>
+							<td>$modulePair[2]</td>
+							<td>$modulePair[3]</td>
+							<td>$modulePair[4]</td>
+						</tr>
+			</tbody>
+		</table>
+	</div>
+
+$else:
+	<div class="container-fluid">
+		<h3 style="margin-bottom: 20px;">Students who took <b>$moduleA</b> 
+		prior to taking <b>$moduleB</b> in <u>$targetAySem</u></h3>
+		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
+			<thead>
+				<tr>
+					<th>$moduleA Taken In</th>
+					<th>Number of Students who took $moduleA prior to $moduleB</th>
+				</tr>
+			</thead>
+			<tbody>
+				$if len(studentCounts) == 0 or studentCounts == None:
+					<tr><td colspan=2>No data found</td></tr>
+				$else:
+					$for studentCount in studentCounts:
+						<tr>
+							<td>$studentCount[0]</td>
+							<td>$studentCount[1]</td>
+						</tr>
+			</tbody>
+		</table>
+		<br>
+
+		<table class="modules-taken-prior-stats">
+			<tbody>
+				<tr>
+					<td style="text-align: right;">Total number of students taking $moduleB:</td>
+					<td style="padding-left: 30px;"><b>$studentsInModuleB</b></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">Total number of students who took $moduleA 
+					before $moduleB:</td>
+					<td style="padding-left: 30px;"><b>$studentPriorCount</b></td>
+				</tr>
+				$if studentsInModuleB == 0:
+					$ percentage = 0
+				$else:
+					$ percentage = studentPriorCount*1.0/studentsInModuleB*100
+				<tr>
+					<td style="text-align: right;">Percentage of students who took $moduleA 
+					before $moduleB:</td>
+					<td style="padding-left: 30px;"><b>$percentage%</b></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<form style="margin-top: 25px;" action="/moduleTakenPriorToOthers" method="post">
+	        <input class="btn btn-lg btn-primary" type="submit" value="Go Back" />
+	    </form>
+	</div>
