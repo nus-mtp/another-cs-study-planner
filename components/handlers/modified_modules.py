@@ -212,7 +212,7 @@ class Modified(object):
             Renders the modified modules page if users requested
             for the page through the GET method.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         # User can select the type of modified information they want to see
