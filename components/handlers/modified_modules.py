@@ -115,7 +115,7 @@ class Modified(object):
         # Include modules with specified quota that have mounting changes
         modules_wth_modified_mountings = self.get_modules_with_modified_mounting()
         for module in modules_wth_modified_mountings:
-            mounting_change = module[3]
+            mounting_change = module[4]
             if mounting_change == 1:   # Unmounted --> Mounted
                 code = module[0]
                 name = module[1]
@@ -189,20 +189,23 @@ class Modified(object):
         modified_mounting_modules = self.get_modules_with_modified_mounting()
         modified_quota_modules = self.get_modules_with_modified_quota()
         modified_details_modules = self.get_modules_with_modified_details()
-        modified_mounting_module_codes = [module[0] for module in modified_mounting_modules]
-        modified_quota_module_codes = [module[0] for module in modified_quota_modules]
-        modified_details_module_codes = [module[0] for module in modified_details_modules]
+        modified_mounting_module_codes_names = [module[0:2] for module in modified_mounting_modules]
+        modified_quota_module_codes_names = [module[0:2] for module in modified_quota_modules]
+        modified_details_module_codes_names = [module[0:2] for module in modified_details_modules]
 
-        modified_module_codes = modified_mounting_module_codes + modified_quota_module_codes +\
-                                modified_details_module_codes
+        modified_module_codes_names = modified_mounting_module_codes_names +\
+                                      modified_quota_module_codes_names +\
+                                      modified_details_module_codes_names
         modified_modules = []
-        for module_code in modified_module_codes:
+        for modified_module in modified_module_codes_names:
+            module_code = modified_module[0]
             if module_code in [module[0] for module in modified_modules]:
                 continue
-            is_mounting_modified = module_code in modified_mounting_module_codes
-            is_quota_modified = module_code in modified_quota_module_codes
-            is_details_modified = module_code in modified_details_module_codes
-            modified_modules.append((module_code, is_mounting_modified,
+            module_name = modified_module[1]
+            is_mounting_modified = any(module[0] == module_code for module in modified_mounting_module_codes_names)
+            is_quota_modified = any(module[0] == module_code for module in modified_quota_module_codes_names)
+            is_details_modified = any(module[0] == module_code for module in modified_details_module_codes_names)
+            modified_modules.append((module_code, module_name, is_mounting_modified,
                                      is_quota_modified, is_details_modified))
 
         return modified_modules

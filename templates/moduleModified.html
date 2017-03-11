@@ -221,6 +221,7 @@ $var title:View modified modules
                             <thead>
                                 <tr>
                                     <th>Code</th>
+                                    <th>Name</th>
                                     <th>Is Mounting Modified?</th>
                                     <th>Is Quota Modified?</th>
                                     <th>Is Module Details Modified?</th>
@@ -230,11 +231,13 @@ $var title:View modified modules
                             <tbody>
                                 $for module in modifiedModulesSummary:
                                     $ moduleCode = module[0]
-                                    $ isMountingModified = module[1]
-                                    $ isQuotaModified = module[2]
-                                    $ isDetailsModified = module[3]
+                                    $ moduleName = module[1]
+                                    $ isMountingModified = module[2]
+                                    $ isQuotaModified = module[3]
+                                    $ isDetailsModified = module[4]
                                     <tr>
                                         <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
+                                        <td>$moduleName</td>
                                         <td>
                                         $if isMountingModified is True:
                                             <u><a href="/modifiedModules?modifyType=mounting&amp;code=$moduleCode" target="_blank">Yes</a></u>
