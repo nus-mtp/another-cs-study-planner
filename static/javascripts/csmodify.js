@@ -20,8 +20,16 @@ function closeSidebar() {
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+  $('#sidebar-button').click(function(e) {
+    e.stopPropagation();
+    openSidebar();
+  });
+  $('body').click(function(e) {
+    if (e.target.id != 'sidebar') {
+        closeSidebar();
+    }
+  });
 })
-
 
 /*
  * FUNCTIONS FOR SCROLLING TO TOP OF PAGE
@@ -80,7 +88,19 @@ $(function() {
         "searching": false
     } );
 
-    $('#modified-modules-table').DataTable( {
+    $('#modified-modules-summary-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#modified-modules-mounting-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#modified-modules-quota-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#modified-modules-details-table').DataTable( {
         "aaSorting": [ 0, "asc" ]
     } );
 

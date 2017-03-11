@@ -31,13 +31,13 @@ URLS = (
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
-    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
-    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
-    '/addModule', 'components.handlers.add_module_handler.AddModule',
-    '/errorPage', 'components.handlers.error_page.ErrorPage',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
-    '/outcome', 'components.handlers.outcome.Outcome'
+    '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
+    '/outcome', 'components.handlers.outcome.Outcome',
+    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
+    '/addModule', 'components.handlers.add_module_handler.AddModule',
+    '/errorPage', 'components.handlers.error_page.ErrorPage'
 )
 
 
