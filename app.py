@@ -29,7 +29,7 @@ URLS = (
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
-    '/verifyLogin', 'components.handlers.login.verifyLogin',
+    '/register', 'components.handlers.register.Register',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
