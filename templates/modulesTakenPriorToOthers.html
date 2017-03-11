@@ -24,11 +24,17 @@ $if modulePairs is not None:
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>
-					<th>Module A</th>
-					<th>Module B</th>
-					<th>Module A Taken In</th>
-					<th>Module B Taken In</th>
-					<th>Number of Students who took Module A prior to Module B</th>
+					<th colspan=3>Module A</th>
+					<th colspan=3>Module B</th>
+					<th rowspan=2 style="border:1px #ddd solid; vertical-align:middle">Number of Students who took Module A prior to Module B</th>
+				</tr>
+				<tr>
+					<th>Code</th>
+					<th>Name</th>
+					<th>AY-Semester</th>
+					<th>Code</th>
+					<th>Name</th>
+					<th>AY-Semester</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,6 +48,8 @@ $if modulePairs is not None:
 							<td>$modulePair[2]</td>
 							<td>$modulePair[3]</td>
 							<td>$modulePair[4]</td>
+							<td>$modulePair[5]</td>
+							<td>$modulePair[6]</td>
 						</tr>
 			</tbody>
 		</table>

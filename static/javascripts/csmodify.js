@@ -87,7 +87,7 @@ $(function() {
     } );
 
     $('#modules-taken-prior-table').DataTable( {
-        "order": [[ 4, "desc" ]]
+        "order": [[ 6, "desc" ], [ 0, "asc" ], [ 3, "asc" ]]
     } );
      
     $('#common-module-table').DataTable( {
