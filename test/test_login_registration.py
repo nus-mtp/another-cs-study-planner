@@ -67,13 +67,17 @@ class TestCode(object):
     BUTTON_ALREADY_LOGGED_IN = '<a href="/"><button class="btn btn-primary">' +\
                                'Enter</button></a>'
 
-    SCRIPT_ACCOUNT_CREATE_SUCCESSFUL = 'window.alert("Your account has been ' +\
-                                       'created successfully.");'
-    SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL = 'window.alert("The username has been ' +\
-                                         'taken. Please register with a different ' +\
-                                         'username.");'
-    SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL = 'window.alert("Login credentials are ' +\
-                                        'incorrect. Please try again.");'
+    SCRIPT_ACCOUNT_CREATE_SUCCESSFUL = "alert('Your account has been " +\
+                                       "created successfully.');"
+    SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL = "alert('The username has been " +\
+                                         "taken. Please register with a different " +\
+                                         "username.');"
+    SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL = "alert('Login credentials are " +\
+                                        "incorrect. Please try again.');"
+
+    SCRIPT_REDIRECT_TO_LOGIN = "window.location = '/login'"
+
+    VALIDATING_TITLE = "Validating..."
 
     def __init__(self):
         self.middleware = None
@@ -160,7 +164,7 @@ class TestCode(object):
         # Checks if page contains home page's title
         redirected.mustcontain("Welcome to CSModify")
 
-        #FAIL
+
     def test_blank_username_login_submission_response(self):
         '''
             Tests if user should fail to login if username
@@ -171,18 +175,16 @@ class TestCode(object):
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
-        #FAIL
+
     def test_blank_password_login_submission_response(self):
         '''
             Tests if user should fail to login if password
@@ -193,16 +195,14 @@ class TestCode(object):
         login_form.__setitem__("username", "user")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
-
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
+        
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
-        redirected.mustcontain("User Login")
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
 
     def test_invalid_account_login_submission_response(self):
@@ -215,18 +215,16 @@ class TestCode(object):
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
-        #FAIL
+
     def test_already_logged_in_response(self):
         '''
             Tests if user should not see the login form if he has
@@ -264,16 +262,14 @@ class TestCode(object):
         registration_form.__setitem__("password", "12345678")
         response = registration_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_CREATE_SUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
+        response.mustcontain(self.SCRIPT_ACCOUNT_CREATE_SUCCESSFUL)
 
 
     def test_blank_username_registration_submission_response(self):
@@ -325,14 +321,11 @@ class TestCode(object):
         registration_form.__setitem__("password", "12345678")
         response = registration_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        # Redirection occurs if no fields are blank.
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title and the validation message.
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
+        response.mustcontain(self.SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL)
