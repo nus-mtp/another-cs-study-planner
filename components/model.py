@@ -677,7 +677,7 @@ def validate_session(username, session_id):
     '''
         Check if a provided session-id is valid.
     '''
-    sql_command = "SELECT sessionSalt FROM session WHERE staffID=%s"
+    sql_command = "SELECT sessionSalt FROM sessions WHERE staffID=%s"
     DB_CURSOR.execute(sql_command, (username,))
     session = DB_CURSOR.fetchall()
     if not session:
