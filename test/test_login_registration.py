@@ -197,7 +197,7 @@ class TestCode(object):
         # checks if Validating page loaded
         response.mustcontain(self.VALIDATING_TITLE)
         assert_equal(response.status, 200)
-        
+
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page will redirect to /login
         response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)

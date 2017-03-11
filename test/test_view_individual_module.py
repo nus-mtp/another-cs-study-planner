@@ -115,57 +115,57 @@ class TestCode(object):
         redirected.mustcontain("NOT FOUND")
 
 
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the target AY-semester is invalid.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the target AY-semester is invalid.
 
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid AY-semester is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_individual_module_invalid_ay_sem_response(self):
-        # AY-Semester used here is '16/18 Sem 1'
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    '''
-
-
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the quota associated with the target module is invalid.
-
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid module quota is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_invalid_module_overview_invalid_quota_response(self):
-        # Quota used here is '70' (actual is '60')
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    '''
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid AY-semester is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_individual_module_invalid_ay_sem_response(self):
+    #     # AY-Semester used here is '16/18 Sem 1'
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+    # '''
 
 
-    '''
-    def test_view_individual_module_search_form(self):
-        """
-            Tests if the module-search form exists.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the quota associated with the target module is invalid.
 
-            NOTE: the current form is NON_FUNCTIONAL at the moment.
-            NOTE: This is also hidden from shipping product so this
-                  test case is commented out for now.
-        """
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid module quota is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_invalid_module_overview_invalid_quota_response(self):
+    #     # Quota used here is '70' (actual is '60')
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+    # '''
 
-        root.mustcontain(self.FORM_SEARCH_MODULE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
-    '''
+
+    # '''
+    # def test_view_individual_module_search_form(self):
+    #     """
+    #         Tests if the module-search form exists.
+
+    #         NOTE: the current form is NON_FUNCTIONAL at the moment.
+    #         NOTE: This is also hidden from shipping product so this
+    #               test case is commented out for now.
+    #     """
+    #     root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+
+    #     root.mustcontain(self.FORM_SEARCH_MODULE)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
+    # '''
 
 
     def test_view_individual_module_contents(self):
@@ -207,13 +207,13 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
 
 
-    '''
-        [NOTE]: Edit Module backend is not up yet.
-    def test_view_individual_module_goto_edit_module(self):
-        """
-            Tests if user can go to the page for editing the module.
-        """
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
-        response = root.goto("Edit Module URL", method='get')
-        assert_equal(response.code, 200)
-    '''
+    # '''
+    #     [NOTE]: Edit Module backend is not up yet.
+    # def test_view_individual_module_goto_edit_module(self):
+    #     """
+    #         Tests if user can go to the page for editing the module.
+    #     """
+    #     root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+    #     response = root.goto("Edit Module URL", method='get')
+    #     assert_equal(response.code, 200)
+    # '''
