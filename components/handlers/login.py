@@ -7,7 +7,7 @@ import uuid
 from app import RENDER
 import web
 from components import model, session
-
+from components.handlers.outcome import Outcome
 
 def create_login_form():
     '''
@@ -32,7 +32,6 @@ def create_login_form():
     return login_form
 
 
-# TODO: SWITCH ALL TO OUTCOME PAGE
 class Login(object):
     '''
         Class handles registration (put user in database)
@@ -50,10 +49,10 @@ class Login(object):
         '''
         login_form = self.login_form()
         registration_form = self.registration_form()
-        if web.ctx.session._initializer['userId'] == None:
-            return RENDER.login(login_form, registration_form, 0)
+        if session.validate_session():
+            return RENDER.login(login_form, registration_form, web.ACCOUNT_LOGIN_SUCCESSFUL)
         else:
-            return RENDER.login(login_form, registration_form, web.ctx.session._initializer['loginStatus'])
+            return RENDER.login(login_form, registration_form)
 
 
     def POST(self):
@@ -73,15 +72,14 @@ class Login(object):
             return RENDER.login(login_form, registration_form)
         else:
             if model.is_userid_taken(registration_form.d.username):
-                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
+                outcome = False
             else:
                 salt = uuid.uuid4().hex
                 hashed_password = hashlib.sha512(registration_form.d.password
                                                  + salt).hexdigest()
                 model.add_admin(registration_form.d.username, salt, hashed_password)
-                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_CREATED_SUCCESSFUL
-
-            raise web.seeother('/login')
+                outcome = True
+            return Outcome().POST("create_user", outcome, None)
 
 
     def create_registration_form(self):
@@ -123,16 +121,15 @@ class verifyLogin(object):
         form = create_login_form()
         # returns to login page
         if not form.validates():
-            web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
-            raise web.seeother('/login')
+            return Outcome().POST("login_user", False, None)
         else:
             # If valid admin, go to index
             is_valid = model.validate_admin(form.d.username, form.d.password)
             if is_valid:
+                session.clean_up_sessions()
                 session.init_session(form.d.username)
                 raise web.seeother('/')
             # Else go to error page
             else:
-                web.ctx.session._initializer['loginStatus'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
-                raise web.seeother('/login')
+                return Outcome().POST("login_user", False, None)
             
