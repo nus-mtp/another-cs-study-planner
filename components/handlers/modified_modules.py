@@ -6,7 +6,7 @@
 
 from app import RENDER
 import web
-from components import model
+from components import model, session
 from components.handlers.fixed_module_mountings import Fixed
 from components.handlers.tentative_module_mountings import Tentative
 
