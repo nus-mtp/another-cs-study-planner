@@ -58,11 +58,5 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
-
-def session_hook():
-    web.ctx.session = None
-
-
-if __name__ == '__main__':
-    APP.add_processor(web.loadhook(session_hook))
+if __name__ == '__main__':    
     APP.run()

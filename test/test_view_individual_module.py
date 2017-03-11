@@ -3,7 +3,7 @@
 '''
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
-import app
+from app import APP
 from components import session
 
 class TestCode(object):
@@ -77,8 +77,7 @@ class TestCode(object):
             Sets up the 'app.py' fixture
         '''
         self.middleware = []
-        app.APP.add_processor(app.web.loadhook(app.session_hook))
-        self.test_app = TestApp(app.APP.wsgifunc(*self.middleware))
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
         session.set_up(self.test_app)
 
 
