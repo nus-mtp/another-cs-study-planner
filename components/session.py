@@ -4,6 +4,7 @@
 '''
 import hashlib
 import uuid
+import datetime
 import web
 import components.model
 
@@ -11,6 +12,20 @@ DUMMY_USER_ID = 'testUser'
 DUMMY_PASSWORD = '12345678'
 URL_DEFAULT_LOGIN = '/login'
 URL_DEFAULT_LOGOUT = '/logout'
+
+COOKIE_TIME = 60*60
+
+def init_session(user_id):
+    '''
+        Create a session id and enter it into the database,
+        then set the cookie.
+    '''
+    session_salt = uuid.uuid4().hex
+    components.model.add_session(user_id, session_salt)
+    session_id = hashlib.sha512(user_id + session_salt).hexdigest()
+    web.cookies.set('user', user_id, COOKIE_TIME)
+    web.cookies.set('session_id', session_id, COOKIE_TIME)
+
 
 def validate_session():
     '''
@@ -31,6 +46,15 @@ def validate_session():
         return True
     except:
         return False
+
+
+def clean_up_sessions():
+    '''
+        Remove all sessions that have expired
+        from database.
+    '''
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    components.model.clean_old_sessions(yesterday)
 
 
 def set_up(test_app):
