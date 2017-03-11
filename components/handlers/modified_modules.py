@@ -229,7 +229,12 @@ class Modified(object):
         except AttributeError:
             module_code = None
 
+        modified_modules_summary = self.get_all_modified_modules()
+        modified_modules_mounting = self.get_modules_with_modified_mounting()
+        modified_modules_quota = self.get_modules_with_modified_quota()
+        modified_modules_details = self.get_modules_with_modified_details()
         modified_modules = None
+
         if modify_type == "mounting":
             modified_modules = self.get_modules_with_modified_mounting()
         elif modify_type == "quota":
@@ -239,17 +244,21 @@ class Modified(object):
         elif modify_type == "all":
             modified_modules = self.get_all_modified_modules()
 
+        module = None
+
         # If module code is specified, only return data for the specified module
         if module_code is not None and (modify_type == "mounting"
                                         or modify_type == "quota"
                                         or modify_type == "moduleDetails"):
             module = [module for module in modified_modules if module[0] == module_code]
-            if len(module) == 0:
-                modified_modules = None
-            else:
-                modified_modules = module
 
-        return RENDER.moduleModified(modify_type, modified_modules, module_code)
+        if module is None:
+            return RENDER.moduleModified(modify_type, modified_modules_summary,
+                modified_modules_mounting, modified_modules_quota,
+                modified_modules_details, None, None)
+        else:
+            return RENDER.moduleModified(modify_type, None, None, None, None,
+                module_code, module[0])
 
 
     def POST(self):
