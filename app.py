@@ -58,5 +58,5 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     APP.run()
