@@ -120,22 +120,22 @@ class TestCode(object):
         # Two students took PT1001 prior to PT1002
         test_module_A = "PT1001"
         test_module_B = "PT1002"
-        test_module_A_taken_in = self.current_ay+' Sem 1'
-        test_module_B_taken_in = self.current_ay+' Sem 2'
+        test_module_A_ay_sem = self.current_ay+' Sem 1'
+        test_module_B_ay_sem = self.current_ay+' Sem 2'
 
         module_pairs = model.get_modA_taken_prior_to_modB()
         is_in_table = False
         student_count = -1
         for module_pair in module_pairs:
             module_A = module_pair[0]
-            module_B = module_pair[1]
-            module_A_taken_in = module_pair[2]
-            module_B_taken_in = module_pair[3]
+            module_B = module_pair[3]
+            module_A_ay_sem = module_pair[2]
+            module_B_ay_sem = module_pair[5]
             if module_A == test_module_A and module_B == test_module_B and (
-                    module_A_taken_in == test_module_A_taken_in) and (
-                        module_B_taken_in == test_module_B_taken_in):
+                    module_A_ay_sem == test_module_A_ay_sem) and (
+                        module_B_ay_sem == test_module_B_ay_sem):
                 is_in_table = True
-                student_count = module_pair[4]
+                student_count = module_pair[6]
                 break
 
         assert_true(is_in_table)
@@ -144,22 +144,22 @@ class TestCode(object):
         # One student took PT1001 prior to PT1003
         test_module_A = "PT1001"
         test_module_B = "PT1003"
-        test_module_A_taken_in = self.current_ay+' Sem 1'
-        test_module_B_taken_in = self.next_ay+' Sem 1'
+        test_module_A_ay_sem = self.current_ay+' Sem 1'
+        test_module_B_ay_sem = self.next_ay+' Sem 1'
 
         module_pairs = model.get_modA_taken_prior_to_modB()
         is_in_table = False
         student_count = -1
         for module_pair in module_pairs:
             module_A = module_pair[0]
-            module_B = module_pair[1]
-            module_A_taken_in = module_pair[2]
-            module_B_taken_in = module_pair[3]
+            module_B = module_pair[3]
+            module_A_ay_sem = module_pair[2]
+            module_B_ay_sem = module_pair[5]
             if module_A == test_module_A and module_B == test_module_B and (
-                    module_A_taken_in == test_module_A_taken_in) and (
-                        module_B_taken_in == test_module_B_taken_in):
+                    module_A_ay_sem == test_module_A_ay_sem) and (
+                        module_B_ay_sem == test_module_B_ay_sem):
                 is_in_table = True
-                student_count = module_pair[4]
+                student_count = module_pair[6]
                 break
 
         assert_true(is_in_table)
