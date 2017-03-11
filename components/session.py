@@ -35,8 +35,6 @@ def validate_session():
     try:
         user = web.cookies().get('user')
         session_id = web.cookies().get('session_id')
-        print("user", user)
-        print("session_id", session_id)
         return components.model.validate_session(user, session_id)
     except:
         return False
