@@ -104,6 +104,10 @@ $(function() {
         "aaSorting": [ 0, "asc" ]
     } );
 
+    $('#specific-modified-module').DataTable( {
+
+    } );
+
     $('#student-focus-area-table').DataTable( {
         "aaSorting": [],
         "pageLength": 25,
