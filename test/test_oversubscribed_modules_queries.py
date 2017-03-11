@@ -36,14 +36,17 @@ class TestCode(object):
         model.DB_CURSOR.execute(sql_command)
 
         list_of_oversub_mod = model.get_oversub_mod()
-        required_list = [('CS3230', 'AY 16/17 Sem 2', '?', 3),
-                         ('CS4244', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS3242', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS3243', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS3247', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS4221', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS3223', 'AY 16/17 Sem 2', '?', 1),
-                         ('CS6101', 'AY 17/18 Sem 1', 0, 1)]
+        required_list = [('CS3230', 'Design and Analysis of Algorithms', 'AY 16/17 Sem 2', '?', 3),
+                         ('CS4244', 'Knowledge-Based Systems', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3242', '3D Modelling and Animation', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS3243', 'Introduction to Artificial Intelligence',
+                          'AY 16/17 Sem 2', '?', 1),
+                         ('CS3247', 'Game Development', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS4221', 'Database Applications Design and Tuning',
+                          'AY 16/17 Sem 2', '?', 1),
+                         ('CS3223', 'Database Systems Implementation', 'AY 16/17 Sem 2', '?', 1),
+                         ('CS6101', 'Exploration of Computer Science Research',
+                          'AY 17/18 Sem 1', 0, 1)]
 
         assert_equal(len(list_of_oversub_mod), len(required_list))
         assert_equal(sorted(list_of_oversub_mod), sorted(required_list))

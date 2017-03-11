@@ -2,7 +2,6 @@ $def with (lst_of_mods)
 
 $ page_title = "Modules Taken Together In The Same Semester"
 
-
 $var title:$page_title
 
 <div class="container container-block">
@@ -15,18 +14,24 @@ $var title:$page_title
             <thead>
                 <tr>
                     <th>Module 1</th>
-                    <th data-sortable="false">Module 2</th>
+                    <th>Name of Module 1</th>
+                    <th>Module 2</th>
+                    <th>Name of Module 2</th>
                     <th>For AY-Sem</th>
-                    <th>Count</th>
+                    <th>Number of Students</th>
                 </tr>
             </thead>
             <tbody>
                 $for row in lst_of_mods:
+                    $ address1 = '/viewModule?code=' + row[0]
+                    $ address2 = '/viewModule?code=' + row[2]
                     <tr>
-                        <td class="text-center">$row[0]</td>
+                        <td class="text-center"><a href="$:address1" target="_blank">$row[0]</a></td>
                         <td class="text-center">$row[1]</td>
-                        <td class="text-center">$row[2]</td>
+                        <td class="text-center"><a href="$:address2" target="_blank">$row[2]</a></td>
                         <td class="text-center">$row[3]</td>
+                        <td class="text-center">$row[4]</td>
+                        <td class="text-center">$row[5]</td>
                     </tr>
             </tbody>
         </table>

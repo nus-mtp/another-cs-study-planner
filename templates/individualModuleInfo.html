@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, systemMessage, overlappingList)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -15,13 +15,10 @@ $var title:$title_string
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
 				<div class="col-md-12">
-					
 					<br>
 					<hr>
 				</div>
 				<div class="col-md-12 text-center">
-					$if systemMessage is not None:
-						<p style="color:red; text-align:center">$systemMessage</p>
 					<h3>Module Info for <b><u>$aySem</u></b></h3>
 				</div>
 				<div class="col-md-12 module-header">
@@ -61,7 +58,18 @@ $var title:$title_string
 					</div>
 				</div>
 				<div class="col-md-12">
-					<h4><b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>$mountingStatus</h4>
+					<h4>
+						<b>Mounting Status:&nbsp;&nbsp;&nbsp;</b>
+						$if mountingStatus == 1:
+							<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+							&nbsp;&nbsp; (Mounted)
+						$elif mountingStatus == 0:
+							<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+							&nbsp;&nbsp; (Unmounted)
+						$if mountingStatus == -1:
+							<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+							&nbsp;&nbsp; (Not Mounted)
+					</h4>
 					<br>
 					<h4><b>Class Quota:&nbsp;&nbsp;&nbsp;</b>
 						$if quota is None:
@@ -93,23 +101,29 @@ $var title:$title_string
 			</div>
             <br>
             <br>
-			<h4><b>Student Demand:</b></h4>
+			<h4><b>Modules taken with $moduleCode:</b></h4>
 			<table id="common-module-table" class="table table-bordered table-hover display dataTable">
                 <thead>
                     <tr>
                         <th>Module 1</th>
-                        <th data-sortable="false">Module 2</th>
+                        <th>Name of Module 1</th>
+                        <th>Module 2</th>
+                        <th>Name of Module 2</th>
                         <th>For AY-Sem</th>
-                        <th>Count</th>
+                        <th>Number of Students</th>
                     </tr>
                 </thead>
                 <tbody>
                     $for row in overlappingList:
+                    	$ address1 = '/viewModule?code=' + row[0]
+                    	$ address2 = '/viewModule?code=' + row[2]
                         <tr>
-                            <td class="text-center">$row[0]</td>
+                            <td class="text-center"><a href="$:address1" target="_blank">$row[0]</a></td>
                             <td class="text-center">$row[1]</td>
-                            <td class="text-center">$row[2]</td>
+                            <td class="text-center"><a href="$:address2" target="_blank">$row[2]</a></td>
                             <td class="text-center">$row[3]</td>
+                            <td class="text-center">$row[4]</td>
+                            <td class="text-center">$row[5]</td>
                         </tr>
                 </tbody>
             </table>

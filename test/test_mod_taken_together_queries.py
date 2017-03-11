@@ -30,9 +30,12 @@ class TestCode(object):
         list_of_mod_taken_together = \
             model.get_mod_taken_together_with('CS1010')
 
-        required_list = [('CS1010', 'CS1231', 'AY 16/17 Sem 1', 3),
-                         ('CS1010', 'CS2105', 'AY 16/17 Sem 1', 2),
-                         ('CS1010', 'CS2106', 'AY 16/17 Sem 1', 1)]
+        required_list = [('CS1010', 'Programming Methodology', 'CS1231',
+                          'Discrete Structures', 'AY 16/17 Sem 1', 3),
+                         ('CS1010', 'Programming Methodology', 'CS2105',
+                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
+                         ('CS1010', 'Programming Methodology', 'CS2106',
+                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1)]
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(list_of_mod_taken_together, required_list)
@@ -41,8 +44,10 @@ class TestCode(object):
         list_of_mod_taken_together = \
             model.get_mod_taken_together_with('CS2105')
 
-        required_list = [('CS2105', 'CS1231', 'AY 16/17 Sem 1', 2),
-                         ('CS2105', 'CS1010', 'AY 16/17 Sem 1', 2)]
+        required_list = [('CS2105', 'Introduction to Computer Networks', 'CS1231',
+                          'Discrete Structures', 'AY 16/17 Sem 1', 2),
+                         ('CS2105', 'Introduction to Computer Networks', 'CS1010',
+                          'Programming Methodology', 'AY 16/17 Sem 1', 2)]
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
@@ -58,12 +63,18 @@ class TestCode(object):
         list_of_mod_taken_together = \
             model.get_all_mods_taken_together()
 
-        required_list = [('CS1010', 'CS1231', 'AY 16/17 Sem 1', 3),
-                         ('CS1010', 'CS2105', 'AY 16/17 Sem 1', 2),
-                         ('CS1010', 'CS2106', 'AY 16/17 Sem 1', 1),
-                         ('BT5110', 'CS4246', 'AY 16/17 Sem 1', 1),
-                         ('CS1231', 'CS2105', 'AY 16/17 Sem 1', 2),
-                         ('CS1231', 'CS2106', 'AY 16/17 Sem 1', 1)]
+        required_list = [('CS1010', 'Programming Methodology', 'CS1231',
+                          'Discrete Structures', 'AY 16/17 Sem 1', 3),
+                         ('CS1010', 'Programming Methodology', 'CS2105',
+                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
+                         ('CS1010', 'Programming Methodology', 'CS2106',
+                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1),
+                         ('BT5110', 'Data Management and Warehousing', 'CS4246',
+                          'AI Planning and Decision Making', 'AY 16/17 Sem 1', 1),
+                         ('CS1231', 'Discrete Structures', 'CS2105',
+                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
+                         ('CS1231', 'Discrete Structures', 'CS2106',
+                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1)]
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))

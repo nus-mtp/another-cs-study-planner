@@ -75,11 +75,20 @@ $(function() {
     } );
 
     $('#student-year-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "bPaginate": false,
+        "searching": false
+    } );
+
+    $('#modified-modules-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
     } );
 
     $('#student-focus-area-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "pageLength": 25,
+        "bPaginate": false,
+        "searching": false
     } );
 
     $('#oversubscribed-modules-table').DataTable( {

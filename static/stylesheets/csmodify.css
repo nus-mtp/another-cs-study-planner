@@ -68,14 +68,41 @@ tr > th {
 }
 
 
-/* ========== STYLING  ========== */
+/* ========== STYLING FOR BACK-TO-TOP BUTTON ========== */
 
-.back-to-top-btn{
+.back-to-top-btn {
     position: fixed;
     bottom: 5px;
     right: 5px;
     z-index: 1;
 }
+
+/*************************************************************************/
+/* ======================= STYLING FOR HOME PAGE ======================= */
+/*************************************************************************/
+#accordion .panel-heading {
+    padding: 0;
+}
+
+#accordion .panel-title > a {
+    display: block;
+    padding: 0.4em 0.6em;
+    outline: none;
+    font-weight:bold;
+    text-decoration: none;
+}
+
+#accordion .panel-title > a.accordion-toggle > b::after, #accordion a[data-toggle="collapse"] > b::after  {
+    content:"\e113";
+    float: right;
+    font-family: 'Glyphicons Halflings';
+    margin-right :1em;
+}
+#accordion .panel-title > a.accordion-toggle.collapsed > b::after, #accordion a.collapsed[data-toggle="collapse"] > b::after  {
+    content:"\e114";
+}
+
+
 
 /*************************************************************************/
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */

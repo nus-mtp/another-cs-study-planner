@@ -34,7 +34,10 @@ URLS = (
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
     '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
     '/addModule', 'components.handlers.add_module_handler.AddModule',
-    '/errorPage', 'components.handlers.error_page.ErrorPage'
+    '/errorPage', 'components.handlers.error_page.ErrorPage',
+    '/modifiedModules', 'components.handlers.modified_modules.Modified',
+    '/restoreModule', 'components.handlers.module_restore.RestoreModule',
+    '/outcome', 'components.handlers.outcome.Outcome'
 )
 
 
@@ -56,6 +59,7 @@ RENDER = web.template.render('templates', base='base')
 '''
 APP = web.application(URLS, globals())
 
+
 '''
     Variables for handling accounts page.
 '''
@@ -67,12 +71,7 @@ web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
 web.config.session_parameters['ignore_expiry'] = False
 
 SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None,
-                                           'keyError': False,
-                                           'deleteError': None,
-                                           'displayErrorMessage': False,
-                                           'editModMsg': None,
-                                           'editMountMsg': None})._initializer
+                              initializer={'id': None})._initializer
 
 
 if __name__ == '__main__':
