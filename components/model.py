@@ -672,7 +672,7 @@ def get_modA_taken_prior_to_modB():
         the AY-sem that module B is taken in or planned to be taken to.
 
         Return module A's code, module A's name, AY-Sem that module A is taken in,
-        module B's code, module B's name, AY-Sem that module B is taken in, 
+        module B's code, module B's name, AY-Sem that module B is taken in,
         and the number of students who took module A and B in the specified AY-Sems.
     '''
     sql_command = "SELECT sp1.moduleCode, m1.name, sp1.acadYearAndSem, " +\
