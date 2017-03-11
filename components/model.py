@@ -366,7 +366,9 @@ def delete_admin(username):
     # Delete the foreign key references first.
     sql_command = "DELETE FROM starred WHERE staffID=%s"
     DB_CURSOR.execute(sql_command, (username,))
-
+    sql_command = "DELETE FROM sessions WHERE staffid=%s"
+    DB_CURSOR.execute(sql_command, (username, ))
+    
     sql_command = "DELETE FROM admin WHERE staffID=%s"
     DB_CURSOR.execute(sql_command, (username,))
     CONNECTION.commit()
@@ -656,3 +658,45 @@ def get_all_mods_taken_together():
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
+
+def add_session(username, session_salt):
+    '''
+        Register a session into the database, overwriting
+        existing sessions by same user
+    '''
+    # Delete existing session, if any
+    sql_command = "DELETE FROM sessions WHERE staffid=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+
+    sql_command = "INSERT INTO sessions VALUES (%s, %s)"
+    DB_CURSOR.execute(sql_command, (username, session_salt))
+    CONNECTION.commit()
+
+
+def validate_session(username, session_id):
+    '''
+        Check if a provided session-id is valid.
+    '''
+    sql_command = "SELECT sessionSalt FROM session WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    session = DB_CURSOR.fetchall()
+    if not session:
+        return False
+    else:
+        hashed_id = hashlib.sha512(username + session[0][0]).hexdigest()
+        is_valid = (session_id == hashed_id)
+        return is_valid
+
+
+def clean_old_sessions(date_to_delete):
+    '''
+        Delete all sessions dating before specified date
+    '''
+    sql_command = "DELETE FROM sessions WHERE date < %s;"
+    try:
+        DB_CURSOR.execute(sql_command, (date_to_delete,))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
