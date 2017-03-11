@@ -2,25 +2,6 @@ $def with (loginform, registerform, response=0)
 
 $var title:Login to CSModify
 
-$# Account is successfully created
-$if response == 1:
-	<script type="text/javascript">
-		window.alert("Your account has been created successfully.");
-	</script>
-
-$# Account ID is taken
-$if response == -1:
-	<script type="text/javascript">
-		window.alert("The username has been taken. Please register with a different username.");
-	</script>
-
-$# User login is unsuccessful
-$if response == -2:
-	<script type="text/javascript">
-		window.alert("Login credentials are incorrect. Please try again.");
-	</script>
-
-
 <div class="row">
 	<div class="col-md-12">
 		<div class="page-header text-center">
