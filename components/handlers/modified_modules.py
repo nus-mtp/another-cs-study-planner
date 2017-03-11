@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
 from components import model
 from components.handlers.fixed_module_mountings import Fixed

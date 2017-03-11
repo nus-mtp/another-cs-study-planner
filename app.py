@@ -59,16 +59,8 @@ RENDER = web.template.render('templates', base='base')
 APP = web.application(URLS, globals())
 
 
-# TODO: deprecate
-web.config.session_parameters['ignore_expiry'] = False
-web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour
-
-SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'userId': None,
-                                           'loginStatus': 0})
-
 def session_hook():
-    web.ctx.session = SESSION
+    web.ctx.session = None
 
 
 if __name__ == '__main__':
