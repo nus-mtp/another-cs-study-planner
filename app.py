@@ -59,12 +59,6 @@ RENDER = web.template.render('templates', base='base')
 APP = web.application(URLS, globals())
 
 
-'''
-    Variables for handling accounts page.
-'''
-web.ACCOUNT_LOGIN_SUCCESSFUL = 2
-web.ACCOUNT_LOGGED_OUT = 0
-
 # TODO: deprecate
 web.config.session_parameters['ignore_expiry'] = False
 web.config.session_parameters['max_age'] = (1 * 60 * 60) # 1 hour

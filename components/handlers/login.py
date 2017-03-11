@@ -49,10 +49,7 @@ class Login(object):
         '''
         login_form = self.login_form()
         registration_form = self.registration_form()
-        if session.validate_session():
-            return RENDER.login(login_form, registration_form, web.ACCOUNT_LOGIN_SUCCESSFUL)
-        else:
-            return RENDER.login(login_form, registration_form)
+        return RENDER.login(login_form, registration_form, session.validate_session())
 
 
     def POST(self):

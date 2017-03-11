@@ -1,4 +1,4 @@
-$def with (loginform, registerform, response=0)
+$def with (loginform, registerform, loggedIn=False)
 
 $var title:Login to CSModify
 
@@ -14,7 +14,7 @@ $var title:Login to CSModify
 	<div class="col-md-6 text-center account-form-wrapper">
 		<h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
 		<br>
-		$if response == 2:
+		$if loggedIn == True:
 			<h2>You have already logged in.</h2>
 			<br>
 			<a href="/"><button class="btn btn-primary">Enter</button></a>
