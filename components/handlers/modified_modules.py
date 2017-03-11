@@ -248,21 +248,20 @@ class Modified(object):
         elif modify_type == "all":
             modified_modules = self.get_all_modified_modules()
 
-        module = None
-
         # If module code is specified, only return data for the specified module
         if module_code is not None and (modify_type == "mounting"
                                         or modify_type == "quota"
                                         or modify_type == "moduleDetails"):
             module = [module for module in modified_modules if module[0] == module_code]
 
-        if module is None:
-            return RENDER.moduleModified(modify_type, modified_modules_summary,
-                modified_modules_mounting, modified_modules_quota,
-                modified_modules_details, None, None)
-        else:
-            return RENDER.moduleModified(modify_type, None, None, None, None,
-                module_code, module[0])
+            if len(module) == 0:
+                modified_modules = None
+            else:
+                modified_modules = module
+        
+        return RENDER.moduleModified(modify_type, modified_modules_summary,
+                    modified_modules_mounting, modified_modules_quota,
+                    modified_modules_details, module_code, modified_modules)
 
 
     def POST(self):
