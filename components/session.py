@@ -23,27 +23,21 @@ def init_session(user_id):
     session_salt = uuid.uuid4().hex
     components.model.add_session(user_id, session_salt)
     session_id = hashlib.sha512(user_id + session_salt).hexdigest()
-    web.cookies.set('user', user_id, COOKIE_TIME)
-    web.cookies.set('session_id', session_id, COOKIE_TIME)
+    web.setcookie('user', user_id, COOKIE_TIME)
+    web.setcookie('session_id', session_id, COOKIE_TIME)
 
 
 def validate_session():
     '''
         Check if session is valid by checking if
-        a) user is logged in
-        b) logged in user is who they claim to be
+        cookies have been tampered with.
     '''
     try:
-        # Check if user logged in successfully
-        loginStatus = web.ctx.session._initializer.get('loginStatus')
-        if loginStatus != web.ACCOUNT_LOGIN_SUCCESSFUL:
-            return False
-
-        # Check if user is the logged in user
         user = web.cookies().get('user')
-        if web.ctx.session._initializer.get('userId') != user:
-            return False
-        return True
+        session_id = web.cookies().get('session_id')
+        print("user", user)
+        print("session_id", session_id)
+        return components.model.validate_session(user, session_id)
     except:
         return False
 
