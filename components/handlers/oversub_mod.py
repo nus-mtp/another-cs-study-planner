@@ -21,7 +21,7 @@ class OversubModule(object):
         '''
         if not session.validate_session():
             raise web.seeother('/login')
-        
+
         list_of_oversub_mod = model.get_oversub_mod()
 
         return RENDER.oversubscribedModules(list_of_oversub_mod)
