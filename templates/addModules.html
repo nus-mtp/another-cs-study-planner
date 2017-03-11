@@ -1,0 +1,38 @@
+$ title_string = 'Add module'
+$var title:$title_string
+
+<div class="container container-block">
+    <div class="">
+        <h2><span class="glyphicon glyphicon-plus"></span> Add a new module</h2>
+        <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
+        <form id="addModForm" action="/addModule" method="post">
+            <div class="form-group row">
+                <label for="module-code" class="col-2 col-form-table">Module Code:</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="module-code" name="code" pattern="[A-Z0-9]{0,12}$$" placeholder="e.g. CS1010" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="module-name">Module Name:</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" id="module-name" name="name" pattern="[a-zA-Z0-9\-]+$$" placeholder="e.g. Programming methodology" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="module-description">Module Description:</label>
+                <div class="col-10">
+                    <textarea class="form-control" type="text" rows="6" id="module-description" name="description" placeholder="Description" required></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="module-mc">Module Credits:</label>
+                <div class="col-10">
+                    <input class="form-control" type="number" min="0" max="12" id="module-mc" name="mc" placeholder="e.g. 4" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <input class="btn btn-lg btn-primary" type="submit" value="Submit">
+            </div>
+        </form>
+    <div>
+</div>

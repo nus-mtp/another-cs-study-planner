@@ -30,6 +30,18 @@ def get_module(code):
     return DB_CURSOR.fetchone()
 
 
+def is_existing_module(code):
+    '''
+        Returns true if specified module code exists in the database,
+        returns false otherwise.
+    '''
+    sql_command = "SELECT COUNT(*) FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    number_module = DB_CURSOR.fetchone()[0]
+
+    return number_module > 0
+
+
 def get_all_fixed_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all fixed mounted modules

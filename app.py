@@ -34,8 +34,10 @@ URLS = (
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
-    '/outcome', 'components.handlers.outcome.Outcome'
-    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule'
+    '/outcome', 'components.handlers.outcome.Outcome',
+    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
+    '/addModule', 'components.handlers.add_module_handler.AddModule',
+    '/errorPage', 'components.handlers.error_page.ErrorPage'
 )
 
 

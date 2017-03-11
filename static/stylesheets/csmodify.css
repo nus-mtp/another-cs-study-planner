@@ -108,7 +108,9 @@ tr > th {
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */
 /*************************************************************************/
 #register-form-wrapper {
-    border-left: 1px solid black;
+    border: 1px solid grey;
+    margin: 0 auto;
+    max-width: 50%;
 }
 
 .account-form-wrapper > form > table {

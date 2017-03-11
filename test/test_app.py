@@ -104,3 +104,13 @@ class TestCode(object):
         response = root.click(linkid="home-page", href="/overlappingModules")
 
         assert_equal(response.status, 200)
+
+    def test_goto_add_modules_page(self):
+        '''
+            Tests if user can access add module page without request errors.
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/addModule")
+
+        assert_equal(response.status, 200)

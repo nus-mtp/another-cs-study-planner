@@ -20,37 +20,49 @@ $if response == -2:
 		window.alert("Login credentials are incorrect. Please try again.");
 	</script>
 
+<div class="row">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header text-center">
+                <h1>CSModify</h1>
+                <p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
+            </div>
+        </div>
+    </div>
+    <span class="border-0 rounded">
+        <div id="register-form-wrapper" class="row center-block">
 
-<div class="row">
-	<div class="col-md-12">
-		<div class="page-header text-center">
-			<h1>CSModify</h1>
-			<p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-6 text-center account-form-wrapper">
-		<h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
-		<br>
-		$if response == 2:
-			<h2>You have already logged in.</h2>
-			<br>
-			<a href="/"><button class="btn btn-primary">Enter</button></a>
-		$else:
-			<form id="loginForm" action="/verifyLogin" method="post">
-				$:loginform.render()
-			</form>
-		<br>
-		<br>
-	</div>
-	<div class="col-md-6 text-center account-form-wrapper" id="register-form-wrapper">
-		<h2 class="text-center"><span class="glyphicon glyphicon-pencil"></span> Account Registration</h2>
-		<br>
-		<form id="registerForm" action="" method="post">
-			$:registerform.render()
-		</form>
-		<br>
-		<br>
-	</div>
-</div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#login-1" aria-controls="login-1" role="tab" data-toggle="tab">login</a></li>
+            <li role="presentation"><a href="#register-1" aria-controls="register-1" role="tab" data-toggle="tab">Register</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="login-1">
+                    <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
+                    <br>
+                    $if response == 2:
+                        <h2>You have already logged in.</h2>
+                        <br>
+                        <a href="/"><button class="btn btn-primary">Enter</button></a>
+                    $else:
+                        <form id="loginForm" action="/verifyLogin" method="post">
+                            $:loginform.render()
+                        </form>
+                    <br>
+                    <br> 
+                </div>
+                <div role="tabpanel" class="tab-pane" id="register-1">
+                    <h2 class="text-center"><span class="glyphicon glyphicon-pencil"></span> Account Registration</h2>
+                        <br>
+                        <form id="registerForm" action="" method="post">
+                            $:registerform.render()
+                        </form>
+                        <br>
+                        <br>
+                </div>
+            </div>
+
+        </div>
+    </span>
+<div>
