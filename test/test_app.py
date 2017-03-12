@@ -71,13 +71,7 @@ class TestCode(object):
 
         response = root.click(linkid="home-page", href="/modifiedModules")
 
-        # There is a redirect involved when viewing ALL modified modules.
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-
-        # Now the page should be accessible after the redirect.
-        assert_equal(redirected.status, 200)
+        assert_equal(response.status, 200)
 
 
     def test_goto_fixed_module_mounting(self):
