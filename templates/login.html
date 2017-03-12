@@ -8,12 +8,6 @@ $if response == 1:
         window.alert("Your account has been created successfully. Please proceed to login.");
     </script>
 
-$# Account ID is taken
-$if response == -1:
-    <script type="text/javascript">
-        window.alert("The username has been taken. Please register with a different username.");
-    </script>
-
 $# User login is unsuccessful
 $if response == -2:
 	<script type="text/javascript">

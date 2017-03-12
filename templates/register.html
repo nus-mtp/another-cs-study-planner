@@ -2,12 +2,6 @@ $def with (response=0)
 
 $var title:Register for CSModify Account
 
-$# Account is successfully created
-$if response == 1:
-	<script type="text/javascript">
-		window.alert("Your account has been created successfully. Please proceed to login.");
-	</script>
-
 $# Account ID is taken
 $if response == -1:
 	<script type="text/javascript">
