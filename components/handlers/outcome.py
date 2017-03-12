@@ -66,4 +66,8 @@ class Outcome(object):
                                       "Remove all mountings before deleting module!"
                 redirect_page = "/modules"
 
+            elif action == "get_module":
+                outcome_message = "Error: Module code (" + module_code + ") does not exist! "
+                redirect_page = "/moduleTakenPriorToOthers"
+
             return RENDER.outcome(outcome_message, redirect_page)

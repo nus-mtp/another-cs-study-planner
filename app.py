@@ -34,7 +34,8 @@ URLS = (
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
-    '/outcome', 'components.handlers.outcome.Outcome'
+    '/outcome', 'components.handlers.outcome.Outcome',
+    '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo'
 )
 
 
