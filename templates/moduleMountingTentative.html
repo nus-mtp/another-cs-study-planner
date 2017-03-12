@@ -4,23 +4,23 @@ $ title_string = 'Tentative Module Mounting In ' + selectedAY
 
 $var title:$title_string
 
-<div class="container-fluid" id="main">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+            <h1 class="text-center"><b>Module Mountings for <u>$selectedAY</u></b></h1>
+            <p class="text-center">Shows the <b>tentative</b> module mountings for the AY <b>one year after the current AY</b>.</p>
+            <br>
             <div id="options">
                 <h2>Options:</h2>
                 <form class="navForm" action="/modules" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To All Modules" />
+                    <input class="btn btn-primary" type="submit" value="Go To Module Information" data-toggle="tooltip" data-placement="right" title="See all modules that exist in the system">
                 </form>
                 <form class="navForm" action="/moduleMountingFixed" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
+                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" data-toggle="tooltip" data-placement="right" title="See fixed module mountings for the current AY">
                 </form>
             </div>
-        </div>
-
-        <div class="col-md-12">
-            <h1>Tentative Module Mountings for <b>$selectedAY</b></h1>
-
+            <br>
+            <br>
             <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
                 <thead>
                     <tr>
