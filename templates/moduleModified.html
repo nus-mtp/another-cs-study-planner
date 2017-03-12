@@ -18,8 +18,8 @@ $var title:View modified modules
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Current AY-Semester</th>
-                                <th>Target AY-Semester</th>
+                                <th>Mounting in Current AY-Semester</th>
+                                <th>Mounting in Target AY-Semester</th>
                                 <th>Mounting Change Applied</th>
                                 <th data-sortable="false">Actions</th>
                             </tr>
@@ -34,11 +34,13 @@ $var title:View modified modules
                         <tr>
                             <td>$moduleCode</td>
                             <td>$moduleName</td>
-                            <td>$currentAySem</td>
-                            <td>$targetAySem</td>
                         $if mountingChange == 1:
+                            <td>Unmounted (in <b>$currentAySem</b>)</td>
+                            <td>Mounted (in <b>$targetAySem</b>)</td>
                             <td>Unmounted &#8594; Mounted</td>
                         $elif mountingChange == 0:
+                            <td>Mounted (in <b>$currentAySem</b>)</td>
+                            <td>Unmounted (in <b>$targetAySem</b>)</td>
                             <td>Mounted &#8594; Unmounted</td>
                         <td>
                             <form action="/viewModule" method="get">
@@ -67,9 +69,9 @@ $var title:View modified modules
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Current AY-Semester</th>
+                                <th data-sortable="false">Quota for Current AY-Semester</th>
                                 <th>Target AY-Semester</th>
-                                <th data-sortable="false">Current Quota</th>
-                                <th data-sortable="false">Modified Quota</th>
+                                <th data-sortable="false">Quota for Target AY-Semester</th>
                                 <th>Quota Change</th>
                                 <th data-sortable="false">Actions</th>
                             </tr>
@@ -87,11 +89,11 @@ $var title:View modified modules
                             <td>$moduleCode</td>
                             <td>$moduleName</td>
                             <td>$currentAySem</td>
-                            <td>$targetAySem</td>
                         $if currentQuota is None:
                             <td>?</td>
                         $else:
                             <td>$currentQuota</td>
+                        <td>$targetAySem</td>
                         $if targetQuota is None:
                             <td>?</td>
                         $else:
@@ -128,6 +130,7 @@ $var title:View modified modules
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
+                                <th>Name Modified?</th>
                                 <th>Description Modified?</th>
                                 <th>Number of MCs Modified?</th>
                                 <th data-sortable="false">Actions</th>
@@ -142,6 +145,7 @@ $var title:View modified modules
                         $ isMcModified = module[2][2] is not None
                         <tr>
                             <td>$moduleCode</td>
+                            <td>$moduleName</td>
                         $if isNameModified is True:
                             $ originalName = module[2][0][0]
                             $ modifiedName = module[2][0][1]
@@ -152,7 +156,7 @@ $var title:View modified modules
                                 <i>"$modifiedName"</i><br><br>
                             </td>
                         $else:
-                            <td>Not Modified</td>
+                            <td>-</td>
                         $if isDescModified is True:
                             $ originalDesc = module[2][1][0]
                             $ modifiedDesc = module[2][1][1]
@@ -163,7 +167,7 @@ $var title:View modified modules
                                 <i>"$modifiedDesc"</i><br><br>
                             </td>
                         $else:
-                            <td>Not Modified</td>
+                            <td>-</td>
                         $if isMcModified is True:
                             $ originalMc = module[2][2][0]
                             $ modifiedMc = module[2][2][1]
@@ -172,7 +176,7 @@ $var title:View modified modules
                                 <b>to</b> <i>"$modifiedMc"</i><br><br>
                             </td>
                         $else:
-                            <td>Not Modified</td>
+                            <td>-</td>
                         <td>
                             <form action="/viewModule" method="get">
                                 <input type="hidden" name="code" value="$targetModuleModifiedInfo[0]">
