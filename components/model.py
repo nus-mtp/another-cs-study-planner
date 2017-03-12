@@ -659,6 +659,7 @@ def get_all_mods_taken_together():
 
     return DB_CURSOR.fetchall()
 
+
 def add_session(username, session_salt):
     '''
         Register a session into the database, overwriting
@@ -700,3 +701,101 @@ def clean_old_sessions(date_to_delete):
         CONNECTION.rollback()
         return False
     return True
+
+
+def get_modA_taken_prior_to_modB():
+    '''
+        Retrieves the list of pairs of modules where there is at least 1 student
+        who took module A prior to taking module B.
+
+        By 'took', it means that the 'isTaken' attribute is set to True.
+
+        By 'taking', it means that the 'isTaken' attribute can be set to True or False,
+        but the student plan for that module must exist.
+
+        By 'prior', it means that the AY-sem that module A is taken in comes before
+        the AY-sem that module B is taken in or planned to be taken to.
+
+        Return module A's code, module A's name, AY-Sem that module A is taken in,
+        module B's code, module B's name, AY-Sem that module B is taken in,
+        and the number of students who took module A and B in the specified AY-Sems.
+    '''
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp1.acadYearAndSem, " +\
+                  "sp2.moduleCode, m2.name, sp2.acadYearAndSem, COUNT(*) " + \
+                  "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
+                  "WHERE sp2.moduleCode <> sp1.moduleCode " + \
+                  "AND sp1.studentId = sp2.studentId " + \
+                  "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp1.isTaken = True " + \
+                  "AND m1.code = sp1.moduleCode " + \
+                  "AND m2.code = sp2.moduleCode " + \
+                  "GROUP BY sp1.moduleCode, sp2.moduleCode, " +\
+                  "sp1.acadYearAndSem, sp2.acadYearAndSem, " + \
+                  "m1.name, m2.name " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command)
+
+    return DB_CURSOR.fetchall()
+
+
+def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, module_B_ay_sem):
+    '''
+        Retrieves the number of students who took module A some time before
+        taking module B in a target AY-Sem.
+
+        Meaning, the student has already taken module A, in an AY-Sem that is prior to
+        the target AY-Sem that the student is going to take module B in.
+
+        Return the AY-Sem that module A is taken in,
+        and the number of students who took module A and B in the specified AY-Sems.
+    '''
+    sql_command = "SELECT sp1.acadYearAndSem, COUNT(*) " + \
+                  "FROM studentPlans sp1, studentPlans sp2 " + \
+                  "WHERE sp1.moduleCode = %s " + \
+                  "AND sp2.moduleCode = %s " + \
+                  "AND sp1.studentId = sp2.studentId " + \
+                  "AND sp2.acadYearAndSem = %s " + \
+                  "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp1.isTaken = True " + \
+                  "GROUP BY sp1.acadYearAndSem " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command, (module_A, module_B, module_B_ay_sem))
+
+    return DB_CURSOR.fetchall()
+
+
+def add_student_plan(student_id, is_taken, module_code, ay_sem):
+    '''
+        Add a student plan into the database
+    '''
+    sql_command = 'INSERT INTO studentPlans VALUES(%s, %s, %s, %s);'
+    DB_CURSOR.execute(sql_command, (student_id, is_taken, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_student_plan(student_id, module_code, ay_sem):
+    '''
+        Delete a student plan from the database
+    '''
+    sql_command = "DELETE FROM studentPlans WHERE studentId = %s " +\
+                  "AND moduleCode = %s AND acadYearAndSem = %s;"
+    DB_CURSOR.execute(sql_command, (student_id, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def get_number_of_students_taking_module(module_code, ay_sem):
+    '''
+        Retrieves the number of students who have taken or are taking the module
+        in the target AY-Sem
+    '''
+    sql_command = "SELECT COUNT(*) " + \
+                  "FROM studentPlans sp " + \
+                  "WHERE sp.moduleCode = %s " + \
+                  "AND sp.acadYearAndSem = %s " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command, (module_code, ay_sem))
+
+    return DB_CURSOR.fetchone()[0]
