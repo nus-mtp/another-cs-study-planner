@@ -11,7 +11,7 @@ class TestCode(object):
     '''
         runs tests to test accessability and components in add module page
     '''
-    HEADER_TITLE = '<h1 class="text-center"><b>Add a new module</b></h1>'
+    HEADER_TITLE = '<h1 class="text-center"><b>Add Module</b></h1>'
     FORM_LABEL_CODE = '<label for="module-code" class="col-2 col-form-table">' +\
                       'Module Code:</label>'
     FORM_INPUT_CODE = '<input class="form-control" type="text" id="module-code" ' +\
