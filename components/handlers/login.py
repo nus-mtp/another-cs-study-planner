@@ -2,12 +2,12 @@
     This module handles account login.
 '''
 
-from app import RENDER, SESSION
 import web
-from components import model
+from app import RENDER
+from components import model, session
+from components.handlers.outcome import Outcome
 
 
-## For login test
 class Login(object):
     '''
         Class handles login (verifying if user is in database)
@@ -19,25 +19,10 @@ class Login(object):
         '''
             This function is called when /login is accessed.
         '''
-        referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
-        parts = referrer_page.split("/")
-        referrer_page_shortform = "/" + parts[len(parts) - 1]
-        # If referred from another page, direct to this page straight away.
-        if referrer_page_shortform != self.URL_THIS_PAGE:
-            if SESSION['id'] == web.ACCOUNT_CREATED_SUCCESSFUL:
-                return RENDER.login(SESSION['id'])
-            else:
-                SESSION['id'] = 0
-                return RENDER.login(SESSION['id'])
-        else:
-            return RENDER.login(SESSION['id'])
+        return RENDER.login(session.validate_session())
 
 
     def POST(self):
-        '''
-            This function is called when the login button is clicked.
-            If both fields are empty, return to login page.
-        '''
         '''
             Blank inputs are blocked by front-end. For full extent of validation
             we also perform validation here should the front-end happen to be
@@ -49,19 +34,18 @@ class Login(object):
             input_id = credentials.id
             input_password = credentials.password
         except(AttributeError):
-            SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
-            raise web.seeother('/login')
+            return Outcome().POST("login_user", False, None)
 
         if credentials.id == '' or credentials.password == '':
-            raise web.seeother('/login')
+            return Outcome().POST("login_user", False, None)
 
         is_valid = model.validate_admin(credentials.id, credentials.password)
         
         # If valid admin, go to index
         if is_valid:
-            SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+            session.clean_up_sessions()
+            session.init_session(credentials.id)
             raise web.seeother('/')
         # Else go to error page
         else:
-            SESSION['id'] = web.ACCOUNT_LOGIN_UNSUCCESSFUL
-            raise web.seeother('/login')
+            return Outcome().POST("login_user", False, None)

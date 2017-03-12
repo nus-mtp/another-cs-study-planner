@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class ViewMod(object):
@@ -111,11 +111,14 @@ class ViewMod(object):
         '''
             Retrieve and render all the info of a module
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
+        if module_info is None:
+            error_message = module_code + ' does not exist in the system.'
+            return RENDER.notfound(error_message)
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)

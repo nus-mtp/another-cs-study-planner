@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 from components.handlers.outcome import Outcome
 
 
@@ -22,7 +22,7 @@ class Modules(object):
             This function is called when the '/modules' page (moduleListing.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         else:
             module_infos = model.get_all_modules()

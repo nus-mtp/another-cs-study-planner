@@ -100,3 +100,10 @@ name VARCHAR(64),
 description VARCHAR(4096),
 mc INT
 );
+
+CREATE TABLE sessions (
+staffID VARCHAR(9) PRIMARY KEY,
+sessionSalt VARCHAR(32),
+date TIMESTAMPTZ DEFAULT now(),
+FOREIGN KEY (staffID) REFERENCES admin(staffID)
+);

@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class OversubModule(object):
@@ -19,9 +19,9 @@ class OversubModule(object):
             Renders the oversubscribed modules page if users requested
             for the page through the GET method.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
-        
+
         list_of_oversub_mod = model.get_oversub_mod()
 
         return RENDER.oversubscribedModules(list_of_oversub_mod)

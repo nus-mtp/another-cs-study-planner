@@ -4,9 +4,10 @@
 
 import hashlib
 import uuid
-from app import RENDER, SESSION
 import web
-from components import model
+from app import RENDER
+from components import model, session
+from components.handlers.outcome import Outcome
 
 
 ## For login test
@@ -18,7 +19,7 @@ class Register(object):
         '''
             This function is called when /register is accessed.
         '''
-        return RENDER.register(SESSION['id'])
+        return RENDER.register()
 
 
     def POST(self):
@@ -40,7 +41,6 @@ class Register(object):
             input_id = credentials.id
             input_password = credentials.password
         except(AttributeError):
-            SESSION['id'] = 0
             raise web.seeother('/register')
 
         if credentials.id == '' or credentials.password == '':
@@ -48,14 +48,13 @@ class Register(object):
 
         # If user ID already exists, alert user that the ID is taken.
         if model.is_userid_taken(credentials.id):
-            SESSION['id'] = web.ACCOUNT_CREATED_UNSUCCESSFUL
-            raise web.seeother('/register')
+            outcome = False
         # Else, the new account is valid, and add it to the database.
         else:
             salt = uuid.uuid4().hex
             hashed_password = hashlib.sha512(credentials.password
                                              + salt).hexdigest()
             model.add_admin(credentials.id, salt, hashed_password)
-            SESSION['id'] = web.ACCOUNT_CREATED_SUCCESSFUL
+            outcome = True
 
-            raise web.seeother('/login')
+        return Outcome().POST("create_user", outcome, None)

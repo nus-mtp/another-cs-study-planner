@@ -1,18 +1,6 @@
-$def with (response=0)
+$def with (loggedIn=False)
 
 $var title:Login to CSModify
-
-$# Account is successfully created
-$if response == 1:
-    <script type="text/javascript">
-        window.alert("Your account has been created successfully. Please proceed to login.");
-    </script>
-
-$# User login is unsuccessful
-$if response == -2:
-	<script type="text/javascript">
-		window.alert("Login credentials are empty or incorrect. Please try again.");
-	</script>
 
 <div class="row">
     <div class="col-md-12">
@@ -24,7 +12,7 @@ $if response == -2:
     <div class="col-md-4 col-md-offset-4">
         <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
         <br>
-        $if response == 2:
+        $if loggedIn == True:
             <h2>You have already logged in.</h2>
             <br>
             <a href="/"><button class="btn btn-primary">Enter</button></a>
@@ -44,4 +32,3 @@ $if response == -2:
             <br>
             <br>
     </div>
-</div>

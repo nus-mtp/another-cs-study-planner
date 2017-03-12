@@ -2,10 +2,12 @@
     test_add_module.py tests the add module page
 '''
 
+import web
 from paste.fixture import TestApp
 from nose.tools import assert_equal
-from app import APP, SESSION
-import web
+from app import APP
+from components import session
+
 
 class TestCode(object):
     '''
@@ -46,8 +48,14 @@ class TestCode(object):
         '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        # Sets up the simulated 'login' state
-        SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_add_module_valid_response(self):

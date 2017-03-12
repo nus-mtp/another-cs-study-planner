@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class IndividualModule(object):
@@ -62,21 +62,28 @@ class IndividualModule(object):
 
         self.is_current_ay = is_current_ay
 
+
     def get_overlapping_mods(self, code):
         '''
             Get modules that over lap with this module
         '''
         return model.get_mod_taken_together_with(code)
+
+
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
+        if module_info is None:
+            error_message = module_code + " does not exist in the system."
+            return RENDER.notfound(error_message)
+
         target_ay_sem = input_data.targetAY
 
         self.load_mounting_info(module_code, target_ay_sem)

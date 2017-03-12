@@ -4,7 +4,8 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal
-from app import APP, SESSION
+from app import APP
+from components import session
 
 class TestCode(object):
     '''
@@ -25,11 +26,18 @@ class TestCode(object):
 
     def setUp(self):
         '''
-            sets up fixture, along with user account states.
+            Sets up the 'app.py' fixture
         '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        SESSION['id'] = 2
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
     def test_access_module_mounting_edit(self):
         '''

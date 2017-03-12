@@ -17,7 +17,7 @@ $def with (page)
 	</head>
 
 	<body>
-		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account':
+		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
 			$:page
 
 		$else:
@@ -33,6 +33,11 @@ $def with (page)
 					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
+					</form>
+					<form class="navbar-form navbar-right" action="/logout" method="post">
+						<button class="btn btn-lg btn-danger" type="submit">
+							<span class="glyphicon glyphicon-log-out"></span> Logout
+						</button>
 					</form>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
