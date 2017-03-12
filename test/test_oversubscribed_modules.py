@@ -32,7 +32,7 @@ class TestCode(object):
     TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_MODULE_AY_SEM = '<th>AY-Semester</th>'
     TABLE_HEADER_MODULE_QUOTA = '<th>Class Quota</th>'
-    TABLE_HEADER_MODULE_DEMAND = '<th>Student Demand</th>'
+    TABLE_HEADER_MODULE_DEMAND = '<th>Number of Students Taking Module</th>'
 
 
     def __init__(self):
