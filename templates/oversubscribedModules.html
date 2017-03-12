@@ -2,38 +2,39 @@ $def with (list_of_oversub_mod)
 
 $var title:View Oversubscribed Modules
 
-
-<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
-<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
-<br>
-<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
-	<thead>
-		<tr>
-			<th>Code</th>
-			<th>Name</th>
-			<th>AY-Semester</th>
-			<th>Class Quota</th>
-			<th>Number of Students Taking Module</th>
-		</tr>
-	</thead>
-	<tbody>
-		$if list_of_oversub_mod == None:
+<div class="container-fluid">
+	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
+	<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
+	<br>
+	<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
+		<thead>
 			<tr>
-				<th>Nil</th>
-				<th>Nil</th>
-				<th>Nil</th>
-				<th>Nil</th>
-				<th>Nil</th>
+				<th>Code</th>
+				<th>Name</th>
+				<th>AY-Semester</th>
+				<th>Class Quota</th>
+				<th>Number of Students Taking Module</th>
 			</tr>
-		$else:
-			$for module in list_of_oversub_mod:
-				$ address = '/viewModule?code=' + module[0]
-				<tr>						
-					<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
-					<td>$module[1]</td>
-					<td>$module[2]</td>
-					<td>$module[3]</td>
-					<td>$module[4]</td>
+		</thead>
+		<tbody>
+			$if list_of_oversub_mod == None:
+				<tr>
+					<th>Nil</th>
+					<th>Nil</th>
+					<th>Nil</th>
+					<th>Nil</th>
+					<th>Nil</th>
 				</tr>
-	</tbody>
-</table>
+			$else:
+				$for module in list_of_oversub_mod:
+					$ address = '/viewModule?code=' + module[0]
+					<tr>						
+						<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
+						<td>$module[1]</td>
+						<td>$module[2]</td>
+						<td>$module[3]</td>
+						<td>$module[4]</td>
+					</tr>
+		</tbody>
+	</table>
+</div>
