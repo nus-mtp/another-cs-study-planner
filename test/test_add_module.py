@@ -17,7 +17,7 @@ class TestCode(object):
                       'pattern="[A-Z0-9]{0,12}$" placeholder="e.g. CS1010" required>'
     FORM_LABEL_NAME = '<label for="module-name">Module Name:</label>'
     FORM_INPUT_NAME = '<input class="form-control" type="text" id="module-name"'+\
-                      ' name="name" pattern="[a-zA-Z0-9\-]+$" '+\
+                      ' name="name" pattern="[a-zA-Z0-9 \-]+$" '+\
                       'placeholder="e.g. Programming methodology" required>'
     FORM_LABEL_DESCRIPTION = '<label for="module-description">Module Description:</label>'
     FORM_TEXTAREA_DESCRIPTION = '<textarea class="form-control" type="text" rows="6" '+\
