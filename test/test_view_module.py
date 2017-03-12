@@ -41,7 +41,7 @@ class TestCode(object):
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
                             'action="/editModule" method="post">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
-                                   ' value="Edit Module Information" ' +\
+                                   ' value="Edit General Module Info" ' +\
                                    'data-toggle="tooltip" data-placement="right" ' +\
                                    'title="Edit the module\'s name, description ' +\
                                    'and MCs">'
