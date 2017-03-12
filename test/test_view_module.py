@@ -38,6 +38,14 @@ class TestCode(object):
     FORM_SEARCH_MODULE_AY_SEM_BUTTON = '<button type="submit" class="btn ' +\
                                        'btn-primary">Search</button>'
 
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
+                            'action="/editModule" method="post">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
+                                   ' value="Edit Module Information" ' +\
+                                   'data-toggle="tooltip" data-placement="right" ' +\
+                                   'title="Edit the module\'s name, description ' +\
+                                   'and MCs">'
+
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
     CONTENT_NAME = "Data Management and Warehousing"
@@ -206,6 +214,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
 
     def test_contains_overlapping_module_table(self):
         '''
