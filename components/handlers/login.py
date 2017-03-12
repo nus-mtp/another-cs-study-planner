@@ -12,11 +12,25 @@ class Login(object):
     '''
         Class handles login (verifying if user is in database)
     '''
+    URL_THIS_PAGE = '/login'
+
+
     def GET(self):
         '''
             This function is called when /login is accessed.
         '''
-        return RENDER.login(SESSION['id'])
+        referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
+        parts = referrer_page.split("/")
+        referrer_page_shortform = "/" + parts[len(parts) - 1]
+        # If referred from another page, direct to this page straight away.
+        if referrer_page_shortform != self.URL_THIS_PAGE:
+            if SESSION['id'] == web.ACCOUNT_CREATED_SUCCESSFUL:
+                return RENDER.login(SESSION['id'])
+            else:
+                SESSION['id'] = 0
+                return RENDER.login(SESSION['id'])
+        else:
+            return RENDER.login(SESSION['id'])
 
 
     def POST(self):

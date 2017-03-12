@@ -18,7 +18,6 @@ class Register(object):
         '''
             This function is called when /register is accessed.
         '''
-        SESSION['id'] = 0
         return RENDER.register(SESSION['id'])
 
 
