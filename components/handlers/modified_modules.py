@@ -227,37 +227,36 @@ class Modified(object):
             input_data = web.input()
             modify_type = input_data.modifyType
         except AttributeError:
-            raise web.seeother("/modifiedModules?modifyType=all")
+            modify_type = None
         try:
             module_code = input_data.code
         except AttributeError:
             module_code = None
 
-        modified_modules_summary = self.get_all_modified_modules()
-        modified_modules_mounting = self.get_modules_with_modified_mounting()
-        modified_modules_quota = self.get_modules_with_modified_quota()
-        modified_modules_details = self.get_modules_with_modified_details()
-        modified_modules = None
-
-        if modify_type == "mounting":
-            modified_modules = self.get_modules_with_modified_mounting()
-        elif modify_type == "quota":
-            modified_modules = self.get_modules_with_modified_quota()
-        elif modify_type == "moduleDetails":
-            modified_modules = self.get_modules_with_modified_details()
-        elif modify_type == "all":
-            modified_modules = self.get_all_modified_modules()
-
         # If module code is specified, only return data for the specified module
+        modified_modules_summary = []
+        modified_modules_mounting = []
+        modified_modules_quota = []
+        modified_modules_details = []
+        modified_modules = []
         if module_code is not None and (modify_type == "mounting"
                                         or modify_type == "quota"
                                         or modify_type == "moduleDetails"):
+            if modify_type == "mounting":
+                modified_modules = self.get_modules_with_modified_mounting()
+            elif modify_type == "quota":
+                modified_modules = self.get_modules_with_modified_quota()
+            elif modify_type == "moduleDetails":
+                modified_modules = self.get_modules_with_modified_details()
             module = [module for module in modified_modules if module[0] == module_code]
 
-            if len(module) == 0:
-                modified_modules = None
-            else:
-                modified_modules = module
+            modified_modules = module
+        # Else return all 4 modification tables, for all the modified modules
+        else:
+            modified_modules_summary = self.get_all_modified_modules()
+            modified_modules_mounting = self.get_modules_with_modified_mounting()
+            modified_modules_quota = self.get_modules_with_modified_quota()
+            modified_modules_details = self.get_modules_with_modified_details()
         
         return RENDER.moduleModified(modify_type, modified_modules_summary,
                     modified_modules_mounting, modified_modules_quota,
@@ -272,4 +271,4 @@ class Modified(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
-        raise web.seeother('/modifiedModules?modifyType=all')
+        raise web.seeother('/modifiedModules')
