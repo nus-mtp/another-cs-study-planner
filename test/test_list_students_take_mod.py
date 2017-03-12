@@ -34,7 +34,9 @@ class TestCode(object):
 
         required_list = [['D1000002A', 1, 'Database Systems', '-'],
                          ['D1000000A', 1, 'Artificial Intelligence', '-'],
-                         ['D1000001A', 1, 'Computer Graphics and Games', '-']
+                         ['D1000001A', 1, 'Computer Graphics and Games', '-'],
+                         ['D5000000A', 1, 'Software Engineering', '-'],
+                         ['D5000001A', 2, 'Software Engineering', '-']
                         ]
 
         assert_equal(len(list_of_students_take_mod), len(required_list))
