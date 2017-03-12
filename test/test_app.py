@@ -63,6 +63,23 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
 
+    def test_goto_modified_modules(self):
+        '''
+            Tests if user can access the module listing page without request errors.
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/modifiedModules")
+
+        # There is a redirect involved when viewing ALL modified modules.
+        assert_equal(response.status, 303)
+
+        redirected = response.follow()
+
+        # Now the page should be accessible after the redirect.
+        assert_equal(redirected.status, 200)
+
+
     def test_goto_fixed_module_mounting(self):
         '''
             Tests if user can access the fixed module mounting page without request errors.
@@ -95,6 +112,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
+
     def test_goto_overlapping_modules(self):
         '''
             Tests if user can access the overlapping modules page without request errors.
@@ -105,6 +123,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
+
     def test_goto_add_modules_page(self):
         '''
             Tests if user can access add module page without request errors.
@@ -112,5 +131,16 @@ class TestCode(object):
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/addModule")
+
+        assert_equal(response.status, 200)
+
+
+    def test_goto_prior_modules_taken_page(self):
+        '''
+            Tests if user can access add module page without request errors.
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/moduleTakenPriorToOthers")
 
         assert_equal(response.status, 200)
