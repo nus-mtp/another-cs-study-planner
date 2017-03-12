@@ -4,9 +4,9 @@
     semester
 '''
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class OverlappingModules(object):
@@ -18,8 +18,7 @@ class OverlappingModules(object):
             Renders the modules page if users requested
             for the page through the GET method.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         lst_of_mods = model.get_all_mods_taken_together()
-
         return RENDER.overlappingModules(lst_of_mods)

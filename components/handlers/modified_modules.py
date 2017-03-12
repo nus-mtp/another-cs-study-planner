@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 from components.handlers.fixed_module_mountings import Fixed
 from components.handlers.tentative_module_mountings import Tentative
 
@@ -212,7 +212,7 @@ class Modified(object):
             Renders the modified modules page if users requested
             for the page through the GET method.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         # User can select the type of modified information they want to see

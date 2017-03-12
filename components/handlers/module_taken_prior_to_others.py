@@ -5,9 +5,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 from components.handlers.outcome import Outcome
 
 
@@ -38,7 +38,7 @@ class TakePriorTo(object):
             at least 1 student who has taken module A
             prior to taking module B
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         module_pairs = model.get_modA_taken_prior_to_modB()
@@ -63,8 +63,6 @@ class TakePriorTo(object):
 
             Also shows the student count for each AY-Sem that module A is taken in
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
-            raise web.seeother('/login')
 
         is_testing = (len(test_data) > 0)
         if is_testing:

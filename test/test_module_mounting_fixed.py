@@ -15,8 +15,9 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP, SESSION
+from nose.tools import assert_equal
+from app import APP
+from components import session
 
 
 class TestCode(object):
@@ -67,9 +68,16 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
-        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_fixed_module_mounting_valid_response(self):
@@ -102,18 +110,23 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
-    @raises(Exception)
     def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
             self):
         '''
             Tests if navigation to a module overview page with
             an invalid target module code will fail.
-
-            NOTE: this test case is supposed to FAIL.
         '''
         root = self.test_app.get(self.URL_MODULE_MOUNTING_FIXED)
         # an exception WILL be encountered here
-        root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
+        response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
+        assert_equal(response.status, 303)
+
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        redirected.mustcontain("NOT FOUND")
+
 
 
     def test_fixed_module_mounting_view_options(self):

@@ -30,11 +30,13 @@ URLS = (
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
     '/verifyLogin', 'components.handlers.login.verifyLogin',
+    '/logout', 'components.handlers.logout.Logout',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
     '/outcome', 'components.handlers.outcome.Outcome',
+    '/404', 'components.handlers.tempErrorPage.Error',
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo'
 )
 
@@ -56,21 +58,6 @@ RENDER = web.template.render('templates', base='base')
     globals().
 '''
 APP = web.application(URLS, globals())
-
-
-'''
-    Variables for handling accounts page.
-'''
-web.ACCOUNT_CREATED_SUCCESSFUL = 1
-web.ACCOUNT_CREATED_UNSUCCESSFUL = -1
-web.ACCOUNT_LOGIN_SUCCESSFUL = 2
-web.ACCOUNT_LOGIN_UNSUCCESSFUL = -2
-
-web.config.session_parameters['ignore_expiry'] = False
-
-SESSION = web.session.Session(APP, web.session.DiskStore('sessions'),
-                              initializer={'id': None})._initializer
-
 
 if __name__ == '__main__':
     APP.run()

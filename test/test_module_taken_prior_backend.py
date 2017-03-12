@@ -6,7 +6,6 @@
 from nose.tools import assert_equal, assert_true, assert_false
 from components import model
 from components.handlers.module_taken_prior_to_others import TakePriorTo
-from app import SESSION
 
 
 class TestCode(object):
@@ -31,7 +30,6 @@ class TestCode(object):
         '''
             Add dummy modules, mountings and student planners into database
         '''
-        SESSION['id'] = 2
 
         # Dummy modules
         model.add_module('PT1001', 'Dummy Module 1',

@@ -4,9 +4,9 @@
 '''
 
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 
 class IndividualModule(object):
@@ -71,12 +71,15 @@ class IndividualModule(object):
         '''
             Retrieve and render all the info of a module mounting
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
 
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
+        if module_info is None:
+            raise web.seeother('/404')
+
         target_ay_sem = input_data.targetAY
 
         self.load_mounting_info(module_code, target_ay_sem)

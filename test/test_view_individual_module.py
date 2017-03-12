@@ -2,8 +2,9 @@
     test_view_individual_module.py tests the app's view individual mod page
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP, SESSION
+from nose.tools import assert_equal
+from app import APP
+from components import session
 
 class TestCode(object):
     '''
@@ -75,9 +76,16 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
-        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_view_individual_module_valid_response(self):
@@ -91,69 +99,73 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    @raises(Exception)
     def test_view_individual_module_invalid_code_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
-
-            NOTE: this test case is supposed to FAIL
         '''
         # an exception WILL be encountered here
-        self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+        root = self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
+        assert_equal(root.status, 303)
+
+        redirected = root.follow()
+        assert_equal(redirected.status, 200)
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        redirected.mustcontain("NOT FOUND")
 
 
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the target AY-semester is invalid.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the target AY-semester is invalid.
 
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid AY-semester is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_individual_module_invalid_ay_sem_response(self):
-        # AY-Semester used here is '16/18 Sem 1'
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    '''
-
-
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the quota associated with the target module is invalid.
-
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid module quota is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_invalid_module_overview_invalid_quota_response(self):
-        # Quota used here is '70' (actual is '60')
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    '''
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid AY-semester is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_individual_module_invalid_ay_sem_response(self):
+    #     # AY-Semester used here is '16/18 Sem 1'
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+    # '''
 
 
-    '''
-    def test_view_individual_module_search_form(self):
-        """
-            Tests if the module-search form exists.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the quota associated with the target module is invalid.
 
-            NOTE: the current form is NON_FUNCTIONAL at the moment.
-            NOTE: This is also hidden from shipping product so this
-                  test case is commented out for now.
-        """
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid module quota is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_invalid_module_overview_invalid_quota_response(self):
+    #     # Quota used here is '70' (actual is '60')
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+    # '''
 
-        root.mustcontain(self.FORM_SEARCH_MODULE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
-    '''
+
+    # '''
+    # def test_view_individual_module_search_form(self):
+    #     """
+    #         Tests if the module-search form exists.
+
+    #         NOTE: the current form is NON_FUNCTIONAL at the moment.
+    #         NOTE: This is also hidden from shipping product so this
+    #               test case is commented out for now.
+    #     """
+    #     root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+
+    #     root.mustcontain(self.FORM_SEARCH_MODULE)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
+    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
+    # '''
 
 
     def test_view_individual_module_contents(self):
@@ -195,13 +207,13 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
 
 
-    '''
-        [NOTE]: Edit Module backend is not up yet.
-    def test_view_individual_module_goto_edit_module(self):
-        """
-            Tests if user can go to the page for editing the module.
-        """
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
-        response = root.goto("Edit Module URL", method='get')
-        assert_equal(response.code, 200)
-    '''
+    # '''
+    #     [NOTE]: Edit Module backend is not up yet.
+    # def test_view_individual_module_goto_edit_module(self):
+    #     """
+    #         Tests if user can go to the page for editing the module.
+    #     """
+    #     root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
+    #     response = root.goto("Edit Module URL", method='get')
+    #     assert_equal(response.code, 200)
+    # '''
