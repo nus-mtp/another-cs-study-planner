@@ -227,7 +227,7 @@ class Modified(object):
             input_data = web.input()
             modify_type = input_data.modifyType
         except AttributeError:
-            raise web.seeother("/modifiedModules?modifyType=all")
+            modify_type = None
         try:
             module_code = input_data.code
         except AttributeError:
@@ -272,4 +272,4 @@ class Modified(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
-        raise web.seeother('/modifiedModules?modifyType=all')
+        raise web.seeother('/modifiedModules')
