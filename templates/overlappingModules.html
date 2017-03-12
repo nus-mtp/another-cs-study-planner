@@ -4,36 +4,37 @@ $ page_title = "Modules Taken Together In The Same Semester"
 
 $var title:$page_title
 
-<div class="container container-block">
+<div class="container-fluid">
     <div class="row">
-        <h1 class="text-center"> Modules Usually Taken Together</h1>
-    </div>
-    
-    <div class="row">
-        <table id="common-module-table" class="table table-bordered table-hover display dataTable">
-            <thead>
-                <tr>
-                    <th>Module 1</th>
-                    <th>Name of Module 1</th>
-                    <th>Module 2</th>
-                    <th>Name of Module 2</th>
-                    <th>For AY-Sem</th>
-                    <th>Number of Students</th>
-                </tr>
-            </thead>
-            <tbody>
-                $for row in lst_of_mods:
-                    $ address1 = '/viewModule?code=' + row[0]
-                    $ address2 = '/viewModule?code=' + row[2]
+        <div class="col-md-12">
+            <h1 class="text-center"><b>Overlapping Modules</b></h1>
+            <p class="text-center">Shows all pairs of modules, that are taken by students in the same semester.</p>
+            <br>
+            <table id="common-module-table" class="table table-bordered table-hover display dataTable">
+                <thead>
                     <tr>
-                        <td class="text-center"><a href="$:address1" target="_blank" data-toggle="tooltip" title="View general info for $row[0]">$row[0]</a></td>
-                        <td class="text-center">$row[1]</td>
-                        <td class="text-center"><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
-                        <td class="text-center">$row[3]</td>
-                        <td class="text-center">$row[4]</td>
-                        <td class="text-center">$row[5]</td>
+                        <th>Module 1</th>
+                        <th>Name of Module 1</th>
+                        <th>Module 2</th>
+                        <th>Name of Module 2</th>
+                        <th>For AY-Sem</th>
+                        <th>Number of Students</th>
                     </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    $for row in lst_of_mods:
+                        $ address1 = '/viewModule?code=' + row[0]
+                        $ address2 = '/viewModule?code=' + row[2]
+                        <tr>
+                            <td class="text-center"><a href="$:address1" target="_blank" data-toggle="tooltip" title="View general info for $row[0]">$row[0]</a></td>
+                            <td class="text-center">$row[1]</td>
+                            <td class="text-center"><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
+                            <td class="text-center">$row[3]</td>
+                            <td class="text-center">$row[4]</td>
+                            <td class="text-center">$row[5]</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
