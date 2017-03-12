@@ -12,18 +12,24 @@ class TestCode(object):
         This class runs the test cases to test app home page
     '''
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
-    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary pull-right"'+\
-                                 ' type="submit" value="Go To Fixed Module Mountings" />'
+    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary ' +\
+                                 'pull-right" type="submit" value="Go To ' +\
+                                 'Fixed Module Mountings" data-toggle="tooltip" ' +\
+                                 'data-placement="bottom" title="See fixed module ' +\
+                                 'mountings for current AY">'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
-    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"'+\
-                                     ' value="Go To Tentative Module Mountings" />'
+    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
+                                     'type="submit" value="Go To Tentative Module ' +\
+                                     'Mountings" data-toggle="tooltip" ' +\
+                                     'data-placement="bottom" title="See tentative ' +\
+                                     'module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
     TABLE_HEADER_DESCRIPTION = '<th>Description</th>'
     TABLE_HEADER_MC = '<th>MCs</th>'
-    TABLE_HEADER_STATUS = '<th>Status</th>'
+    TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
     TABLE_HEADER_ACTIONS = '<th data-sortable="false">Actions</th>'
 
     global_var = None
