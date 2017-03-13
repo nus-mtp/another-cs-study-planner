@@ -2,7 +2,7 @@
     test_view_individual_module.py tests the app's view individual mod page
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP
 from components import session
 

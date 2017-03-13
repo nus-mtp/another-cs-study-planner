@@ -66,10 +66,6 @@ class Outcome(object):
                                       "Remove all mountings before deleting module!"
                 redirect_page = "/modules"
 
-            elif action == "get_module":
-                outcome_message = "Error: Module code (" + module_code + ") does not exist! "
-                redirect_page = "/moduleTakenPriorToOthers"
-
             elif action == "create_user":
                 if outcome is True:
                     outcome_message = "Your account has been created successfully. " +\
@@ -84,5 +80,9 @@ class Outcome(object):
                 outcome_message = "Login credentials are empty or incorrect. " +\
                                   "Please try again."
                 redirect_page = "/login"
+
+            elif action == "get_module":
+                outcome_message = "Error: Module code (" + module_code + ") does not exist! "
+                redirect_page = "/moduleTakenPriorToOthers"
 
             return RENDER.outcome(outcome_message, redirect_page)

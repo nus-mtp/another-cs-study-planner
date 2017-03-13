@@ -58,6 +58,7 @@ def set_up(test_app):
     create_dummy_user_for_tests()
     login_session_for_tests(test_app)
 
+
 def tear_down(test_app):
     '''
         Cleans up after one test cases concludes by

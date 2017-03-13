@@ -38,9 +38,7 @@ URLS = (
     '/outcome', 'components.handlers.outcome.Outcome',
     '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
     '/addModule', 'components.handlers.add_module_handler.AddModule',
-    '/errorPage', 'components.handlers.error_page.ErrorPage',
-    '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo',
-    '/404', 'components.handlers.tempErrorPage.Error'
+    '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo'
 )
 
 
