@@ -45,7 +45,8 @@ class NonOverlappingModules(object):
         if self.validateAYSem(ay_sem_of_interest):
             lst_of_independ_mods = model.get_mods_no_one_take(ay_sem_of_interest)
 
-            return RENDER.nonOverlappingModules(lst_of_independ_mods, self.AVAILABLE_AY_SEM, ay_sem_of_interest)
+            return RENDER.nonOverlappingModules(lst_of_independ_mods,
+                                                self.AVAILABLE_AY_SEM, ay_sem_of_interest)
         else:
             return Outcome().POST("non-overlapping-mods", False, None)
 
@@ -57,4 +58,3 @@ class NonOverlappingModules(object):
         input_data = web.input()
         ay_sem = input_data.sem
         raise web.seeother('/nonOverlappingModules?sem=' + ay_sem)
-
