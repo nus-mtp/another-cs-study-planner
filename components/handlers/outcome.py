@@ -88,5 +88,4 @@ class Outcome(object):
             elif action == "non-overlapping-mods":
                 outcome_message = "Error: invalid AYSem!"
                 redirect_page = "/nonOverlappingModules"
-
             return RENDER.outcome(outcome_message, redirect_page)

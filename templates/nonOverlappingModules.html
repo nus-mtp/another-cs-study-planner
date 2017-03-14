@@ -11,17 +11,17 @@ $var title:Non-Overlapping Modules
                 <br>
             </div>
             <div class="row"><!--request form-->
-                <div class="col-md-3 col-md-offset-5">
-                    <form class="form-inline" action="/nonOverlappingModules" method="post">
+                <div class="col-md-4 col-md-offset-4">
+                    <form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">
                         <div class="form-group">
-                            <label for="ay-sem"></label>
+                            <label for="ay-sem">Select AY-Sem:</label>
                             <select class="form-control" name="sem">
                                 $for aysem in lst_of_ay_sem:
                                     <option value="$aysem">$aysem</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-primary">
+                            <input type="submit"  value="Submit" class="btn btn-primary">
                         </div>
                     </form>
                 </div>
