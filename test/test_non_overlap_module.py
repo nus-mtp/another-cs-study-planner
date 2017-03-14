@@ -42,7 +42,7 @@ class TestCode(object):
 
     REDIRECT_CHANGED_CONTENT = 'Non-Overlapping Modules for AY 16/17 Sem 2'
     VALIDATING_TITLE = 'Validating...'
-    SCRIPT_REDIRECT_TO_DEFAULT = "window.location = '/nonOverLappingModules'"
+    SCRIPT_REDIRECT_TO_DEFAULT = "window.location = '/nonOverlappingModules'"
     SCRIPT_ERROR_MESSAGE = "alert('The AY-Semester you specified does not exist!');"
     def __init__(self):
         self.middleware = None
@@ -121,4 +121,5 @@ class TestCode(object):
         root.mustcontain(self.VALIDATING_TITLE)
 
         #checks if validating page contain expected elements
-        
+        root.mustcontain(self.SCRIPT_REDIRECT_TO_DEFAULT)
+        root.mustcontain(self.SCRIPT_ERROR_MESSAGE)
