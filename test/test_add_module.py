@@ -21,6 +21,7 @@ class TestCode(object):
                       'placeholder="e.g. CS1231, CS1010J, LSM1302, GEM1004FC" ' +\
                       'required>'
     FORM_LABEL_NAME = '<label for="module-name">Module Name:</label>'
+
     FORM_INPUT_NAME = '<input class="form-control" type="text" id="module-name" ' +\
                       'name="name" pattern="[a-zA-Z0-9 \-]+$" placeholder="Enter ' +\
                       'Module Name" required>'
