@@ -6,7 +6,7 @@ import hashlib
 import uuid
 import web
 from app import RENDER
-from components import model, session
+from components import model
 from components.handlers.outcome import Outcome
 
 
@@ -29,18 +29,17 @@ class Register(object):
             1) If username is taken, an alert will indicate that username
                is taken.
             2) If all validations pass, the account is inserted into the database.
-        '''
-        '''
+
             Blank inputs are blocked by front-end. For full extent of validation
             we also perform validation here should the front-end happen to be
-            bypassed in some manner. 
+            bypassed in some manner.
         '''
         credentials = web.input()
 
         try:
             input_id = credentials.id
             input_password = credentials.password
-        except(AttributeError):
+        except AttributeError:
             raise web.seeother('/register')
 
         if credentials.id == '' or credentials.password == '':
