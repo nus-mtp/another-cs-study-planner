@@ -63,5 +63,5 @@ INSERT INTO moduleMounted VALUES('MM1014', 'AY 16/17 Sem 2', 140);
 INSERT INTO moduleMountTentative VALUES('MM1014', 'AY 17/18 Sem 2', 555);
 INSERT INTO moduleBackup VALUES('MM1014', 'Dummy Modified Module 14', 'Quota and MC are modified', 12);
 
-INSERT INTO module VALUES('MM1015', 'Dummy Modified Module 8', 'Remounted in sem 1, but quota is not specified', 8);
+INSERT INTO module VALUES('MM1015', 'Dummy Modified Module 15', 'Remounted in sem 1, but quota is not specified', 8);
 INSERT INTO moduleMountTentative VALUES('MM1015', 'AY 17/18 Sem 2', NULL);

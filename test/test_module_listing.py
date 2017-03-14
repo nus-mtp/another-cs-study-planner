@@ -2,9 +2,9 @@
     test_module_listing.py test the module listing view.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP, SESSION
-import web
+from nose.tools import assert_equal
+from app import APP
+from components import session
 
 
 class TestCode(object):
@@ -12,18 +12,24 @@ class TestCode(object):
         This class runs the test cases to test app home page
     '''
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
-    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary pull-right"'+\
-                                 ' type="submit" value="Go To Fixed Module Mountings" />'
+    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary ' +\
+                                 'pull-right" type="submit" value="Go To ' +\
+                                 'Fixed Module Mountings" data-toggle="tooltip" ' +\
+                                 'data-placement="bottom" title="See fixed module ' +\
+                                 'mountings for current AY">'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
-    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"'+\
-                                     ' value="Go To Tentative Module Mountings" />'
+    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
+                                     'type="submit" value="Go To Tentative Module ' +\
+                                     'Mountings" data-toggle="tooltip" ' +\
+                                     'data-placement="bottom" title="See tentative ' +\
+                                     'module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
     TABLE_HEADER_DESCRIPTION = '<th>Description</th>'
     TABLE_HEADER_MC = '<th>MCs</th>'
-    TABLE_HEADER_STATUS = '<th>Status</th>'
+    TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
     TABLE_HEADER_ACTIONS = '<th data-sortable="false">Actions</th>'
 
     global_var = None
@@ -39,8 +45,14 @@ class TestCode(object):
         '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        # Sets up the simulated 'login' state
-        SESSION['id'] = web.ACCOUNT_LOGIN_SUCCESSFUL
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_index_valid_response(self):
@@ -100,17 +112,19 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
-    @raises(Exception)
     def test_index_goto_invalid_module_overview_page_response(self):
         '''
             Tests if navigation to a module overview page with
             an invalid target module code will fail.
-
-            NOTE: this test case is supposed to FAIL.
         '''
         root = self.test_app.get('/modules')
         # an exception WILL be encountered here
-        root.goto('/viewModule?code=CS0123', method='get')
+        response = root.goto('/viewModule?code=CS0123', method='get')
+        assert_equal(response.status, 200)
+
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        response.mustcontain("Not Found")
 
     def test_index_module_mounting_view_options(self):
         '''

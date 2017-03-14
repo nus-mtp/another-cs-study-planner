@@ -14,8 +14,10 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
-from app import APP, SESSION
+from nose.tools import assert_equal
+from app import APP
+from components import session
+
 
 class TestCode(object):
     '''
@@ -27,16 +29,13 @@ class TestCode(object):
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
 
-    FORM_SEARCH_MODULE = '<form class="search-form" id="search-form"'
-    FORM_SEARCH_MODULE_LABEL_CODE = '<label for="module-code">Enter ' +\
-                                    'Module Code: </label>'
-    FORM_SEARCH_MODULE_INPUT_CODE_1 = '<input type="text"'
-    FORM_SEARCH_MODULE_INPUT_CODE_2 = 'name="module-code"'
-    FORM_SEARCH_MODULE_AY_SEM_LABEL = '<label for="ay-sem">Select Target ' +\
-                                      'AY &amp; Semester: </label>'
-    FORM_SEARCH_MODULE_AY_SEM_INPUT = '<select name="ay-sem" form="search-form">'
-    FORM_SEARCH_MODULE_AY_SEM_BUTTON = '<button type="submit" class="btn ' +\
-                                       'btn-primary">Search</button>'
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
+                            'action="/editModule" method="post">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
+                                   ' value="Edit General Module Info" ' +\
+                                   'data-toggle="tooltip" data-placement="right" ' +\
+                                   'title="Edit the module\'s name, description ' +\
+                                   'and MCs">'
 
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
@@ -71,9 +70,16 @@ class TestCode(object):
         '''
             Sets up the 'app.py' fixture
         '''
-        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_view_valid_module_overview_valid_response(self):
@@ -87,16 +93,17 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    @raises(Exception)
     def test_view_invalid_module_overview_valid_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
-
-            NOTE: this test case is supposed to FAIL
         '''
-        # an exception WILL be encountered here
-        self.test_app.get(self.URL_VIEW_MODULE_INVALID)
+        root = self.test_app.get(self.URL_VIEW_MODULE_INVALID)
+        assert_equal(root.status, 200)
+
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        root.mustcontain("Not Found")
 
 
     def test_view_module_overview_goto_valid_individual_module(self):
@@ -116,7 +123,6 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
 
-    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_code(self):
         '''
             Tests if navigation to an individual module view
@@ -128,64 +134,52 @@ class TestCode(object):
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
-        root.goto(url, method='get')
-
-
-    '''
-        Tests if navigation to an individual module view
-        with invalid AY-semester is unsuccesful.
-
-        (i.e. navigation to module info for valid target module and
-        quota, but invalid AY-semester)
-
-        NOTE: Checking for invalid AY-semester is not implemented yet.
-    '''
-    '''
-    @raises(Exception)
-    def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
-              '&quota=60'
         response = root.goto(url, method='get')
-    '''
+
+        assert_equal(response.status, 200)
+
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        response.mustcontain("Not Found")
 
 
-    '''
-        Tests if navigation to an individual module view
-        with invalid quota is unsuccesful.
+    # '''
+    #     Tests if navigation to an individual module view
+    #     with invalid AY-semester is unsuccesful.
 
-        (i.e. navigation to module info for invalid quota and
-        valid target module and AY-semester)
+    #     (i.e. navigation to module info for valid target module and
+    #     quota, but invalid AY-semester)
 
-        NOTE: Checking for invalid quota is not implemented yet.
-    '''
-    '''
-    @raises(Exception)
-    def test_view_module_overview_goto_individual_module_invalid_quota(self):
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=70'
-        response = root.goto(url, method='get')
-    '''
+    #     NOTE: Checking for invalid AY-semester is not implemented yet.
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
+    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+    #     url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
+    #           '&quota=60'
+    #     response = root.goto(url, method='get')
+    # '''
 
-    '''
-    def test_view_module_overview_search_form(self):
-    '''
-    '''
-        Tests if the module-search form exists.
-        NOTE: the current form is NON_FUNCTIONAL at the moment.
-    '''
-    '''
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
 
-        root.mustcontain(self.FORM_SEARCH_MODULE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
-        root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
-        root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
-    '''
+    # '''
+    #     Tests if navigation to an individual module view
+    #     with invalid quota is unsuccesful.
+
+    #     (i.e. navigation to module info for invalid quota and
+    #     valid target module and AY-semester)
+
+    #     NOTE: Checking for invalid quota is not implemented yet.
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_module_overview_goto_individual_module_invalid_quota(self):
+    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+    #     url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
+    #           '&quota=70'
+    #     response = root.goto(url, method='get')
+    # '''
+
 
     def test_view_module_overview_contents(self):
         '''
@@ -206,6 +200,9 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
+
 
     def test_contains_overlapping_module_table(self):
         '''
@@ -219,3 +216,14 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
+
+
+    def test_goto_edit_general_info(self):
+        '''
+            Tests if user can access the 'Edit General Module Info' option
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        edit_form = root.forms__get()["edit-module-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)

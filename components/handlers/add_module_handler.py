@@ -2,9 +2,10 @@
     This module contains the handlers for add module page
 '''
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
+from components.handlers.outcome import Outcome
 
 class AddModule(object):
     '''
@@ -14,8 +15,9 @@ class AddModule(object):
         '''
             render page with add module form
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
+
         return RENDER.addModules()
 
     def POST(self):
@@ -29,11 +31,5 @@ class AddModule(object):
         module_desc = data.description
         module_mc = data.mc
 
-        #add
         outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
-        if outcome is True:
-            #add module success
-            raise web.seeother('/viewModule?code=' + module_code)
-        else:
-            error = "module already exist"
-            raise web.seeother('/errorPage?error=' + error)
+        return Outcome().POST("add_module", outcome, module_code)

@@ -16,8 +16,8 @@
 
 from paste.fixture import TestApp
 from nose.tools import assert_equal
-from app import APP, SESSION
-
+from app import APP
+from components import session
 
 class TestCode(object):
     '''
@@ -32,7 +32,7 @@ class TestCode(object):
     TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_MODULE_AY_SEM = '<th>AY-Semester</th>'
     TABLE_HEADER_MODULE_QUOTA = '<th>Class Quota</th>'
-    TABLE_HEADER_MODULE_DEMAND = '<th>Student Demand</th>'
+    TABLE_HEADER_MODULE_DEMAND = '<th>Number of Students Taking Module</th>'
 
 
     def __init__(self):
@@ -40,13 +40,20 @@ class TestCode(object):
         self.test_app = None
 
 
-    def  setUp(self):
+    def setUp(self):
         '''
             Sets up the 'app.py' fixture
         '''
-        SESSION['id'] = 2
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
+
+
+    def tearDown(self):
+        '''
+            Tears down 'app.py' fixture and logs out
+        '''
+        session.tear_down(self.test_app)
 
 
     def test_oversubscribed_modules_valid_response(self):

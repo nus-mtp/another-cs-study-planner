@@ -104,6 +104,10 @@ $(function() {
         "aaSorting": [ 0, "asc" ]
     } );
 
+    $('#specific-modified-module').DataTable( {
+
+    } );
+
     $('#student-focus-area-table').DataTable( {
         "aaSorting": [],
         "pageLength": 25,
@@ -113,6 +117,10 @@ $(function() {
 
     $('#oversubscribed-modules-table').DataTable( {
         "order": [[ 3, "desc" ]]
+    } );
+
+    $('#modules-taken-prior-table').DataTable( {
+        "order": [[ 6, "desc" ], [ 0, "asc" ], [ 3, "asc" ]]
     } );
      
     $('#common-module-table').DataTable( {

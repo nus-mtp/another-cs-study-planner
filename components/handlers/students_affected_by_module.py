@@ -2,9 +2,9 @@
     This module contains the handler to get the students affected by module
     page
 '''
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import model, session
 
 class StudentsAffectedByModule(object):
     '''
@@ -14,7 +14,7 @@ class StudentsAffectedByModule(object):
         '''
             gets the page with code and ay-sem
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         input_data = web.input()
         module_code = input_data.code

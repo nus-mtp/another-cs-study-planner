@@ -3,9 +3,9 @@
     the home page.
 '''
 
-from app import RENDER, SESSION
+from app import RENDER
 import web
-from components import model
+from components import session
 
 
 class Index(object):
@@ -17,8 +17,7 @@ class Index(object):
             This function is called when the '/' page (index.html) is loaded
             If user is not logged in, they are redirected to the login page.
         '''
-        if SESSION['id'] != web.ACCOUNT_LOGIN_SUCCESSFUL:
+        if not session.validate_session():
             raise web.seeother('/login')
         else:
             return RENDER.index()
-

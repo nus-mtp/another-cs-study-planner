@@ -25,11 +25,10 @@
 
 import hashlib
 import uuid
-from paste.fixture import TestApp
-from nose.tools import assert_equal
-from app import APP, SESSION
+from app import APP
 from components import model
-
+from nose.tools import assert_equal
+from paste.fixture import TestApp
 
 
 class TestCode(object):
@@ -40,40 +39,51 @@ class TestCode(object):
 
 
     URL_DEFAULT_LOGIN = '/login'
+    URL_DEFAULT_REGISTER = '/register'
     URL_INDEX = '/'
+    URL_DEFAULT_LOGOUT = '/logout'
 
-    FORM_USER_LOGIN = '<form id="loginForm" action="/verifyLogin" method="post">'
-    FORM_USER_LOGIN_USERNAME_LABEL = '<label for="username">Username</label>'
-    FORM_USER_LOGIN_USERNAME_FIELD = '<input type="text" id="username" ' +\
-                                     'name="username"/>'
+    FORM_USER_LOGIN = '<form id="loginForm" action="/login" method="post">'
+    FORM_USER_LOGIN_USERNAME_LABEL = '<label for="id">User ID</label>'
+    FORM_USER_LOGIN_USERNAME_FIELD = '<input type="text" class=""form-control" ' +\
+                                     'id="id" name="id" placeholder="User ID" ' +\
+                                     'pattern="^[a-zA-Z0-9]+$" required>'
     FORM_USER_LOGIN_PASSWORD_LABEL = '<label for="password">Password</label>'
-    FORM_USER_LOGIN_PASSWORD_FIELD = '<input type="text" id="password" ' +\
-                                     'name="password"/>'
-    FORM_USER_LOGIN_BUTTON = '<input class="btn btn-primary" ' +\
-                              'type="submit" value="Login" />'
+    FORM_USER_LOGIN_PASSWORD_FIELD = '<input type="password" class="form-control" ' +\
+                                     'id="password" name="password" ' +\
+                                     'placeholder="Password" required>'
+    FORM_USER_LOGIN_BUTTON = '<input type="submit" value="Login" ' +\
+                             'class="btn btn-primary">'
 
-    FORM_USER_REGISTRATION = '<form id="registerForm" action="" method="post">'
-    FORM_USER_REGISTRATION_USERNAME_LABEL = '<label for="username">Username</label>'
-    FORM_USER_REGISTRATION_USERNAME_FIELD = '<input type="text" id="username" ' +\
-                                            'name="username"/>'
+    FORM_USER_REGISTRATION = '<form id="registerForm" action="/register" method="post">'
+    FORM_USER_REGISTRATION_USERNAME_LABEL = '<label for="id">User ID</label>'
+    FORM_USER_REGISTRATION_USERNAME_FIELD = '<input type="text" class="form-control"' +\
+                                            ' id="id" name="id" placeholder="User ' +\
+                                            'ID" pattern="^[a-zA-Z0-9]+$" required>'
     FORM_USER_REGISTRATION_PASSWORD_LABEL = '<label for="password">Password</label>'
-    FORM_USER_REGISTRATION_PASSWORD_FIELD = '<input type="text" id="password" ' +\
-                                            'name="password"/>'
-    FORM_USER_REGISTRATION_BUTTON = '<input class="btn btn-info" ' +\
-                              'type="submit" value="Register" />'
+    FORM_USER_REGISTRATION_PASSWORD_FIELD = '<input type="password" class="form-control"' +\
+                                            'id="password" name="password" placeholder=' +\
+                                            '"Password" required>'
+    FORM_USER_REGISTRATION_BUTTON = '<input type="submit" value="Create Account"' +\
+                                    'class="btn btn-primary"'
 
     HEADER_ALREADY_LOGGED_IN = 'You have already logged in.'
     BUTTON_ALREADY_LOGGED_IN = '<a href="/"><button class="btn btn-primary">' +\
                                'Enter</button></a>'
 
-    SCRIPT_ACCOUNT_CREATE_SUCCESSFUL = 'window.alert("Your account has been ' +\
-                                       'created successfully.");'
-    SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL = 'window.alert("The username has been ' +\
-                                         'taken. Please register with a different ' +\
-                                         'username.");'
-    SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL = 'window.alert("Login credentials are ' +\
-                                        'incorrect. Please try again.");'
+    SCRIPT_ACCOUNT_CREATE_SUCCESSFUL = "alert('Your account has been " +\
+                                       "created successfully. Please proceed to " +\
+                                       "login.');"
+    SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL = "alert('The username has been " +\
+                                         "taken. Please register with a different " +\
+                                         "username.');"
+    SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL = "alert('Login credentials are " +\
+                                        "empty or incorrect. Please try again.');"
 
+    SCRIPT_REDIRECT_TO_LOGIN = "window.location = '/login'"
+    SCRIPT_REDIRECT_TO_REGISTER = "window.location = '/register'"
+
+    VALIDATING_TITLE = "Validating..."
 
     def __init__(self):
         self.middleware = None
@@ -87,7 +97,6 @@ class TestCode(object):
         '''
         self.middleware = []
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
-        SESSION['id'] = 0
         model.delete_admin("user")
         model.delete_admin("user2")
         self.create_dummy_user()
@@ -96,10 +105,11 @@ class TestCode(object):
     def tearDown(self):
         '''
             Removes any trace of dummy accounts that were present
-            during the invocation of all the test cases.
+            during the invocation of all the test cases and logs out if needed.
         '''
         model.delete_admin("user")
         model.delete_admin("user2")
+        self.test_app.post(self.URL_DEFAULT_LOGOUT)
 
 
     def create_dummy_user(self):
@@ -146,7 +156,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_DEFAULT_LOGIN)
         login_form = root.forms__get()["loginForm"]
-        login_form.__setitem__("username", "user")
+        login_form.__setitem__("id", "user")
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
@@ -160,7 +170,7 @@ class TestCode(object):
         # Checks if page contains home page's title
         redirected.mustcontain("Welcome to CSModify")
 
-        #FAIL
+
     def test_blank_username_login_submission_response(self):
         '''
             Tests if user should fail to login if username
@@ -168,21 +178,20 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_DEFAULT_LOGIN)
         login_form = root.forms__get()["loginForm"]
+        login_form.__setitem__("id", None)
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
-        #FAIL
+
     def test_blank_password_login_submission_response(self):
         '''
             Tests if user should fail to login if password
@@ -190,19 +199,17 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_DEFAULT_LOGIN)
         login_form = root.forms__get()["loginForm"]
-        login_form.__setitem__("username", "user")
+        login_form.__setitem__("id", "user")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
-        redirected.mustcontain("User Login")
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
 
     def test_invalid_account_login_submission_response(self):
@@ -211,22 +218,20 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_DEFAULT_LOGIN)
         login_form = root.forms__get()["loginForm"]
-        login_form.__setitem__("username", "nonexistent")
+        login_form.__setitem__("id", "nonexistent")
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_ACCOUNT_LOGIN_UNSUCCESSFUL)
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
 
-        #FAIL
+
     def test_already_logged_in_response(self):
         '''
             Tests if user should not see the login form if he has
@@ -234,7 +239,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_DEFAULT_LOGIN)
         login_form = root.forms__get()["loginForm"]
-        login_form.__setitem__("username", "user")
+        login_form.__setitem__("id", "user")
         login_form.__setitem__("password", "12345678")
         response = login_form.submit()
 
@@ -259,9 +264,29 @@ class TestCode(object):
         '''
             Tests if user is redirected correctly upon successful registration.
         '''
-        root = self.test_app.get(self.URL_DEFAULT_LOGIN)
+        root = self.test_app.get(self.URL_DEFAULT_REGISTER)
         registration_form = root.forms__get()["registerForm"]
-        registration_form.__setitem__("username", "user2")
+        registration_form.__setitem__("id", "user2")
+        registration_form.__setitem__("password", "12345678")
+        response = registration_form.submit()
+
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
+
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_LOGIN)
+        response.mustcontain(self.SCRIPT_ACCOUNT_CREATE_SUCCESSFUL)
+
+
+    def test_blank_username_registration_submission_response(self):
+        '''
+            Tests if account registration with no username triggers validation.
+        '''
+        root = self.test_app.get(self.URL_DEFAULT_REGISTER)
+        registration_form = root.forms__get()["registerForm"]
+        registration_form.__setitem__("id", None)
         registration_form.__setitem__("password", "12345678")
         response = registration_form.submit()
 
@@ -272,47 +297,26 @@ class TestCode(object):
         assert_equal(redirected.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_CREATE_SUCCESSFUL)
-
-
-    def test_blank_username_registration_submission_response(self):
-        '''
-            Tests if account registration with no username triggers validation.
-        '''
-        root = self.test_app.get(self.URL_DEFAULT_LOGIN)
-        registration_form = root.forms__get()["registerForm"]
-        registration_form.__setitem__("password", "12345678")
-        response = registration_form.submit()
-
-        # checks if HTTP response code is 200 (= OK)
-        # No redirection occurs if any field is blank
-        assert_equal(response.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title and the validation message.
-        response.mustcontain("User Login")
-        response.mustcontain("Required")
+        redirected.mustcontain("Account Registration")
 
 
     def test_blank_password_registration_submission_response(self):
         '''
             Tests if account registration with no password triggers validation.
         '''
-        root = self.test_app.get(self.URL_DEFAULT_LOGIN)
+        root = self.test_app.get(self.URL_DEFAULT_REGISTER)
         registration_form = root.forms__get()["registerForm"]
-        registration_form.__setitem__("username", "user2")
+        registration_form.__setitem__("id", "user2")
         response = registration_form.submit()
 
-        # checks if HTTP response code is 200 (= OK)
-        # No redirection occurs if any field is blank
-        assert_equal(response.status, 200)
+        # checks if HTTP response code is 303 (= See Other)
+        assert_equal(response.status, 303)
+
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title and the validation message.
-        response.mustcontain("User Login")
-        response.mustcontain("Required")
+        redirected.mustcontain("Account Registration")
 
 
     def test_duplicate_username_registration_submission_response(self):
@@ -320,20 +324,17 @@ class TestCode(object):
             Tests if account registration with a pre-existing username
             triggers validation.
         '''
-        root = self.test_app.get(self.URL_DEFAULT_LOGIN)
+        root = self.test_app.get(self.URL_DEFAULT_REGISTER)
         registration_form = root.forms__get()["registerForm"]
-        registration_form.__setitem__("username", "user")
+        registration_form.__setitem__("id", "user")
         registration_form.__setitem__("password", "12345678")
         response = registration_form.submit()
 
-        # checks if HTTP response code is 303 (= See Other)
-        # Redirection occurs if no fields are blank.
-        assert_equal(response.status, 303)
-
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        # checks if Validating page loaded
+        response.mustcontain(self.VALIDATING_TITLE)
+        assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'User Login' title and the validation message.
-        redirected.mustcontain("User Login")
-        redirected.mustcontain(self.SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL)
+        # Checks if page will redirect to /login
+        response.mustcontain(self.SCRIPT_REDIRECT_TO_REGISTER)
+        response.mustcontain(self.SCRIPT_ACCOUNT_CREATE_UNSUCCESSFUL)

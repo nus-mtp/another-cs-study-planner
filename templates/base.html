@@ -17,7 +17,7 @@ $def with (page)
 	</head>
 
 	<body>
-		$if page.title == 'Login to CSModify':
+		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
 			$:page
 
 		$else:
@@ -33,6 +33,11 @@ $def with (page)
 					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
+					</form>
+					<form class="navbar-form navbar-right" action="/logout" method="post">
+						<button class="btn btn-lg btn-danger" type="submit">
+							<span class="glyphicon glyphicon-log-out"></span> Logout
+						</button>
 					</form>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
@@ -56,8 +61,8 @@ $def with (page)
 					<!--li><a href="#">Sort/Filter Modules</a></li>
 					<li><a href="#">Recently Removed Modules</a></li>
 					<li><a href="#">Starred Modules</a></li-->
-					<li><a id="sidebar" href="/moduleMountingFixed">View Modules for Current AY</a></li>
-					<li><a id="sidebar" href="/moduleMountingTentative">View Modules for Next AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
 				</ul>
 				<h3><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Change Curriculum</h3>
@@ -70,9 +75,9 @@ $def with (page)
 				</ul>
 				<h3><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;Module Relations</h3>
 				<ul>
-					<li><a id="sidebar" href="/overlappingModules">Commonly Overlapping Modules</a></li>
+					<li><a id="sidebar" href="/overlappingModules">Overlapping Modules</a></li>
+					<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
 					<!--li><a href="#">Module Info by Semester</a></li>
-					<li><a href="javascript:void(0)">Prior Modules Taken</a></li>
 				    <ul>
 					   <li><a href="#">Before Specified Module</a></li>
 				        <li><a href="#">Before Internship</a></li>

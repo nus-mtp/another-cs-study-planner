@@ -1,68 +1,34 @@
-$def with (loginform, registerform, response=0)
+$def with (loggedIn=False)
 
 $var title:Login to CSModify
 
-$# Account is successfully created
-$if response == 1:
-	<script type="text/javascript">
-		window.alert("Your account has been created successfully.");
-	</script>
-
-$# Account ID is taken
-$if response == -1:
-	<script type="text/javascript">
-		window.alert("The username has been taken. Please register with a different username.");
-	</script>
-
-$# User login is unsuccessful
-$if response == -2:
-	<script type="text/javascript">
-		window.alert("Login credentials are incorrect. Please try again.");
-	</script>
-
 <div class="row">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header text-center">
-                <h1>CSModify</h1>
-                <p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
-            </div>
+    <div class="col-md-12">
+        <div class="page-header text-center">
+            <h1>CSModify</h1>
+            <p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
         </div>
     </div>
-    <span class="border-0 rounded">
-        <div id="register-form-wrapper" class="row center-block">
-
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#login-1" aria-controls="login-1" role="tab" data-toggle="tab">login</a></li>
-            <li role="presentation"><a href="#register-1" aria-controls="register-1" role="tab" data-toggle="tab">Register</a></li>
-            </ul>
-
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="login-1">
-                    <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
-                    <br>
-                    $if response == 2:
-                        <h2>You have already logged in.</h2>
-                        <br>
-                        <a href="/"><button class="btn btn-primary">Enter</button></a>
-                    $else:
-                        <form id="loginForm" action="/verifyLogin" method="post">
-                            $:loginform.render()
-                        </form>
-                    <br>
-                    <br> 
+    <div class="col-md-4 col-md-offset-4">
+        <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
+        <br>
+        $if loggedIn == True:
+            <h2>You have already logged in.</h2>
+            <br>
+            <a href="/"><button class="btn btn-primary">Enter</button></a>
+        $else:
+            <form id="loginForm" action="/login" method="post">
+                <div class="form-group">
+                    <label for="id">User ID</label>
+                    <input type="text" class="form-control" id="id" name="id" placeholder="User ID" pattern="^[a-zA-Z0-9]+$$" required>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="register-1">
-                    <h2 class="text-center"><span class="glyphicon glyphicon-pencil"></span> Account Registration</h2>
-                        <br>
-                        <form id="registerForm" action="" method="post">
-                            $:registerform.render()
-                        </form>
-                        <br>
-                        <br>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                 </div>
-            </div>
-
-        </div>
-    </span>
-<div>
+                <input type="submit" value="Login" class="btn btn-primary">
+            </form>
+            <p>Don&#39;t have an account yet? Create one <a href="/register">here</a>.</p>
+            <br>
+            <br>
+    </div>
