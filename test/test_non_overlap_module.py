@@ -29,9 +29,11 @@ class TestCode(object):
     URL_NON_OVERLAP_MODS_INVALID = '/nonOverlappingModules?sem=AY%2016/18%20Sem%202'
     CURRENT_SEM = 'AY 16/17 Sem 1'
     DEFAULT_TITLE = 'Non-Overlapping Modules for AY 16/17 Sem 1'
-    TEXT = '<p class="text-center" data-toggle="tooltip" data-placement="bottom" '+\
-           'title="By default, these pairs are shown for the current AY-Semester.">Shows all module pairs '+\
-           'which no student takes together in a particular semester.</p>'
+    TEXT = '<p class="text-center" >Shows all module pairs which no student takes'+\
+           ' together in a particular semester.<span data-toggle="tooltip" '+\
+           'data-placement="bottom" title="By default, these pairs are shown for the '+\
+           'current AY-Semester." class="glyphicon glyphicon-info-sign" title="By '+\
+           'default, these pairs are shown for the current AY-Semester."></span></p>'
     FORM = '<form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">'
     SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
     SELECT_ELEMENT = '<select class="form-control" name="sem">'
