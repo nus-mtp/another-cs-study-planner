@@ -888,3 +888,18 @@ def clean_old_sessions(date_to_delete):
         CONNECTION.rollback()
         return False
     return True
+
+
+def add_prerequisite(module_code, prereq_code, index):
+    '''
+        Insert a prerequisite into the prerequisite table.
+        Returns true if successful, false if duplicate primary key detected
+    '''
+    sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
