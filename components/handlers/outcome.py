@@ -85,4 +85,8 @@ class Outcome(object):
                 outcome_message = "Error: Module code (" + module_code + ") does not exist! "
                 redirect_page = "/moduleTakenPriorToOthers"
 
+            elif action == "non-overlapping-mods":
+                outcome_message = "Error: invalid AYSem!"
+                redirect_page = "/nonOverlappingModules"
+
             return RENDER.outcome(outcome_message, redirect_page)
