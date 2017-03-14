@@ -29,14 +29,16 @@ URLS = (
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
     '/login', 'components.handlers.login.Login',
-    '/verifyLogin', 'components.handlers.login.verifyLogin',
+    '/register', 'components.handlers.register.Register',
     '/logout', 'components.handlers.logout.Logout',
     '/studentEnrollment', 'components.handlers.student_enrollment.StudentEnrollmentQuery',
     '/modifiedModules', 'components.handlers.modified_modules.Modified',
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
     '/outcome', 'components.handlers.outcome.Outcome',
-    '/404', 'components.handlers.tempErrorPage.Error',
+    '/studentsAffectedByModule',
+    'components.handlers.students_affected_by_module.StudentsAffectedByModule',
+    '/addModule', 'components.handlers.add_module_handler.AddModule',
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo'
 )
 

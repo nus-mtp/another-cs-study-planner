@@ -30,6 +30,18 @@ def get_module(code):
     return DB_CURSOR.fetchone()
 
 
+def is_existing_module(code):
+    '''
+        Returns true if specified module code exists in the database,
+        returns false otherwise.
+    '''
+    sql_command = "SELECT COUNT(*) FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    number_module = DB_CURSOR.fetchone()[0]
+
+    return number_module > 0
+
+
 def get_all_fixed_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all fixed mounted modules
@@ -283,10 +295,20 @@ def delete_module(code):
     return True
 
 
+def get_module_name(code):
+    '''
+        Retrieves the module name of a module given its module code.
+    '''
+    sql_command = "SELECT name FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+
+    return DB_CURSOR.fetchone()[0]
+
+
 def get_oversub_mod():
     '''
         Retrieves a list of modules which are oversubscribed.
-        Returns module, AY/Sem, quota, number students interested
+        Returns module code, module name, AY/Sem, quota, number students interested
         i.e. has more students interested than the quota
     '''
     list_of_oversub_with_info = []
@@ -314,7 +336,9 @@ def get_oversub_mod():
                 quota = real_quota
 
             if num_student_planning > quota:
-                oversub_info = (mod_code, ay_sem, real_quota, num_student_planning)
+                module_name = get_module_name(mod_code)
+                oversub_info = (mod_code, module_name, ay_sem,
+                                real_quota, num_student_planning)
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
@@ -458,9 +482,14 @@ def delete_tenta_mounting(code, ay_sem):
 def get_modules_with_modified_details():
     '''
         Get all modules whose details (name/description/MC) has been modified.
-        Return the module's code, old name, old description, and old MC
+        Return the module's code, old name, old description, old MC,
+        current name, current description, and current MC
     '''
-    sql_command = "SELECT * FROM moduleBackup ORDER BY code ASC"
+    sql_command = "SELECT m1.code, m1.name, m1.description, m1.mc, " +\
+                  "m2.name, m2.description, m2.mc " +\
+                  "FROM moduleBackup m1, module m2 " +\
+                  "WHERE m1.code = m2.code " +\
+                  "ORDER BY code ASC"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -468,12 +497,12 @@ def get_modules_with_modified_details():
 def get_modules_with_modified_quota():
     '''
         Find modules whose quota in target AY/Sem is different from quota in current AY/Sem
-        and return the module code, current AY/Sem, current quota,
-        target AY/Sem, and modified quota
+        and return the module code, module name, current AY/Sem, current AY/Sem's quota,
+        target AY/Sem, and target AY/Sem's quota
     '''
-    sql_command = "SELECT m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem, " +\
+    sql_command = "SELECT m1.moduleCode, m3.name, m1.acadYearAndSem, m2.acadYearAndSem, " +\
                   "m1.quota, m2.quota " +\
-                  "FROM moduleMounted m1, moduleMountTentative m2 " +\
+                  "FROM moduleMounted m1, moduleMountTentative m2, module m3 " +\
                   "WHERE m1.moduleCode = m2.moduleCode " +\
                   "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
                   "AND (" +\
@@ -481,6 +510,7 @@ def get_modules_with_modified_quota():
                   "    OR (m1.quota IS NULL AND m2.quota IS NOT NULL) " +\
                   "    OR (m2.quota IS NULL AND m1.quota IS NOT NULL) " +\
                   ") " +\
+                  "AND m1.moduleCode = m3.code " +\
                   "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
@@ -608,99 +638,115 @@ def get_num_students_by_focus_areas():
 
     return final_table
 
+
 def get_mod_taken_together_with(code):
     '''
         Retrieves the list of modules taken together with the specified
         module code in the same semester.
 
-        Returns a table of lists (up to 10 top results). Each list contains
-        (specified code, module code of mod taken together, aySem, number of students)
+        Returns a table of lists. Each list contains
+        (specified module code, specified module name,
+        module taken together's code, module taken together's name,
+        aySem, number of students)
 
-        e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students
+        e.g. [(CS1010, Programming Methodology, CS1231,
+        Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
-    #NUM_TOP_RESULTS_TO_RETURN = 10
 
-    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
-                "FROM studentPlans sp1, studentPlans sp2 " + \
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name" + \
+                ", sp1.acadYearAndSem, COUNT(*) " + \
+                "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                 "WHERE sp1.moduleCode = %s AND " + \
                 "sp2.moduleCode <> sp1.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
                 "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
-                "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
+                "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, sp1.acadYearAndSem " + \
                 "ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command, (code,))
 
     return DB_CURSOR.fetchall()
 
+
 def get_all_mods_taken_together():
     '''
         Retrieves the list of all modules taken together in the same semester.
 
         Returns a table of lists. Each list contains
-        (module code 1, module code 2, aySem, number of students)
-        where module code 1 and module code 2 are the 2 mods taken together
+        (module 1 code, module 1 name, module 2 code, module 2 name, aySem, number of students)
+        where module 1 and module 2 are the 2 mods taken together
         in the same semester.
 
-        e.g. [(CS1010, CS1231, AY 16/17 Sem 1, 5)] means there are 5 students
+        e.g. [(CS1010, Programming Methodology, CS1231,
+        Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
 
-    sql_command = "SELECT sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem, COUNT(*) " + \
-                "FROM studentPlans sp1, studentPlans sp2 " + \
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name," + \
+                " sp1.acadYearAndSem, COUNT(*) " + \
+                "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                 "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
                 "sp1.studentId = sp2.studentId AND " + \
-                "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
-                "GROUP BY sp1.moduleCode, sp2.moduleCode, sp1.acadYearAndSem " + \
-                "ORDER BY COUNT(*) DESC"
+                "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
+                "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
+                "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
 
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
 
 
-def add_session(username, session_salt):
+def get_list_students_take_module(code, aysem):
     '''
-        Register a session into the database, overwriting
-        existing sessions by same user
-    '''
-    # Delete existing session, if any
-    sql_command = "DELETE FROM sessions WHERE staffid=%s"
-    DB_CURSOR.execute(sql_command, (username,))
+        Retrieves the list of students who take specified module at specified aysem.
 
-    sql_command = "INSERT INTO sessions VALUES (%s, %s)"
-    DB_CURSOR.execute(sql_command, (username, session_salt))
-    CONNECTION.commit()
-
-
-def validate_session(username, session_id):
+        Returns a table of lists. Each list represents a student and it contains
+        (matric number, year of study, focus area 1, focus area 2)
     '''
-        Check if a provided session-id is valid.
-    '''
-    sql_command = "SELECT sessionSalt FROM sessions WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-    session = DB_CURSOR.fetchall()
-    if not session:
-        return False
-    else:
-        hashed_id = hashlib.sha512(username + session[0][0]).hexdigest()
-        is_valid = (session_id == hashed_id)
-        return is_valid
+
+    sql_command = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
+                "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                "AND sp.studentid = s.nusnetid AND " + \
+                "sp.studentid = tfa.nusnetid"
+
+    DB_CURSOR.execute(sql_command, (code, aysem))
+
+    current_list_of_students = DB_CURSOR.fetchall()
+
+    return replace_null_with_dash(current_list_of_students)
 
 
-def clean_old_sessions(date_to_delete):
+def replace_null_with_dash(table):
     '''
-        Delete all sessions dating before specified date
+        Changes all the NULL values found in the table to '-'
+        This function supports a 2D table.
     '''
-    sql_command = "DELETE FROM sessions WHERE date < %s;"
-    try:
-        DB_CURSOR.execute(sql_command, (date_to_delete,))
-        CONNECTION.commit()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
-    return True
+    table = convert_to_list(table)
+
+    for row in table:
+        row_length = len(row)
+        for col in range(row_length):
+            if row[col] is None:
+                row[col] = '-'
+
+    return table
+
+
+def convert_to_list(table):
+    '''
+        Converts a list of tuples to a list of lists.
+    '''
+    converted_table = list()
+
+    for row in table:
+        conveted_list = list(row)
+        converted_table.append(conveted_list)
+
+    return converted_table
 
 
 def get_modA_taken_prior_to_modB():
@@ -799,3 +845,46 @@ def get_number_of_students_taking_module(module_code, ay_sem):
     DB_CURSOR.execute(sql_command, (module_code, ay_sem))
 
     return DB_CURSOR.fetchone()[0]
+
+
+def add_session(username, session_salt):
+    '''
+        Register a session into the database, overwriting
+        existing sessions by same user
+    '''
+    # Delete existing session, if any
+    sql_command = "DELETE FROM sessions WHERE staffid=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+
+    sql_command = "INSERT INTO sessions VALUES (%s, %s)"
+    DB_CURSOR.execute(sql_command, (username, session_salt))
+    CONNECTION.commit()
+
+
+def validate_session(username, session_id):
+    '''
+        Check if a provided session-id is valid.
+    '''
+    sql_command = "SELECT sessionSalt FROM sessions WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    session = DB_CURSOR.fetchall()
+    if not session:
+        return False
+    else:
+        hashed_id = hashlib.sha512(username + session[0][0]).hexdigest()
+        is_valid = (session_id == hashed_id)
+        return is_valid
+
+
+def clean_old_sessions(date_to_delete):
+    '''
+        Delete all sessions dating before specified date
+    '''
+    sql_command = "DELETE FROM sessions WHERE date < %s;"
+    try:
+        DB_CURSOR.execute(sql_command, (date_to_delete,))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True

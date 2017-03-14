@@ -62,11 +62,14 @@ class IndividualModule(object):
 
         self.is_current_ay = is_current_ay
 
+
     def get_overlapping_mods(self, code):
         '''
             Get modules that over lap with this module
         '''
         return model.get_mod_taken_together_with(code)
+
+
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
@@ -78,7 +81,8 @@ class IndividualModule(object):
         module_code = input_data.code
         module_info = model.get_module(module_code)
         if module_info is None:
-            raise web.seeother('/404')
+            error_message = module_code + " does not exist in the system."
+            return RENDER.notfound(error_message)
 
         target_ay_sem = input_data.targetAY
 

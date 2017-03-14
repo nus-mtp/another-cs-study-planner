@@ -29,16 +29,13 @@ class TestCode(object):
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
 
-    FORM_SEARCH_MODULE = '<form class="search-form" id="search-form"'
-    FORM_SEARCH_MODULE_LABEL_CODE = '<label for="module-code">Enter ' +\
-                                    'Module Code: </label>'
-    FORM_SEARCH_MODULE_INPUT_CODE_1 = '<input type="text"'
-    FORM_SEARCH_MODULE_INPUT_CODE_2 = 'name="module-code"'
-    FORM_SEARCH_MODULE_AY_SEM_LABEL = '<label for="ay-sem">Select Target ' +\
-                                      'AY &amp; Semester: </label>'
-    FORM_SEARCH_MODULE_AY_SEM_INPUT = '<select name="ay-sem" form="search-form">'
-    FORM_SEARCH_MODULE_AY_SEM_BUTTON = '<button type="submit" class="btn ' +\
-                                       'btn-primary">Search</button>'
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
+                            'action="/editModule" method="post">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
+                                   ' value="Edit General Module Info" ' +\
+                                   'data-toggle="tooltip" data-placement="right" ' +\
+                                   'title="Edit the module\'s name, description ' +\
+                                   'and MCs">'
 
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
@@ -56,6 +53,12 @@ class TestCode(object):
     CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
                                         'class="table table-bordered table-hover display ' +\
                                         'dataTable">'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
 
 
     def __init__(self):
@@ -94,18 +97,14 @@ class TestCode(object):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
-
-            NOTE: this test case is supposed to FAIL
         '''
-        # an exception WILL be encountered here
         root = self.test_app.get(self.URL_VIEW_MODULE_INVALID)
-        assert_equal(root.status, 303)
+        assert_equal(root.status, 200)
 
-        redirected = root.follow()
-        assert_equal(redirected.status, 200)
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page contains 'Not Found'
-        redirected.mustcontain("NOT FOUND")
+        root.mustcontain("Not Found")
+
 
     def test_view_module_overview_goto_valid_individual_module(self):
         '''
@@ -136,13 +135,12 @@ class TestCode(object):
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
-        assert_equal(response.status, 303)
 
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
+        assert_equal(response.status, 200)
+
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page contains 'Not Found'
-        redirected.mustcontain("NOT FOUND")
+        response.mustcontain("Not Found")
 
 
     # '''
@@ -182,24 +180,6 @@ class TestCode(object):
     #     response = root.goto(url, method='get')
     # '''
 
-    # '''
-    # def test_view_module_overview_search_form(self):
-    # '''
-    # '''
-    #     Tests if the module-search form exists.
-    #     NOTE: the current form is NON_FUNCTIONAL at the moment.
-    # '''
-    # '''
-    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-
-    #     root.mustcontain(self.FORM_SEARCH_MODULE)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_LABEL_CODE)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_1)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_INPUT_CODE_2)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_LABEL)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_INPUT)
-    #     root.mustcontain(self.FORM_SEARCH_MODULE_AY_SEM_BUTTON)
-    # '''
 
     def test_view_module_overview_contents(self):
         '''
@@ -220,6 +200,9 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO)
+        root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
+
 
     def test_contains_overlapping_module_table(self):
         '''
@@ -227,3 +210,20 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
+
+
+    def test_goto_edit_general_info(self):
+        '''
+            Tests if user can access the 'Edit General Module Info' option
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        edit_form = root.forms__get()["edit-module-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)

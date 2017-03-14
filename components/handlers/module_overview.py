@@ -117,7 +117,8 @@ class ViewMod(object):
         module_code = input_data.code
         module_info = model.get_module(module_code)
         if module_info is None:
-            raise web.seeother('/404')
+            error_message = module_code + ' does not exist in the system.'
+            return RENDER.notfound(error_message)
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)

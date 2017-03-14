@@ -17,7 +17,7 @@ $def with (page)
 	</head>
 
 	<body>
-		$if page.title == 'Login to CSModify':
+		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
 			$:page
 
 		$else:
@@ -30,7 +30,7 @@ $def with (page)
 				    	<a class="btn btn-lg btn-primary" href="/">
 				    		<span class="glyphicon glyphicon-home"></span>
 				    	</a>
-					    <button type="button" class="btn btn-lg btn-primary" onclick="openSidebar()">
+					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
 					</form>
@@ -52,7 +52,7 @@ $def with (page)
 
 			<div id="sidebar" class="sidebar">
 				<a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">&times;</a>
-				<h3><span class="glyphicon glyphicon-align-left"></span> Module Views</h3>
+				<h3><span class="glyphicon glyphicon-align-left"></span>&nbsp;&nbsp;&nbsp;Module Views</h3>
 				<ul>
 					<li><a id="sidebar" href="/oversubscribedModules">Oversubscribed Modules</a></li>
 					<!--li><a href="#">View by Focus Area</a></li-->
@@ -61,29 +61,29 @@ $def with (page)
 					<!--li><a href="#">Sort/Filter Modules</a></li>
 					<li><a href="#">Recently Removed Modules</a></li>
 					<li><a href="#">Starred Modules</a></li-->
-					<li><a id="sidebar" href="/moduleMountingFixed">View Modules for Current AY</a></li>
-					<li><a id="sidebar" href="/moduleMountingTentative">View Modules for Next AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
 				</ul>
-				<!--h3>Change Curriculum</h3>
+				<h3><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Change Curriculum</h3>
 				<ul>
-					<li><a href="#">Change Module Quota</a></li>
+					<!--li><a href="#">Change Module Quota</a></li>
 					<li><a href="#">Change Preclusions/Prerequisites</a></li>
-					<li><a href="#">Edit Module</a></li>
-					<li><a href="#">Add Module</a></li>
-					<li><a href="#">Delete Module</a></li>
-				</ul-->
-				<h3><span class="glyphicon glyphicon-random"></span> Module Relations</h3>
+					<li><a href="#">Edit Module</a></li-->
+					<li><a href="/addModule">Add Module</a></li>
+					<!--li><a href="#">Delete Module</a></li-->
+				</ul>
+				<h3><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;Module Relations</h3>
 				<ul>
-					<li><a id="sidebar" href="/overlappingModules">Commonly Overlapping Modules</a></li>
-					<li><a id="sidebar" href="/moduleTakenPriorToOthers">Prior Modules Taken</a></li>
+					<li><a id="sidebar" href="/overlappingModules">Overlapping Modules</a></li>
+					<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
 					<!--li><a href="#">Module Info by Semester</a></li>
 				    <ul>
 					   <li><a href="#">Before Specified Module</a></li>
 				        <li><a href="#">Before Internship</a></li>
 				    </ul-->
 				</ul>
-				<h3><span class="glyphicon glyphicon-education"></span> Student Statistics</h3>
+				<h3><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;Student Statistics</h3>
 				<ul>
 					<!--li><a href="javascript:void(0)">Module Demand</a></li>
 						<ul>

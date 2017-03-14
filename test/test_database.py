@@ -255,3 +255,16 @@ class TestCode(object):
         model.delete_admin("Admin 1")
         is_admin_valid = model.validate_admin("Admin 1", "pass")
         assert_false(is_admin_valid)
+
+
+    def test_is_existing_module(self):
+        '''
+            Tests if is_existing_module() function is working correctly.
+        '''
+        current_test_module_code = "ZZ7654"
+
+        assert_false(model.is_existing_module(current_test_module_code))
+        model.add_module(current_test_module_code, "Exist Module",
+                         "I describe myself", 4, "New")
+        assert_true(model.is_existing_module(current_test_module_code))
+        model.delete_module(current_test_module_code)

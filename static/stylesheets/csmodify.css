@@ -22,7 +22,7 @@ tr > th {
     z-index: 1; /* Stay on top */
     top: 0;
     left: 0;
-    background-color: #000066;
+    background-color: #245580;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -68,9 +68,9 @@ tr > th {
 }
 
 
-/* ========== STYLING  ========== */
+/* ========== STYLING FOR BACK-TO-TOP BUTTON ========== */
 
-.back-to-top-btn{
+.back-to-top-btn {
     position: fixed;
     bottom: 5px;
     right: 5px;
@@ -78,10 +78,39 @@ tr > th {
 }
 
 /*************************************************************************/
+/* ======================= STYLING FOR HOME PAGE ======================= */
+/*************************************************************************/
+#accordion .panel-heading {
+    padding: 0;
+}
+
+#accordion .panel-title > a {
+    display: block;
+    padding: 0.4em 0.6em;
+    outline: none;
+    font-weight:bold;
+    text-decoration: none;
+}
+
+#accordion .panel-title > a.accordion-toggle > b::after, #accordion a[data-toggle="collapse"] > b::after  {
+    content:"\e113";
+    float: right;
+    font-family: 'Glyphicons Halflings';
+    margin-right :1em;
+}
+#accordion .panel-title > a.accordion-toggle.collapsed > b::after, #accordion a.collapsed[data-toggle="collapse"] > b::after  {
+    content:"\e114";
+}
+
+
+
+/*************************************************************************/
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */
 /*************************************************************************/
 #register-form-wrapper {
-    border-left: 1px solid black;
+    border: 1px solid grey;
+    margin: 0 auto;
+    max-width: 50%;
 }
 
 .account-form-wrapper > form > table {

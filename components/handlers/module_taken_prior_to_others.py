@@ -63,7 +63,6 @@ class TakePriorTo(object):
 
             Also shows the student count for each AY-Sem that module A is taken in
         '''
-
         is_testing = (len(test_data) > 0)
         if is_testing:
             module_A = test_data[0]

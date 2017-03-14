@@ -239,10 +239,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -274,10 +274,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -309,10 +309,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -344,10 +344,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -381,10 +381,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
             current_index += 1
 
@@ -405,10 +405,10 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -457,9 +457,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                mounting_change = module[3]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                mounting_change = module[4]
                 break
 
         assert_true(is_in_modified_modules)
@@ -488,9 +488,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                mounting_change = module[3]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                mounting_change = module[4]
                 break
 
         assert_true(is_in_modified_modules)
@@ -520,9 +520,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                mounting_change = module[3]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                mounting_change = module[4]
                 break
             current_index += 1
 
@@ -540,9 +540,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                mounting_change = module[3]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                mounting_change = module[4]
                 break
             current_index += 1
 
@@ -575,9 +575,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_aysem = module[1]
-                target_aysem = module[2]
-                mounting_change = module[3]
+                current_aysem = module[2]
+                target_aysem = module[3]
+                mounting_change = module[4]
                 break
 
         self.modified_modules_handler.number_of_future_ays = 1
@@ -655,9 +655,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1][0] is not None
-                is_desc_modified = module[1][1] is not None
-                is_mc_modified = module[1][2] is not None
+                is_name_modified = module[2][0] is not None
+                is_desc_modified = module[2][1] is not None
+                is_mc_modified = module[2][2] is not None
         assert_true(is_in_modified_modules)
         assert_true(is_name_modified)
         assert_false(is_desc_modified)
@@ -686,9 +686,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1][0] is not None
-                is_desc_modified = module[1][1] is not None
-                is_mc_modified = module[1][2] is not None
+                is_name_modified = module[2][0] is not None
+                is_desc_modified = module[2][1] is not None
+                is_mc_modified = module[2][2] is not None
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_true(is_desc_modified)
@@ -717,9 +717,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1][0] is not None
-                is_desc_modified = module[1][1] is not None
-                is_mc_modified = module[1][2] is not None
+                is_name_modified = module[2][0] is not None
+                is_desc_modified = module[2][1] is not None
+                is_mc_modified = module[2][2] is not None
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_false(is_desc_modified)
@@ -810,9 +810,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_mounting_modified = module[1]
-                is_quota_modified = module[2]
-                is_module_details_modified = module[3]
+                is_mounting_modified = module[2]
+                is_quota_modified = module[3]
+                is_module_details_modified = module[4]
                 break
         assert_true(is_in_modified_modules)
         assert_false(is_mounting_modified)
@@ -829,9 +829,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_mounting_modified = module[1]
-                is_quota_modified = module[2]
-                is_module_details_modified = module[3]
+                is_mounting_modified = module[2]
+                is_quota_modified = module[3]
+                is_module_details_modified = module[4]
                 break
         assert_true(is_in_modified_modules)
         assert_true(is_mounting_modified)
@@ -901,8 +901,8 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -942,8 +942,8 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
 
         assert_true(is_in_modified_modules)
@@ -960,8 +960,8 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                current_quota = module[3]
-                modified_quota = module[4]
+                current_quota = module[4]
+                modified_quota = module[5]
                 break
         assert_false(is_in_modified_modules)
 
@@ -986,7 +986,7 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                mounting_change = module[3]
+                mounting_change = module[4]
                 break
 
         assert_true(is_in_modified_modules)
@@ -1022,7 +1022,7 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                mounting_change = module[3]
+                mounting_change = module[4]
                 break
 
         assert_true(is_in_modified_modules)
@@ -1071,9 +1071,9 @@ class TestCode(object):
             code = module[0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1][0]
-                is_desc_modified = module[1][1]
-                is_mc_modified = module[1][2]
+                is_name_modified = module[2][0]
+                is_desc_modified = module[2][1]
+                is_mc_modified = module[2][2]
                 break
 
         assert_true(is_in_modified_modules)
@@ -1179,7 +1179,7 @@ class TestCode(object):
         is_in_modified_modules = False
         for module in modified_modules:
             code = module[0]
-            current_quota = module[3]
+            current_quota = module[4]
             if code == test_module_code:
                 is_in_modified_modules = True
                 break

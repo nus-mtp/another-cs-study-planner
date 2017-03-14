@@ -1,41 +1,23 @@
-$def with (moduleInfos, form)  
+$def with (moduleInfos)  
 
-$var title:Module Listing
+$var title:Module Information
 
-<div class="container-fluid" id="main">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-7">
-                    <div id="add-module-form-wrapper">
-                        <h2><span class="glyphicon glyphicon-pencil"></span> Add a new module</h2>
-                        <p>Adds the new module into the <b>tentative mounting plan</b>.</p>
-                        <form id="addModForm" action="" method="post">
-                            $:form.render()
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-md-5">
-                    <div id="module-mounting-options">
-                        <h2><span class="glyphicon glyphicon-list"></span> View Module Mountings</h2>
-                        <p>View your mounting plans here.</p>
-                        <br>
-                        <form action="/moduleMountingFixed" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" />
-                        </form>
-                        <form action="/moduleMountingTentative" method="post">
-                            <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-12">
+            <h1 class="text-center"><b>Module Information</b></h1>
+            <p class="text-center">Shows all modules that exist in the system.</p>
             <br>
-            <h1 class="text-center">All Modules</h1>
-
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="/moduleMountingFixed" method="post">
+                        <input class="btn btn-lg btn-primary pull-right" type="submit" value="Go To Fixed Module Mountings" data-toggle="tooltip" data-placement="bottom" title="See fixed module mountings for current AY">
+                    </form>
+                </div>
+                <form action="/moduleMountingTentative" method="post">
+                    <input class="btn btn-lg btn-primary" type="submit" value="Go To Tentative Module Mountings" data-toggle="tooltip" data-placement="bottom" title="See tentative module mountings for other AYs">
+                </form>
+            </div>
             <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
                 <thead>
                     <tr>
@@ -43,7 +25,7 @@ $var title:Module Listing
                         <th>Name</th>
                         <th>Description</th>
                         <th>MCs</th>
-                        <th>Status</th>
+                        <th>Is New Module?</th>
                         <th data-sortable="false">Actions</th>
                     </tr>
                 </thead>
@@ -54,7 +36,10 @@ $var title:Module Listing
                         <td>$moduleInfo[1]</td>
                         <td>$moduleInfo[2]</td>
                         <td class="text-center">$moduleInfo[3]</td>
-                        <td class="text-center">$moduleInfo[4]</td>
+                        $if moduleInfo[4][0:3] == 'New':
+                            <td class="text-center">Yes</td>
+                        $else:
+                            <td class="text-center">No</td>
                         <td>
                             <form action="/viewModule" method="get">
                                 <input type="hidden" name="code" value="$moduleInfo[0]">

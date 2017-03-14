@@ -1,0 +1,29 @@
+$var title:Register for CSModify Account
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="page-header text-center">
+            <h1>CSModify</h1>
+            <p>To use this system, please ensure you have registered for an account and that the system administrator has activated your account.</p>
+        </div>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
+        <h2 class="text-center"><span class="glyphicon glyphicon-pencil"></span> Account Registration</h2>
+        <br>
+        <form id="registerForm" action="/register" method="post">
+            <div class="form-group">
+                <label for="id">User ID</label>
+                <input type="text" class="form-control" id="id" name="id" placeholder="User ID" pattern="^[a-zA-Z0-9]+$$" required>
+                <small id="idHelp">User ID should only contain alphanumeric characters.</small>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            </div>
+            <input type="submit" value="Create Account" class="btn btn-primary">
+        </form>
+        <p>Already have an account? Login <a href="/login">here</a>.</p>
+        <br>
+        <br>
+    </div>
+</div>

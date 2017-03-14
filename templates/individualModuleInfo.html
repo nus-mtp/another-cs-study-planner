@@ -12,48 +12,49 @@ $var title:$title_string
 
 <div class="container-fluid">
 	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center"><b>Module Info for <u>$aySem</u></b></h1>
+			<hr>
+		</div>
 		<div class="col-md-6 module-info-wrapper">
 			<div class="row">
-				<div class="col-md-12">
-					<br>
-					<hr>
-				</div>
-				<div class="col-md-12 text-center">
-					<h3>Module Info for <b><u>$aySem</u></b></h3>
-				</div>
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
-						<table style="border-spacing: 5px; border-collapse: separate;">
+						<table>
 							<tr>
 								<td>
-									<form id="edit-module-button" name="edit-module-button" action="/editModule" style="display:inline-block" method="post">
+									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
 										<input type="hidden" name="status" value="load">
 										<input type="hidden" name="code" value="$moduleCode">
-										<input class="btn btn-lg btn-primary" type="submit" value="Edit Module" />
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
 			                        </form>
 			                    </td>
-		                    $if isFutureAY is True:
-								<td>
-			                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" style="display:inline-block" method="post">
-			                        	<input type="hidden" name="status" value="load">
-			                        	<input type="hidden" name="code" value="$moduleCode">
-			                        	<input type="hidden" name="aySem" value="$aySem">
-			                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
-			                        	<input type="hidden" name="quota" value="$quota">
-			                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Mounting" />
-									</form>
-			                    </td>
-		                    $if True:
-		                    	<td>
-									<form id="view-module-button" action="/viewModule" style="display:inline-block" method="get">
-										<input type="hidden" name="code" value="$moduleCode" />
-										<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
-									</form>
-								</td>
 			                </tr>
+		                    $if isFutureAY is True:
+		                    	<tr>
+									<td>
+				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post">
+				                        	<input type="hidden" name="status" value="load">
+				                        	<input type="hidden" name="code" value="$moduleCode">
+				                        	<input type="hidden" name="aySem" value="$aySem">
+				                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
+				                        	<input type="hidden" name="quota" value="$quota">
+				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
+										</form>
+				                    </td>
+				                </tr>
+		                    $if True:
+		                    	<tr>
+			                    	<td>
+										<form id="view-module-button" action="/viewModule"  method="get">
+											<input type="hidden" name="code" value="$moduleCode" />
+											<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
+										</form>
+									</td>
+			                	</tr>
 			             </table>
 					</div>
 				</div>
@@ -101,23 +102,29 @@ $var title:$title_string
 			</div>
             <br>
             <br>
-			<h4><b>Student Demand:</b></h4>
+			<h4><b>Modules taken with $moduleCode:</b></h4>
 			<table id="common-module-table" class="table table-bordered table-hover display dataTable">
                 <thead>
                     <tr>
                         <th>Module 1</th>
-                        <th data-sortable="false">Module 2</th>
+                        <th>Name of Module 1</th>
+                        <th>Module 2</th>
+                        <th>Name of Module 2</th>
                         <th>For AY-Sem</th>
-                        <th>Count</th>
+                        <th>Number of Students</th>
                     </tr>
                 </thead>
                 <tbody>
                     $for row in overlappingList:
+                    	$ address1 = '/viewModule?code=' + row[0]
+                    	$ address2 = '/viewModule?code=' + row[2]
                         <tr>
-                            <td class="text-center">$row[0]</td>
+                            <td class="text-center"><a href="$:address1" target="_blank" data-toggle="tooltip" title="View general info for $row[0]">$row[0]</a></td>
                             <td class="text-center">$row[1]</td>
-                            <td class="text-center">$row[2]</td>
+                            <td class="text-center"><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
                             <td class="text-center">$row[3]</td>
+                            <td class="text-center">$row[4]</td>
+                            <td class="text-center">$row[5]</td>
                         </tr>
                 </tbody>
             </table>

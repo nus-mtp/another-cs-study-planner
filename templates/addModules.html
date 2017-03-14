@@ -1,0 +1,40 @@
+$ title_string = 'Add Module'
+$var title:$title_string
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 class="text-center"><b>Add Module</b></h1>
+            <p class="text-center">Adds the new module into the <b>list of existing modules</b>.</p>
+            <form id="addModForm" action="/addModule" method="post">
+                <div class="form-group row">
+                    <label for="module-code" class="col-2 col-form-table">Module Code:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" id="module-code" name="code" pattern="[A-Z]{2,3}[0-9]{4}[A-Z]{0,2}" placeholder="e.g. CS1231, CS1010J, LSM1302, GEM1004FC" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="module-name">Module Name:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" id="module-name" name="name" pattern="[a-zA-Z0-9 \-]+$$" placeholder="Enter Module Name" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="module-description">Module Description:</label>
+                    <div class="col-10">
+                        <textarea class="form-control" type="text" rows="6" id="module-description" name="description" placeholder="Enter Module Description" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="module-mc">Module Credits:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="number" min="0" max="12" id="module-mc" name="mc" placeholder="Number of MCs is between 0 to 12" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <input class="btn btn-lg btn-primary" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    <div>
+</div>

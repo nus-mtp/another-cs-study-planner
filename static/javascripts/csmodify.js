@@ -20,8 +20,16 @@ function closeSidebar() {
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+  $('#sidebar-button').click(function(e) {
+    e.stopPropagation();
+    openSidebar();
+  });
+  $('body').click(function(e) {
+    if (e.target.id != 'sidebar') {
+        closeSidebar();
+    }
+  });
 })
-
 
 /*
  * FUNCTIONS FOR SCROLLING TO TOP OF PAGE
@@ -29,10 +37,14 @@ $(function () {
 
 // Collapses the navbar on scroll
 $(window).scroll(function() {
-    if ($(".navbar").offset().top > 50) {
-        $(".navbar-fixed-top").addClass("top-nav-collapse");
-    } else {
-        $(".navbar-fixed-top").removeClass("top-nav-collapse");
+    try{
+        if ($(".navbar").offset().top > 50) {
+            $(".navbar-fixed-top").addClass("top-nav-collapse");
+        } else {
+            $(".navbar-fixed-top").removeClass("top-nav-collapse");
+        }
+    }catch(err){
+        console.log(err.message, err.name);
     }
 });
 
@@ -71,15 +83,36 @@ $(function() {
     } );
 
     $('#student-year-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "bPaginate": false,
+        "searching": false
     } );
 
-    $('#modified-modules-table').DataTable( {
+    $('#modified-modules-summary-table').DataTable( {
         "aaSorting": [ 0, "asc" ]
     } );
 
+    $('#modified-modules-mounting-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#modified-modules-quota-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#modified-modules-details-table').DataTable( {
+        "aaSorting": [ 0, "asc" ]
+    } );
+
+    $('#specific-modified-module').DataTable( {
+
+    } );
+
     $('#student-focus-area-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "pageLength": 25,
+        "bPaginate": false,
+        "searching": false
     } );
 
     $('#oversubscribed-modules-table').DataTable( {
@@ -94,3 +127,5 @@ $(function() {
         aaSorting: []
     } );
 } );
+
+

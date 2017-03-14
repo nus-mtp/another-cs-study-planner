@@ -84,7 +84,7 @@ def login_session_for_tests(test_app):
     '''
     root = test_app.get(URL_DEFAULT_LOGIN)
     login_form = root.forms__get()["loginForm"]
-    login_form.__setitem__("username", DUMMY_USER_ID)
+    login_form.__setitem__("id", DUMMY_USER_ID)
     login_form.__setitem__("password", DUMMY_PASSWORD)
     login_form.submit()
 

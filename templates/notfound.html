@@ -1,0 +1,21 @@
+$def with (message=None)
+
+$var title:404 Page Not Found
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1><b>404 Page Not Found</b></h1>
+			<p>The page you are looking for is either removed, or does not exist.</p>
+			<br>
+			<p>If you were looking for a module or making edits to it, that module may have been removed by someone else and no longer exists.</p>
+			<br>
+			<p>If you tried to change the URL to access another page, the URL might be invalid.</p>
+			<p>For example, if you changed a parameter in the URL like <strong>code='CS3250'</strong> and encountered this page, then <strong>'CS3250'</strong> does not exist in the database.</p>
+			<p>Please also ensure that the URL you have specified is <strong>correct</strong>.</p>
+			<br>
+			$if message is not None:
+				<p><b>Error message</b>: $message</p>
+		</div>
+	</div>
+</div>

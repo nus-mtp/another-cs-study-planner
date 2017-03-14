@@ -31,14 +31,18 @@ class TestCode(object):
     URL_MODULE_VIEW_INVALID = '/viewModule?code=CS0123'
 
     FORM_ALL_MODULES = '<form class="navForm" action="/modules" method="post">'
-    FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" ' +\
-                              'type="submit" value="Go To All Modules" />'
+    FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
+                              'value="Go To Module Information" ' +\
+                              'data-toggle="tooltip" data-placement="right" ' +\
+                              'title="See all modules that exist in the system">'
     FORM_FIXED_MOUNTING = '<form class="navForm" action=' +\
                           '"/moduleMountingFixed" ' +\
                           'method="post">'
-    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" ' +\
-                                 'type="submit" value="Go To Fixed ' +\
-                                 'Module Mountings" />'
+    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
+                                 'value="Go To Fixed Module Mountings" ' +\
+                                 'data-toggle="tooltip" data-placement="right" ' +\
+                                 'title="See fixed module mountings for the ' +\
+                                 'current AY">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
@@ -120,13 +124,11 @@ class TestCode(object):
         root = self.test_app.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         # an exception WILL be encountered here
         response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
-        assert_equal(response.status, 303)
+        assert_equal(response.status, 200)
 
-        redirected = response.follow()
-        assert_equal(redirected.status, 200)
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page contains 'Not Found'
-        redirected.mustcontain("NOT FOUND")
+        response.mustcontain("Not Found")
 
 
     def test_tentative_module_mounting_view_options(self):
