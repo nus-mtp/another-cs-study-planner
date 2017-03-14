@@ -14,7 +14,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP
 from components import session
 
@@ -135,7 +135,7 @@ class TestCode(object):
         url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
               '&quota=60'
         response = root.goto(url, method='get')
-        
+
         assert_equal(response.status, 200)
 
         # Presence of these elements indicates that the request direction is correct.

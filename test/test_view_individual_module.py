@@ -128,36 +128,36 @@ class TestCode(object):
         root.mustcontain("Not Found")
 
 
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the target AY-semester is invalid.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the target AY-semester is invalid.
 
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid AY-semester is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_individual_module_invalid_ay_sem_response(self):
-        # AY-Semester used here is '16/18 Sem 1'
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    '''
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid AY-semester is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_individual_module_invalid_ay_sem_response(self):
+    #     # AY-Semester used here is '16/18 Sem 1'
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+    # '''
 
 
-    '''
-        Tests if user will fail to access page for showing module overview
-        if the quota associated with the target module is invalid.
+    # '''
+    #     Tests if user will fail to access page for showing module overview
+    #     if the quota associated with the target module is invalid.
 
-        NOTE: this test case is supposed to FAIL
-        NOTE: Checking for invalid module quota is not implemented
-    '''
-    '''
-    @raises(Exception)
-    def test_view_invalid_module_overview_invalid_quota_response(self):
-        # Quota used here is '70' (actual is '60')
-        # an exception WILL be encountered here
-        root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    '''
+    #     NOTE: this test case is supposed to FAIL
+    #     NOTE: Checking for invalid module quota is not implemented
+    # '''
+    # '''
+    # @raises(Exception)
+    # def test_view_invalid_module_overview_invalid_quota_response(self):
+    #     # Quota used here is '70' (actual is '60')
+    #     # an exception WILL be encountered here
+    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
+    # '''
 
 
     # '''
@@ -216,6 +216,10 @@ class TestCode(object):
 
 
     def test_view_individual_module_contents_with_future_ay(self):
+        '''
+            Tests if all the necessary info is displayed in the individual
+            module view page with future AY and Semester.
+        '''
         root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
 
         root.mustcontain(self.CONTENT_SUMMARY_FUTURE_AY)
