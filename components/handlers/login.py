@@ -26,21 +26,21 @@ class Login(object):
         '''
             Blank inputs are blocked by front-end. For full extent of validation
             we also perform validation here should the front-end happen to be
-            bypassed in some manner. 
+            bypassed in some manner.
         '''
         credentials = web.input()
 
         try:
             input_id = credentials.id
             input_password = credentials.password
-        except(AttributeError):
+        except AttributeError:
             return Outcome().POST("login_user", False, None)
 
         if credentials.id == '' or credentials.password == '':
             return Outcome().POST("login_user", False, None)
 
         is_valid = model.validate_admin(credentials.id, credentials.password)
-        
+
         # If valid admin, go to index
         if is_valid:
             session.clean_up_sessions()

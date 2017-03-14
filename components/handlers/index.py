@@ -5,7 +5,7 @@
 
 from app import RENDER
 import web
-from components import model, session
+from components import session
 
 
 class Index(object):
@@ -21,4 +21,3 @@ class Index(object):
             raise web.seeother('/login')
         else:
             return RENDER.index()
-
