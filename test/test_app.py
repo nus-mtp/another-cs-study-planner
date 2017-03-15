@@ -163,5 +163,5 @@ class TestCode(object):
         root = self.test_app.get('/')
 
         response = root.click(linkid="home-page", href="/nonOverlappingModules")
-        
+
         assert_equal(response.status, 200)
