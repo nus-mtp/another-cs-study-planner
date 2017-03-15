@@ -1,0 +1,37 @@
+$def with (moduleCode, overlappingList)
+
+$ title_string = 'Modules Overlapping with ' + moduleCode
+$var title:$title_string
+
+<div class="container container-fluid">
+    <div class="row">
+    <!--title-->
+        <h1>$title_string</h1>
+    </div>
+    <div class="row">
+    <!--table-->
+        <table id="common-module-table" class="table table-bordered table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>Module 1</th>
+                    <th>Name of Module 1</th>
+                    <th>Module 2</th>
+                    <th>Name of Module 2</th>
+                    <th>For AY-Sem</th>
+                    <th>Number of Students</th>
+                </tr>
+            </thead>
+            <tbody>
+                $for row in overlappingList:
+                <tr>
+                    <td class="text-center">$row[0]</td>
+                    <td class="text-center">$row[1]</td>
+                    <td class="text-center">$row[2]</td>
+                    <td class="text-center">$row[3]</td>
+                    <td class="text-center">$row[2]</td>
+                    <td class="text-center">$row[3]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
