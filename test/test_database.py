@@ -32,7 +32,9 @@ class TestCode(object):
         self.module_CRD_tested = False
         self.fixed_mounting_CRD_tested = False
         self.tenta_mounting_CRD_tested = False
-
+        self.prereq_CRD_tested = False
+        self.test_prereq_code = "BB1111"
+        self.test_prereq_index = 0
 
     def setUp(self):
         '''
@@ -52,11 +54,14 @@ class TestCode(object):
                                  self.test_module_tenta_mounting_s1,
                                  self.test_module_quota1)
 
+        self.test_prereq_CRD()
+        self.prereq_CRD_tested = True
 
     def tearDown(self):
         '''
             Clean up the database after all test cases are ran
         '''
+        model.delete_prerequisite(self.test_module_code, self.test_prereq_code)
         model.delete_tenta_mounting(self.test_module_code, self.test_module_tenta_mounting_s1)
         model.delete_module(self.test_module_code)
 
@@ -268,3 +273,25 @@ class TestCode(object):
                          "I describe myself", 4, "New")
         assert_true(model.is_existing_module(current_test_module_code))
         model.delete_module(current_test_module_code)
+
+    def test_prereq_CRD(self):
+        '''
+            Tests creating, reading and deleting of prerequisites.
+        '''
+        if not self.prereq_CRD_tested:
+            model.add_module(self.test_prereq_code, self.test_module_name, self.test_module_desc,
+                         self.test_module_mc, self.test_module_status)
+            
+            model.add_prerequisite(self.test_module_code, self.test_prereq_code,
+                                   self.test_prereq_index)
+
+            prereq_info = model.get_prerequisite(self.test_module_code)
+            assert_true(prereq_info is not None)
+            assert_equal(self.test_prereq_index, prereq_info[0][0])
+            assert_equal(self.test_prereq_code, prereq_info[0][1])
+
+            model.delete_prerequisite(self.test_module_code, self.test_prereq_code)
+            model.delete_module(self.test_prereq_code)
+            prereq_info = model.get_prerequisite(self.test_module_code)
+            assert_true(len(prereq_info) == 0)
+            return
