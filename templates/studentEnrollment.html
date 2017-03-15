@@ -2,6 +2,62 @@ $def with (yr_of_study_count_table, focus_count_table)
 
 $var title:View Student Enrollment
 
+<script type="text/javascript">
+	window.onload = function () {
+	    var yearOfStudyChart = new CanvasJS.Chart("yearOfStudyChartContainer",
+	    {
+			animationEnabled: true,
+			axisY: {
+				title: "Number of Students"
+			},
+			axisX: {
+				title: "Year of Study"
+			},
+			legend: {
+				verticalAlign: "bottom",
+				horizontalAlign: "center"
+			},
+			theme: "theme1",
+			data: [{
+						type: "column",
+						dataPoints: [      
+						$for year_count_pair in yr_of_study_count_table[0:len(yr_of_study_count_table)-1]:
+							{y: $year_count_pair[1], label: $year_count_pair[0]},
+						{y: $yr_of_study_count_table[-1][1],  label: $yr_of_study_count_table[-1][0]}
+						]
+				  }]
+		});
+
+		yearOfStudyChart.render();
+
+		var focusAreaChart = new CanvasJS.Chart("focusAreaChartContainer",
+	    {
+			animationEnabled: true,
+			axisY: {
+				title: "Number of Students"
+			},
+			axisX: {
+				title: "Focus Area"
+			},
+			legend: {
+				verticalAlign: "bottom",
+				horizontalAlign: "center"
+			},
+			theme: "theme1",
+			data: [{
+						type: "column",
+						dataPoints: [      
+						$for focus_count_pair in focus_count_table[0:len(focus_count_table)-1]:
+							{y: $focus_count_pair[1], label: "$focus_count_pair[0]"},
+						{y: $focus_count_table[-1][1],  label: "$focus_count_table[-1][0]"}
+						]
+				  }]
+		});
+
+		focusAreaChart.render();
+	}
+</script>
+
 <div class="container-fluid">
 	<h1 class="text-center"><b>Student Enrollment Information</b></h1>
 	<hr>
@@ -23,6 +79,8 @@ $var title:View Student Enrollment
 		</tbody>
 	</table>
 	<br>
+	<div id="yearOfStudyChartContainer" style="height: 400px; width: 100%;"></div>
+	<br>
 	<h2>Student Enrollment by Focus Area</h2>
 	<br>
 	<table class="table display dataTable table-bordered table-hover text-center" id="student-focus-area-table">
@@ -40,6 +98,8 @@ $var title:View Student Enrollment
 				</tr>
 		</tbody>
 	</table>
+	<br>
+	<div id="focusAreaChartContainer" style="height: 400px; width: 100%;"></div>
 	<br>
 	<br>
 </div>
