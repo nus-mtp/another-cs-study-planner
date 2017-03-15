@@ -58,7 +58,7 @@ class EditModuleInfo(object):
         if module_info is None:
             outcome = False
         elif (module_name != old_module_name or module_desc != old_module_desc or
-                int(module_mc) != int(old_module_mc)):
+              int(module_mc) != int(old_module_mc)):
             model.store_original_module_info(module_code, old_module_name,
                                              old_module_desc, old_module_mc)
             outcome = model.update_module(module_code, module_name, module_desc, module_mc)
