@@ -70,6 +70,20 @@ class IndividualModule(object):
         return model.get_mod_taken_together_with(code)
 
 
+    def get_mounting_status(self):
+        '''
+            Return the mounting status of the module in the target AY-Sem
+        '''
+        return self.mounting_status
+
+
+    def get_quota(self):
+        '''
+            Return the quota of the module in the target AY-Sem
+        '''
+        return self.quota
+
+
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
@@ -83,11 +97,11 @@ class IndividualModule(object):
         if module_info is None:
             error_message = module_code + " does not exist in the system."
             return RENDER.notfound(error_message)
-
         target_ay_sem = input_data.targetAY
 
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
+
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,

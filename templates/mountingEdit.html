@@ -17,7 +17,7 @@ $var title:$title_string
                         <div class="form-group">
                             <!--mounting status-->
                             <h4><b>Mounting Status:</b></h4>
-                            $if mountingValue == "1":
+                            $if mountingValue == 1:
                                 <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Mounted" checked="checked"> Mounted<br>
                                 <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Not Mounted"> Not Mounted
                             $else:
@@ -43,7 +43,7 @@ $var title:$title_string
                         </div>
                         <div class="form-group">
                             <label for="class-quota">Class Quota</label>
-                            $if mountingValue == "1":
+                            $if mountingValue == 1:
                                 <input class="form-control" id="quota" type="number" min="0" size="10" name="quota" value="$quota">
                             $else:
                                 <input class="form-control" id="quota" type="number" min="0" size="10" name="quota" value="$quota" disabled>
@@ -54,7 +54,6 @@ $var title:$title_string
                         <input type="hidden" name="code" value="$moduleCode" required>
                         <input type="hidden" name="aySem" value="$aySem" required>
                         <input type="hidden" name="oldMountingValue" value="$mountingValue" required>
-                        <input type="hidden" name="status" value="submit" required>
                         <input class="btn btn-primary" type="submit" value="Submit" />
                     </form>
                 </div>

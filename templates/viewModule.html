@@ -32,8 +32,7 @@ $var title:$title_string
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
-						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-							<input type="hidden" name="status" value="load">
+						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="GET">
 							<input type="hidden" name="code" value="$moduleCode">
                             <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
                         </form>
