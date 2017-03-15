@@ -45,10 +45,10 @@ $if modulePairs is not None:
 				$else:
 					$for modulePair in modulePairs:
 						<tr>
-							<td>$modulePair[0]</td>
+							<td><a href="/viewModule?code=$modulePair[0]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[0]">$modulePair[0]</a></td>
 							<td>$modulePair[1]</td>
 							<td>$modulePair[2]</td>
-							<td>$modulePair[3]</td>
+							<td><a href="/viewModule?code=$modulePair[3]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[3]">$modulePair[3]</a></td>
 							<td>$modulePair[4]</td>
 							<td>$modulePair[5]</td>
 							<td>$modulePair[6]</td>
@@ -59,8 +59,11 @@ $if modulePairs is not None:
 
 $else:
 	<div class="container-fluid">
-		<h3 style="margin-bottom: 20px;">Students who took <b>$moduleA</b> 
-		prior to taking <b>$moduleB</b> in <u>$targetAySem</u></h3>
+		<h3 style="margin-bottom: 20px;">Students who took 
+			<b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> 
+			prior to taking 
+			<b><a href="/viewModule?code=$moduleB" target="_blank" data-toggle="tooltip" title="View general info for $moduleB">$moduleB</a></b> 
+			in <u>$targetAySem</u></h3>
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>
