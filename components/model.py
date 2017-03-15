@@ -90,6 +90,14 @@ def get_current_ay():
     return DB_CURSOR.fetchone()[0]
 
 
+def get_next_ay(ay):
+    '''
+        Return the AY that comes after the given AY
+    '''
+    ay = ay.split(' ')[1].split('/')
+    return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
+
+
 def get_all_fixed_ay_sems():
     '''
         Get all the distinct AY/Sem in the fixed mounting table
