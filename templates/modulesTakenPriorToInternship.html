@@ -1,0 +1,33 @@
+$def with (moduleListWithCount)
+
+$var title:View Modules Taken Prior to Internship
+
+
+<div class="container-fluid">
+	<h1 class="text-center"><b>Modules Taken Prior to Internship</b></h1>
+	<p class="text-center">Shows all modules taken prior to internship and how many students took them</b></p>
+	<br>
+
+	<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-intern-table">
+		<thead>
+			<tr>
+				<th>Module Code</th>
+				<th>Module Name</th>
+				<th>Number of Students who took</th>
+			</tr>
+		</thead>
+		<tbody>
+			$if len(moduleListWithCount) == 0 or moduleListWithCount == None:
+				<tr>
+					<td>No data found</td>
+				</tr>
+			$else:
+				$for module_with_count in moduleListWithCount:
+					<tr>
+						<td>$module_with_count[0]</td> <!-- Module Name -->
+						<td>$module_with_count[1]</td> <!-- Module Code -->
+						<td>$module_with_count[2]</td> <!-- Number students took this mod before intern-->
+					</tr>
+		</tbody>
+	</table>
+</div>
