@@ -997,7 +997,7 @@ def is_aysem_in_list(given_aysem, given_list):
     return False
 
 
-def star_modules(module_code, staff_id):
+def star_module(module_code, staff_id):
     '''
         Insert a module into the starred table.
     '''
@@ -1006,7 +1006,7 @@ def star_modules(module_code, staff_id):
     CONNECTION.commit()
 
 
-def unstar_modules(module_code, staff_id):
+def unstar_module(module_code, staff_id):
     '''
         Remove a module from the starred table.
     '''
@@ -1022,3 +1022,16 @@ def get_starred_modules(module_code):
     sql_command = "SELECT moduleCode FROM starred WHERE staffId = %s"
     DB_CURSOR.execute(sql_command, (staff_id,))
     return DB_CURSOR.fetchall()
+
+
+def is_module_starred(module_code, staff_id):
+    '''
+        Check if a module is starred by the user.
+    '''
+    sql_command = "SELECT * FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    starred = DB_CURSOR.fetchall()
+    if not starred:
+        return False
+    else:
+        return True
