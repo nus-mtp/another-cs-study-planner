@@ -22,8 +22,8 @@ $var title:View Student Enrollment
 						type: "column",
 						dataPoints: [      
 						$for year_count_pair in yr_of_study_count_table[0:len(yr_of_study_count_table)-1]:
-							{y: $year_count_pair[1], label: $year_count_pair[0]},
-						{y: $yr_of_study_count_table[-1][1],  label: $yr_of_study_count_table[-1][0]}
+							{y: $year_count_pair[1], label: "Year $year_count_pair[0]"},
+						{y: $yr_of_study_count_table[-1][1],  label: "Year $yr_of_study_count_table[-1][0]"}
 						]
 				  }]
 		});
