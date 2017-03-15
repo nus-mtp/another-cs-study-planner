@@ -29,7 +29,10 @@ $var title:$title_string
 			<div class="row">
 				<div class="col-md-12 module-header">
 					<div class="page-header">
-						<h1><b>$moduleCode</b></h1>
+						<h1>
+							<b>$moduleCode</b> 
+							<a href="/starModule?star=$moduleCode" class="star"><span class="glyphicon glyphicon-star-empty"></span></a>
+						</h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
 						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
