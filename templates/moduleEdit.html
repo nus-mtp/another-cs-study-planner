@@ -31,7 +31,8 @@ $var title:$title_string
                             <label for="description">Description</label>
                             <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$moduleDescription</textarea>
                         </div>
-                        <input class="btn btn-primary" type="submit" value="Submit" />
+                        <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
+                        <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/viewModule?code=$moduleInfo[0]';}">Cancel</button>
                     </form>
                 </div>
                 <br>
