@@ -39,6 +39,9 @@ $def with (page)
 							<span class="glyphicon glyphicon-log-out"></span> Logout
 						</button>
 					</form>
+					<form class="navbar-form navbar-right">
+						$web.cookies().get('user')
+					</form>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
 				    </form-->
