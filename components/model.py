@@ -903,3 +903,28 @@ def add_prerequisite(module_code, prereq_code, index):
         CONNECTION.rollback()
         return False
     return True
+
+
+def get_prerequisite(module_code):
+    '''
+        Get a prerequisite from the prerequisite table.
+    '''
+    sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def delete_prerequisite(module_code, prereq_code):
+    '''
+        Delete a prerequisite from the prerequisite table.
+        Returns true if successful.
+    '''
+    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s " +\
+                  "AND prerequisiteModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
