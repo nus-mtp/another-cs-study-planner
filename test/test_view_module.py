@@ -48,17 +48,12 @@ class TestCode(object):
     CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
-    CONTENT_STATS = "Module Statistics"
 
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover display ' +\
-                                        'dataTable">'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
+    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" '+\
+                              'name="view-overlapping-with-module" action="/overlappingWithModule" '+\
+                              'method="get">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary" '+\
+                                     'value="View modules that overlap with this module.">'
 
 
     def __init__(self):
@@ -199,23 +194,10 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_MOUNT_FLAG)
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
-        root.mustcontain(self.CONTENT_STATS)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
-
-
-    def test_contains_overlapping_module_table(self):
-        '''
-            tests if overlapping modules table exists
-        '''
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
+        root.mustcontain(self.FORM_OVERLAPPING_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_MODULE_BUTTON)
 
 
     def test_goto_edit_general_info(self):
@@ -224,6 +206,16 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         edit_form = root.forms__get()["edit-module-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_overlapping_with_module(self):
+        '''
+            test if user can access to moverlapping with module page
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        edit_form = root.forms__get()["view-overlapping-with-module"]
 
         response = edit_form.submit()
         assert_equal(response.status, 200)
