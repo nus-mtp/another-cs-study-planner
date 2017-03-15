@@ -34,7 +34,7 @@ $var title:$title_string
 						<br>
 						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="GET">
 							<input type="hidden" name="code" value="$moduleCode">
-                            <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+                            <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
                         </form>
                         <button type="button" class="btn btn-lg btn-primary" onclick="window.location='/modules';">Back to Module List</button>
 					</div>
@@ -53,12 +53,10 @@ $var title:$title_string
 					<h4><b>Module Prerequisites:</b></h4>
 					<p>--not parsed yet</p>
 					<br>
-					<h4><b>Class Quota for AY-Semesters:</b></h4>
-					<br>
 				</div>
 				<div class="col-md-12">
 					<!--mountingAndQuota-->
-					<h4><b>Current AY (Fixed)</b></h4>
+					<h4><b>Information for Current AY (Fixed):</b></h4>
 					$if moduleStatus[0:3] == "New":
 						<h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
 					$else:
@@ -112,7 +110,7 @@ $var title:$title_string
 								</tr>
 							</tbody>
 						</table>
-					<h4><b>Future AYs (Tentative)</b></h4>
+					<h4><b>Information for Future AYs (Tentative):</b></h4>
 					<table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
 						<thead>
 							<tr>
