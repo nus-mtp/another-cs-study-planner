@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList, isStarred)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -31,7 +31,10 @@ $var title:$title_string
 					<div class="page-header">
 						<h1>
 							<b>$moduleCode</b> 
-							<a href="/starModule?star=$moduleCode" class="star"><span class="glyphicon glyphicon-star-empty"></span></a>
+							$if isStarred:
+								<a href="/starModule?star=$moduleCode&amp;action=unstar" class="star"><span class="glyphicon glyphicon-star"></span></a>
+							$else:
+								<a href="/starModule?star=$moduleCode&amp;action=star" class="star"><span class="glyphicon glyphicon-star-empty"></span></a>
 						</h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
