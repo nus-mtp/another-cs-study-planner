@@ -8,7 +8,7 @@ from components import model, session
 from components.handlers.outcome import Outcome
 
 
-class StarModules(object):
+class StarModule(object):
     '''
         Class handles starring and unstarring of modules.
     '''
