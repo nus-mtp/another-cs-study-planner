@@ -30,12 +30,12 @@ class TestCode(object):
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
+                            'action="/editModule" method="get">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
                                    ' value="Edit General Module Info" ' +\
                                    'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description ' +\
-                                   'and MCs">'
+                                   'title="Edit the module\'s name, description, ' +\
+                                   'MC, pre-requisites and preclusions">'
 
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
@@ -44,7 +44,8 @@ class TestCode(object):
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
-    CONTENT_QUOTA = "Class Quota for AY-Semesters"
+    CONTENT_INFO_FIXED = "Information for Current AY (Fixed):"
+    CONTENT_INFO_TENTA = "Information for Future AYs (Tentative)"
     CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
@@ -195,7 +196,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_DESCRIPTION)
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
-        root.mustcontain(self.CONTENT_QUOTA)
+        root.mustcontain(self.CONTENT_INFO_FIXED)
+        root.mustcontain(self.CONTENT_INFO_TENTA)
         root.mustcontain(self.CONTENT_TABLE_MOUNT_FLAG)
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)

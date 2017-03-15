@@ -26,7 +26,7 @@ $var title:$title_string
 						<table>
 							<tr>
 								<td>
-									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="GET">
+									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
 										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
 			                        </form>
@@ -35,7 +35,7 @@ $var title:$title_string
 		                    $if isFutureAY is True:
 		                    	<tr>
 									<td>
-				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="GET">
+				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="get">
 				                        	<input type="hidden" name="code" value="$moduleCode">
 				                        	<input type="hidden" name="aySem" value="$aySem">
 				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">
