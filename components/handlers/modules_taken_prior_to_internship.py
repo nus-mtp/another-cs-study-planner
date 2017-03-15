@@ -1,6 +1,6 @@
 '''
     This module contains the handler for web requests pertaining to
-    showing the list of modules taken before internship and 
+    showing the list of modules taken before internship and
     the number of students who have taken those modules.
 '''
 
@@ -8,7 +8,6 @@
 from app import RENDER
 import web
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class TakePriorInternship(object):
