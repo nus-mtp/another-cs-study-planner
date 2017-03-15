@@ -143,3 +143,11 @@ class TestCode(object):
         response = root.click(linkid="home-page", href="/moduleTakenPriorToOthers")
 
         assert_equal(response.status, 200)
+
+    def test_goto_non_overlapping_mods(self):
+        '''
+            Test if user can access non overlapping modules without request errors
+        '''
+        root = self.test_app.get('/')
+        response = root.click(linkid="home-page", href="/nonOverlappingModules")
+        assert_equal(response.status, 200)
