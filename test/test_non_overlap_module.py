@@ -26,11 +26,14 @@ class TestCode(object):
 
     URL_NON_OVERLAP_MODS = '/nonOverlappingModules'
     URL_NON_OVERLAP_MODS_16_17_SEM2 = '/nonOverlappingModules?sem=AY%2016/17%20Sem%202'
+    URL_NON_OVERLAP_MODS_INVALID = '/nonOverlappingModules?sem=AY%2016/18%20Sem%202'
     CURRENT_SEM = 'AY 16/17 Sem 1'
     DEFAULT_TITLE = 'Non-Overlapping Modules for AY 16/17 Sem 1'
-    TEXT = '<p class="text-center" data-toggle="tooltip" data-placement="bottom" '+\
-           'title="By default, these pairs are shown for the current AY-Semester.">Shows all module pairs '+\
-           'which no student takes together in a particular semester.</p>'
+    TEXT = '<p class="text-center" >Shows all module pairs which no student takes'+\
+           ' together in a particular semester.<span data-toggle="tooltip" '+\
+           'data-placement="bottom" title="By default, these pairs are shown for the '+\
+           'current AY-Semester." class="glyphicon glyphicon-info-sign" title="By '+\
+           'default, these pairs are shown for the current AY-Semester."></span></p>'
     FORM = '<form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">'
     SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
     SELECT_ELEMENT = '<select class="form-control" name="sem">'
@@ -40,7 +43,9 @@ class TestCode(object):
     TABLE_HEADER_MODULE_NAME_TWO = '<th>Name of Module 2</th>'
 
     REDIRECT_CHANGED_CONTENT = 'Non-Overlapping Modules for AY 16/17 Sem 2'
-
+    VALIDATING_TITLE = 'Validating...'
+    SCRIPT_REDIRECT_TO_DEFAULT = "window.location = '/nonOverlappingModules'"
+    SCRIPT_ERROR_MESSAGE = "alert('The AY-Semester you specified does not exist!');"
     def __init__(self):
         self.middleware = None
         self.test_app = None
@@ -106,3 +111,17 @@ class TestCode(object):
         #checks changed content of redirected field
 
         redirected.mustcontain(self.REDIRECT_CHANGED_CONTENT)
+
+    def test_error_redirect(self):
+        '''
+            tests if redirect to outcome when ay-sem is invalid
+        '''
+        root = self.test_app.get(self.URL_NON_OVERLAP_MODS_INVALID)
+
+        #checks if directs to validating page
+        assert_equal(root.status, 200)
+        root.mustcontain(self.VALIDATING_TITLE)
+
+        #checks if validating page contain expected elements
+        root.mustcontain(self.SCRIPT_REDIRECT_TO_DEFAULT)
+        root.mustcontain(self.SCRIPT_ERROR_MESSAGE)
