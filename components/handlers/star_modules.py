@@ -20,7 +20,13 @@ class StarModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            return RENDER.index()
+            module_code = web.input().star
+            action = web.input().action
+            if action == "star":
+                model.star_module(module_code, web.cookies().get('user'))
+            else:
+                model.unstar_module(module_code, web.cookies().get('user'))
+            raise web.seeother('/viewModule?code=' + module_code)
 
 class StarListing(object):
     '''
