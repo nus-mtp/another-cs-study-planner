@@ -10,52 +10,19 @@ $ title_string = 'Module Info for ' + moduleCode + ' in ' + aySem
 
 $var title:$title_string
 
-<div class="container-fluid">
+<div class="container container-block">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="text-center"><b>Module Info for <u>$aySem</u></b></h1>
-			<hr>
-		</div>
-		<div class="col-md-6 module-info-wrapper">
+            <div class="row">
+                <h1 class="text-center"><b>Module Info for <u>$aySem</u></b></h1>
+                <hr>
+            </div>
 			<div class="row">
 				<div class="col-md-12 module-header">
 					<div class="page-header">
 						<h1><b>$moduleCode</b></h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
-						<table>
-							<tr>
-								<td>
-									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-										<input type="hidden" name="status" value="load">
-										<input type="hidden" name="code" value="$moduleCode">
-										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
-			                        </form>
-			                    </td>
-			                </tr>
-		                    $if isFutureAY is True:
-		                    	<tr>
-									<td>
-				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post">
-				                        	<input type="hidden" name="status" value="load">
-				                        	<input type="hidden" name="code" value="$moduleCode">
-				                        	<input type="hidden" name="aySem" value="$aySem">
-				                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
-				                        	<input type="hidden" name="quota" value="$quota">
-				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
-										</form>
-				                    </td>
-				                </tr>
-		                    $if True:
-		                    	<tr>
-			                    	<td>
-										<form id="view-module-button" action="/viewModule"  method="get">
-											<input type="hidden" name="code" value="$moduleCode" />
-											<input class="btn btn-lg btn-primary" type="submit" value="Back to Overview" />
-										</form>
-									</td>
-			                	</tr>
-			             </table>
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -94,9 +61,61 @@ $var title:$title_string
 					<br>
 				</div>
 			</div>
+            <div class="row text-center well">
+                <!--module button links-->
+                <h1><b>More Actions</b></h1>
+                <div class="col-md-6 text-center">
+                    <table>
+                        <tr>
+                            <td>
+                                <form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
+                                    <input type="hidden" name="status" value="load">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+                                </form>
+                            </td>
+                        </tr>
+                        $if isFutureAY is True:
+                            <tr>
+								<td>
+				                    <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post">
+				                        <input type="hidden" name="status" value="load">
+				                        <input type="hidden" name="code" value="$moduleCode">
+				                        <input type="hidden" name="aySem" value="$aySem">
+				                        <input type="hidden" name="mountingValue" value="$mountingStatus">
+				                        <input type="hidden" name="quota" value="$quota">
+				                        <input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
+								    </form>
+				                </td>
+				            </tr>
+                        $if True:
+                            <tr>
+                                <td>
+                                    <form id="view-module-button" action="/viewModule"  method="get">
+                                        <input type="hidden" name="code" value="$moduleCode">
+                                        <input class="btn btn-lg btn-primary" type="submit" value="Back to Overview">
+                                    </form>
+                                </td>
+                            </tr>
+                    </table>
+                </div>
+                <div class="col-md-6 text-center">
+                    <form id="view-students-planning-to-take-module" name="view-students-planning-to-take-module" action="/studentsAffectedByModule" method="get">
+                        <input type="hidden" name="code" value="$moduleCode">
+                        <input type="hidden" name="aysem" value="$aySem">
+                        <input type="submit" class="btn btn-lg btn-primary" value="View students that will be affected by this module">
+                    </form>
+                    <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get">
+                        <input type="hidden" name="code" value="$moduleCode">
+                        <input type="hidden" name="aysem" value="$aySem">
+                        <input type="submit" class="btn btn-lg btn-primary" value="View modules overlapping with this module">
+                    </form>
+                </div>
+            </div>
 		</div>
 		<!--module statistics, in other view-->
-		<div class="col-md-6 module-analysis-wrapper">
+		<!--div class="col-md-12">
+            
 			<div class="page-header text-center">
 				<h2>Module Statistics</h2>
 			</div>
@@ -128,7 +147,7 @@ $var title:$title_string
                         </tr>
                 </tbody>
             </table>
-		</div>
+		</div-->
 	</div>
 </div>
 
