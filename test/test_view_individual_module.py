@@ -37,21 +37,20 @@ class TestCode(object):
                                    '&quota='
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
+                            'action="/editModule" method="get">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
                                    'type="submit" value="Edit General Module Info" ' +\
                                    'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description and '+\
-                                   'MCs">'
+                                   'title="Edit the module\'s name, description, '+\
+                                   'MC, pre-requisites and preclusions">'
     FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" ' +\
                                      'name="edit-mounting-button" ' +\
-                                     'action="/editMounting" method="post">'
+                                     'action="/editMounting" method="get">'
     FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
                                             'type="submit" value="Edit Specific ' +\
                                             'Module Info" data-toggle="tooltip" ' +\
                                             'data-placement="right" title="Edit the ' +\
-                                            'module\'s mounting, ' +\
-                                            'prerequisites/preclusions and quota">'
+                                            'module\'s mounting and quota">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -206,8 +205,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.CONTENT_STATS)
@@ -229,8 +226,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.CONTENT_STATS)
