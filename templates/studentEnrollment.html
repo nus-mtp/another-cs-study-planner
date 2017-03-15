@@ -40,17 +40,26 @@ $var title:View Student Enrollment
 				title: "Focus Area"
 			},
 			legend: {
-				verticalAlign: "bottom",
-				horizontalAlign: "center"
+				verticalAlign: "center",
+				horizontalAlign: "left"
 			},
-			theme: "theme2",
 			data: [{
-						type: "column",
+						type: "pie",
+						indexLabelFontFamily: "Garamond",       
+						indexLabelFontSize: 20,
+						indexLabelFontWeight: "bold",
+						startAngle:0,
+						indexLabelFontColor: "darkgrey",       
+						indexLabelLineColor: "darkgrey", 
+						indexLabelPlacement: "outside",
+
+						toolTipContent: "{name}: {y} (#percent%)",
+						showInLegend: true, 
 						dataPoints: [      
 						$for focus_count_pair in focus_count_table[0:len(focus_count_table)-1]:
 							$ focus_area = focus_count_pair[0].replace('&', 'and')
-							{y: $focus_count_pair[1], label: "$focus_area"},
-						{y: $focus_count_table[-1][1],  label: "$focus_count_table[-1][0]"}
+							{y: $focus_count_pair[1], name: "$focus_area", legendMarkerType: "square"},
+						{y: $focus_count_table[-1][1],  name: "$focus_count_table[-1][0]", legendMarkerType: "square"}
 						]
 				  }]
 		});
@@ -100,7 +109,7 @@ $var title:View Student Enrollment
 		</tbody>
 	</table>
 	<br>
-	<div id="focusAreaChartContainer" style="height: 400px; width: 100%;"></div>
+	<div id="focusAreaChartContainer" style="margin-left: 20%; margin-right: 20%; height: 400px; width: 60%;"></div>
 	<br>
 	<br>
 </div>
