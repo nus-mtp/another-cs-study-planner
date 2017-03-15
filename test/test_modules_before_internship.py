@@ -1,136 +1,132 @@
 '''
-test_modules_before_internship.py
-Contains test cases for modules taken before internship query related functions.
-'''
-from nose.tools import assert_equal
-from components import model
+    test_modules_before_internship_ui.py tests the page views for
+    viewing modules taken before internship
 
-# HOW TO RUN NOSE TESTS
-# 1. Make sure you are in cs-modify main directory
-# 2. Make sure the path "C:\Python27\Scripts" is added in your environment variables
-# 3. Enter in cmd: "nosetests test/"
-# 4. Nose will run all the tests inside the test/ folder
+    Firstly, we specify a target URL for conducting UI testing.
+
+    Then, we proceed to test the following things:
+    #1 Accessing the target page should be possible (i.e. response code should be 200 OK).
+    #2 The necessary HTML elements are contained in the page view for target page.
+
+'''
+
+
+from paste.fixture import TestApp
+from nose.tools import assert_equal
+from app import APP
+from components import session
+
 
 class TestCode(object):
     '''
-        This class runs the test cases for modules taken before internship
-        query related functions.
+        This class contains methods that tests the page views inside
+        the target page.
     '''
+
+
+    URL_MODS_BEFORE_INTERNSHIP = '/moduleTakenPriorToInternship'
+    URL_MODS_BEFORE_INTERNSHIP_16_17_SEM2 = '/moduleTakenPriorToInternship?sem=AY%2016/17%20Sem%202'
+    URL_MODS_BEFORE_INTERNSHIP_INVALID = '/moduleTakenPriorToInternship?sem=AY%2016/18%20Sem%202'
+    CURRENT_SEM = 'AY 16/17 Sem 1'
+    DEFAULT_TITLE = 'Modules Taken Prior to Internship for AY 16/17 Sem 1'
+    TEXT = '<p class="text-center">Shows all modules taken by students prior to taking ' +\
+           'internship for a particular semester, and how many students took them.</b> ' +\
+           '<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" ' +\
+           'data-placement="bottom" title="By default, this shows all data before ' +\
+           'students take internship in the current AY-Sem."></span></p>'
+    FORM = '<form id="ay-form" class="form-inline" ' +\
+           'action="/moduleTakenPriorToInternship" method="post">'
+    SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
+    SELECT_ELEMENT = '<select class="form-control" name="sem">'
+    TABLE_HEADER_MODULE_CODE = '<th>Code</th>'
+    TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
+    TABLE_HEADER_NUM_STUDENTS = '<th>Number of Students</th>'
+
+    REDIRECT_CHANGED_CONTENT = 'Modules Taken Prior to Internship for AY 16/17 Sem 2'
+    VALIDATING_TITLE = 'Validating...'
+    SCRIPT_REDIRECT_TO_DEFAULT = "window.location = '/moduleTakenPriorToInternship'"
+    SCRIPT_ERROR_MESSAGE = "alert('The AY-Semester you specified does not exist!');"
+
+
     def __init__(self):
-        self.TEST_MOD_1 = 'CS6101'
-        self.TEST_MOD_2 = 'CP3200'
-        self.TEST_MOD_3 = 'CS3230'
-        self.TEST_MOD_4 = 'CS2105'
-        self.isDuringTesting = False # a boolean flag to allow functions to be called by
-                                     # other functions only, and not by nosetests
+        self.middleware = None
+        self.test_app = None
 
 
-    def test_query_module_before_internship_empty(self):
+    def  setUp(self):
         '''
-            Tests querying the list of modules taken before internship,
-            in AY/Sem which no one is doing internship in.
+            Sets up the 'app.py' fixture
         '''
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 16/17 Sem 1')
-        required_list = []
-
-        assert_equal(len(list_of_modules_before_internship), len(required_list))
-        assert_equal(sorted(list_of_modules_before_internship), sorted(required_list))
-
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 16/17 Sem 2')
-        required_list = []
-
-        assert_equal(len(list_of_modules_before_internship), len(required_list))
-        assert_equal(sorted(list_of_modules_before_internship), sorted(required_list))
+        self.middleware = []
+        self.test_app = TestApp(APP.wsgifunc(*self.middleware))
+        session.set_up(self.test_app)
 
 
-    def test_query_module_before_internship(self):
+    def tearDown(self):
         '''
-            Tests querying the list of modules taken before internship,
-            in AY/Sem with people doing internship in.
+            Tears down 'app.py' fixture and logs out
         '''
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 17/18 Sem 1')
-        required_list = [('CS1020', 'Data Structures and Algorithms I', 2),
-                         ('CS1010', 'Programming Methodology', 2),
-                         ('CS1231', 'Discrete Structures', 2),
-                         ('CS2105', 'Introduction to Computer Networks', 2),
-                         ('CS3230', 'Design and Analysis of Algorithms', 1),
-                         ('CS2010', 'Data Structures and Algorithms II', 1),
-                         ('CS4221', 'Database Applications Design and Tuning', 1),
-                         ('CS4224', 'Distributed Databases', 1)
-                        ]
-
-        assert_equal(len(list_of_modules_before_internship), len(required_list))
-        assert_equal(sorted(list_of_modules_before_internship), sorted(required_list))
-
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 17/18 Sem 2')
-        required_list = [('CS3247', 'Game Development', 1),
-                         ('CS4350', 'Game Development Project', 1),
-                         ('CS3223', 'Database Systems Implementation', 1),
-                         ('CS2102', 'Database Systems', 1)
-                        ]
-
-        assert_equal(len(list_of_modules_before_internship), len(required_list))
-        assert_equal(sorted(list_of_modules_before_internship), sorted(required_list))
+        session.tear_down(self.test_app)
 
 
-    def test_query_module_before_internship_with_mod_after_internship(self):
+    def test_modules_before_internship_valid_response(self):
         '''
-            Tests querying the list of modules taken before internship,
-            in AY/Sem with people doing internship in, and
-            with some modules taken after or during aysem of internship
+            Tests whether user can access page for showing non
+            overlapping modules without request errors.
         '''
-        self.isDuringTesting = True
-        self.populate_dummy_data_for_test_mod_before_intern()
+        root = self.test_app.get(self.URL_MODS_BEFORE_INTERNSHIP)
 
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 17/18 Sem 1')
-        required_list = [('CS1020', 'Data Structures and Algorithms I', 2),
-                         ('CS1010', 'Programming Methodology', 2),
-                         ('CS1231', 'Discrete Structures', 2),
-                         ('CS2105', 'Introduction to Computer Networks', 3),
-                         ('CS3230', 'Design and Analysis of Algorithms', 1),
-                         ('CS2010', 'Data Structures and Algorithms II', 1),
-                         ('CS4221', 'Database Applications Design and Tuning', 1),
-                         ('CS4224', 'Distributed Databases', 1)
-                        ]
-
-        assert_equal(len(list_of_modules_before_internship), len(required_list))
-        assert_equal(sorted(list_of_modules_before_internship), sorted(required_list))
-
-        self.isDuringTesting = True
-        self.clean_up_dummy_data_for_test_mod_before_intern()
+        assert_equal(root.status, 200)
 
 
-    def populate_dummy_data_for_test_mod_before_intern(self):
+    def test_non_overlapping_modules_contents(self):
         '''
-            Populates some dummy data for more testing
+            Tests if the non-overlapping modules page contains
+            the necessary views.
         '''
-        if self.isDuringTesting:
-            sql_command = "INSERT INTO student VALUES('D9818873B', 1)"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_1 + "', 'AY 17/18 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_2 + "', 'AY 17/18 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_3 + "', 'AY 17/18 Sem 2')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_4 + "', 'AY 16/17 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
+        root = self.test_app.get(self.URL_MODS_BEFORE_INTERNSHIP)
 
-            self.isDuringTesting = False
+        root.mustcontain(self.DEFAULT_TITLE)
+        root.mustcontain(self.TEXT)
+        root.mustcontain(self.FORM)
+        root.mustcontain(self.SELECT_LABEL)
+        root.mustcontain(self.SELECT_ELEMENT)
+        root.mustcontain(self.TABLE_HEADER_MODULE_CODE)
+        root.mustcontain(self.TABLE_HEADER_MODULE_NAME)
+        root.mustcontain(self.TABLE_HEADER_NUM_STUDENTS)
 
 
-    def clean_up_dummy_data_for_test_mod_before_intern(self):
+    def test_redirect_button(self):
         '''
-            Clean up dummy data for testing
+            tests if redirect works
         '''
-        if self.isDuringTesting:
-            sql_command = "DELETE FROM studentplans WHERE studentid='D9818873B'"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "DELETE FROM student WHERE nusnetid='D9818873B'"
-            model.DB_CURSOR.execute(sql_command)
 
-            self.isDuringTesting = False
+        root = self.test_app.get(self.URL_MODS_BEFORE_INTERNSHIP)
+        form = root.forms__get()["ay-form"]
+        form.__setitem__("sem", "AY 16/17 Sem 2")
+        response = form.submit()
+
+        #check response is 303 see other
+        assert_equal(response.status, 303)
+
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+
+        #checks changed content of redirected field
+
+        redirected.mustcontain(self.REDIRECT_CHANGED_CONTENT)
+
+
+    def test_error_redirect(self):
+        '''
+            tests if redirect to outcome when ay-sem is invalid
+        '''
+        root = self.test_app.get(self.URL_MODS_BEFORE_INTERNSHIP_INVALID)
+
+        #checks if directs to validating page
+        assert_equal(root.status, 200)
+        root.mustcontain(self.VALIDATING_TITLE)
+
+        #checks if validating page contain expected elements
+        root.mustcontain(self.SCRIPT_REDIRECT_TO_DEFAULT)
+        root.mustcontain(self.SCRIPT_ERROR_MESSAGE)
