@@ -8,12 +8,11 @@ $var title:$title_string
     <div class="container-block container">
         <div class="row red">
             <div class="col-md-6 module-info-wrapper">
+                <h1 class="row title text-center">Edit: $moduleCode ($aySem)</h1>
+                <br>
                 <div class="row">
                     <!--mounting information-->
                     <form id="edit-mounting-form" name="edit-mounting-form" action="/editMounting" method="post">
-                        <h4><b>Module Code:</b></h4>
-                        <p>$moduleCode</p>
-                        <br>
                         <div class="form-group">
                             <!--mounting status-->
                             <h4><b>Mounting Status:</b></h4>
@@ -49,7 +48,6 @@ $var title:$title_string
                                 <input class="form-control" id="quota" type="number" min="0" size="10" name="quota" value="$quota" disabled>
                             <br>
                         </div>
-                        <br>
                         <br>
                         <input type="hidden" name="code" value="$moduleCode" required>
                         <input type="hidden" name="aySem" value="$aySem" required>
