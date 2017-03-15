@@ -113,41 +113,6 @@ $var title:$title_string
                 </div>
             </div>
 		</div>
-		<!--module statistics, in other view-->
-		<!--div class="col-md-12">
-            
-			<div class="page-header text-center">
-				<h2>Module Statistics</h2>
-			</div>
-            <br>
-            <br>
-			<h4><b>Modules taken with $moduleCode:</b></h4>
-			<table id="common-module-table" class="table table-bordered table-hover display dataTable">
-                <thead>
-                    <tr>
-                        <th>Module 1</th>
-                        <th>Name of Module 1</th>
-                        <th>Module 2</th>
-                        <th>Name of Module 2</th>
-                        <th>For AY-Sem</th>
-                        <th>Number of Students</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    $for row in overlappingList:
-                    	$ address1 = '/viewModule?code=' + row[0]
-                    	$ address2 = '/viewModule?code=' + row[2]
-                        <tr>
-                            <td class="text-center"><a href="$:address1" target="_blank" data-toggle="tooltip" title="View general info for $row[0]">$row[0]</a></td>
-                            <td class="text-center">$row[1]</td>
-                            <td class="text-center"><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
-                            <td class="text-center">$row[3]</td>
-                            <td class="text-center">$row[4]</td>
-                            <td class="text-center">$row[5]</td>
-                        </tr>
-                </tbody>
-            </table>
-		</div-->
 	</div>
 </div>
 

@@ -52,6 +52,16 @@ class TestCode(object):
                                             'data-placement="right" title="Edit the ' +\
                                             'module\'s mounting, ' +\
                                             'prerequisites/preclusions and quota">'
+    FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
+                             'name="view-students-planning-to-take-module" '+\
+                             'action="/studentsAffectedByModule" method="get">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
+                                    ' value="View students that will be affected by this module">'
+    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
+                                   'name="view-overlapping-with-module" action="/overlappingWithModule"'+\
+                                   ' method="get">'
+    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
+                                          ' value="View modules overlapping with this module">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -61,26 +71,15 @@ class TestCode(object):
     CONTENT_NAME = "Data Management and Warehousing"
     CONTENT_MC = "(4 MCs)"
     CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
-                                      'value="BT5110" />'
+                                      'value="BT5110">'
     CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                        'type="submit" value="Back to Overview" />'
+                                        'type="submit" value="Back to Overview">'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
-    CONTENT_STATS = "Module Statistics"
     CONTENT_CLASS_QUOTA_BLANK = "?"
-
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover' +\
-                                        ' display dataTable">'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
 
 
     def __init__(self):
@@ -210,9 +209,12 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
-        root.mustcontain(self.CONTENT_STATS)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED_BUTTON)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE_BUTTON)
 
 
     def test_view_individual_module_contents_with_future_ay(self):
@@ -233,11 +235,14 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
-        root.mustcontain(self.CONTENT_STATS)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
         root.mustcontain(self.FORM_EDIT_SPECIFIC_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED_BUTTON)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE_BUTTON)
 
 
     def test_view_individual_module_no_quota_valid_response(self):
@@ -248,20 +253,6 @@ class TestCode(object):
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
 
-
-    def test_overlapping_table(self):
-        '''
-            Test if the overlapping modules table is available
-        '''
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
-
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
 
 
     def test_goto_edit_general_info(self):
@@ -281,6 +272,26 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
         edit_form = root.forms__get()["edit-mounting-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_affected_students_page(self):
+        '''
+            Tests if user can access students affected by module page
+        '''
+        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
+        edit_form = root.forms__get()["view-students-planning-to-take-module"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_overlapping_with_module(self):
+        '''
+            Tests if user can access overlapping with module
+        '''
+        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
+        edit_form = root.forms__get()["view-overlapping-with-module"]
 
         response = edit_form.submit()
         assert_equal(response.status, 200)
