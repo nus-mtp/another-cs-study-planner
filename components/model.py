@@ -995,3 +995,30 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def star_modules(module_code, staff_id):
+    '''
+        Insert a module into the starred table.
+    '''
+    sql_command = "INSERT INTO starred VALUES (%s,%s)"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    CONNECTION.commit()
+
+
+def unstar_modules(module_code, staff_id):
+    '''
+        Remove a module from the starred table.
+    '''
+    sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    CONNECTION.commit()
+
+
+def get_starred_modules(module_code):
+    '''
+        Get all starred modules
+    '''
+    sql_command = "SELECT moduleCode FROM starred WHERE staffId = %s"
+    DB_CURSOR.execute(sql_command, (staff_id,))
+    return DB_CURSOR.fetchall()
