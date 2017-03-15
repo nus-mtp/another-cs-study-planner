@@ -35,12 +35,10 @@ $def with (page)
 					   	</button>
 					</form>
 					<form class="navbar-form navbar-right" action="/logout" method="post">
-						<button class="btn btn-lg btn-danger" type="submit">
+                        <label for="logout-button"><b>$web.cookies().get('user')</b></label>
+						<button id="logout-button" class="btn btn-lg btn-danger" type="submit">
 							<span class="glyphicon glyphicon-log-out"></span> Logout
 						</button>
-					</form>
-					<form class="navbar-form navbar-right">
-						$web.cookies().get('user')
 					</form>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
