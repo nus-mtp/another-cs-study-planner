@@ -12,18 +12,16 @@ class TestCode(object):
         This class runs the test cases to test app home page
     '''
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
-    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary ' +\
-                                 'pull-right" type="submit" value="Go To ' +\
-                                 'Fixed Module Mountings" data-toggle="tooltip" ' +\
-                                 'data-placement="bottom" title="See fixed module ' +\
-                                 'mountings for current AY">'
+    FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
+                                 'value="Go To Fixed Module Mountings" ' +\
+                                 'data-toggle="tooltip" data-placement="right" ' +\
+                                 'title="See fixed module mountings for current AY">'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
-    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                     'type="submit" value="Go To Tentative Module ' +\
-                                     'Mountings" data-toggle="tooltip" ' +\
-                                     'data-placement="bottom" title="See tentative ' +\
-                                     'module mountings for other AYs">'
+    FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
+                                     'value="Go To Tentative Module Mountings" ' +\
+                                     'data-toggle="tooltip" data-placement="right" ' +\
+                                     'title="See tentative module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
