@@ -280,8 +280,8 @@ class TestCode(object):
         '''
         if not self.prereq_CRD_tested:
             model.add_module(self.test_prereq_code, self.test_module_name, self.test_module_desc,
-                         self.test_module_mc, self.test_module_status)
-            
+                             self.test_module_mc, self.test_module_status)
+
             model.add_prerequisite(self.test_module_code, self.test_prereq_code,
                                    self.test_prereq_index)
 
