@@ -39,7 +39,8 @@ URLS = (
     '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
     '/addModule', 'components.handlers.add_module_handler.AddModule',
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo',
-    '/overlappingWithModule', 'components.handlers.overlapping_with_module.OverlappingWithModule'
+    '/overlappingWithModule', 'components.handlers.overlapping_with_module.OverlappingWithModule',
+    '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules'
 )
 
 
@@ -51,8 +52,7 @@ URLS = (
     'templates' directory and use the 'base.html' as the base template
     for all other pages.
 '''
-RENDER = web.template.render('templates', base='base')
-
+RENDER = web.template.render('templates', base='base', globals={'web':web})
 
 '''
     This creates the application instance with the defined
