@@ -43,12 +43,13 @@ $var title:View Student Enrollment
 				verticalAlign: "bottom",
 				horizontalAlign: "center"
 			},
-			theme: "theme1",
+			theme: "theme2",
 			data: [{
 						type: "column",
 						dataPoints: [      
 						$for focus_count_pair in focus_count_table[0:len(focus_count_table)-1]:
-							{y: $focus_count_pair[1], label: "$focus_count_pair[0]"},
+							$ focus_area = focus_count_pair[0].replace('&', 'and')
+							{y: $focus_count_pair[1], label: "$focus_area"},
 						{y: $focus_count_table[-1][1],  label: "$focus_count_table[-1][0]"}
 						]
 				  }]
