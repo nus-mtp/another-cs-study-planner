@@ -41,4 +41,5 @@ class StarredModulesList(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            return RENDER.starredModulesListing([])
+            starred_module_infos = model.get_starred_modules(web.cookies().get('user'))
+            return RENDER.starredModulesListing(starred_module_infos)
