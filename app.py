@@ -42,7 +42,7 @@ URLS = (
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo',
     '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules',
     '/starModule', 'components.handlers.star_modules.StarModule',
-    '/starredModules', 'components.handlers.star_modules.StarListing'
+    '/starredModules', 'components.handlers.star_modules.StarredModulesList'
 )
 
 

@@ -28,7 +28,8 @@ class StarModule(object):
                 model.unstar_module(module_code, web.cookies().get('user'))
             raise web.seeother('/viewModule?code=' + module_code)
 
-class StarListing(object):
+
+class StarredModulesList(object):
     '''
         Class handles showing of starredModules
     '''
@@ -40,4 +41,4 @@ class StarListing(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            return RENDER.index()    
+            return RENDER.starredModulesListing([])
