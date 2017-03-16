@@ -1015,11 +1015,12 @@ def unstar_module(module_code, staff_id):
     CONNECTION.commit()
 
 
-def get_starred_modules(module_code):
+def get_starred_modules(staff_id):
     '''
-        Get all starred modules
+        Get all module info of all starred modules.
     '''
-    sql_command = "SELECT moduleCode FROM starred WHERE staffId = %s"
+    sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
+                "AND m.code = s.modulecode"
     DB_CURSOR.execute(sql_command, (staff_id,))
     return DB_CURSOR.fetchall()
 
