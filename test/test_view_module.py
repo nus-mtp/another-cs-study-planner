@@ -246,7 +246,7 @@ class TestCode(object):
         redirected = response.follow()
         assert_equal(redirected.status, 200)
         redirected.mustcontain(self.CONTENT_UNSTAR_BUTTON)
-        
+
         # test unstarring now
         response = redirected.goto(self.URL_UNSTAR_MODULE, method='get')
         assert_equal(response.status, 303)
