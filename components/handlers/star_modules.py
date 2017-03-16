@@ -12,7 +12,7 @@ class StarModule(object):
     '''
         Class handles starring and unstarring of modules.
     '''
-    
+
     def GET(self):
         '''
             This function is called when /starModule is accessed.
