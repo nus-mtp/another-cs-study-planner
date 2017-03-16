@@ -891,6 +891,46 @@ def clean_old_sessions(date_to_delete):
     return True
 
 
+def add_prerequisite(module_code, prereq_code, index):
+    '''
+        Insert a prerequisite into the prerequisite table.
+        Returns true if successful, false if duplicate primary key detected
+    '''
+    sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_prerequisite(module_code):
+    '''
+        Get a prerequisite from the prerequisite table.
+    '''
+    sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def delete_prerequisite(module_code, prereq_code):
+    '''
+        Delete a prerequisite from the prerequisite table.
+        Returns true if successful.
+    '''
+    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s " +\
+                  "AND prerequisiteModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 def get_mods_no_one_take(aysem):
     '''
         Retrieves the list of all modules which no student take together
