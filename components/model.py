@@ -1028,6 +1028,56 @@ def delete_prerequisite(module_code, prereq_code):
     return True
 
 
+def add_preclusion(module_code, preclude_code):
+    '''
+        Insert a preclusion into the precludes table.
+        Returns true if successful, false if duplicate primary key detected or
+        when module precludes itself (i.e. module_code == preclude_code) or
+        when invalid module/preclude code is given.
+    '''
+    if module_code == preclude_code:
+        return False
+
+    if not is_existing_module(module_code) or not is_existing_module(preclude_code):
+        return False
+
+    sql_command = "INSERT INTO precludes VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
+        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_preclusion(module_code):
+    '''
+        Get all preclusions of module_code from the precludes table.
+    '''
+    sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def delete_preclusion(module_code, prereq_code):
+    '''
+        Delete a preclusion from the precludes table.
+        Returns true if successful, false otherwise.
+    '''
+    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
+                  "AND precludedByModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 def get_mods_no_one_take(aysem):
     '''
         Retrieves the list of all modules which no student take together
