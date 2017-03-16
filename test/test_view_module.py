@@ -28,6 +28,8 @@ class TestCode(object):
 
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
+    URL_STAR_MODULE = '/starModule?star=BT5110&action=star'
+    URL_UNSTAR_MODULE = '/starModule?star=BT5110&action=unstar'
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
                             'action="/editModule" method="post">'
@@ -59,6 +61,8 @@ class TestCode(object):
     CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
     CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
     CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
+    CONTENT_STAR_BUTTON = '<span class="glyphicon glyphicon-star-empty">'
+    CONTENT_UNSTAR_BUTTON = '<span class="glyphicon glyphicon-star">'
 
 
     def __init__(self):
@@ -200,8 +204,10 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
         root.mustcontain(self.CONTENT_STATS)
+        root.mustcontain(self.CONTENT_STAR_BUTTON)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
+
 
 
     def test_contains_overlapping_module_table(self):
@@ -227,3 +233,24 @@ class TestCode(object):
 
         response = edit_form.submit()
         assert_equal(response.status, 200)
+
+
+    def test_click_star_button(self):
+        '''
+            Tests if user can star and unstar modules by clicking the button.
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        response = root.goto(self.URL_STAR_MODULE, method='get')
+        assert_equal(response.status, 303)
+        # follow back to view module page
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+        redirected.mustcontain(self.CONTENT_UNSTAR_BUTTON)
+        
+        # test unstarring now
+        response = redirected.goto(self.URL_UNSTAR_MODULE, method='get')
+        assert_equal(response.status, 303)
+        # follow back to view module page
+        redirected = response.follow()
+        assert_equal(redirected.status, 200)
+        redirected.mustcontain(self.CONTENT_STAR_BUTTON)
