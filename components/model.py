@@ -527,8 +527,6 @@ def get_num_students_by_yr_study():
         e.g. [(1, 4), (2, 3)] means four year 1 students
         and two year 3 students
     '''
-    INDEX_FIRST_ELEM = 0
-
     sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
         " ORDER BY year"
     DB_CURSOR.execute(sql_command)
@@ -617,8 +615,6 @@ def get_num_students_by_focus_areas():
         Note: A student taking double focus on AI and Database will be
         reflected once for AI and once for database (i.e. double counting)
     '''
-    INDEX_FIRST_ELEM = 0
-
     table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
     table_with_zero_students = get_focus_areas_with_no_students_taking()
 
