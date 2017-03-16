@@ -123,6 +123,7 @@ class ViewMod(object):
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)
         overlapping_modules_list = self.get_overlapping_mods(module_code)
+        prereq_string = model.get_prerequisite_as_string(module_code)
 
         #get html of overlapping modules template
         return RENDER.viewModule(module_info, self.fixed_mounting_plan,
