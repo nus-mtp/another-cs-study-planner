@@ -89,6 +89,7 @@ class IndividualModule(object):
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+        prereq_string = model.get_prerequisite_as_string(module_code)
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
