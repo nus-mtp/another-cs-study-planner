@@ -12,6 +12,9 @@ from psycopg2.extensions import AsIs
 CONNECTION = components.database_adapter.connect_db()
 DB_CURSOR = CONNECTION.cursor()
 
+INDEX_FIRST_ELEM = 0
+INDEX_SECOND_ELEM = 1
+LENGTH_EMPTY = 0
 
 def get_all_modules():
     '''
@@ -913,6 +916,104 @@ def get_prerequisite(module_code):
     sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
     DB_CURSOR.execute(sql_command, (module_code,))
     return DB_CURSOR.fetchall()
+
+
+def get_prerequisite_as_string(module_code):
+    '''
+        Returns a string of pre-requisites of specified module_code
+    '''
+    prerequisites = get_prerequisite(module_code)
+    prereq_list = convert_to_list(prerequisites)
+
+    # sort list of lists based on index (which is the first elem of each row)
+    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
+
+    return prereq_string
+
+
+def convert_list_of_prereqs_to_string(prereq_list):
+    '''
+        Converts given list of lists (prereq_list) into string form of prereqs.
+        Pre-condition: Given list must have the rows' first index sorted.
+        Example: [['0', 'CS1010'], ['0', 'CS1231'], ['1', 'CS2105']] will yield
+        the string (CS1010 or CS1231) and CS2105.
+        Same index elements have an "OR" relationship, different index elements
+        have an "AND" relationship.
+    '''
+    number_of_prereq = len(prereq_list)
+    if number_of_prereq == LENGTH_EMPTY:
+        return ""
+
+    required_string = ""
+    temp_list_for_or = list()
+    previous_index = None
+    for prereq_with_index in prereq_list:
+        current_index = prereq_with_index[INDEX_FIRST_ELEM]
+        current_prereq = prereq_with_index[INDEX_SECOND_ELEM]
+
+        if previous_index is None:
+            previous_index = current_index
+            temp_list_for_or.append(current_prereq)
+        else:
+            if previous_index == current_index:
+                temp_list_for_or.append(current_prereq)
+            else:
+                prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+                required_string = process_and_relation_prereq(required_string,
+                                                              prereq_of_or_string)
+                previous_index = current_index
+                temp_list_for_or = [current_prereq]
+
+    if len(required_string) == LENGTH_EMPTY:
+        # there is no 'and' relation
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or,
+                                                               False)
+        required_string = prereq_of_or_string
+    else:
+        # there is 'and' relation to process
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+        required_string = process_and_relation_prereq(required_string,
+                                                      prereq_of_or_string)
+
+    return required_string
+
+
+def convert_list_prereq_to_or_string(temp_list, to_add_brackets=True):
+    '''
+        Converts all elements in temp_list to a string separated by "or"
+    '''
+    number_of_prereq = len(temp_list)
+    if number_of_prereq == 1:
+        return temp_list[INDEX_FIRST_ELEM]
+    else:
+        # more than 1 prereq
+        required_string = " or ".join(temp_list)
+
+        if to_add_brackets:
+            required_string_with_brackets = "(" + required_string + ")"
+
+            return required_string_with_brackets
+        else:
+            return required_string
+
+
+def process_and_relation_prereq(existing_string, prereq_of_or_string):
+    '''
+        Appends the prereq_of_or_string into existing_string by building
+        "and" relations between existing prereqs in existing_string
+        with those in prereq_of_or_string
+    '''
+    existing_string_length = len(existing_string)
+
+    if existing_string_length == LENGTH_EMPTY:
+        return prereq_of_or_string
+    else:
+        and_string = " and "
+        required_string = existing_string + and_string + prereq_of_or_string
+
+        return required_string
 
 
 def delete_prerequisite(module_code, prereq_code):
