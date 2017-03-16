@@ -13,7 +13,7 @@ DUMMY_PASSWORD = '12345678'
 URL_DEFAULT_LOGIN = '/login'
 URL_DEFAULT_LOGOUT = '/logout'
 
-COOKIE_TIME = 60*60
+COOKIE_TIME = 60*10
 
 def init_session(user_id):
     '''
