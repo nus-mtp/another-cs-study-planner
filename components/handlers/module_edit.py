@@ -75,6 +75,7 @@ class EditMountingInfo(object):
         if form_status == "load":
             mounting_value = data.mountingValue
             overlapping_list = model.get_mod_taken_together_with(module_code)
+            prereq_string = model.get_prerequisite_as_string(module_code)
             return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota, overlapping_list)
 
         elif form_status == "submit":
