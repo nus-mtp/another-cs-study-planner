@@ -5,7 +5,6 @@
 import web
 from app import RENDER
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class StarModule(object):
