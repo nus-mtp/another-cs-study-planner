@@ -39,10 +39,9 @@ class TestCode(object):
                           '"/moduleMountingFixed" ' +\
                           'method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
-                                 'value="Go To Fixed Module Mountings" ' +\
+                                 'value="Go To Module Mountings for Current AY" ' +\
                                  'data-toggle="tooltip" data-placement="right" ' +\
-                                 'title="See fixed module mountings for the ' +\
-                                 'current AY">'
+                                 'title="See fixed module mountings for current AY">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
