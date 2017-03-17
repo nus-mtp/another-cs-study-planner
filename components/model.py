@@ -375,9 +375,12 @@ def add_admin(username, salt, hashed_pass):
         Note: to change last argument to false once
         activation done
     '''
-    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
-    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
-    CONNECTION.commit()
+    try:
+        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+        CONNECTION.commit()
+    except psycopg2.DataError: #if username too long
+        CONNECTION.rollback()
 
 
 def is_userid_taken(userid):
