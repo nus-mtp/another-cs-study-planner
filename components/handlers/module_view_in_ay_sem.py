@@ -98,6 +98,20 @@ class IndividualModule(object):
         return self.quota
 
 
+    def get_acronym(self, focus_area):
+        '''
+            Return the acronym of a focus area
+        '''
+        focus_area_words = focus_area.split(" ")
+        focus_area_acronym = ""
+        for word in focus_area_words:
+            first_letter = word[0]
+            if first_letter == "&":
+                continue
+            focus_area_acronym += first_letter
+        return focus_area_acronym
+
+
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
@@ -120,9 +134,41 @@ class IndividualModule(object):
 
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
 
+        # Get a list of all focus areas and a list of their acronyms
+        focus_areas = model.get_all_focus_areas()
+        focus_areas = sorted([area[0] for area in focus_areas])
+        focus_area_counts = {"Nil": 0}
+        focus_area_acronyms = ["Nil"]
+        for focus_area in focus_areas:
+            acronym = self.get_acronym(focus_area)
+            focus_area_counts[acronym] = 0
+            focus_area_acronyms.append(acronym)
+        focus_areas.insert(0, "Have Not Indicated")
+
+        student_list = model.get_list_students_take_module(module_code, target_ay_sem)
+
+        student_year_counts = [0] * 6
+        for student in student_list:
+            # Get number of students in each year that are taking the module
+            student_year = student[1]
+            student_year_counts[student_year-1] += 1
+            
+            # Get number of students in each focus area that are taking the module
+            focus_area_1 = student[2]
+            focus_area_2 = student[3]
+            if focus_area_1 == "-" and focus_area_2 == "-":
+                focus_area_counts["Nil"] += 1
+            else:
+                if focus_area_1 != "-":
+                    focus_area_counts[self.get_acronym(focus_area_1)] += 1
+                if focus_area_2 != "-":
+                    focus_area_counts[self.get_acronym(focus_area_2)] += 1
+
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, overlapping_mod_list)
+                                           self.quota, overlapping_mod_list,
+                                           focus_areas, focus_area_acronyms,
+                                           student_year_counts, focus_area_counts)
 
 
     def POST(self):
