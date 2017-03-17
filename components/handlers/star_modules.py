@@ -22,14 +22,13 @@ class StarModule(object):
         else:
             module_code = web.input().code
             action = web.input().action
-            if action == "unstar_from_list":
-                model.unstar_module(module_code, web.cookies().get('user'))
-                raise web.seeother('/starredModules')
-            elif action == "star":
+            return_path = web.input().return_path
+            if action == "star":
                 model.star_module(module_code, web.cookies().get('user'))
             else:
                 model.unstar_module(module_code, web.cookies().get('user'))
-            raise web.seeother('/viewModule?code=' + module_code)
+            
+            raise web.seeother(return_path)
 
 
 class StarredModulesList(object):
