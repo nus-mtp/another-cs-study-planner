@@ -126,8 +126,3 @@ class ViewMod(object):
         #get html of overlapping modules template
         return RENDER.viewModule(module_info, self.fixed_mounting_plan,
                                  self.tenta_mounting_plan, number_of_student_planning)
-
-
-    def POST(self):
-        ''' Redirect '''
-        raise web.seeother('/viewModule')
