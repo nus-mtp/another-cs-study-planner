@@ -1,5 +1,5 @@
 '''
-    test_module_listing.py test the module listing view.
+    test_star_listing.py tests the starred module listing view.
 '''
 from paste.fixture import TestApp
 from nose.tools import assert_equal
@@ -9,7 +9,7 @@ from components import session, model
 
 class TestCode(object):
     '''
-        This class runs the test cases to test app home page
+        This class runs the test cases to test starred modules page
     '''
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-lg btn-primary ' +\
@@ -116,7 +116,7 @@ class TestCode(object):
         '''
         root = self.test_app.get('/starredModules')
 
-        # Checks the existence of the handler for viewing fixed mounting plan
+        # Checks the existence of the handler for viewing starred modules
         root.mustcontain(self.TABLE_HEADER_CODE)
         root.mustcontain(self.TABLE_HEADER_NAME)
         root.mustcontain(self.TABLE_HEADER_DESCRIPTION)
