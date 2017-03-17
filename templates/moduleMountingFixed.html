@@ -9,16 +9,17 @@ $var title:$title_string
             <h1 class="text-center"><b>Module Mountings for <u>$currentAY</u></b></h1>
             <p class="text-center">Shows the <b>fixed</b> module mountings for the current AY.</p>
             <br>
-            <div id="options">
-                <h2>Options:</h2>
-                <form class="navForm" action="/modules" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Module Information" data-toggle="tooltip" data-placement="right" title="See all modules that exist in the system">
-                </form>
-                <form class="navForm" action="/moduleMountingTentative" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Tentative Module Mountings" data-toggle="tooltip" data-placement="right" title="See tentative module mountings for the other AYs">
-                </form>
+            <div class="row" id="options">
+                <h2 class="text-center">Options:</h2>
+                <div class="col-md-12 text-center">
+                    <form class="navForm" action="/modules" method="post">
+                        <input class="btn btn-primary" type="submit" value="Go To Module Information" data-toggle="tooltip" data-placement="right" title="See all modules that exist in the system">
+                    </form>
+                    <form class="navForm" action="/moduleMountingTentative" method="post">
+                        <input class="btn btn-primary" type="submit" value="Go To Module Mountings for Other AYs" data-toggle="tooltip" data-placement="right" title="See tentative module mountings for other AYs">
+                    </form>
+                </div>
             </div>
-            <br>
             <br>
             <table class="table table-bordered table-hover text-center dataTable display" id="fixed-mounting-table">
                 <thead>

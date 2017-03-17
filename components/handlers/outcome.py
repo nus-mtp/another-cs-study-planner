@@ -88,4 +88,9 @@ class Outcome(object):
             elif action == "non-overlapping-mods":
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/nonOverlappingModules"
+
+            elif action == "mods-before-internship":
+                outcome_message = "The AY-Semester you specified does not exist!"
+                redirect_page = "/moduleTakenPriorToInternship"
+
             return RENDER.outcome(outcome_message, redirect_page)

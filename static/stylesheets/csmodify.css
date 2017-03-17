@@ -31,7 +31,7 @@ tr > th {
 /* The navigation menu links */
 .sidebar > h3 {
     padding-left: 20px;
-    color: white;
+    color: #ffffff;
 }
 
 .sidebar > ul {
@@ -42,14 +42,15 @@ tr > th {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
-    color: #919191;
+    color: #dddd3e;
     display: block;
     transition: 0.3s
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
+    color: #ffffff;
+    text-decoration: underline;
 }
 
 /* Position and style the close button (top right corner) */
