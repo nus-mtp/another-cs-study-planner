@@ -1003,9 +1003,11 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
         specified AY-Semester if the quota falls within the given range
         of quota_lower <= retrieved module quota <= quota_higher
     '''
-    sql_command = "SELECT mm.moduleCode, mm.quota FROM %(table)s mm " + \
+    sql_command = "SELECT mm.moduleCode, m.name, mm.quota " + \
+                "FROM %(table)s mm, module m " + \
                 "WHERE mm.acadYearAndSem = %(aysem)s " + \
-                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s"
+                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s " + \
+                "AND mm.moduleCode = m.code"
 
     STRING_MODULE_MOUNTED = "moduleMounted"
     STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
