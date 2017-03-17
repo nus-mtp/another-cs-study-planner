@@ -33,10 +33,9 @@ class TestCode(object):
             model.get_mod_specified_class_size(self.test_aysem_1, self.test_quota_lower_1,
                                                self.test_quota_higher_1)
 
-        required_list = ["CS6101", "MM1001", "FMC1206", "CS2309", "MM1002",
-                         "CS6203", "CS6880", "CS2220", "CS6231", "CS3205",
-                         "MM1004"]
-
+        required_list = [["CS6101", 0], ["MM1001", 10], ["FMC1206", 15], ["CS2309", 20],
+                         ["MM1002", 20], ["CS6203", 30], ["CS6880", 30], ["CS2220", 30],
+                         ["CS6231", 40], ["CS3205", 40], ["MM1004", 40]]
 
         assert_equal(len(list_of_modules), len(required_list))
         assert_equal(sorted(list_of_modules), sorted(required_list))
@@ -51,7 +50,8 @@ class TestCode(object):
             model.get_mod_specified_class_size(self.test_aysem_2, self.test_quota_lower_2,
                                                self.test_quota_higher_2)
 
-        required_list = ["CS2106", "CS2103", "CS2107", "CS1010S"]
+        required_list = [["CS2106", 180], ["CS2103", 180], ["CS2107", 200],
+                         ["CS1010S", 200]]
 
         assert_equal(len(list_of_modules), len(required_list))
         assert_equal(sorted(list_of_modules), sorted(required_list))
