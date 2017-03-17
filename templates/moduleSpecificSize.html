@@ -1,0 +1,63 @@
+$def with (allAySems, listOfMods, ayOfInterest, lowerRange, higherRange)
+
+$var title:Modules with Specific Class Size
+
+<div class="container container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row"><!--header-->
+                <h1 class="text-center"><b>Modules with Specific Class Size</b></h1>
+                <p class="text-center" >Shows all modules with specific class size in specified AY-Semester</p>
+                <br>
+            </div>
+            <div class="row"><!--request form-->
+                <div class="col-md-12 pagination-centered text-center">
+                    <form id="ay-form" action="/moduleSpecificSize" method="post" class="form-inline">
+                        <div class="form-group">
+                            <label for="ay-sem">Find modules in </label>
+                            <select class="form-control" name="sem" required>
+                                <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
+                                $for aysem in allAySems:
+                                    <option value="$aysem">$aysem</option>
+                            </select>
+                            <label for="low"> with class size between </label>
+                            <input type="number" class="form-control" name="lowerClassSize" min="0" max="999" required>
+                            <label for="high"> and </label>
+                            <input type="number" class="form-control" name="higherClassSize" min="0" max="999" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit"  value="Submit" class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Render table only if ay-sem and class size range values are specified. -->
+            $if not ayOfInterest is None and not lowerRange is None and not higherRange is None:
+                <div class="row"><!--subheader-->
+                    <div class="col-md-12 pagination-centered text-center">
+                        <h2>Modules in $ayOfInterest with class size between $lowerRange and $higherRange:</h2>
+                        <br>
+                    </div>
+                </div>
+                <div class="row"><!--table-->
+                    <table class="table display dataTable table-bordered table-hover text-center" id="mod-specific-size-table">
+                        <thead>
+                            <tr>
+                                <th>Module Code</th>
+                                <th>Name of Module</th>
+                                <th>Quota / Class Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            $for module in listOfMods:
+                                <tr>
+                                    <td>$module[0]</td>
+                                    <td>$module[1]</td>
+                                    <td>$module[2]</td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>
