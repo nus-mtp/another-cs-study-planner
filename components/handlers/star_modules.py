@@ -20,7 +20,7 @@ class StarModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            module_code = web.input().star
+            module_code = web.input().code
             action = web.input().action
             if action == "unstar_from_list":
                 model.unstar_module(module_code, web.cookies().get('user'))
