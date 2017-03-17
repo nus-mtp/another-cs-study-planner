@@ -995,3 +995,44 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
+    '''
+        Retrieves the list of modules with specified quota/class size in the
+        specified AY-Semester
+    '''
+    sql_command = "SELECT mm.moduleCode FROM %(table)s mm " + \
+                "WHERE mm.acadYearAndSem = %(aysem)s " + \
+                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s"
+
+    STRING_MODULE_MOUNTED = "moduleMounted"
+    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
+
+    MAP_TABLE_TO_MODULE_MOUNTED = {
+        "table": AsIs(STRING_MODULE_MOUNTED),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
+        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+
+    fixed_sems = get_all_fixed_ay_sems()
+    tenta_sems = get_all_tenta_ay_sems()
+
+    if is_aysem_in_list(given_aysem, fixed_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    elif is_aysem_in_list(given_aysem, tenta_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    else: # No such aysem found
+        return list()
+
+    required_list = DB_CURSOR.fetchall()
+    processed_list = [module[0] for module in required_list]
+
+    return processed_list
