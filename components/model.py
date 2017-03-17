@@ -999,10 +999,11 @@ def is_aysem_in_list(given_aysem, given_list):
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
     '''
-        Retrieves the list of modules with specified quota/class size in the
-        specified AY-Semester
+        Retrieves the list of modules with quota/class size in the
+        specified AY-Semester if the quota falls within the given range
+        of quota_lower <= retrieved module quota <= quota_higher
     '''
-    sql_command = "SELECT mm.moduleCode FROM %(table)s mm " + \
+    sql_command = "SELECT mm.moduleCode, mm.quota FROM %(table)s mm " + \
                 "WHERE mm.acadYearAndSem = %(aysem)s " + \
                 "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s"
 
@@ -1033,6 +1034,6 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
         return list()
 
     required_list = DB_CURSOR.fetchall()
-    processed_list = [module[0] for module in required_list]
+    processed_list = convert_to_list(required_list)
 
     return processed_list
