@@ -131,5 +131,9 @@ $(function() {
         aaSorting: [],
         "deferRender": true
     } );
+
+    $('#mod-specific-size-table').DataTable( {
+        "order": [[ 2, "asc"]]
+    } );
 } );
 
