@@ -28,8 +28,8 @@ class TestCode(object):
 
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
-    URL_STAR_MODULE = '/starModule?star=BT5110&action=star'
-    URL_UNSTAR_MODULE = '/starModule?star=BT5110&action=unstar'
+    URL_STAR_MODULE = '/starModule?code=BT5110&action=star&return_path=/viewModule?code=BT5110'
+    URL_UNSTAR_MODULE = '/starModule?code=BT5110&action=unstar&return_path=/viewModule?code=BT5110'
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
                             'action="/editModule" method="post">'
