@@ -23,11 +23,14 @@ class StarModule(object):
             module_code = web.input().code
             action = web.input().action
             return_path = web.input().return_path
+            # modify return path if individual module info to include aySem
+            if return_path == '/individualModuleInfo':
+                target_ay = web.input().target_ay
+                return_path = return_path + '?code=' + module_code + '&targetAY=' + target_ay
             if action == "star":
                 model.star_module(module_code, web.cookies().get('user'))
             else:
                 model.unstar_module(module_code, web.cookies().get('user'))
-            
             raise web.seeother(return_path)
 
 
