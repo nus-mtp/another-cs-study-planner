@@ -4,7 +4,7 @@ $var title:View Student Enrollment
 
 <script type="text/javascript">
 	window.onload = function () {
-	    studentYearBarChart = new CanvasJS.Chart("student-year-bar-chart",
+	    studentYearBarChart = new CanvasJS.Chart("enrollment-student-year-bar-chart",
 	    {
 			animationEnabled: true,
 			axisY: {
@@ -36,7 +36,7 @@ $var title:View Student Enrollment
 
 		studentYearBarChart.render();
 
-		studentYearPieChart = new CanvasJS.Chart("student-year-pie-chart",
+		studentYearPieChart = new CanvasJS.Chart("enrollment-student-year-pie-chart",
 	    {
 			animationEnabled: true,
 			legend: {
@@ -64,7 +64,7 @@ $var title:View Student Enrollment
 				  }]
 		});
 
-	    focusAreaBarChart = new CanvasJS.Chart("focus-area-bar-chart",
+	    focusAreaBarChart = new CanvasJS.Chart("enrollment-focus-area-bar-chart",
 	    {
 			animationEnabled: true,
 			axisY: {
@@ -97,7 +97,7 @@ $var title:View Student Enrollment
 
 		focusAreaBarChart.render();
 
-		focusAreaPieChart = new CanvasJS.Chart("focus-area-pie-chart",
+		focusAreaPieChart = new CanvasJS.Chart("enrollment-focus-area-pie-chart",
 	    {
 			animationEnabled: true,
 			legend: {
@@ -128,34 +128,34 @@ $var title:View Student Enrollment
 	}
 
 	function showStudentYearBarChart() {
-		document.getElementById('student-year-bar-chart').style.display = "block";
-		document.getElementById('student-year-pie-chart').style.display = "none";
-		document.getElementById('student-year-bar-chart-button').classList.add("active");
-		document.getElementById('student-year-pie-chart-button').classList.remove("active");
+		document.getElementById('enrollment-student-year-bar-chart').style.display = "block";
+		document.getElementById('enrollment-student-year-pie-chart').style.display = "none";
+		document.getElementById('enrollment-student-year-bar-chart-button').classList.add("active");
+		document.getElementById('enrollment-student-year-pie-chart-button').classList.remove("active");
 		studentYearBarChart.render();
 	}
 
 	function showStudentYearPieChart() {
-		document.getElementById('student-year-pie-chart').style.display = "block";
-		document.getElementById('student-year-bar-chart').style.display = "none";
-		document.getElementById('student-year-pie-chart-button').classList.add("active");
-		document.getElementById('student-year-bar-chart-button').classList.remove("active");
+		document.getElementById('enrollment-student-year-pie-chart').style.display = "block";
+		document.getElementById('enrollment-student-year-bar-chart').style.display = "none";
+		document.getElementById('enrollment-student-year-pie-chart-button').classList.add("active");
+		document.getElementById('enrollment-student-year-bar-chart-button').classList.remove("active");
 		studentYearPieChart.render();
 	}
 
 	function showFocusAreaBarChart() {
-		document.getElementById('focus-area-bar-chart').style.display = "block";
-		document.getElementById('focus-area-pie-chart').style.display = "none";
-		document.getElementById('focus-area-bar-chart-button').classList.add("active");
-		document.getElementById('focus-area-pie-chart-button').classList.remove("active");
+		document.getElementById('enrollment-focus-area-bar-chart').style.display = "block";
+		document.getElementById('enrollment-focus-area-pie-chart').style.display = "none";
+		document.getElementById('enrollment-focus-area-bar-chart-button').classList.add("active");
+		document.getElementById('enrollment-focus-area-pie-chart-button').classList.remove("active");
 		focusAreaBarChart.render();
 	}
 
 	function showFocusAreaPieChart() {
-		document.getElementById('focus-area-pie-chart').style.display = "block";
-		document.getElementById('focus-area-bar-chart').style.display = "none";
-		document.getElementById('focus-area-pie-chart-button').classList.add("active");
-		document.getElementById('focus-area-bar-chart-button').classList.remove("active");
+		document.getElementById('enrollment-focus-area-pie-chart').style.display = "block";
+		document.getElementById('enrollment-focus-area-bar-chart').style.display = "none";
+		document.getElementById('enrollment-focus-area-pie-chart-button').classList.add("active");
+		document.getElementById('enrollment-focus-area-bar-chart-button').classList.remove("active");
 		focusAreaPieChart.render();
 	}
 </script>
@@ -163,17 +163,17 @@ $var title:View Student Enrollment
 <div class="container-fluid">
 	<h1 class="text-center"><b>Student Enrollment Information</b></h1>
 	<hr>
-	<div class="row" id="student-year-header">
+	<div class="row" id="enrollment-student-year-header">
 		<h2 class="text-center">Student Enrollment by Year of Study</h2>
 	</div>
-	<div class="row chart-button-container">
-		<button class="btn btn-primary chart-button" id="student-year-pie-chart-button" onclick="showStudentYearPieChart();">
+	<div class="row enrollment-chart-button-container">
+		<button class="btn btn-primary enrollment-chart-button" id="enrollment-student-year-pie-chart-button" onclick="showStudentYearPieChart();">
 			Pie Chart</button>
-		<button class="btn btn-primary chart-button active" id="student-year-bar-chart-button" onclick="showStudentYearBarChart();">Bar Chart</button>
+		<button class="btn btn-primary enrollment-chart-button active" id="enrollment-student-year-bar-chart-button" onclick="showStudentYearBarChart();">Bar Chart</button>
 	</div>
 	<div class="row">
-		<!--<div class="col-md-4" id="student-year-table-container">
-			<table class="table display dataTable table-bordered table-hover text-center" id="student-year-table">
+		<!--<div class="col-md-4" id="enrollment-student-year-table-container">
+			<table class="table display dataTable table-bordered table-hover text-center" id="enrollment-student-year-table">
 				<thead>
 					<tr>
 						<th>Year of Study</th>
@@ -189,22 +189,22 @@ $var title:View Student Enrollment
 				</tbody>
 			</table>
 		</div>-->
-		<div id="student-year-bar-chart" class="col-md-12"></div>
-		<div id="student-year-pie-chart" class="col-md-12"></div>
+		<div id="enrollment-student-year-bar-chart" class="col-md-12"></div>
+		<div id="enrollment-student-year-pie-chart" class="col-md-12"></div>
 	</div>
 	<br>
 	<hr>
-	<div class="row" id="focus-area-header">
+	<div class="row" id="enrollment-focus-area-header">
 		<h2 class="text-center">Student Enrollment by Focus Area</h2>
 	</div>
-	<div class="row chart-button-container">
-		<button class="btn btn-primary chart-button" id="focus-area-pie-chart-button" onclick="showFocusAreaPieChart();">
+	<div class="row enrollment-chart-button-container">
+		<button class="btn btn-primary enrollment-chart-button" id="enrollment-focus-area-pie-chart-button" onclick="showFocusAreaPieChart();">
 			Pie Chart</button>
-		<button class="btn btn-primary chart-button active" id="focus-area-bar-chart-button" onclick="showFocusAreaBarChart();">Bar Chart</button>
+		<button class="btn btn-primary enrollment-chart-button active" id="enrollment-focus-area-bar-chart-button" onclick="showFocusAreaBarChart();">Bar Chart</button>
 	</div>
 	<div class="row">
-		<!--<div class="col-md-4" id="focus-area-table-container">
-			<table class="table display dataTable table-bordered table-hover text-center" id="focus-area-table">
+		<!--<div class="col-md-4" id="enrollment-focus-area-table-container">
+			<table class="table display dataTable table-bordered table-hover text-center" id="enrollment-focus-area-table">
 				<thead>
 					<tr>
 						<th>Focus Area</th>
@@ -220,7 +220,7 @@ $var title:View Student Enrollment
 				</tbody>
 			</table>
 		</div>-->
-		<div id="focus-area-bar-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
-		<div id="focus-area-pie-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
+		<div id="enrollment-focus-area-bar-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
+		<div id="enrollment-focus-area-pie-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
 	</div>
 </div>

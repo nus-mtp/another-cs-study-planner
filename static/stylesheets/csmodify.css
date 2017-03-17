@@ -207,52 +207,52 @@ tr > th {
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
 /*******************************************************************************************/
-#student-year-header {
+#enrollment-student-year-header {
     margin-bottom: 20px;
 }
 
-#student-year-table-container {
+#enrollment-student-year-table-container {
     margin-top: 15px;
 }
 
-#student-year-bar-chart {
+#enrollment-student-year-bar-chart {
     width: 80%;
     height: 350px;
     margin-top: 20px;
     margin-left: 10%;
 }
 
-#student-year-pie-chart {
+#enrollment-student-year-pie-chart {
     display: None;
     height: 350px;
 }
 
-#focus-area-header {
+#enrollment-focus-area-header {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-#focus-area-table-container {
+#enrollment-focus-area-table-container {
     margin-bottom: 30px;
 }
 
-#focus-area-bar-chart {
+#enrollment-focus-area-bar-chart {
     width: 92%;
     margin-top: 20px;
     margin-left: 4%;
     margin-bottom: 30px;
 }
 
-#focus-area-pie-chart {
+#enrollment-focus-area-pie-chart {
     display: None;
     margin-bottom: 30px;
 }
 
-.chart-button {
+.enrollment-chart-button {
     float: right;
     margin-left: 5px;
 }
 
-.chart-button-container {
+.enrollment-chart-button-container {
     margin-right: 5px;
 }
