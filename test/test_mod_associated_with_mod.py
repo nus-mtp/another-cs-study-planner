@@ -79,11 +79,62 @@ class TestCode(object):
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
 
+    def test_query_module_association_no_preclusion(self):
+        '''
+            Tests querying the modules preclusions as a string, where there is
+            no preclusions.
+        '''
+        preclude_string = model.get_preclusion_as_string('CS2104')
+        required_preclude_string = ""
+
+        assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+
+    def test_query_module_association_one_preclusion(self):
+        '''
+            Tests querying the modules preclusions as a string, where there is
+            only one preclusion.
+        '''
+        preclude_string = model.get_preclusion_as_string('CS4213')
+        required_preclude_string = "CS3247"
+
+        assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+
+    def test_query_module_association_many_preclusions(self):
+        '''
+            Tests querying the modules preclusions as a string, where there are
+            more than one preclusions.
+        '''
+        preclude_string = model.get_preclusion_as_string('CS4350')
+        required_preclude_string = "CS4204, CS4203"
+
+        assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+        preclude_string = model.get_preclusion_as_string('CS4203')
+        required_preclude_string = "CS4350, CS3283, CS3284"
+
+        assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+
 # Static methods start here
 STRING_AND = "and"
 STRING_OR = "or"
 STRING_OPEN_BRACKET = "("
 STRING_CLOSE_BRACKET = ")"
+STRING_COMMA = ","
+
+
+def is_preclude_equal(preclude1, preclude2):
+    '''
+        Returns true if given preclude1 is considered to be the same (or
+        equivalent) as given preclude2. Returns false otherwise.
+
+        Both precludes are string of modules separated by commas.
+    '''
+    return is_equal_after_split_and_remove_spaces_and_sort(STRING_COMMA,
+                                                           preclude1, preclude2)
+
 
 def is_prereq_equal(prereq1, prereq2):
     '''
