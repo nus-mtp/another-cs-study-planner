@@ -134,6 +134,8 @@ class EditMountingInfo(object):
             outcome = False
         elif ay_sem not in self.list_of_future_ay_sems:
             outcome = False
+        elif quota < 0 or (quota is not None and type(quota) != int):
+            outcome = False
         else:
             if mounting_status == "Mounted":
                 outcome = None

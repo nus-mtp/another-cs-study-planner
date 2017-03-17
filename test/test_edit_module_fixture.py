@@ -147,9 +147,7 @@ class TestCode(object):
         print(response)
         assert_equal(response.status, 200)
 
-        # the error message for this section is placeholder;
-        # it depends on how you want to handle the error
-        response.mustcontain("alert('Module quota must be greater or equal to 0.');")
+        response.mustcontain("alert('Error: Failed to edit module.');")
 
 
     def test_contains_overlapping_modules_table(self):
