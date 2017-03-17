@@ -7,7 +7,7 @@ $var title:$title_string
 <body>
     <div class="container-block container">
         <div class="row red">
-            <div class="col-md-6 module-info-wrapper">
+            <div class="col-md-12">
                 <div class="row">
                     <!--mounting information-->
                     <form id="edit-mounting-form" name="edit-mounting-form" action="/editMounting" method="post">
@@ -58,30 +58,6 @@ $var title:$title_string
                         <input class="btn btn-primary" type="submit" value="Submit" />
                     </form>
                 </div>
-            </div>
-            <div class="col-md-6 module-analysis-wrapper">
-                <h1 class="row title text-center">Statistics</h1>
-                <br>
-                <br>
-                <table id="common-module-table" class="table table-bordered table-hover display dataTable">
-                <thead>
-                    <tr>
-                        <th>Module 1</th>
-                        <th data-sortable="false">Module 2</th>
-                        <th>For AY-Sem</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    $for row in overlappingList:
-                        <tr>
-                            <td class="text-center">$row[0]</td>
-                            <td class="text-center">$row[1]</td>
-                            <td class="text-center">$row[2]</td>
-                            <td class="text-center">$row[3]</td>
-                        </tr>
-                </tbody>
-            </table>
             </div>
         </div>
     </div>
