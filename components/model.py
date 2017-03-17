@@ -1002,8 +1002,11 @@ def star_module(module_code, staff_id):
         Insert a module into the starred table.
     '''
     sql_command = "INSERT INTO starred VALUES (%s,%s)"
-    DB_CURSOR.execute(sql_command, (module_code, staff_id))
-    CONNECTION.commit()
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
 
 
 def unstar_module(module_code, staff_id):
@@ -1011,7 +1014,11 @@ def unstar_module(module_code, staff_id):
         Remove a module from the starred table.
     '''
     sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
-    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
     CONNECTION.commit()
 
 
