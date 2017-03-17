@@ -367,9 +367,12 @@ def add_admin(username, salt, hashed_pass):
         Note: to change last argument to false once
         activation done
     '''
-    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
-    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
-    CONNECTION.commit()
+    try:
+        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+        CONNECTION.commit()
+    except psycopg2.DataError: #if username too long
+        CONNECTION.rollback()
 
 
 def is_userid_taken(userid):
@@ -1043,3 +1046,32 @@ def is_module_starred(module_code, staff_id):
         return False
     else:
         return True
+
+
+def get_mod_before_intern(ay_sem):
+    '''
+        Retrieves a list of modules which is taken by students prior to
+        their internship in specified ay_sem.
+
+        Returns a table of lists, each list contains
+        (module code, module name, number of students who took)
+        where ('CS1010', 'Programming Methodology', 3) means
+        3 students have taken CS1010 before their internship on
+        specified ay_sem
+    '''
+    sql_command = "SELECT sp.moduleCode, m.name, COUNT(*) " + \
+                  "FROM studentPlans sp, module m " + \
+                  "WHERE sp.moduleCode = m.code " + \
+                  "AND sp.acadYearAndSem < %s " + \
+                  "AND sp.moduleCode <> 'CP3200' AND sp.moduleCode <> 'CP3202' " + \
+                  "AND sp.moduleCode <> 'CP3880' " + \
+                  "AND EXISTS (" + \
+                  "SELECT * FROM studentPlans sp2 " + \
+                  "WHERE sp2.acadYearAndSem = %s " + \
+                  "AND sp2.studentid = sp.studentid " + \
+                  "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
+                  "OR sp2.moduleCode = 'CP3880')) " + \
+                  "GROUP BY sp.moduleCode, m.name"
+    DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
+
+    return DB_CURSOR.fetchall()

@@ -89,13 +89,8 @@ class Outcome(object):
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/nonOverlappingModules"
 
-            elif action == "star_delete_module":
-                if outcome is True:
-                    outcome_message = "Module " + module_code + " has been deleted successfully!"
-                else:
-                    outcome_message = "Error: Module " + module_code + " currently has " +\
-                                      "mountings that refer to it. " +\
-                                      "Remove all mountings before deleting module!"
-                redirect_page = "/starredModules"
+            elif action == "mods-before-internship":
+                outcome_message = "The AY-Semester you specified does not exist!"
+                redirect_page = "/moduleTakenPriorToInternship"
 
             return RENDER.outcome(outcome_message, redirect_page)
