@@ -1061,6 +1061,19 @@ def get_preclusion(module_code):
     return DB_CURSOR.fetchall()
 
 
+def get_preclusion_as_string(module_code):
+    '''
+        Returns a string of preclusions of specified module_code
+    '''
+    preclusions = get_preclusion(module_code)
+    preclude_list = convert_to_list(preclusions)
+    processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
+
+    preclude_string = ", ".join(processed_list)
+
+    return preclude_string
+
+
 def delete_preclusion(module_code, prereq_code):
     '''
         Delete a preclusion from the precludes table.
