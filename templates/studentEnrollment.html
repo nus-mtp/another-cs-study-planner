@@ -4,7 +4,7 @@ $var title:View Student Enrollment
 
 <script type="text/javascript">
 	window.onload = function () {
-	    var yearOfStudyChart = new CanvasJS.Chart("yearOfStudyChartContainer",
+	    var yearOfStudyChart = new CanvasJS.Chart("student-year-chart",
 	    {
 			animationEnabled: true,
 			axisY: {
@@ -30,7 +30,7 @@ $var title:View Student Enrollment
 
 		yearOfStudyChart.render();
 
-		var focusAreaChart = new CanvasJS.Chart("focusAreaChartContainer",
+		var focusAreaChart = new CanvasJS.Chart("focus-area-chart",
 	    {
 			animationEnabled: true,
 			axisY: {
@@ -71,45 +71,52 @@ $var title:View Student Enrollment
 <div class="container-fluid">
 	<h1 class="text-center"><b>Student Enrollment Information</b></h1>
 	<hr>
-	<h2>Student Enrollment by Year of Study</h2>
+	<div class="row" id="student-year-header">
+		<h2 class="text-center">Student Enrollment by Year of Study</h2>
+	</div>
+	<div class="row">
+		<div class="col-md-6" id="student-year-table-container">
+			<table class="table display dataTable table-bordered table-hover text-center" id="student-year-table">
+				<thead>
+					<tr>
+						<th>Year of Study</th>
+						<th>Number of Students</th>
+					</tr>
+				</thead>
+				<tbody>
+					$for year_count_pair in yr_of_study_count_table:
+						<tr>
+							<td>$year_count_pair[0]</td>
+							<td>$year_count_pair[1]</td>
+						</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="student-year-chart" class="col-md-6" style="height:350px;"></div>
+	</div>
 	<br>
-	<table class="table display dataTable table-bordered table-hover text-center" id="student-year-table">
-		<thead>
-			<tr>
-				<th>Year of Study</th>
-				<th>Number of Students</th>
-			</tr>
-		</thead>
-		<tbody>
-			$for year_count_pair in yr_of_study_count_table:
-				<tr>
-					<td>$year_count_pair[0]</td>
-					<td>$year_count_pair[1]</td>
-				</tr>
-		</tbody>
-	</table>
-	<br>
-	<div id="yearOfStudyChartContainer" style="height: 400px; width: 100%;"></div>
-	<br>
-	<h2>Student Enrollment by Focus Area</h2>
-	<br>
-	<table class="table display dataTable table-bordered table-hover text-center" id="student-focus-area-table">
-		<thead>
-			<tr>
-				<th>Focus Area</th>
-				<th>Number of Students</th>
-			</tr>
-		</thead>
-		<tbody>
-			$for focus_count_pair in focus_count_table:
-				<tr>
-					<td>$focus_count_pair[0]</td>
-					<td>$focus_count_pair[1]</td>
-				</tr>
-		</tbody>
-	</table>
-	<br>
-	<div id="focusAreaChartContainer" style="margin-left: 20%; margin-right: 20%; height: 400px; width: 60%;"></div>
-	<br>
-	<br>
+	<hr>
+	<div class="row" id="focus-area-header">
+		<h2 class="text-center">Student Enrollment by Focus Area</h2>
+	</div>
+	<div class="row">
+		<div class="col-md-6" id="focus-area-table-container">
+			<table class="table display dataTable table-bordered table-hover text-center" id="focus-area-table">
+				<thead>
+					<tr>
+						<th>Focus Area</th>
+						<th>Number of Students</th>
+					</tr>
+				</thead>
+				<tbody>
+					$for focus_count_pair in focus_count_table:
+						<tr>
+							<td>$focus_count_pair[0]</td>
+							<td>$focus_count_pair[1]</td>
+						</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="focus-area-chart" class="col-md-5" style="height: 400px; margin-top: 30px;"></div>
+	</div>
 </div>

@@ -203,3 +203,23 @@ tr > th {
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
 }
+
+/*******************************************************************************************/
+/* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
+/*******************************************************************************************/
+#student-year-header {
+    margin-bottom: 20px;
+}
+
+#student-year-table-container {
+    margin-top: 15px;
+}
+
+#focus-area-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#focus-area-table-container {
+    margin-bottom: 30px;
+}
