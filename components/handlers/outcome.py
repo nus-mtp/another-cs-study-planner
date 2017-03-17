@@ -88,4 +88,13 @@ class Outcome(object):
             elif action == "non-overlapping-mods":
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/nonOverlappingModules"
+
+            elif action == "mods-specific-size-aysem":
+                outcome_message = "The AY-Semester you specified does not exist!"
+                redirect_page = "/moduleSpecificSize"
+
+            elif action == "mods-specific-size-range":
+                outcome_message = "You have specified an invalid range!"
+                redirect_page = "/moduleSpecificSize"
+
             return RENDER.outcome(outcome_message, redirect_page)
