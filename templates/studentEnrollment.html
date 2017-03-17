@@ -1,17 +1,23 @@
-$def with (yr_of_study_count_table, focus_count_table)
+$def with (year_of_study_count_table, focus_count_table)
 
 $var title:View Student Enrollment
 
 <script type="text/javascript">
 	window.onload = function () {
-	    var yearOfStudyChart = new CanvasJS.Chart("student-year-chart",
+	    studentYearBarChart = new CanvasJS.Chart("student-year-bar-chart",
 	    {
 			animationEnabled: true,
 			axisY: {
-				title: "Number of Students"
+				title: "Number of Students",
+				titleFontColor: "#161616",
+				labelFontColor: "#161616",
+				lineColor: "#161616"
 			},
 			axisX: {
-				title: "Year of Study"
+				title: "Year of Study",
+				titleFontColor: "#161616",
+				labelFontColor: "#161616",
+				lineColor: "#161616"
 			},
 			legend: {
 				verticalAlign: "bottom",
@@ -21,24 +27,18 @@ $var title:View Student Enrollment
 			data: [{
 						type: "column",
 						dataPoints: [      
-						$for year_count_pair in yr_of_study_count_table[0:len(yr_of_study_count_table)-1]:
+						$for year_count_pair in year_of_study_count_table[0:len(year_of_study_count_table)-1]:
 							{y: $year_count_pair[1], label: "Year $year_count_pair[0]"},
-						{y: $yr_of_study_count_table[-1][1],  label: "Year $yr_of_study_count_table[-1][0]"}
+						{y: $year_of_study_count_table[-1][1],  label: "Year $year_of_study_count_table[-1][0]"}
 						]
 				  }]
 		});
 
-		yearOfStudyChart.render();
+		studentYearBarChart.render();
 
-		var focusAreaChart = new CanvasJS.Chart("focus-area-chart",
+		studentYearPieChart = new CanvasJS.Chart("student-year-pie-chart",
 	    {
 			animationEnabled: true,
-			axisY: {
-				title: "Number of Students"
-			},
-			axisX: {
-				title: "Focus Area"
-			},
 			legend: {
 				verticalAlign: "center",
 				horizontalAlign: "left"
@@ -49,12 +49,74 @@ $var title:View Student Enrollment
 						indexLabelFontSize: 20,
 						indexLabelFontWeight: "bold",
 						startAngle:0,
-						indexLabelFontColor: "darkgrey",       
-						indexLabelLineColor: "darkgrey", 
+						indexLabelFontColor: "#161616",       
+						indexLabelLineColor: "#161616", 
+						indexLabelPlacement: "outside",
+
+						toolTipContent: "{name}:  {y} (#percent%)",
+						showInLegend: false,
+						indexLabel: "{name}:  {y} (#percent%)",
+						dataPoints: [      
+						$for year_count_pair in year_of_study_count_table[0:len(year_of_study_count_table)-1]:
+							{y: $year_count_pair[1], name: "Year $year_count_pair[0]", legendMarkerType: "square"},
+						{y: $year_of_study_count_table[-1][1],  name: "Year $year_of_study_count_table[-1][0]", legendMarkerType: "square"}
+						]
+				  }]
+		});
+
+	    focusAreaBarChart = new CanvasJS.Chart("focus-area-bar-chart",
+	    {
+			animationEnabled: true,
+			axisY: {
+				title: "Number of Students",
+				titleFontColor: "#161616",
+				labelFontColor: "#161616",
+				lineColor: "#161616"
+			},
+			axisX: {
+				title: "Focus Area",
+				titleFontColor: "#161616",
+				labelFontColor: "#161616",
+				lineColor: "#161616"
+			},
+			legend: {
+				verticalAlign: "bottom",
+				horizontalAlign: "center"
+			},
+			theme: "theme1",
+			data: [{
+						type: "column",
+						dataPoints: [      
+						$for focus_count_pair in focus_count_table[0:len(focus_count_table)-1]:
+							$ focus_area = focus_count_pair[0].replace('&', 'and')
+							{y: $focus_count_pair[1], label: "$focus_area"},
+						{y: $focus_count_table[-1][1],  label: "$focus_count_table[-1][0]"}
+						]
+				  }]
+		});
+
+		focusAreaBarChart.render();
+
+		focusAreaPieChart = new CanvasJS.Chart("focus-area-pie-chart",
+	    {
+			animationEnabled: true,
+			legend: {
+				verticalAlign: "center",
+				horizontalAlign: "left"
+			},
+			data: [{
+						type: "pie",
+						indexLabelFontFamily: "Garamond",       
+						indexLabelFontSize: 20,
+						indexLabelFontWeight: "bold",
+						startAngle:0,
+						indexLabelFontColor: "#161616",       
+						indexLabelLineColor: "#161616", 
 						indexLabelPlacement: "outside",
 
 						toolTipContent: "{name}: {y} (#percent%)",
-						showInLegend: true, 
+						showInLegend: false,
+						indexLabel: "{name}:  {y} (#percent%)", 
 						dataPoints: [      
 						$for focus_count_pair in focus_count_table[0:len(focus_count_table)-1]:
 							$ focus_area = focus_count_pair[0].replace('&', 'and')
@@ -63,8 +125,38 @@ $var title:View Student Enrollment
 						]
 				  }]
 		});
+	}
 
-		focusAreaChart.render();
+	function showStudentYearBarChart() {
+		document.getElementById('student-year-bar-chart').style.display = "block";
+		document.getElementById('student-year-pie-chart').style.display = "none";
+		document.getElementById('student-year-bar-chart-button').classList.add("active");
+		document.getElementById('student-year-pie-chart-button').classList.remove("active");
+		studentYearBarChart.render();
+	}
+
+	function showStudentYearPieChart() {
+		document.getElementById('student-year-pie-chart').style.display = "block";
+		document.getElementById('student-year-bar-chart').style.display = "none";
+		document.getElementById('student-year-pie-chart-button').classList.add("active");
+		document.getElementById('student-year-bar-chart-button').classList.remove("active");
+		studentYearPieChart.render();
+	}
+
+	function showFocusAreaBarChart() {
+		document.getElementById('focus-area-bar-chart').style.display = "block";
+		document.getElementById('focus-area-pie-chart').style.display = "none";
+		document.getElementById('focus-area-bar-chart-button').classList.add("active");
+		document.getElementById('focus-area-pie-chart-button').classList.remove("active");
+		focusAreaBarChart.render();
+	}
+
+	function showFocusAreaPieChart() {
+		document.getElementById('focus-area-pie-chart').style.display = "block";
+		document.getElementById('focus-area-bar-chart').style.display = "none";
+		document.getElementById('focus-area-pie-chart-button').classList.add("active");
+		document.getElementById('focus-area-bar-chart-button').classList.remove("active");
+		focusAreaPieChart.render();
 	}
 </script>
 
@@ -74,8 +166,13 @@ $var title:View Student Enrollment
 	<div class="row" id="student-year-header">
 		<h2 class="text-center">Student Enrollment by Year of Study</h2>
 	</div>
+	<div class="row chart-button-container">
+		<button class="btn btn-primary chart-button" id="student-year-pie-chart-button" onclick="showStudentYearPieChart();">
+			Pie Chart</button>
+		<button class="btn btn-primary chart-button active" id="student-year-bar-chart-button" onclick="showStudentYearBarChart();">Bar Chart</button>
+	</div>
 	<div class="row">
-		<div class="col-md-6" id="student-year-table-container">
+		<!--<div class="col-md-4" id="student-year-table-container">
 			<table class="table display dataTable table-bordered table-hover text-center" id="student-year-table">
 				<thead>
 					<tr>
@@ -84,23 +181,29 @@ $var title:View Student Enrollment
 					</tr>
 				</thead>
 				<tbody>
-					$for year_count_pair in yr_of_study_count_table:
+					$for year_count_pair in year_of_study_count_table:
 						<tr>
 							<td>$year_count_pair[0]</td>
 							<td>$year_count_pair[1]</td>
 						</tr>
 				</tbody>
 			</table>
-		</div>
-		<div id="student-year-chart" class="col-md-6" style="height:350px;"></div>
+		</div>-->
+		<div id="student-year-bar-chart" class="col-md-12"></div>
+		<div id="student-year-pie-chart" class="col-md-12"></div>
 	</div>
 	<br>
 	<hr>
 	<div class="row" id="focus-area-header">
 		<h2 class="text-center">Student Enrollment by Focus Area</h2>
 	</div>
+	<div class="row chart-button-container">
+		<button class="btn btn-primary chart-button" id="focus-area-pie-chart-button" onclick="showFocusAreaPieChart();">
+			Pie Chart</button>
+		<button class="btn btn-primary chart-button active" id="focus-area-bar-chart-button" onclick="showFocusAreaBarChart();">Bar Chart</button>
+	</div>
 	<div class="row">
-		<div class="col-md-6" id="focus-area-table-container">
+		<!--<div class="col-md-4" id="focus-area-table-container">
 			<table class="table display dataTable table-bordered table-hover text-center" id="focus-area-table">
 				<thead>
 					<tr>
@@ -116,7 +219,8 @@ $var title:View Student Enrollment
 						</tr>
 				</tbody>
 			</table>
-		</div>
-		<div id="focus-area-chart" class="col-md-5" style="height: 400px; margin-top: 30px;"></div>
+		</div>-->
+		<div id="focus-area-bar-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
+		<div id="focus-area-pie-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
 	</div>
 </div>

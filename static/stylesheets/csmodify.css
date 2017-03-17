@@ -215,6 +215,18 @@ tr > th {
     margin-top: 15px;
 }
 
+#student-year-bar-chart {
+    width: 80%;
+    height: 350px;
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+#student-year-pie-chart {
+    display: None;
+    height: 350px;
+}
+
 #focus-area-header {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -222,4 +234,25 @@ tr > th {
 
 #focus-area-table-container {
     margin-bottom: 30px;
+}
+
+#focus-area-bar-chart {
+    width: 92%;
+    margin-top: 20px;
+    margin-left: 4%;
+    margin-bottom: 30px;
+}
+
+#focus-area-pie-chart {
+    display: None;
+    margin-bottom: 30px;
+}
+
+.chart-button {
+    float: right;
+    margin-left: 5px;
+}
+
+.chart-button-container {
+    margin-right: 5px;
 }
