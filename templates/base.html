@@ -26,22 +26,24 @@ $def with (page)
 
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
-				    <form class="navbar-form navbar-left">
-				    	<a class="btn btn-lg btn-primary" href="/">
-				    		<span class="glyphicon glyphicon-home"></span>
-				    	</a>
-					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
-					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
-					   	</button>
-					</form>
-					<form class="navbar-form navbar-right" action="/logout" method="post">
-						<button class="btn btn-lg btn-danger" type="submit">
-							<span class="glyphicon glyphicon-log-out"></span> Logout
-						</button>
-					</form>
-					<form class="navbar-form navbar-right">
-						$web.cookies().get('user')
-					</form>
+                    <div class="inline navbar-left">
+                        <form class="navbar-form">
+                            <a class="btn btn-lg btn-primary" href="/">
+                                <span class="glyphicon glyphicon-home"></span>
+                            </a>
+                            <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="navbar-right">
+                        <h3 class="navbar-header inline navbar-text">$web.cookies().get('user')</h3>
+                        <form class="navbar-form inline" action="/logout" method="post">
+                            <button class="btn btn-lg btn-danger" type="submit">
+                                <span class="glyphicon glyphicon-log-out inline"></span><p class="inline"> Logout</p>
+                            </button>
+                        </form>
+                    </div>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
 				    </form-->

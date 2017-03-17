@@ -46,6 +46,13 @@ tr > th {
     display: block;
     transition: 0.3s
 }
+.inline{
+    display: inline;
+}
+
+.navbar-btn{
+    height: 50px;
+}
 
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
