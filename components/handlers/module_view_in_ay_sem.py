@@ -164,26 +164,23 @@ class IndividualModule(object):
         self.student_year_counts = student_year_counts
 
 
-    def GET(self, *test_data):
+    def GET(self):
         '''
             Retrieve and render all the info of a module mounting
         '''
-        if test_data:
-            module_code = test_data[0]
-            target_ay_sem = test_data[1]
-        else:
-            if not session.validate_session():
-                raise web.seeother('/login')
-            input_data = web.input()
-            module_code = input_data.code
-            module_info = model.get_module(module_code)
-            if module_info is None:
-                error_message = module_code + " does not exist in the system."
-                return RENDER.notfound(error_message)
-            target_ay_sem = input_data.targetAY
-            if target_ay_sem not in self.list_of_ay_sems:
-                return RENDER.notfound(target_ay_sem + " is not in the " +\
-                                       "system's list of AY-Semesters.")
+        if not session.validate_session():
+            raise web.seeother('/login')
+            
+        input_data = web.input()
+        module_code = input_data.code
+        module_info = model.get_module(module_code)
+        if module_info is None:
+            error_message = module_code + " does not exist in the system."
+            return RENDER.notfound(error_message)
+        target_ay_sem = input_data.targetAY
+        if target_ay_sem not in self.list_of_ay_sems:
+            return RENDER.notfound(target_ay_sem + " is not in the " +\
+                                   "system's list of AY-Semesters.")
 
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
@@ -194,12 +191,12 @@ class IndividualModule(object):
         self.load_focus_areas()
         self.load_student_enrollments(module_code, target_ay_sem)
 
-        if not test_data:
-            return RENDER.individualModuleInfo(module_info, is_future_ay,
-                                               target_ay_sem, self.mounting_status,
-                                               self.quota, overlapping_mod_list,
-                                               self.focus_areas, self.focus_area_acronyms,
-                                               self.student_year_counts, self.focus_area_counts)
+        return RENDER.individualModuleInfo(module_info, is_future_ay,
+                                           target_ay_sem, self.mounting_status,
+                                           self.quota, overlapping_mod_list,
+                                           is_starred,
+                                           self.focus_areas, self.focus_area_acronyms,
+                                           self.student_year_counts, self.focus_area_counts)
 
 
     def POST(self):

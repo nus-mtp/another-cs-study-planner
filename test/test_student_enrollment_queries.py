@@ -157,7 +157,8 @@ class TestCode(object):
         test_ay_sem_1 = "AY 16/17 Sem 1"
         test_ay_sem_2 = "AY 16/17 Sem 2"
 
-        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_1)
+        self.module_view_in_ay_sem_handler.load_focus_areas()
+        self.module_view_in_ay_sem_handler.load_student_enrollments(test_module_code, test_ay_sem_1)
         student_year_counts = self.module_view_in_ay_sem_handler.student_year_counts
         assert_equal(student_year_counts[0], 4)
         assert_equal(student_year_counts[1], 1)
@@ -166,7 +167,8 @@ class TestCode(object):
         assert_equal(student_year_counts[4], 0)
         assert_equal(student_year_counts[5], 0)
 
-        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_2)
+        self.module_view_in_ay_sem_handler.load_focus_areas()
+        self.module_view_in_ay_sem_handler.load_student_enrollments(test_module_code, test_ay_sem_2)
         student_year_counts = self.module_view_in_ay_sem_handler.student_year_counts
         assert_equal(student_year_counts[0], 1)
         assert_equal(student_year_counts[1], 0)
@@ -184,7 +186,8 @@ class TestCode(object):
         test_ay_sem_1 = "AY 16/17 Sem 1"
         test_ay_sem_2 = "AY 16/17 Sem 2"
 
-        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_1)
+        self.module_view_in_ay_sem_handler.load_focus_areas()
+        self.module_view_in_ay_sem_handler.load_student_enrollments(test_module_code, test_ay_sem_1)
         focus_area_counts = self.module_view_in_ay_sem_handler.focus_area_counts
         assert_equal(focus_area_counts["Nil"], 0)
         assert_equal(focus_area_counts["AT"], 0)
@@ -198,7 +201,8 @@ class TestCode(object):
         assert_equal(focus_area_counts["PL"], 0)
         assert_equal(focus_area_counts["SE"], 2)
 
-        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_2)
+        self.module_view_in_ay_sem_handler.load_focus_areas()
+        self.module_view_in_ay_sem_handler.load_student_enrollments(test_module_code, test_ay_sem_2)
         focus_area_counts = self.module_view_in_ay_sem_handler.focus_area_counts
         assert_equal(focus_area_counts["Nil"], 1)
         assert_equal(focus_area_counts["AT"], 0)

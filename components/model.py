@@ -924,6 +924,7 @@ def get_all_focus_areas():
     '''
     sql_command = "SELECT DISTINCT name FROM focusarea"
     DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def add_prerequisite(module_code, prereq_code, index):
