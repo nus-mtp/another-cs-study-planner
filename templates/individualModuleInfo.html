@@ -9,6 +9,12 @@ $ overviewURL = '/viewModule'
 $ title_string = 'Module Info for ' + moduleCode + ' in ' + aySem
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ individualModuleInfo = ['#' + aySem, 'Module Info for ' + aySem]
+
+$var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo]
 
 <div class="container-fluid">
 	<div class="row">
