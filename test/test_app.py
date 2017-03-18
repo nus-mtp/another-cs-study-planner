@@ -136,7 +136,7 @@ class TestCode(object):
 
     def test_goto_prior_modules_taken_page(self):
         '''
-            Tests if user can access add module page without request errors.
+            Tests if user can access modules-taken-prior-to-others page without request errors.
         '''
         root = self.test_app.get('/')
 
@@ -144,10 +144,24 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
+
+    def test_goto_prior_modules_taken_before_internship_page(self):
+        '''
+            Tests if user can access modules-taken-before-internship page without request errors.
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/moduleTakenPriorToInternship")
+
+        assert_equal(response.status, 200)
+
+
     def test_goto_non_overlapping_mods(self):
         '''
             Test if user can access non overlapping modules without request errors
         '''
         root = self.test_app.get('/')
+
         response = root.click(linkid="home-page", href="/nonOverlappingModules")
+
         assert_equal(response.status, 200)

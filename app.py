@@ -40,7 +40,10 @@ URLS = (
     'components.handlers.students_affected_by_module.StudentsAffectedByModule',
     '/addModule', 'components.handlers.add_module_handler.AddModule',
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo',
-    '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules'
+    '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules',
+    '/starModule', 'components.handlers.star_modules.StarModule',
+    '/starredModules', 'components.handlers.star_modules.StarredModulesList',
+    '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship'
 )
 
 

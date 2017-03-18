@@ -370,9 +370,12 @@ def add_admin(username, salt, hashed_pass):
         Note: to change last argument to false once
         activation done
     '''
-    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
-    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
-    CONNECTION.commit()
+    try:
+        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+        CONNECTION.commit()
+    except psycopg2.DataError: #if username too long
+        CONNECTION.rollback()
 
 
 def is_userid_taken(userid):
@@ -1155,3 +1158,80 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def star_module(module_code, staff_id):
+    '''
+        Insert a module into the starred table.
+    '''
+    sql_command = "INSERT INTO starred VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+
+
+def unstar_module(module_code, staff_id):
+    '''
+        Remove a module from the starred table.
+    '''
+    sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+    CONNECTION.commit()
+
+
+def get_starred_modules(staff_id):
+    '''
+        Get all module info of all starred modules.
+    '''
+    sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
+                "AND m.code = s.modulecode"
+    DB_CURSOR.execute(sql_command, (staff_id,))
+    return DB_CURSOR.fetchall()
+
+
+def is_module_starred(module_code, staff_id):
+    '''
+        Check if a module is starred by the user.
+    '''
+    sql_command = "SELECT * FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    starred = DB_CURSOR.fetchall()
+    if not starred:
+        return False
+    else:
+        return True
+
+
+def get_mod_before_intern(ay_sem):
+    '''
+        Retrieves a list of modules which is taken by students prior to
+        their internship in specified ay_sem.
+
+        Returns a table of lists, each list contains
+        (module code, module name, number of students who took)
+        where ('CS1010', 'Programming Methodology', 3) means
+        3 students have taken CS1010 before their internship on
+        specified ay_sem
+    '''
+    sql_command = "SELECT sp.moduleCode, m.name, COUNT(*) " + \
+                  "FROM studentPlans sp, module m " + \
+                  "WHERE sp.moduleCode = m.code " + \
+                  "AND sp.acadYearAndSem < %s " + \
+                  "AND sp.moduleCode <> 'CP3200' AND sp.moduleCode <> 'CP3202' " + \
+                  "AND sp.moduleCode <> 'CP3880' " + \
+                  "AND EXISTS (" + \
+                  "SELECT * FROM studentPlans sp2 " + \
+                  "WHERE sp2.acadYearAndSem = %s " + \
+                  "AND sp2.studentid = sp.studentid " + \
+                  "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
+                  "OR sp2.moduleCode = 'CP3880')) " + \
+                  "GROUP BY sp.moduleCode, m.name"
+    DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
+
+    return DB_CURSOR.fetchall()

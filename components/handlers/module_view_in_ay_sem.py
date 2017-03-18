@@ -91,10 +91,12 @@ class IndividualModule(object):
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
         prereq_string = model.get_prerequisite_as_string(module_code)
         preclude_string = model.get_preclusion_as_string(module_code)
+        is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, overlapping_mod_list)
+                                           self.quota, overlapping_mod_list,
+                                           is_starred)
 
 
     def POST(self):
