@@ -82,19 +82,19 @@ $var title:$title_string
                     $if True:
                         <form id="view-module-button" action="/viewModule"  method="get">
                             <input type="hidden" name="code" value="$moduleCode">
-                            <input class="btn btn-lg btn-primary" type="submit" value="Back to Overview">
+                            <input class="btn btn-lg btn-primary" type="submit" value="Back To Overview">
                         </form>
                 </div>
                 <div class="col-md-6 text-center">
                     <form id="view-students-planning-to-take-module" name="view-students-planning-to-take-module" action="/studentsAffectedByModule" method="get">
                         <input type="hidden" name="code" value="$moduleCode">
                         <input type="hidden" name="aysem" value="$aySem">
-                        <input type="submit" class="btn btn-lg btn-primary" value="View students that will be affected by this module">
+                        <input type="submit" class="btn btn-lg btn-primary" value="View Students That Will Be Affected By This Module">
                     </form>
                     <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get">
                         <input type="hidden" name="code" value="$moduleCode">
                         <input type="hidden" name="aysem" value="$aySem">
-                        <input type="submit" class="btn btn-lg btn-primary" value="View modules overlapping with this module">
+                        <input type="submit" class="btn btn-lg btn-primary" value="View Modules Overlapping With This Module">
                     </form>
                 </div>
             </div>
