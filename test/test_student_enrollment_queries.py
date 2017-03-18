@@ -4,6 +4,7 @@ Contains test cases for student enrollment query functions.
 '''
 from nose.tools import assert_equal
 from components import model
+from components.handlers.module_view_in_ay_sem import IndividualModule
 
 # HOW TO RUN NOSE TESTS
 # 1. Make sure you are in cs-modify main directory
@@ -18,6 +19,8 @@ class TestCode(object):
     def __init__(self):
         self.num_column_for_each_year = 2
         self.num_column_for_each_focus = 2
+        self.module_view_in_ay_sem_handler = IndividualModule()
+
 
 
     def test_query_num_students_in_year_of_study(self):
@@ -144,3 +147,67 @@ class TestCode(object):
         model.DB_CURSOR.execute(sql_command)
         sql_command = "DELETE FROM student WHERE nusnetid = 'D9818872A'"
         model.DB_CURSOR.execute(sql_command)
+
+
+    def test_query_num_students_in_year_of_study_for_target_module(self):
+        '''
+            Tests querying number of students for each year of study for a target module
+        '''
+        test_module_code = "CS1010"
+        test_ay_sem_1 = "AY 16/17 Sem 1"
+        test_ay_sem_2 = "AY 16/17 Sem 2"
+
+        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_1)
+        student_year_counts = self.module_view_in_ay_sem_handler.student_year_counts
+        assert_equal(student_year_counts[0], 4)
+        assert_equal(student_year_counts[1], 1)
+        assert_equal(student_year_counts[2], 0)
+        assert_equal(student_year_counts[3], 0)
+        assert_equal(student_year_counts[4], 0)
+        assert_equal(student_year_counts[5], 0)
+
+        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_2)
+        student_year_counts = self.module_view_in_ay_sem_handler.student_year_counts
+        assert_equal(student_year_counts[0], 1)
+        assert_equal(student_year_counts[1], 0)
+        assert_equal(student_year_counts[2], 1)
+        assert_equal(student_year_counts[3], 0)
+        assert_equal(student_year_counts[4], 0)
+        assert_equal(student_year_counts[5], 0)
+
+
+    def test_query_num_students_in_focus_area_for_target_module(self):
+        '''
+            Tests querying number of students for each focus area for a target module
+        '''
+        test_module_code = "CS1010"
+        test_ay_sem_1 = "AY 16/17 Sem 1"
+        test_ay_sem_2 = "AY 16/17 Sem 2"
+
+        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_1)
+        focus_area_counts = self.module_view_in_ay_sem_handler.focus_area_counts
+        assert_equal(focus_area_counts["Nil"], 0)
+        assert_equal(focus_area_counts["AT"], 0)
+        assert_equal(focus_area_counts["AI"], 1)
+        assert_equal(focus_area_counts["CGaG"], 1)
+        assert_equal(focus_area_counts["CS"], 0)
+        assert_equal(focus_area_counts["DS"], 1)
+        assert_equal(focus_area_counts["MIR"], 0)
+        assert_equal(focus_area_counts["NaDS"], 0)
+        assert_equal(focus_area_counts["PC"], 0)
+        assert_equal(focus_area_counts["PL"], 0)
+        assert_equal(focus_area_counts["SE"], 2)
+
+        self.module_view_in_ay_sem_handler.GET(test_module_code, test_ay_sem_2)
+        focus_area_counts = self.module_view_in_ay_sem_handler.focus_area_counts
+        assert_equal(focus_area_counts["Nil"], 1)
+        assert_equal(focus_area_counts["AT"], 0)
+        assert_equal(focus_area_counts["AI"], 0)
+        assert_equal(focus_area_counts["CGaG"], 0)
+        assert_equal(focus_area_counts["CS"], 0)
+        assert_equal(focus_area_counts["DS"], 0)
+        assert_equal(focus_area_counts["MIR"], 0)
+        assert_equal(focus_area_counts["NaDS"], 0)
+        assert_equal(focus_area_counts["PC"], 0)
+        assert_equal(focus_area_counts["PL"], 0)
+        assert_equal(focus_area_counts["SE"], 1)

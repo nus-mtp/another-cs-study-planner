@@ -32,6 +32,11 @@ class IndividualModule(object):
         self.quota = None
         self.is_current_ay = False
 
+        self.focus_areas = None
+        self.focus_area_acronyms = None
+        self.focus_area_counts = None
+        self.student_year_counts = None
+
 
     def load_mounting_info(self, module_code, target_ay_sem):
         '''
@@ -112,29 +117,10 @@ class IndividualModule(object):
         return focus_area_acronym
 
 
-    def GET(self):
+    def load_focus_areas(self):
         '''
-            Retrieve and render all the info of a module mounting
+            Retrieve the list of focus areas and the list of their acronyms
         '''
-        if not session.validate_session():
-            raise web.seeother('/login')
-
-        input_data = web.input()
-        module_code = input_data.code
-        module_info = model.get_module(module_code)
-        if module_info is None:
-            error_message = module_code + " does not exist in the system."
-            return RENDER.notfound(error_message)
-        target_ay_sem = input_data.targetAY
-        if target_ay_sem not in self.list_of_ay_sems:
-            return RENDER.notfound(target_ay_sem + " is not in the system's list of AY-Semesters.")
-
-        self.load_mounting_info(module_code, target_ay_sem)
-        is_future_ay = not self.is_current_ay
-
-        overlapping_mod_list = model.get_mod_taken_together_with(module_code)
-
-        # Get a list of all focus areas and a list of their acronyms
         focus_areas = model.get_all_focus_areas()
         focus_areas = sorted([area[0] for area in focus_areas])
         focus_area_counts = {"Nil": 0}
@@ -145,9 +131,20 @@ class IndividualModule(object):
             focus_area_acronyms.append(acronym)
         focus_areas.insert(0, "Have Not Indicated")
 
-        student_list = model.get_list_students_take_module(module_code, target_ay_sem)
+        self.focus_areas = focus_areas
+        self.focus_area_acronyms = focus_area_acronyms
+        self.focus_area_counts = focus_area_counts
 
+
+    def load_student_enrollments(self, module_code, target_ay_sem):
+        '''
+            Retrieve the number of students in each year of study,
+            and the number of students in each focus area,
+            that are taking this module
+        '''
+        student_list = model.get_list_students_take_module(module_code, target_ay_sem)
         student_year_counts = [0] * 6
+
         for student in student_list:
             # Get number of students in each year that are taking the module
             student_year = student[1]
@@ -157,18 +154,50 @@ class IndividualModule(object):
             focus_area_1 = student[2]
             focus_area_2 = student[3]
             if focus_area_1 == "-" and focus_area_2 == "-":
-                focus_area_counts["Nil"] += 1
+                self.focus_area_counts["Nil"] += 1
             else:
                 if focus_area_1 != "-":
-                    focus_area_counts[self.get_acronym(focus_area_1)] += 1
+                    self.focus_area_counts[self.get_acronym(focus_area_1)] += 1
                 if focus_area_2 != "-":
-                    focus_area_counts[self.get_acronym(focus_area_2)] += 1
+                    self.focus_area_counts[self.get_acronym(focus_area_2)] += 1
 
-        return RENDER.individualModuleInfo(module_info, is_future_ay,
-                                           target_ay_sem, self.mounting_status,
-                                           self.quota, overlapping_mod_list,
-                                           focus_areas, focus_area_acronyms,
-                                           student_year_counts, focus_area_counts)
+        self.student_year_counts = student_year_counts
+
+
+    def GET(self, *test_data):
+        '''
+            Retrieve and render all the info of a module mounting
+        '''
+        if test_data:
+            module_code = test_data[0]
+            target_ay_sem = test_data[1]
+        else:
+            if not session.validate_session():
+                raise web.seeother('/login')
+            input_data = web.input()
+            module_code = input_data.code
+            module_info = model.get_module(module_code)
+            if module_info is None:
+                error_message = module_code + " does not exist in the system."
+                return RENDER.notfound(error_message)
+            target_ay_sem = input_data.targetAY
+            if target_ay_sem not in self.list_of_ay_sems:
+                return RENDER.notfound(target_ay_sem + " is not in the system's list of AY-Semesters.")
+
+        self.load_mounting_info(module_code, target_ay_sem)
+        is_future_ay = not self.is_current_ay
+
+        overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+
+        self.load_focus_areas()
+        self.load_student_enrollments(module_code, target_ay_sem)
+
+        if not test_data:
+            return RENDER.individualModuleInfo(module_info, is_future_ay,
+                                               target_ay_sem, self.mounting_status,
+                                               self.quota, overlapping_mod_list,
+                                               self.focus_areas, self.focus_area_acronyms,
+                                               self.student_year_counts, self.focus_area_counts)
 
 
     def POST(self):
