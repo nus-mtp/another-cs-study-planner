@@ -17,6 +17,153 @@ $code:
 $ title_string = 'View Info for ' + moduleCode
 
 <script>
+window.onload = function () {
+    var chart = new CanvasJS.Chart("quota-demand-chart",
+    {
+      animationEnabled: true,
+
+      axisY:{
+         lineColor: "#161616",
+         labelFontColor: "#161616",
+         title: "Number of Students",
+         titleFontColor: "#161616" 
+      },
+
+      axisX:{
+         lineColor: "#161616",
+         labelFontColor: "#161616",
+         labelFontSize: 18
+      },
+
+      legend: {
+        cursor:"pointer",
+        fontColor: "#161616",
+        fontSize: 14,
+        itemclick : function(e) {
+			if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+				if (e.dataSeries.name == "Sem 1 Quota" || e.dataSeries.name == "Sem 1 Demand") {
+					chart.options.data[0].visible = false;
+					chart.options.data[1].visible = false;
+				} else {
+					chart.options.data[2].visible = false;
+					chart.options.data[3].visible = false;					
+				}
+			} else {
+				if (e.dataSeries.name == "Sem 1 Quota" || e.dataSeries.name == "Sem 1 Demand") {
+					chart.options.data[0].visible = true;
+					chart.options.data[1].visible = true;
+				} else {
+					chart.options.data[2].visible = true;
+					chart.options.data[3].visible = true;					
+				}
+			}
+          chart.render();
+        }
+      },
+
+      data: [
+      {        
+        type: "bar",
+        showInLegend: true,
+        name: "Sem 1 Quota",
+        color: "#BC141D",
+        indexLabelFontColor: "#161616", 
+        dataPoints: [
+        $for subplan in tentaMountingPlan[-2::-2]:
+        	$ aySem = subplan[0]
+        	$ quota = subplan[2]
+        	$if quota is None or quota == "-":
+        		$ quota = 0
+        	{y: $quota, label: "$aySem[9:]"+"\'s Quota"},  
+        $for subplan in fixedMountingPlan[0::2]:
+        	$ aySem = subplan[0]
+        	$ quota = subplan[2]
+        	$if quota is None or quota == "-":
+        		$ quota = 0
+        	{y: $quota, label: "$aySem[9:]"+"\'s Quota"},  
+        ]
+      },
+
+      {        
+        type: "bar",
+        showInLegend: true,
+        name: "Sem 1 Demand",
+        color: "#ED31C4", 
+        indexLabelFontColor: "#161616",      
+        dataPoints: [
+        $for subplan in tentaMountingPlan[-2::-2]:
+        	$ aySem = subplan[0]
+        	$ numberTaking = getNumStudents(aySem)
+        	{y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"},
+        $for subplan in fixedMountingPlan[0::2]:
+        	$ aySem = subplan[0]
+        	$ numberTaking = getNumStudents(aySem)
+        	{y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"},
+        ]
+      },
+
+      {        
+        type: "bar",
+        showInLegend: true,
+        name: "Sem 2 Quota",
+        color: "#366EC9",
+        indexLabelFontColor: "#161616", 
+        dataPoints: [
+        $for subplan in tentaMountingPlan[-1::-2]:
+        	$ aySem = subplan[0]
+        	$ quota = subplan[2]
+        	$if quota is None or quota == "-":
+        		$ quota = 0
+        	{y: $quota, label: "$aySem[9:]"+"\'s Quota"},  
+        $for subplan in fixedMountingPlan[1::2]:
+        	$ aySem = subplan[0]
+        	$ quota = subplan[2]
+        	$if quota is None or quota == "-":
+        		$ quota = 0
+        	{y: $quota, label: "$aySem[9:]"+"\'s Quota"},    
+        ]
+      },
+
+      {        
+        type: "bar",
+        showInLegend: true,
+        name: "Sem 2 Demand",
+        color: "skyblue",
+        indexLabelFontColor: "#161616",      
+        dataPoints: [
+        $for subplan in tentaMountingPlan[-1::-2]:
+        	$ aySem = subplan[0]
+        	$ numberTaking = getNumStudents(aySem)
+        	{y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"},
+        $for subplan in fixedMountingPlan[1::2]:
+        	$ aySem = subplan[0]
+        	$ numberTaking = getNumStudents(aySem)
+        	{y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"},      
+        ]
+      },
+
+      {        
+        type: "bar",
+        showInLegend: true,
+        name: "",
+        color: "white",
+        indexLabelFontColor: "#161616",      
+        dataPoints: [
+        $for subplan in tentaMountingPlan[-1::-2]:
+        	$ aySem = subplan[0]
+        	{y: 0, label: "$aySem[0:8]"},
+        $for subplan in fixedMountingPlan[1::2]:
+        	$ aySem = subplan[0]
+        	{y: 0, label: "$aySem[0:8]"},      
+        ]
+      }
+
+      ]
+    });
+
+	chart.render();
+}
+
 function scrollToTenta(element, duration) {
 	document.getElementById('editSpecificInfoWarning').style.display = "block";
 	document.getElementById('editSpecificInfoWarning').style.color = "red";
@@ -246,6 +393,15 @@ $var title:$title_string
                             </tr>
                     </tbody>
                 </table>
+                <br>
+                <hr>
+                <h3 class="text-center">
+                	Module's Quota and Demand
+                </h3>
+                <div class="row">
+                	  <div id="quota-demand-chart" style="height: 300px; width: 100%;">
+ 					  </div>
+                </div>
             </div>
         </div>
     </div>
