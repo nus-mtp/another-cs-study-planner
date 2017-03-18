@@ -50,7 +50,8 @@ class TestCode(object):
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
 
     FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" '+\
-                              'name="view-overlapping-with-module" action="/overlappingWithModule" '+\
+                              'name="view-overlapping-with-module" '+\
+                              'action="/overlappingWithModule" '+\
                               'method="get">'
     FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary" '+\
                                      'value="View modules that overlap with this module.">'
