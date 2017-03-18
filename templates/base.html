@@ -59,8 +59,8 @@ $def with (page)
 					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<li><a id="sidebar" href="/modifiedModules">Modified Modules</a></li>
 					<!--li><a href="#">Sort/Filter Modules</a></li>
-					<li><a href="#">Recently Removed Modules</a></li>
-					<li><a href="#">Starred Modules</a></li-->
+					<li><a href="#">Recently Removed Modules</a></li-->
+					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
 					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
 					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
@@ -76,12 +76,15 @@ $def with (page)
 				<h3><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;Module Relations</h3>
 				<ul>
 					<li><a id="sidebar" href="/overlappingModules">Overlapping Modules</a></li>
-					<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
-					<!--li><a href="#">Module Info by Semester</a></li>
-				    <ul>
-					   <li><a href="#">Before Specified Module</a></li>
-				        <li><a href="#">Before Internship</a></li>
-				    </ul-->
+					<li><a href="javascript:void(0)">Prior Modules Taken</a></li>
+					<ul>
+						<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
+						<li><a id="sidebar" href="/moduleTakenPriorToInternship">Modules Taken Prior to Internship</a></li>
+					</ul>
+					<li><a href="javascript:void(0)">Module Info by Semester</a></li>
+					<ul>
+						<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
+					</ul>
 				</ul>
 				<h3><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;Student Statistics</h3>
 				<ul>
@@ -92,8 +95,7 @@ $def with (page)
 							<li><a href="#">In Specific Semester</a></li>
 						</ul-->
 					<li><a id="sidebar" href="/studentEnrollment">Student Enrollment Info</a></li>
-					<!--li><a href="#">Module Timeline</a></li>
-					<li><a href="#">Non-Overlapping Modules</a></li-->
+					<!--li><a href="#">Module Timeline</a></li-->
 				</ul>
 			</div>
 
