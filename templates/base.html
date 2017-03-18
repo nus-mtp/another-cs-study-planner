@@ -34,12 +34,14 @@ $def with (page)
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
 					</form>
-					<form class="navbar-form navbar-right" action="/logout" method="post">
-                        <label for="logout-button"><b>$web.cookies().get('user')</b></label>
-						<button id="logout-button" class="btn btn-lg btn-danger" type="submit">
-							<span class="glyphicon glyphicon-log-out"></span> Logout
-						</button>
-					</form>
+                    <div class="navbar-right">
+                        <p class="inline"><b>$web.cookies().get('user')</b></p>
+                        <form class="navbar-form inline" action="/logout" method="post">
+                            <button id="logout-button" class="btn btn-lg btn-danger" type="submit">
+                                <span class="glyphicon glyphicon-log-out"></span> Logout
+                            </button>
+                        </form>
+                    </div>
 				    <!--form class="navbar-form navbar-right">
 				        <button type="submit" class="btn btn-danger">Logout</button>
 				    </form-->
