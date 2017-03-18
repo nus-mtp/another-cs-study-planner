@@ -91,6 +91,14 @@ def get_current_ay():
     return DB_CURSOR.fetchone()[0]
 
 
+def get_next_ay(ay):
+    '''
+        Return the AY that comes after the given AY
+    '''
+    ay = ay.split(' ')[1].split('/')
+    return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
+
+
 def get_all_fixed_ay_sems():
     '''
         Get all the distinct AY/Sem in the fixed mounting table
@@ -998,6 +1006,54 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def star_module(module_code, staff_id):
+    '''
+        Insert a module into the starred table.
+    '''
+    sql_command = "INSERT INTO starred VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+
+
+def unstar_module(module_code, staff_id):
+    '''
+        Remove a module from the starred table.
+    '''
+    sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+    CONNECTION.commit()
+
+
+def get_starred_modules(staff_id):
+    '''
+        Get all module info of all starred modules.
+    '''
+    sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
+                "AND m.code = s.modulecode"
+    DB_CURSOR.execute(sql_command, (staff_id,))
+    return DB_CURSOR.fetchall()
+
+
+def is_module_starred(module_code, staff_id):
+    '''
+        Check if a module is starred by the user.
+    '''
+    sql_command = "SELECT * FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    starred = DB_CURSOR.fetchall()
+    if not starred:
+        return False
+    else:
+        return True
 
 
 def get_mod_before_intern(ay_sem):

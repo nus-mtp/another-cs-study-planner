@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList, isStarred)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -26,29 +26,35 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo]
 			<div class="row">
 				<div class="col-md-12 module-header">
 					<div class="page-header">
-						<h1><b>$moduleCode</b></h1>
+						<h1>
+							<b>$moduleCode</b>
+							$if isStarred:
+								<a href="/starModule?code=$moduleCode&amp;action=unstar&amp;return_path=/individualModuleInfo&amp;target_ay=$aySem" class="star">
+									<span class="glyphicon glyphicon-star"></span>
+								</a>
+							$else:
+								<a href="/starModule?code=$moduleCode&amp;action=star&amp;return_path=/individualModuleInfo&amp;target_ay=$aySem" class="star">
+									<span class="glyphicon glyphicon-star-empty"></span>
+								</a>
+						</h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
 						<table>
 							<tr>
 								<td>
-									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-										<input type="hidden" name="status" value="load">
+									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
-										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
 			                        </form>
 			                    </td>
 			                </tr>
 		                    $if isFutureAY is True:
 		                    	<tr>
 									<td>
-				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post">
-				                        	<input type="hidden" name="status" value="load">
+				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="get">
 				                        	<input type="hidden" name="code" value="$moduleCode">
 				                        	<input type="hidden" name="aySem" value="$aySem">
-				                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
-				                        	<input type="hidden" name="quota" value="$quota">
-				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
+				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">
 										</form>
 				                    </td>
 				                </tr>
@@ -92,11 +98,6 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo]
 						$moduleDescription
 					</p>
 					<br>
-					<h4><b>Module Preclusions:</b></h4>
-					<p>--none loaded</p>
-					<br>
-					<h4><b>Module Prerequisites:</b></h4>
-					<p>--none loaded</p>
 					<br>
 				</div>
 			</div>

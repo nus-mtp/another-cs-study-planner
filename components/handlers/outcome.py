@@ -62,8 +62,8 @@ class Outcome(object):
                     outcome_message = "Module " + module_code + " has been deleted successfully!"
                 else:
                     outcome_message = "Error: Module " + module_code + " currently has " +\
-                                      "mountings that refer to it. " +\
-                                      "Remove all mountings before deleting module!"
+                                      "mountings that refer to it or is starred. " +\
+                                      "Remove all mountings and unstar before deleting module!"
                 redirect_page = "/modules"
 
             elif action == "create_user":
@@ -81,8 +81,8 @@ class Outcome(object):
                                   "Please try again."
                 redirect_page = "/login"
 
-            elif action == "get_module":
-                outcome_message = "Error: Module code (" + module_code + ") does not exist! "
+            elif action == "module_taken_prior":
+                outcome_message = "Error: Module code " + module_code + " does not exist! "
                 redirect_page = "/moduleTakenPriorToOthers"
 
             elif action == "non-overlapping-mods":
