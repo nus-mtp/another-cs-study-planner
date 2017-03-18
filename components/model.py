@@ -1000,6 +1000,54 @@ def is_aysem_in_list(given_aysem, given_list):
     return False
 
 
+def star_module(module_code, staff_id):
+    '''
+        Insert a module into the starred table.
+    '''
+    sql_command = "INSERT INTO starred VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+
+
+def unstar_module(module_code, staff_id):
+    '''
+        Remove a module from the starred table.
+    '''
+    sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+    CONNECTION.commit()
+
+
+def get_starred_modules(staff_id):
+    '''
+        Get all module info of all starred modules.
+    '''
+    sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
+                "AND m.code = s.modulecode"
+    DB_CURSOR.execute(sql_command, (staff_id,))
+    return DB_CURSOR.fetchall()
+
+
+def is_module_starred(module_code, staff_id):
+    '''
+        Check if a module is starred by the user.
+    '''
+    sql_command = "SELECT * FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    starred = DB_CURSOR.fetchall()
+    if not starred:
+        return False
+    else:
+        return True
+
+
 def get_mod_before_intern(ay_sem):
     '''
         Retrieves a list of modules which is taken by students prior to

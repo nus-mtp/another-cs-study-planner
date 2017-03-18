@@ -1,0 +1,53 @@
+$def with (moduleInfos) 
+
+$var title:Module Information
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center"><b>Starred Modules</b></h1>
+            <p class="text-center">Shows all modules that have been starred by you.</p>
+            <br>
+            <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>MCs</th>
+                        <th>Is New Module?</th>
+                        <th data-sortable="false">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                $for moduleInfo in moduleInfos:
+                    <tr>
+                        <td class="text-center">$moduleInfo[0]</td>
+                        <td>$moduleInfo[1]</td>
+                        <td>$moduleInfo[2]</td>
+                        <td class="text-center">$moduleInfo[3]</td>
+                        $if moduleInfo[4][0:3] == 'New':
+                            <td class="text-center">Yes</td>
+                        $else:
+                            <td class="text-center">No</td>
+                        <td>
+                            <form action="/viewModule" method="get">
+                                <input type="hidden" name="code" value="$moduleInfo[0]">
+                                <input class="btn btn-primary" type="submit" value="View Module"/>
+                            </form>
+                            
+                            <form action="/starModule" method="get">
+                                <input type="hidden" name="code" value="$moduleInfo[0]">
+                                <input type="hidden" name="action" value="unstar">
+                                <input type="hidden" name="return_path" value="/starredModules">
+                                <input class="btn btn-primary" type="submit" value="Unstar"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>

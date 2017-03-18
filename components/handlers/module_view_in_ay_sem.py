@@ -89,10 +89,12 @@ class IndividualModule(object):
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+        is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, overlapping_mod_list)
+                                           self.quota, overlapping_mod_list,
+                                           is_starred)
 
 
     def POST(self):
