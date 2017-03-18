@@ -37,21 +37,20 @@ class TestCode(object):
                                    '&quota='
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
+                            'action="/editModule" method="get">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
                                    'type="submit" value="Edit General Module Info" ' +\
                                    'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description and '+\
-                                   'MCs">'
+                                   'title="Edit the module\'s name, description, '+\
+                                   'MC, pre-requisites and preclusions">'
     FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" ' +\
                                      'name="edit-mounting-button" ' +\
-                                     'action="/editMounting" method="post">'
+                                     'action="/editMounting" method="get">'
     FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
                                             'type="submit" value="Edit Specific ' +\
                                             'Module Info" data-toggle="tooltip" ' +\
                                             'data-placement="right" title="Edit the ' +\
-                                            'module\'s mounting, ' +\
-                                            'prerequisites/preclusions and quota">'
+                                            'module\'s mounting and quota">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -128,68 +127,18 @@ class TestCode(object):
         root.mustcontain("Not Found")
 
 
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
+    '''
+        Tests if user will fail to access page for showing module overview
+        if the target AY-semester is invalid.
+    '''
+    def test_view_individual_module_invalid_ay_sem_response(self):
+        # AY-Semester used here is '16/18 Sem 1'
+        root = self.test_app.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+        assert_equal(root.status, 200)
 
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        root.mustcontain("Not Found")
 
 
     def test_view_individual_module_contents(self):
@@ -206,8 +155,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.CONTENT_STATS)
@@ -229,8 +176,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.CONTENT_STATS)
