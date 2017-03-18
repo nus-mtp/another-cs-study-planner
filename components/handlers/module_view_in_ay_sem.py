@@ -149,7 +149,7 @@ class IndividualModule(object):
             # Get number of students in each year that are taking the module
             student_year = student[1]
             student_year_counts[student_year-1] += 1
-            
+
             # Get number of students in each focus area that are taking the module
             focus_area_1 = student[2]
             focus_area_2 = student[3]
@@ -182,7 +182,8 @@ class IndividualModule(object):
                 return RENDER.notfound(error_message)
             target_ay_sem = input_data.targetAY
             if target_ay_sem not in self.list_of_ay_sems:
-                return RENDER.notfound(target_ay_sem + " is not in the system's list of AY-Semesters.")
+                return RENDER.notfound(target_ay_sem + " is not in the " +\
+                                       "system's list of AY-Semesters.")
 
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
