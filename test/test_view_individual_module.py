@@ -58,7 +58,8 @@ class TestCode(object):
     FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
                                     ' value="View students that will be affected by this module">'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
-                                   'name="view-overlapping-with-module" action="/overlappingWithModule"'+\
+                                   'name="view-overlapping-with-module" '+\
+                                   'action="/overlappingWithModule"'+\
                                    ' method="get">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
                                           ' value="View modules overlapping with this module">'
