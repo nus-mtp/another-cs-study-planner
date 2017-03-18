@@ -36,23 +36,19 @@ $var title:$title_string
 						<table>
 							<tr>
 								<td>
-									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-										<input type="hidden" name="status" value="load">
+									<form id="edit-module-button" name="edit-module-button" action="/editModule" method="get">
 										<input type="hidden" name="code" value="$moduleCode">
-										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+										<input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
 			                        </form>
 			                    </td>
 			                </tr>
 		                    $if isFutureAY is True:
 		                    	<tr>
 									<td>
-				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post">
-				                        	<input type="hidden" name="status" value="load">
+				                        <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="get">
 				                        	<input type="hidden" name="code" value="$moduleCode">
 				                        	<input type="hidden" name="aySem" value="$aySem">
-				                        	<input type="hidden" name="mountingValue" value="$mountingStatus">
-				                        	<input type="hidden" name="quota" value="$quota">
-				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
+				                        	<input class="btn btn-lg btn-primary" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">
 										</form>
 				                    </td>
 				                </tr>
@@ -96,17 +92,6 @@ $var title:$title_string
 						$moduleDescription
 					</p>
 					<br>
-					<h4><b>Module Preclusions:</b></h4>
-					$if preclude == "":
-						<p>None</p>
-					$else:
-						<p>$preclude</p>
-					<br>
-					<h4><b>Module Prerequisites:</b></h4>
-					$if prereq == "":
-						<p>None</p>
-					$else:
-						<p>$prereq</p>
 					<br>
 				</div>
 			</div>
