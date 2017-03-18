@@ -1,0 +1,56 @@
+$def with (lst_of_independ_mods, lst_of_ay_sem, ay_sem)
+
+$var title:Non-Overlapping Modules
+
+<div class="container container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row"><!--header-->
+                <h1 class="text-center"><b>Non-Overlapping Modules for $ay_sem</b></h1>
+                <p class="text-center" >Shows all module pairs which no student takes together in a particular semester.<span data-toggle="tooltip" data-placement="bottom" title="By default, these pairs are shown for the current AY-Semester." class="glyphicon glyphicon-info-sign" title="By default, these pairs are shown for the current AY-Semester."></span></p>
+                <br>
+            </div>
+            <div class="row"><!--request form-->
+                <div class="col-md-12 pagination-centered text-center">
+                    <form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">
+                        <div class="form-group">
+                            <label for="ay-sem">Select AY-Sem:</label>
+                            <select class="form-control" name="sem">
+                                <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
+                                $for aysem in lst_of_ay_sem:
+                                    <option value="$aysem">$aysem</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit"  value="Submit" class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--div class="row">
+                <h3>Non-Overlapping Modules for $ay_sem</h3>
+            </div-->
+            <div class="row"><!--table-->
+                <table class="table display dataTable table-bordered table-hover text-center" id="non-overlap-table">
+                    <thead>
+                        <tr>
+                            <th>Module 1</th>
+                            <th>Name of Module 1</th>
+                            <th>Module 2</th>
+                            <th>Name  of Module 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        $for module in lst_of_independ_mods:
+                            <tr>
+                                <td><a href="/viewModule?code=$module[0]" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
+                                <td>$module[1]</td>
+                                <td><a href="/viewModule?code=$module[2]" target="_blank" data-toggle="tooltip" title="View general info for $module[2]">$module[2]</a></td>
+                                <td>$module[3]</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

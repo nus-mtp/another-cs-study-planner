@@ -13,8 +13,8 @@ $var title:Register for CSModify Account
         <form id="registerForm" action="/register" method="post">
             <div class="form-group">
                 <label for="id">User ID</label>
-                <input type="text" class="form-control" id="id" name="id" placeholder="User ID" pattern="^[a-zA-Z0-9]+$$" required>
-                <small id="idHelp">User ID should only contain alphanumeric characters.</small>
+                <input type="text" class="form-control" id="id" name="id" placeholder="User ID" pattern="^[a-zA-Z0-9]+$$" maxlength="9" required>
+                <small id="idHelp">User ID should be 1-9 characters and only contain alphanumeric characters.</small>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

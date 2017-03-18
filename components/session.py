@@ -13,7 +13,7 @@ DUMMY_PASSWORD = '12345678'
 URL_DEFAULT_LOGIN = '/login'
 URL_DEFAULT_LOGOUT = '/logout'
 
-COOKIE_TIME = 60*60
+COOKIE_TIME = 60*10
 
 def init_session(user_id):
     '''
@@ -31,13 +31,23 @@ def validate_session():
     '''
         Check if session is valid by checking if
         cookies have been tampered with.
+        Also refreshes session.
     '''
     try:
         user = web.cookies().get('user')
         session_id = web.cookies().get('session_id')
+        refresh_sessions(user, session_id)
         return components.model.validate_session(user, session_id)
     except:
         return False
+
+
+def refresh_sessions(user, session_id):
+    '''
+        Refresh the session by extending the cookie expiry time.
+    '''
+    web.setcookie('user', user, COOKIE_TIME)
+    web.setcookie('session_id', session_id, COOKIE_TIME)
 
 
 def clean_up_sessions():

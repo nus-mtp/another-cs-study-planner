@@ -122,10 +122,18 @@ $(function() {
     $('#modules-taken-prior-table').DataTable( {
         "order": [[ 6, "desc" ], [ 0, "asc" ], [ 3, "asc" ]]
     } );
+
+    $('#modules-taken-prior-intern-table').DataTable( {
+        "order": [[ 2, "desc" ]]
+    } );
      
     $('#common-module-table').DataTable( {
         aaSorting: []
     } );
-} );
 
+    $('#non-overlap-table').DataTable( {
+        aaSorting: [],
+        "deferRender": true
+    } );
+} );
 

@@ -6,6 +6,7 @@
 import hashlib
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
+from psycopg2.extensions import AsIs
 
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
@@ -374,9 +375,12 @@ def add_admin(username, salt, hashed_pass):
         Note: to change last argument to false once
         activation done
     '''
-    sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
-    DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
-    CONNECTION.commit()
+    try:
+        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+        CONNECTION.commit()
+    except psycopg2.DataError: #if username too long
+        CONNECTION.rollback()
 
 
 def is_userid_taken(userid):
@@ -920,4 +924,186 @@ def get_all_focus_areas():
     '''
     sql_command = "SELECT DISTINCT name FROM focusarea"
     DB_CURSOR.execute(sql_command)
+
+
+def add_prerequisite(module_code, prereq_code, index):
+    '''
+        Insert a prerequisite into the prerequisite table.
+        Returns true if successful, false if duplicate primary key detected
+    '''
+    sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_prerequisite(module_code):
+    '''
+        Get a prerequisite from the prerequisite table.
+    '''
+    sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def delete_prerequisite(module_code, prereq_code):
+    '''
+        Delete a prerequisite from the prerequisite table.
+        Returns true if successful.
+    '''
+    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s " +\
+                  "AND prerequisiteModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_mods_no_one_take(aysem):
+    '''
+        Retrieves the list of all modules which no student take together
+        in the specified semester.
+
+        Returns a table of lists. Each list contains
+        (module 1 code, module 1 name, module 2 code, module 2 name)
+        where module 1 and module 2 are the 2 mods no one takes together
+        in the specified semester.
+
+        e.g. [(CS1010, Programming Methodology, CS1231, Discrete Structures)] means
+        there are no students taking CS1010 and CS1231 together in specified aysem.
+    '''
+
+    sql_command = "SELECT mm1.moduleCode, m1.name, mm2.moduleCode, m2.name " + \
+                "FROM %(table)s mm1, %(table)s mm2, module m1, module m2 WHERE " + \
+                "mm1.moduleCode < mm2.moduleCode AND m1.code = mm1.moduleCode " + \
+                "AND m2.code = mm2.moduleCode AND " + \
+                "mm1.acadYearAndSem = %(aysem)s AND " + \
+                "mm1.acadYearAndSem = mm2.acadYearAndSem AND NOT EXISTS (" + \
+                "SELECT * FROM studentPlans sp1, studentPlans sp2 WHERE " + \
+                "sp1.studentid = sp2.studentid AND sp1.acadYearAndSem = sp2.acadYearAndSem " + \
+                "AND sp1.acadYearAndSem = mm1.acadYearAndSem AND " + \
+                "sp1.moduleCode = mm1.moduleCode AND sp2.moduleCode = mm2.moduleCode)"
+
+    STRING_MODULE_MOUNTED = "moduleMounted"
+    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
+
+    MAP_TABLE_TO_MODULE_MOUNTED = {
+        "table": AsIs(STRING_MODULE_MOUNTED),
+        "aysem": aysem
+    }
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
+        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
+        "aysem": aysem
+    }
+
+    fixed_sems = get_all_fixed_ay_sems()
+    tenta_sems = get_all_tenta_ay_sems()
+
+    if is_aysem_in_list(aysem, fixed_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    elif is_aysem_in_list(aysem, tenta_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    else: # No such aysem found
+        return list()
+
+    required_list = DB_CURSOR.fetchall()
+
+    return required_list
+
+
+def is_aysem_in_list(given_aysem, given_list):
+    '''
+        Returns true if given_aysem is found inside given_list.
+        Example:
+        given_list is a list of [('AY 16/17 Sem 1',), ('AY 16/17 Sem 2',)] structure.
+    '''
+    for aysem_tuple in given_list:
+        retrieved_aysem = aysem_tuple[0]
+        if given_aysem == retrieved_aysem:
+            return True
+
+    return False
+
+
+def star_module(module_code, staff_id):
+    '''
+        Insert a module into the starred table.
+    '''
+    sql_command = "INSERT INTO starred VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+
+
+def unstar_module(module_code, staff_id):
+    '''
+        Remove a module from the starred table.
+    '''
+    sql_command = "DELETE FROM starred WHERE moduleCode = %s AND staffId = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, staff_id))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+    CONNECTION.commit()
+
+
+def get_starred_modules(staff_id):
+    '''
+        Get all module info of all starred modules.
+    '''
+    sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
+                "AND m.code = s.modulecode"
+    DB_CURSOR.execute(sql_command, (staff_id,))
+    return DB_CURSOR.fetchall()
+
+
+def is_module_starred(module_code, staff_id):
+    '''
+        Check if a module is starred by the user.
+    '''
+    sql_command = "SELECT * FROM starred WHERE moduleCode = %s AND staffId = %s"
+    DB_CURSOR.execute(sql_command, (module_code, staff_id))
+    starred = DB_CURSOR.fetchall()
+    if not starred:
+        return False
+    else:
+        return True
+
+
+def get_mod_before_intern(ay_sem):
+    '''
+        Retrieves a list of modules which is taken by students prior to
+        their internship in specified ay_sem.
+
+        Returns a table of lists, each list contains
+        (module code, module name, number of students who took)
+        where ('CS1010', 'Programming Methodology', 3) means
+        3 students have taken CS1010 before their internship on
+        specified ay_sem
+    '''
+    sql_command = "SELECT sp.moduleCode, m.name, COUNT(*) " + \
+                  "FROM studentPlans sp, module m " + \
+                  "WHERE sp.moduleCode = m.code " + \
+                  "AND sp.acadYearAndSem < %s " + \
+                  "AND sp.moduleCode <> 'CP3200' AND sp.moduleCode <> 'CP3202' " + \
+                  "AND sp.moduleCode <> 'CP3880' " + \
+                  "AND EXISTS (" + \
+                  "SELECT * FROM studentPlans sp2 " + \
+                  "WHERE sp2.acadYearAndSem = %s " + \
+                  "AND sp2.studentid = sp.studentid " + \
+                  "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
+                  "OR sp2.moduleCode = 'CP3880')) " + \
+                  "GROUP BY sp.moduleCode, m.name"
+    DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
+
     return DB_CURSOR.fetchall()

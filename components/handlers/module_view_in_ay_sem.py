@@ -189,6 +189,7 @@ class IndividualModule(object):
         is_future_ay = not self.is_current_ay
 
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+        is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 
         self.load_focus_areas()
         self.load_student_enrollments(module_code, target_ay_sem)
