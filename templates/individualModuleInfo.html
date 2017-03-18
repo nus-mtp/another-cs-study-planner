@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList, isStarred)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList, isStarred, prereq, preclude)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -97,10 +97,16 @@ $var title:$title_string
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
-					<p>--none loaded</p>
+					$if preclude == "":
+						<p>None</p>
+					$else:
+						<p>$preclude</p>
 					<br>
 					<h4><b>Module Prerequisites:</b></h4>
-					<p>--none loaded</p>
+					$if prereq == "":
+						<p>None</p>
+					$else:
+						<p>$prereq</p>
 					<br>
 				</div>
 			</div>

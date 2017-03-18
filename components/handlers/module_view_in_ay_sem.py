@@ -96,7 +96,7 @@ class IndividualModule(object):
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
                                            self.quota, overlapping_mod_list,
-                                           is_starred)
+                                           is_starred, prereq_string, preclude_string)
 
 
     def POST(self):
