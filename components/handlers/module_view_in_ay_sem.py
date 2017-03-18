@@ -14,6 +14,20 @@ class IndividualModule(object):
         This class handles the display of a single module mounting
     '''
     def __init__(self):
+        '''
+            Define the AY-Sems that are in the system
+            By right, these settings hould be set by the superadmin
+        '''
+        self.number_of_future_ays = 1
+        self.current_ay = model.get_current_ay()
+        self.list_of_ay_sems = [self.current_ay+" Sem 1", self.current_ay+" Sem 2"]
+
+        ay = self.current_ay
+        for i in range(self.number_of_future_ays):
+            ay = model.get_next_ay(ay)
+            self.list_of_ay_sems.append(ay+" Sem 1")
+            self.list_of_ay_sems.append(ay+" Sem 2")
+
         self.mounting_status = -1
         self.quota = None
         self.is_current_ay = False
@@ -70,6 +84,20 @@ class IndividualModule(object):
         return model.get_mod_taken_together_with(code)
 
 
+    def get_mounting_status(self):
+        '''
+            Return the mounting status of the module in the target AY-Sem
+        '''
+        return self.mounting_status
+
+
+    def get_quota(self):
+        '''
+            Return the quota of the module in the target AY-Sem
+        '''
+        return self.quota
+
+
     def GET(self):
         '''
             Retrieve and render all the info of a module mounting
@@ -83,11 +111,13 @@ class IndividualModule(object):
         if module_info is None:
             error_message = module_code + " does not exist in the system."
             return RENDER.notfound(error_message)
-
         target_ay_sem = input_data.targetAY
+        if target_ay_sem not in self.list_of_ay_sems:
+            return RENDER.notfound(target_ay_sem + " is not in the system's list of AY-Semesters.")
 
         self.load_mounting_info(module_code, target_ay_sem)
         is_future_ay = not self.is_current_ay
+
         overlapping_mod_list = model.get_mod_taken_together_with(module_code)
         is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 

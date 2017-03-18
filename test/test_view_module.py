@@ -31,13 +31,16 @@ class TestCode(object):
     URL_STAR_MODULE = '/starModule?code=BT5110&action=star&return_path=/viewModule?code=BT5110'
     URL_UNSTAR_MODULE = '/starModule?code=BT5110&action=unstar&return_path=/viewModule?code=BT5110'
 
+    URL_INDIV_MODULE_VIEW = '/individualModuleInfo?code=BT5110'
+    URL_INDIV_MODULE_VIEW_INVALID = '/individualModuleInfo?code=CS0123'
+
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
+                            'action="/editModule" method="get">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
                                    ' value="Edit General Module Info" ' +\
                                    'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description ' +\
-                                   'and MCs">'
+                                   'title="Edit the module\'s name, description, ' +\
+                                   'MC, pre-requisites and preclusions">'
 
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
@@ -46,7 +49,8 @@ class TestCode(object):
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
-    CONTENT_QUOTA = "Class Quota for AY-Semesters"
+    CONTENT_INFO_FIXED = "Information for Current AY (Fixed):"
+    CONTENT_INFO_TENTA = "Information for Future AYs (Tentative)"
     CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
@@ -119,8 +123,7 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
+        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
         # checks if HTTP response code is 200 (= OK)
@@ -136,8 +139,7 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_VIEW_MODULE_INVALID + '&targetAY=AY+16%2F17+Sem+1' +\
-              '&quota=60'
+        url = self.URL_INDIV_MODULE_VIEW_INVALID + '&targetAY=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
         assert_equal(response.status, 200)
@@ -147,42 +149,36 @@ class TestCode(object):
         response.mustcontain("Not Found")
 
 
-    # '''
-    #     Tests if navigation to an individual module view
-    #     with invalid AY-semester is unsuccesful.
+    '''
+        Tests if navigation to an individual module view
+        with invalid AY is unsuccesful.
 
-    #     (i.e. navigation to module info for valid target module and
-    #     quota, but invalid AY-semester)
+        (i.e. navigation to module info for valid target module
+        and semester but invalid AY)
+    '''
+    def test_view_module_overview_goto_individual_module_invalid_ay(self):
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F18+Sem+1'
+        response = root.goto(url, method='get')
 
-    #     NOTE: Checking for invalid AY-semester is not implemented yet.
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_module_overview_goto_individual_module_invalid_ay_sem(self):
-    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-    #     url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F18+Sem+1' +\
-    #           '&quota=60'
-    #     response = root.goto(url, method='get')
-    # '''
+        assert_equal(response.status, 200)
+        response.mustcontain("Not Found")
 
 
-    # '''
-    #     Tests if navigation to an individual module view
-    #     with invalid quota is unsuccesful.
+    '''
+        Tests if navigation to an individual module view
+        with invalid semester in URL is unsuccesful.
 
-    #     (i.e. navigation to module info for invalid quota and
-    #     valid target module and AY-semester)
+        (i.e. navigation to module info for valid target module
+        and AY but invalid semester)
+    '''
+    def test_view_module_overview_goto_individual_module_invalid_sem(self):
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+3'
+        response = root.goto(url, method='get')
 
-    #     NOTE: Checking for invalid quota is not implemented yet.
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_module_overview_goto_individual_module_invalid_quota(self):
-    #     root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-    #     url = self.URL_VIEW_MODULE_VALID + '&targetAY=AY+16%2F17+Sem+1' +\
-    #           '&quota=70'
-    #     response = root.goto(url, method='get')
-    # '''
+        assert_equal(response.status, 200)
+        response.mustcontain("Not Found")
 
 
     def test_view_module_overview_contents(self):
@@ -199,7 +195,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_DESCRIPTION)
         root.mustcontain(self.CONTENT_PRECLUSION)
         root.mustcontain(self.CONTENT_PREREQUISITE)
-        root.mustcontain(self.CONTENT_QUOTA)
+        root.mustcontain(self.CONTENT_INFO_FIXED)
+        root.mustcontain(self.CONTENT_INFO_TENTA)
         root.mustcontain(self.CONTENT_TABLE_MOUNT_FLAG)
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
