@@ -35,6 +35,10 @@ class TestCode(object):
         self.prereq_CRD_tested = False
         self.test_prereq_code = "BB1111"
         self.test_prereq_index = 0
+        self.starred_CRD_tested = False
+        self.test_user = "testUser"
+        self.test_salt = "salt"
+        self.test_password = "pass"
 
     def setUp(self):
         '''
@@ -56,6 +60,8 @@ class TestCode(object):
 
         self.test_prereq_CRD()
         self.prereq_CRD_tested = True
+        self.test_starred_CRD()
+        self.starred_CRD_tested = True
 
     def tearDown(self):
         '''
@@ -274,6 +280,7 @@ class TestCode(object):
         assert_true(model.is_existing_module(current_test_module_code))
         model.delete_module(current_test_module_code)
 
+
     def test_prereq_CRD(self):
         '''
             Tests creating, reading and deleting of prerequisites.
@@ -294,4 +301,25 @@ class TestCode(object):
             model.delete_module(self.test_prereq_code)
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
+            return
+
+
+    def test_starred_CRD(self):
+        '''
+            Tests starring, reading and unstarring of modules.
+        '''
+        if not self.starred_CRD_tested:
+            model.add_admin(self.test_user, self.test_salt, self.test_password)
+            model.star_module(self.test_module_code, self.test_user)
+            assert_true(model.is_module_starred(self.test_module_code, self.test_user))
+
+            starred_info = model.get_starred_modules(self.test_user)
+            assert_true(starred_info is not None)
+            assert_equal(self.test_module_code, starred_info[0][0])
+            assert_equal(self.test_module_name, starred_info[0][1])
+
+            model.unstar_module(self.test_module_code, self.test_user)
+            starred_info = model.get_starred_modules(self.test_user)
+            model.delete_admin(self.test_user)
+            assert_true(len(starred_info) == 0)
             return
