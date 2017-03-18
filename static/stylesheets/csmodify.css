@@ -47,6 +47,10 @@ tr > th {
     transition: 0.3s
 }
 
+.inline{
+    display: inline-block;
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
     color: #f1f1f1;
