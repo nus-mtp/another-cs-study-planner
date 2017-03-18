@@ -47,9 +47,16 @@ tr > th {
     transition: 0.3s
 }
 .inline{
-    display: inline;
+    display: inline-block;
 }
 
+.ex, .ex2, .ex3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align:middle;
+    line-height: normal;
+    padding: 0;
+}
 .navbar-btn{
     height: 50px;
 }
