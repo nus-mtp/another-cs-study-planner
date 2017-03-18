@@ -130,7 +130,8 @@ class ViewMod(object):
         #get html of overlapping modules template
         return RENDER.viewModule(module_info, self.fixed_mounting_plan,
                                  self.tenta_mounting_plan, number_of_student_planning,
-                                 overlapping_modules_list, is_starred)
+                                 overlapping_modules_list, is_starred, prereq_string,
+                                 preclude_string)
 
 
     def POST(self):
