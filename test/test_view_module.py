@@ -54,7 +54,7 @@ class TestCode(object):
                               'action="/overlappingWithModule" '+\
                               'method="get">'
     FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary" '+\
-                                     'value="View modules that overlap with this module.">'
+                                     'value="View Modules That Overlap With This Module.">'
 
 
     def __init__(self):

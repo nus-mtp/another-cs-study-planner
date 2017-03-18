@@ -56,13 +56,13 @@ class TestCode(object):
                              'name="view-students-planning-to-take-module" '+\
                              'action="/studentsAffectedByModule" method="get">'
     FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
-                                    ' value="View students that will be affected by this module">'
+                                    ' value="View Students That Will Be Affected By This Module">'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
                                    'name="view-overlapping-with-module" '+\
                                    'action="/overlappingWithModule"'+\
                                    ' method="get">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
-                                          ' value="View modules overlapping with this module">'
+                                          ' value="View Modules Overlapping With This Module">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -74,7 +74,7 @@ class TestCode(object):
     CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
                                       'value="BT5110">'
     CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                        'type="submit" value="Back to Overview">'
+                                        'type="submit" value="Back To Overview">'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
