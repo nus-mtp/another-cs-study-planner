@@ -160,167 +160,108 @@ $else:
                     </tbody>
                     </table>
                 $elif modify_type == "moduleDetails":
-                    $ module = None
-                    $for entry in targetModuleModifiedInfo:
-                        $ module = entry
-                    
-                    $ moduleCode = module[0][0]
-                    $ moduleName = module[0][4]
-                    $ isNameModified = module[1][0]
-                    $ isDescModified = module[1][1]
-                    $ isMcModified = module[1][2]
-
-                    $ originalName = module[0][1]
-                    $ modifiedName = module[0][4]
-                    $ originalDescription = module[0][2]
-                    $ modifiedDescription = module[0][5]
-                    $ originalMc = module[0][3]
-                    $ modifiedMc = module[0][6]
-                    
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
                     <br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3 class="text-center">Old Details</h3>
+                    $if len(targetModuleModifiedInfo) == 0:
+                        <div class="jumbotron text-center">
+                            <h1><span class="glyphicon glyphicon-remove-circle"></span></h1>
                             <br>
-                            <div class="panel panel-primary">
-                                <div class="panel-heading"><b>Name</b></div>
-                                <div class="panel-body">
-                                    $if isNameModified:
-                                        <b>$originalName</b>
-                                    $else:
-                                        $originalName
-                                </div>
-                            </div>
-                            <div class="panel panel-primary">
-                                <div class="panel-heading"><b>Description</b></div>
-                                <div class="panel-body">
-                                    $if isDescModified:
-                                        <b>$originalDescription</b>
-                                    $else:
-                                        $originalDescription
-                                </div>
-                            </div>
-                            <div class="panel panel-primary">
-                                <div class="panel-heading"><b>MCs</b></div>
-                                <div class="panel-body">
-                                    $if isMcModified:
-                                        <b>$originalMc</b>
-                                    $else:
-                                        $originalMc
-                                </div>
-                            </div>
+                            <p>There are no changes to module details for this module.</p>
                         </div>
-                        <div class="col-md-6">
-                            <h3 class="text-center">New Details</h3>
-                            <br>
-                            $if isNameModified:
-                                <div class="panel panel-danger">
-                                    <div class="panel-heading"><b>Name</b></div>
-                                    <div class="panel-body">
-                                        <b>$modifiedName</b>
-                                    </div>
-                            $else:
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading"><b>Name</b></div>
-                                        <div class="panel-body">
-                                            <i>(unchanged)</i>
-                                        </div>
-                            </div>
-                            $if isDescModified:
-                                <div class="panel panel-danger">
-                                    <div class="panel-heading"><b>Description</b></div>
-                                    <div class="panel-body">
-                                        <b>$modifiedDescription</b>
-                                    </div>
-                            $else:
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading"><b>Description</b></div>
-                                    <div class="panel-body">
-                                        <i>(unchanged)</i>
-                                    </div>
-                            </div>
-                            $if isMcModified:
-                                <div class="panel panel-danger">
-                                    <div class="panel-heading"><b>MCs</b></div>
-                                    <div class="panel-body">
-                                        <b>$modifiedMc</b>
-                                    </div>
-                            $else:
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading"><b>MCs</b></div>
-                                    <div class="panel-body">
-                                        <i>(unchanged)</i>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--table class="table display dataTable table-bordered table-hover text-center" id="specific-modified-module">
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Name Modified?</th>
-                                <th>Description Modified?</th>
-                                <th>Number of MCs Modified?</th>
-                                <th data-sortable="false">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    $for module in targetModuleModifiedInfo:
+                    $else:
+                        $ module = None
+                        $for entry in targetModuleModifiedInfo:
+                            $ module = entry
+                        
                         $ moduleCode = module[0][0]
-                        $ moduleName = module[0][1]
+                        $ moduleName = module[0][4]
                         $ isNameModified = module[1][0]
                         $ isDescModified = module[1][1]
                         $ isMcModified = module[1][2]
-                        <tr>
-                            <td>$moduleCode</td>
-                            <td>$moduleName</td>
-                        $if isNameModified is True:
-                            $ originalName = module[0][1]
-                            $ modifiedName = module[0][4]
-                            <td>
-                                <b>From</b><br><br>
-                                <i>"$originalName"</i><br><br>
-                                <b>to</b><br><br>
-                                <i>"$modifiedName"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        $if isDescModified is True:
-                            $ originalDesc = module[0][2]
-                            $ modifiedDesc = module[0][5]
-                            <td>
-                                <b>From</b><br><br>
-                                <i>"$originalDesc"</i><br><br>
-                                <b>to</b><br><br>
-                                <i>"$modifiedDesc"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        $if isMcModified is True:
-                            $ originalMc = module[0][3]
-                            $ modifiedMc = module[0][6]
-                            <td>
-                                <b>From</b> <i>"$originalMc"</i><br><br>
-                                <b>to</b> <i>"$modifiedMc"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$targetModuleModifiedInfo[0]">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$targetModuleModifiedInfo[0]">
-                                <input type="hidden" name="restoreType" value="moduleDetails">
-                                <input class="btn btn-danger" type="submit" value="Restore Details"/>
-                            </form>
-                        </td>
-                        </tr>
-                    </tbody>
-                    </table-->
+
+                        $ originalName = module[0][1]
+                        $ modifiedName = module[0][4]
+                        $ originalDescription = module[0][2]
+                        $ modifiedDescription = module[0][5]
+                        $ originalMc = module[0][3]
+                        $ modifiedMc = module[0][6]
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="text-center">Old Details</h3>
+                                <br>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>Name</b></div>
+                                    <div class="panel-body">
+                                        $if isNameModified:
+                                            <b>$originalName</b>
+                                        $else:
+                                            $originalName
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>Description</b></div>
+                                    <div class="panel-body">
+                                        $if isDescModified:
+                                            <b>$originalDescription</b>
+                                        $else:
+                                            $originalDescription
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>MCs</b></div>
+                                    <div class="panel-body">
+                                        $if isMcModified:
+                                            <b>$originalMc</b>
+                                        $else:
+                                            $originalMc
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="text-center">New Details</h3>
+                                <br>
+                                $if isNameModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>Name</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedName</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>Name</b></div>
+                                            <div class="panel-body">
+                                                <i>(unchanged)</i>
+                                            </div>
+                                </div>
+                                $if isDescModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>Description</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedDescription</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>Description</b></div>
+                                        <div class="panel-body">
+                                            <i>(unchanged)</i>
+                                        </div>
+                                </div>
+                                $if isMcModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>MCs</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedMc</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>MCs</b></div>
+                                        <div class="panel-body">
+                                            <i>(unchanged)</i>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
             $else:
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active"><a data-toggle="tab" href="#all">Module Modification Summary</a></li>
