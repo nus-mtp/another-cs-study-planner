@@ -118,6 +118,7 @@ class EditMountingInfo(object):
         data = web.input()
         module_code = data.code
         ay_sem = data.aySem
+
         try:
             quota = data.quota
             if quota == "":
