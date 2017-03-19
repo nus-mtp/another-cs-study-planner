@@ -166,15 +166,18 @@ class Modified(object):
                 del modified_modules[i]
                 continue
 
-            modifications = [None, None, None]
+            '''modifications = [None, None, None]
             if is_name_modified:
                 modifications[0] = (old_module_name, current_module_name)
             if is_desc_modified:
                 modifications[1] = (old_module_desc, current_module_desc)
             if is_mc_modified:
-                modifications[2] = (old_module_mc, current_module_mc)
+                modifications[2] = (old_module_mc, current_module_mc)'''
+            modifications = [is_name_modified, is_desc_modified, is_mc_modified]
 
-            modified_modules[i] = (module_code, current_module_name, modifications)
+
+            #modified_modules[i] = (module_code, current_module_name, modifications)
+            modified_modules[i] = (module_details, modifications)
             i += 1
 
         return modified_modules
@@ -191,7 +194,7 @@ class Modified(object):
         modified_details_modules = self.get_modules_with_modified_details()
         modified_mounting_module_codes_names = [module[0:2] for module in modified_mounting_modules]
         modified_quota_module_codes_names = [module[0:2] for module in modified_quota_modules]
-        modified_details_module_codes_names = [module[0:2] for module in modified_details_modules]
+        modified_details_module_codes_names = [module[0][0::4] for module in modified_details_modules]
 
         modified_module_codes_names = modified_mounting_module_codes_names +\
                                       modified_quota_module_codes_names +\
@@ -247,13 +250,16 @@ class Modified(object):
                                         or modify_type == "moduleDetails"):
             if modify_type == "mounting":
                 modified_modules = self.get_modules_with_modified_mounting()
+                module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type == "quota":
                 modified_modules = self.get_modules_with_modified_quota()
+                module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type == "moduleDetails":
                 modified_modules = self.get_modules_with_modified_details()
-            module = [module for module in modified_modules if module[0] == module_code]
+                module = [module for module in modified_modules if module[0][0] == module_code]
 
             modified_modules = module
+
         # Else return all 4 modification tables, for all the modified modules
         else:
             modified_modules_summary = self.get_all_modified_modules()

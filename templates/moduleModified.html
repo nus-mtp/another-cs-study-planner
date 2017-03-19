@@ -149,24 +149,24 @@ $var title:View Modified Modules
                     $for entry in targetModuleModifiedInfo:
                         $ module = entry
                     
-                    $ moduleCode = module[0]
-                    $ moduleName = module[1]
-                    $ isNameModified = module[2][0] is not None
-                    $ isDescModified = module[2][1] is not None
-                    $ isMcModified = module[2][2] is not None
+                    $ moduleCode = module[0][0]
+                    $ moduleName = module[0][4]
+                    $ isNameModified = module[1][0]
+                    $ isDescModified = module[1][1]
+                    $ isMcModified = module[1][2]
 
                     $# stub for module name
-                    $ originalName = 'module_name'
+                    $ originalName = module[0][1]
                     $# stub for modified module name
-                    $ modifiedName = 'modified_module_name'
+                    $ modifiedName = module[0][4]
                     $# stub for module description
-                    $ originalDescription = 'module_description'
+                    $ originalDescription = module[0][2]
                     $# stub for modified module description
-                    $ modifiedDescription = 'modified_module_description'
+                    $ modifiedDescription = module[0][5]
                     $# stub for module MC
-                    $ originalMc = 'module_MC'
+                    $ originalMc = module[0][3]
                     $# stub for modified module MC
-                    $ modifiedMc = 'modified_module_MC'
+                    $ modifiedMc = module[0][6]
                     
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
                     <br>
@@ -241,17 +241,17 @@ $var title:View Modified Modules
                         </thead>
                         <tbody>
                     $for module in targetModuleModifiedInfo:
-                        $ moduleCode = module[0]
-                        $ moduleName = module[1]
-                        $ isNameModified = module[2][0] is not None
-                        $ isDescModified = module[2][1] is not None
-                        $ isMcModified = module[2][2] is not None
+                        $ moduleCode = module[0][0]
+                        $ moduleName = module[0][1]
+                        $ isNameModified = module[1][0]
+                        $ isDescModified = module[1][1]
+                        $ isMcModified = module[1][2]
                         <tr>
                             <td>$moduleCode</td>
                             <td>$moduleName</td>
                         $if isNameModified is True:
-                            $ originalName = module[2][0][0]
-                            $ modifiedName = module[2][0][1]
+                            $ originalName = module[0][1]
+                            $ modifiedName = module[0][4]
                             <td>
                                 <b>From</b><br><br>
                                 <i>"$originalName"</i><br><br>
@@ -261,8 +261,8 @@ $var title:View Modified Modules
                         $else:
                             <td>-</td>
                         $if isDescModified is True:
-                            $ originalDesc = module[2][1][0]
-                            $ modifiedDesc = module[2][1][1]
+                            $ originalDesc = module[0][2]
+                            $ modifiedDesc = module[0][5]
                             <td>
                                 <b>From</b><br><br>
                                 <i>"$originalDesc"</i><br><br>
@@ -272,8 +272,8 @@ $var title:View Modified Modules
                         $else:
                             <td>-</td>
                         $if isMcModified is True:
-                            $ originalMc = module[2][2][0]
-                            $ modifiedMc = module[2][2][1]
+                            $ originalMc = module[0][3]
+                            $ modifiedMc = module[0][6]
                             <td>
                                 <b>From</b> <i>"$originalMc"</i><br><br>
                                 <b>to</b> <i>"$modifiedMc"</i><br><br>
@@ -521,18 +521,18 @@ $var title:View Modified Modules
                                     <tr><td colspan=6>No data found</td></tr>
                                 $else:
                                     $for module in modifiedModulesDetails:
-                                        $ moduleCode = module[0]
-                                        $ moduleName = module[1]
-                                        $ isNameModified = module[2][0] is not None
-                                        $ isDescModified = module[2][1] is not None
-                                        $ isMcModified = module[2][2] is not None
+                                        $ moduleCode = module[0][0]
+                                        $ moduleName = module[0][4]
+                                        $ isNameModified = module[1][0]
+                                        $ isDescModified = module[1][1]
+                                        $ isMcModified = module[1][2]
                                         <tr id="$moduleCode" data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
                                             <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
                                             <td>$moduleName</td>
                                             <td data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
                                         $if isNameModified is True:
-                                            $ originalName = module[2][0][0]
-                                            $ modifiedName = module[2][0][1]
+                                            $ originalName = module[0][1]
+                                            $ modifiedName = module[0][4]
                                             Name Changed: <span class="detail-change-text">From <b>$originalName</b> to <b>$modifiedName</b></span>
                                             <br>
                                             <br>
@@ -541,8 +541,8 @@ $var title:View Modified Modules
                                             <br>
                                             <br>
                                         $if isMcModified is True:
-                                            $ originalMc = module[2][2][0]
-                                            $ modifiedMc = module[2][2][1]
+                                            $ originalMc = module[0][3]
+                                            $ modifiedMc = module[0][6]
                                             MCs Changed: <span class="detail-change-text">From <b>$originalMc</b> to <b>$modifiedMc</b></span>
                                         </td>
                                         $if True:
@@ -561,8 +561,8 @@ $var title:View Modified Modules
                                         </tr>
                                         $if isDescModified is True:
                                             <tr class="collapse" id="modified-details-child-row-$moduleCode">
-                                            $ originalDesc = module[2][1][0]
-                                            $ modifiedDesc = module[2][1][1]
+                                            $ originalDesc = module[0][2]
+                                            $ modifiedDesc = module[0][5]
                                             <td colspan=4>
                                                 <div class="row">
                                                     <div class="col-md-5 text-justify">
