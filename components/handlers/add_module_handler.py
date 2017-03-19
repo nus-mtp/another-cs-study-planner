@@ -26,7 +26,7 @@ class AddModule(object):
         '''
         #get module values from form
         data = web.input()
-        module_code = data.code
+        module_code = data.code.upper()
         module_name = data.name
         module_desc = data.description
         module_mc = data.mc
