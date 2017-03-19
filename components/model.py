@@ -12,6 +12,9 @@ from psycopg2.extensions import AsIs
 CONNECTION = components.database_adapter.connect_db()
 DB_CURSOR = CONNECTION.cursor()
 
+INDEX_FIRST_ELEM = 0
+INDEX_SECOND_ELEM = 1
+LENGTH_EMPTY = 0
 
 def get_all_modules():
     '''
@@ -535,8 +538,6 @@ def get_num_students_by_yr_study():
         e.g. [(1, 4), (2, 3)] means four year 1 students
         and two year 3 students
     '''
-    INDEX_FIRST_ELEM = 0
-
     sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
         " ORDER BY year"
     DB_CURSOR.execute(sql_command)
@@ -625,8 +626,6 @@ def get_num_students_by_focus_areas():
         Note: A student taking double focus on AI and Database will be
         reflected once for AI and once for database (i.e. double counting)
     '''
-    INDEX_FIRST_ELEM = 0
-
     table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
     table_with_zero_students = get_focus_areas_with_no_students_taking()
 
@@ -719,15 +718,31 @@ def get_list_students_take_module(code, aysem):
         (matric number, year of study, focus area 1, focus area 2)
     '''
 
-    sql_command = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
-                "FROM studentPlans sp, student s, takesFocusArea tfa " + \
-                "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
-                "AND sp.studentid = s.nusnetid AND " + \
-                "sp.studentid = tfa.nusnetid"
+    sql_command_1 = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
+                    "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                    "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                    "AND sp.studentid = s.nusnetid AND " + \
+                    "sp.studentid = tfa.nusnetid"
 
-    DB_CURSOR.execute(sql_command, (code, aysem))
+    sql_command_2 = "SELECT sp2.studentid, s2.year " + \
+                    "FROM studentPlans sp2, student s2 " + \
+                    "WHERE sp2.moduleCode = %s AND sp2.acadYearAndSem = %s " + \
+                    "AND sp2.studentid = s2.nusnetid " +\
+                    "AND sp2.studentid NOT IN ( " +\
+                        "SELECT sp.studentid " + \
+                        "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                        "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                        "AND sp.studentid = s.nusnetid AND " + \
+                        "sp.studentid = tfa.nusnetid" + \
+                    ")"
 
+    DB_CURSOR.execute(sql_command_1, (code, aysem))
     current_list_of_students = DB_CURSOR.fetchall()
+
+    DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
+    list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
+    for student in list_of_students_taking_with_no_focus_areas:
+        current_list_of_students.append([student[0], student[1], "-", "-"])
 
     return replace_null_with_dash(current_list_of_students)
 
@@ -902,6 +917,15 @@ def clean_old_sessions(date_to_delete):
     return True
 
 
+def get_all_focus_areas():
+    '''
+        Get all distinct focus areas
+    '''
+    sql_command = "SELECT DISTINCT name FROM focusarea"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
 def add_prerequisite(module_code, prereq_code, index):
     '''
         Insert a prerequisite into the prerequisite table.
@@ -926,6 +950,104 @@ def get_prerequisite(module_code):
     return DB_CURSOR.fetchall()
 
 
+def get_prerequisite_as_string(module_code):
+    '''
+        Returns a string of pre-requisites of specified module_code
+    '''
+    prerequisites = get_prerequisite(module_code)
+    prereq_list = convert_to_list(prerequisites)
+
+    # sort list of lists based on index (which is the first elem of each row)
+    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
+
+    return prereq_string
+
+
+def convert_list_of_prereqs_to_string(prereq_list):
+    '''
+        Converts given list of lists (prereq_list) into string form of prereqs.
+        Pre-condition: Given list must have the rows' first index sorted.
+        Example: [['0', 'CS1010'], ['0', 'CS1231'], ['1', 'CS2105']] will yield
+        the string (CS1010 or CS1231) and CS2105.
+        Same index elements have an "OR" relationship, different index elements
+        have an "AND" relationship.
+    '''
+    number_of_prereq = len(prereq_list)
+    if number_of_prereq == LENGTH_EMPTY:
+        return ""
+
+    required_string = ""
+    temp_list_for_or = list()
+    previous_index = None
+    for prereq_with_index in prereq_list:
+        current_index = prereq_with_index[INDEX_FIRST_ELEM]
+        current_prereq = prereq_with_index[INDEX_SECOND_ELEM]
+
+        if previous_index is None:
+            previous_index = current_index
+            temp_list_for_or.append(current_prereq)
+        else:
+            if previous_index == current_index:
+                temp_list_for_or.append(current_prereq)
+            else:
+                prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+                required_string = process_and_relation_prereq(required_string,
+                                                              prereq_of_or_string)
+                previous_index = current_index
+                temp_list_for_or = [current_prereq]
+
+    if len(required_string) == LENGTH_EMPTY:
+        # there is no 'and' relation
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or,
+                                                               False)
+        required_string = prereq_of_or_string
+    else:
+        # there is 'and' relation to process
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+        required_string = process_and_relation_prereq(required_string,
+                                                      prereq_of_or_string)
+
+    return required_string
+
+
+def convert_list_prereq_to_or_string(temp_list, to_add_brackets=True):
+    '''
+        Converts all elements in temp_list to a string separated by "or"
+    '''
+    number_of_prereq = len(temp_list)
+    if number_of_prereq == 1:
+        return temp_list[INDEX_FIRST_ELEM]
+    else:
+        # more than 1 prereq
+        required_string = " or ".join(temp_list)
+
+        if to_add_brackets:
+            required_string_with_brackets = "(" + required_string + ")"
+
+            return required_string_with_brackets
+        else:
+            return required_string
+
+
+def process_and_relation_prereq(existing_string, prereq_of_or_string):
+    '''
+        Appends the prereq_of_or_string into existing_string by building
+        "and" relations between existing prereqs in existing_string
+        with those in prereq_of_or_string
+    '''
+    existing_string_length = len(existing_string)
+
+    if existing_string_length == LENGTH_EMPTY:
+        return prereq_of_or_string
+    else:
+        and_string = " and "
+        required_string = existing_string + and_string + prereq_of_or_string
+
+        return required_string
+
+
 def delete_prerequisite(module_code, prereq_code):
     '''
         Delete a prerequisite from the prerequisite table.
@@ -935,6 +1057,69 @@ def delete_prerequisite(module_code, prereq_code):
                   "AND prerequisiteModuleCode = %s"
     try:
         DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def add_preclusion(module_code, preclude_code):
+    '''
+        Insert a preclusion into the precludes table.
+        Returns true if successful, false if duplicate primary key detected or
+        when module precludes itself (i.e. module_code == preclude_code) or
+        when invalid module/preclude code is given.
+    '''
+    if module_code == preclude_code:
+        return False
+
+    if not is_existing_module(module_code) or not is_existing_module(preclude_code):
+        return False
+
+    sql_command = "INSERT INTO precludes VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
+        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_preclusion(module_code):
+    '''
+        Get all preclusions of module_code from the precludes table.
+    '''
+    sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def get_preclusion_as_string(module_code):
+    '''
+        Returns a string of preclusions of specified module_code
+    '''
+    preclusions = get_preclusion(module_code)
+    preclude_list = convert_to_list(preclusions)
+    processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
+
+    preclude_string = ", ".join(processed_list)
+
+    return preclude_string
+
+
+def delete_preclusion(module_code, prereq_code):
+    '''
+        Delete a preclusion from the precludes table.
+        Returns true if successful, false otherwise.
+    '''
+    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
+                  "AND precludedByModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
         CONNECTION.commit()
     except psycopg2.IntegrityError:
         CONNECTION.rollback()
@@ -1006,6 +1191,50 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
+    '''
+        Retrieves the list of modules with quota/class size in the
+        specified AY-Semester if the quota falls within the given range
+        of quota_lower <= retrieved module quota <= quota_higher
+    '''
+    sql_command = "SELECT mm.moduleCode, m.name, mm.quota " + \
+                "FROM %(table)s mm, module m " + \
+                "WHERE mm.acadYearAndSem = %(aysem)s " + \
+                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s " + \
+                "AND mm.moduleCode = m.code"
+
+    STRING_MODULE_MOUNTED = "moduleMounted"
+    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
+
+    MAP_TABLE_TO_MODULE_MOUNTED = {
+        "table": AsIs(STRING_MODULE_MOUNTED),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
+        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+
+    fixed_sems = get_all_fixed_ay_sems()
+    tenta_sems = get_all_tenta_ay_sems()
+
+    if is_aysem_in_list(given_aysem, fixed_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    elif is_aysem_in_list(given_aysem, tenta_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    else: # No such aysem found
+        return list()
+
+    required_list = DB_CURSOR.fetchall()
+    processed_list = convert_to_list(required_list)
+
+    return processed_list
 
 
 def star_module(module_code, staff_id):
