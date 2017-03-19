@@ -2,7 +2,6 @@
     test_add_module.py tests the add module page
 '''
 
-import web
 from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
 from app import APP
