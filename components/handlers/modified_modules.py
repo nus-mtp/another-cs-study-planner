@@ -251,8 +251,13 @@ class Modified(object):
                 modified_modules = self.get_modules_with_modified_quota()
                 module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type == "moduleDetails":
+                module = None
                 modified_modules = self.get_modules_with_modified_details()
-                module = [module for module in modified_modules if module[0][0] == module_code]
+                module = None
+                for mm in modified_modules:
+                    if mm[0][0] == module_code:
+                        module = mm
+                        break
             else:
                 return RENDER.notfound("Invalid modify type '" + modify_type + "'")
 
