@@ -1,6 +1,10 @@
 $def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
 
 $var title:View Modules Taken Prior to Others
+$ home = ['/', 'Home']
+$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
+
+$var hierarchy = [home, modulesPriorOthers]
 
 $if modulePairs is not None:
 	<div class="container-fluid">

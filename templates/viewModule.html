@@ -16,6 +16,12 @@ $code:
 
 $ title_string = 'View Info for ' + moduleCode
 
+$var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['#', moduleCode]
+$var hierarchy = [home, moduleInfo, viewModule]
+
 <script>
 function scrollToTenta(element, duration) {
 	document.getElementById('editSpecificInfoWarning').style.display = "block";

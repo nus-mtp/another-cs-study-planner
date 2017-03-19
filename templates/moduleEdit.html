@@ -8,7 +8,12 @@ $ moduleMC = moduleInfo[3]
 $ title_string = 'Editing ' + moduleCode
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInformation = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ editModule = ['#', 'Edit: ' + moduleCode]
 
+$var hierarchy = [home, moduleInformation, viewModule, editModule]
 
 <body>
     <div class="container-block container">
