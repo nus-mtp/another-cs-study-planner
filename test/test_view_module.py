@@ -149,14 +149,14 @@ class TestCode(object):
         response.mustcontain("Not Found")
 
 
-    '''
-        Tests if navigation to an individual module view
-        with invalid AY is unsuccesful.
-
-        (i.e. navigation to module info for valid target module
-        and semester but invalid AY)
-    '''
     def test_view_module_overview_goto_individual_module_invalid_ay(self):
+        '''
+            Tests if navigation to an individual module view
+            with invalid AY is unsuccesful.
+
+            (i.e. navigation to module info for valid target module
+            and semester but invalid AY)
+        '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F18+Sem+1'
         response = root.goto(url, method='get')
@@ -165,14 +165,14 @@ class TestCode(object):
         response.mustcontain("Not Found")
 
 
-    '''
-        Tests if navigation to an individual module view
-        with invalid semester in URL is unsuccesful.
-
-        (i.e. navigation to module info for valid target module
-        and AY but invalid semester)
-    '''
     def test_view_module_overview_goto_individual_module_invalid_sem(self):
+        '''
+            Tests if navigation to an individual module view
+            with invalid semester in URL is unsuccesful.
+
+            (i.e. navigation to module info for valid target module
+            and AY but invalid semester)
+        '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+3'
         response = root.goto(url, method='get')
@@ -204,7 +204,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_STAR_BUTTON)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
-
 
 
     def test_contains_overlapping_module_table(self):
