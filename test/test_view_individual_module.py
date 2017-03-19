@@ -36,33 +36,27 @@ class TestCode(object):
                                    '&targetAY=AY+16%2F17+Sem+1'+\
                                    '&quota='
 
-    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                   'type="submit" value="Edit General Module Info" ' +\
-                                   'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description and '+\
-                                   'MCs">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" ' +\
-                                     'name="edit-mounting-button" ' +\
-                                     'action="/editMounting" method="post">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                            'type="submit" value="Edit Specific ' +\
-                                            'Module Info" data-toggle="tooltip" ' +\
-                                            'data-placement="right" title="Edit the ' +\
-                                            'module\'s mounting, ' +\
-                                            'prerequisites/preclusions and quota">'
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
+                            'action="/editModule" method="post" class="no-padding-margin">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
+                                   'type="submit" value="Edit General Module Info" data-toggle="tooltip"'+\
+                                   ' data-placement="right" title="Edit the module\'s name,'+\
+                                   ' description and MCs">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" name="edit-mounting-button" '+\
+                                     'action="/editMounting" method="post" class="no-padding-margin">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
+                                            'type="submit" value="Edit Specific Module Info" '+\
+                                            'data-toggle="tooltip" data-placement="right" title="Edit '+\
+                                            'the module\'s mounting, prerequisites/preclusions and quota">'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
-                             'name="view-students-planning-to-take-module" '+\
-                             'action="/studentsAffectedByModule" method="get">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
-                                    ' value="View Students That Will Be Affected By This Module">'
-    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
-                                   'name="view-overlapping-with-module" '+\
-                                   'action="/overlappingWithModule"'+\
-                                   ' method="get">'
-    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary"'+\
-                                          ' value="View Modules Overlapping With This Module">'
+                             'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
+                             'method="get" class="no-padding-margin">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-default dropdown-btn-custom" '+\
+                                    'value="View Students That Will Be Affected By This Module">'
+    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
+                                   ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
+    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-default dropdown-btn-custom" '+\
+                                          'value="View Modules Overlapping With This Module">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -73,8 +67,8 @@ class TestCode(object):
     CONTENT_MC = "(4 MCs)"
     CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
                                       'value="BT5110">'
-    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                        'type="submit" value="Back To Overview">'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-default dropdown-btn-custom"'+\
+                                        ' type="submit" value="Back To Overview">'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
