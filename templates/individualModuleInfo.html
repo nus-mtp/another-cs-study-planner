@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, overlappingList, isStarred)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -20,7 +20,17 @@ $var title:$title_string
 			<div class="row">
 				<div class="col-md-12 module-header">
 					<div class="page-header">
-						<h1><b>$moduleCode</b></h1>
+						<h1>
+							<b>$moduleCode</b>
+							$if isStarred:
+								<a href="/starModule?code=$moduleCode&amp;action=unstar&amp;return_path=/individualModuleInfo&amp;target_ay=$aySem" class="star">
+									<span class="glyphicon glyphicon-star"></span>
+								</a>
+							$else:
+								<a href="/starModule?code=$moduleCode&amp;action=star&amp;return_path=/individualModuleInfo&amp;target_ay=$aySem" class="star">
+									<span class="glyphicon glyphicon-star-empty"></span>
+								</a>
+						</h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
 						<table>

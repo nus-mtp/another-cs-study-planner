@@ -35,6 +35,9 @@ $def with (page)
 					   	</button>
 					</form>
 					<div class="navbar-form navbar-right">
+						<span class="well" id="id-well">
+							<span id="id-display-icon" class="glyphicon glyphicon-user"></span><span id="id-display">&nbsp;&nbsp;Logged in as: $web.cookies().get('user').upper()</span>
+						</span>
 						<button class="btn btn-lg btn-danger" onclick="confirmLogout()">
 							<span class="glyphicon glyphicon-log-out"></span> Logout
 						</button>
@@ -51,8 +54,8 @@ $def with (page)
 					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<li><a id="sidebar" href="/modifiedModules">Modified Modules</a></li>
 					<!--li><a href="#">Sort/Filter Modules</a></li>
-					<li><a href="#">Recently Removed Modules</a></li>
-					<li><a href="#">Starred Modules</a></li-->
+					<li><a href="#">Recently Removed Modules</a></li-->
+					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
 					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
 					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
