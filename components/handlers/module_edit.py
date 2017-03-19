@@ -118,6 +118,7 @@ class EditMountingInfo(object):
         data = web.input()
         module_code = data.code
         ay_sem = data.aySem
+
         try:
             quota = data.quota
             if quota == "":
@@ -128,22 +129,32 @@ class EditMountingInfo(object):
         old_mounting_value = data.oldMountingValue
         mounting_status = data.mountingStatus
 
+        outcome = None
+        # If quota is being set by the user, it should not fall below 0.
+        # Otherwise, if the user is not interested in leaving a value for
+        # the quota, leaving it blank (none) is acceptable.
+        if quota is not None:
+            try:
+                quota = int(quota)
+                if quota < 0:
+                    outcome = False
+            except ValueError:  # quota is not None or int
+                outcome = False
 
-        module_info = model.get_module(module_code)
-        if module_info is None:
-            outcome = False
-        elif ay_sem not in self.list_of_future_ay_sems:
-            outcome = False
-        elif quota < 0 or (quota is not None and type(quota) != int):
-            outcome = False
-        else:
-            if mounting_status == "Mounted":
-                outcome = None
-                if old_mounting_value == "1":
-                    outcome = model.update_quota(module_code, ay_sem, quota)
-                else:
-                    outcome = model.add_tenta_mounting(module_code, ay_sem, quota)
-            elif mounting_status == "Not Mounted":
-                outcome = model.delete_tenta_mounting(module_code, ay_sem)
+        if outcome is not False:
+            module_info = model.get_module(module_code)
+            if module_info is None:
+                outcome = False
+            elif ay_sem not in self.list_of_future_ay_sems:
+                outcome = False
+            else:
+                if mounting_status == "Mounted":
+                    outcome = None
+                    if old_mounting_value == "1":
+                        outcome = model.update_quota(module_code, ay_sem, quota)
+                    else:
+                        outcome = model.add_tenta_mounting(module_code, ay_sem, quota)
+                elif mounting_status == "Not Mounted":
+                    outcome = model.delete_tenta_mounting(module_code, ay_sem)
 
         return Outcome().POST("edit_mounting", outcome, module_code, ay_sem)
