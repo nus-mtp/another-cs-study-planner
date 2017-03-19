@@ -55,8 +55,7 @@ URLS = (
     'templates' directory and use the 'base.html' as the base template
     for all other pages.
 '''
-RENDER = web.template.render('templates', base='base')
-
+RENDER = web.template.render('templates', base='base', globals={'web':web})
 
 '''
     This creates the application instance with the defined
