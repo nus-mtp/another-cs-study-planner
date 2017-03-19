@@ -165,3 +165,15 @@ class TestCode(object):
         response = root.click(linkid="home-page", href="/nonOverlappingModules")
 
         assert_equal(response.status, 200)
+
+
+    def test_goto_mods_specific_size(self):
+        '''
+            Test if user can access modules with specific class size
+            page without request errors
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/moduleSpecificSize")
+
+        assert_equal(response.status, 200)
