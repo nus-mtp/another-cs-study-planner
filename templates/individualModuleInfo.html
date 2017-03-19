@@ -27,7 +27,7 @@ $var title:$title_string
                             <form id="edit-module-button" name="edit-module-button" action="/editModule" method="post" class="no-padding-margin">
                                 <input type="hidden" name="status" value="load">
                                 <input type="hidden" name="code" value="$moduleCode">
-                                <input class="btn btn-default dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+                                <input class="btn btn-default dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="left" title="Edit the module's name, description and MCs">
                             </form>
                             $if isFutureAY is True:
                                 <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="post" class="no-padding-margin">
@@ -36,7 +36,7 @@ $var title:$title_string
                                     <input type="hidden" name="aySem" value="$aySem">
                                     <input type="hidden" name="mountingValue" value="$mountingStatus">
                                     <input type="hidden" name="quota" value="$quota">
-                                    <input class="btn btn-default dropdown-btn-custom" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting, prerequisites/preclusions and quota">
+                                    <input class="btn btn-default dropdown-btn-custom" type="submit" value="Edit Specific Module Info" data-toggle="tooltip" data-placement="left" title="Edit the module's mounting, prerequisites/preclusions and quota">
                                 </form>
                             $if True:
                                 <form id="view-module-button" action="/viewModule"  method="get" class="no-padding-margin">
@@ -48,12 +48,12 @@ $var title:$title_string
                             <form id="view-students-planning-to-take-module" name="view-students-planning-to-take-module" action="/studentsAffectedByModule" method="get" class="no-padding-margin">
                                 <input type="hidden" name="code" value="$moduleCode">
                                 <input type="hidden" name="aysem" value="$aySem">
-                                <input type="submit" class="btn btn-default dropdown-btn-custom" value="View Students That Will Be Affected By This Module">
+                                <input type="submit" class="btn btn-default dropdown-btn-custom" value="View Students That Will Be Affected By This Module" data-toggle="tooltip" data-placement="left" title="Show list of students who are planning to take this module">
                             </form>
                             <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
                                 <input type="hidden" name="code" value="$moduleCode">
                                 <input type="hidden" name="aysem" value="$aySem">
-                                <input type="submit" class="btn btn-default dropdown-btn-custom" value="View Modules Overlapping With This Module">
+                                <input type="submit" class="btn btn-default dropdown-btn-custom" value="View Modules Overlapping With This Module" data-toggle="tooltip" data-placement="left" title="Show modules that are also offered in this AY-SEM">
                             </form>
                         </div>                                                                                  
                     </div>
