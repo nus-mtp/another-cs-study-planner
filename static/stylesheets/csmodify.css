@@ -207,3 +207,17 @@ tr > th {
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
 }
+
+.dropdown-btn-custom{
+    width: 100%;
+    align-self: flex-end;
+}
+
+.dropdown-btn-custom-main{
+    float: right;
+}
+
+.no-padding-margin{
+    padding: 0px;
+    margin: 0px;
+}
