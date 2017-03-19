@@ -3,6 +3,12 @@ $def with (moduleCode, aySem, mountingValue, quota, overlappingList)
 $ title_string = 'Editing ' + moduleCode + ' for ' + aySem
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ individualModuleInfo = ['/individualModuleInfo?code=' + moduleCode + '&amp;targetAY=' + aySem, 'Module Info for ' + aySem]
+$ editIndividualModule = ['#', title_string]
+$var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndividualModule]
 
 <body>
     <div class="container-block container">

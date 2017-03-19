@@ -12,8 +12,8 @@ $def with (page)
 		<script type="text/javascript" src="static/javascripts/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/dataTables.bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="static/javascripts/jquery.canvasjs.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/csmodify.js"></script>
-        
 	</head>
 
 	<body>
@@ -53,6 +53,7 @@ $def with (page)
 					<!--li><a href="#">View by Focus Area</a></li-->
 					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<li><a id="sidebar" href="/modifiedModules">Modified Modules</a></li>
+					<li><a id="sidebar" href="/moduleSpecificSize">Modules with Specific Class Size</a></li>
 					<!--li><a href="#">Sort/Filter Modules</a></li>
 					<li><a href="#">Recently Removed Modules</a></li-->
 					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
@@ -93,7 +94,15 @@ $def with (page)
 					<!--li><a href="#">Module Timeline</a></li-->
 				</ul>
 			</div>
-
+			<div class="container">
+				<ol class="breadcrumb">
+					$for entry in page.hierarchy:
+						$if entry[0] != '#':
+							<li><a href='$entry[0]'>$entry[1]</a></li>
+						$else:
+							<li class='active'>$entry[1]</li>
+				</ol>
+			</div>
 			$:page
 
 	</body>
