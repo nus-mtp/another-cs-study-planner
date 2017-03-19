@@ -12,6 +12,9 @@ from psycopg2.extensions import AsIs
 CONNECTION = components.database_adapter.connect_db()
 DB_CURSOR = CONNECTION.cursor()
 
+INDEX_FIRST_ELEM = 0
+INDEX_SECOND_ELEM = 1
+LENGTH_EMPTY = 0
 
 def get_all_modules():
     '''
@@ -535,8 +538,6 @@ def get_num_students_by_yr_study():
         e.g. [(1, 4), (2, 3)] means four year 1 students
         and two year 3 students
     '''
-    INDEX_FIRST_ELEM = 0
-
     sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
         " ORDER BY year"
     DB_CURSOR.execute(sql_command)
@@ -625,8 +626,6 @@ def get_num_students_by_focus_areas():
         Note: A student taking double focus on AI and Database will be
         reflected once for AI and once for database (i.e. double counting)
     '''
-    INDEX_FIRST_ELEM = 0
-
     table_with_non_zero_students = get_num_students_by_focus_area_non_zero()
     table_with_zero_students = get_focus_areas_with_no_students_taking()
 
@@ -926,6 +925,104 @@ def get_prerequisite(module_code):
     return DB_CURSOR.fetchall()
 
 
+def get_prerequisite_as_string(module_code):
+    '''
+        Returns a string of pre-requisites of specified module_code
+    '''
+    prerequisites = get_prerequisite(module_code)
+    prereq_list = convert_to_list(prerequisites)
+
+    # sort list of lists based on index (which is the first elem of each row)
+    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
+
+    return prereq_string
+
+
+def convert_list_of_prereqs_to_string(prereq_list):
+    '''
+        Converts given list of lists (prereq_list) into string form of prereqs.
+        Pre-condition: Given list must have the rows' first index sorted.
+        Example: [['0', 'CS1010'], ['0', 'CS1231'], ['1', 'CS2105']] will yield
+        the string (CS1010 or CS1231) and CS2105.
+        Same index elements have an "OR" relationship, different index elements
+        have an "AND" relationship.
+    '''
+    number_of_prereq = len(prereq_list)
+    if number_of_prereq == LENGTH_EMPTY:
+        return ""
+
+    required_string = ""
+    temp_list_for_or = list()
+    previous_index = None
+    for prereq_with_index in prereq_list:
+        current_index = prereq_with_index[INDEX_FIRST_ELEM]
+        current_prereq = prereq_with_index[INDEX_SECOND_ELEM]
+
+        if previous_index is None:
+            previous_index = current_index
+            temp_list_for_or.append(current_prereq)
+        else:
+            if previous_index == current_index:
+                temp_list_for_or.append(current_prereq)
+            else:
+                prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+                required_string = process_and_relation_prereq(required_string,
+                                                              prereq_of_or_string)
+                previous_index = current_index
+                temp_list_for_or = [current_prereq]
+
+    if len(required_string) == LENGTH_EMPTY:
+        # there is no 'and' relation
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or,
+                                                               False)
+        required_string = prereq_of_or_string
+    else:
+        # there is 'and' relation to process
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+        required_string = process_and_relation_prereq(required_string,
+                                                      prereq_of_or_string)
+
+    return required_string
+
+
+def convert_list_prereq_to_or_string(temp_list, to_add_brackets=True):
+    '''
+        Converts all elements in temp_list to a string separated by "or"
+    '''
+    number_of_prereq = len(temp_list)
+    if number_of_prereq == 1:
+        return temp_list[INDEX_FIRST_ELEM]
+    else:
+        # more than 1 prereq
+        required_string = " or ".join(temp_list)
+
+        if to_add_brackets:
+            required_string_with_brackets = "(" + required_string + ")"
+
+            return required_string_with_brackets
+        else:
+            return required_string
+
+
+def process_and_relation_prereq(existing_string, prereq_of_or_string):
+    '''
+        Appends the prereq_of_or_string into existing_string by building
+        "and" relations between existing prereqs in existing_string
+        with those in prereq_of_or_string
+    '''
+    existing_string_length = len(existing_string)
+
+    if existing_string_length == LENGTH_EMPTY:
+        return prereq_of_or_string
+    else:
+        and_string = " and "
+        required_string = existing_string + and_string + prereq_of_or_string
+
+        return required_string
+
+
 def delete_prerequisite(module_code, prereq_code):
     '''
         Delete a prerequisite from the prerequisite table.
@@ -935,6 +1032,69 @@ def delete_prerequisite(module_code, prereq_code):
                   "AND prerequisiteModuleCode = %s"
     try:
         DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def add_preclusion(module_code, preclude_code):
+    '''
+        Insert a preclusion into the precludes table.
+        Returns true if successful, false if duplicate primary key detected or
+        when module precludes itself (i.e. module_code == preclude_code) or
+        when invalid module/preclude code is given.
+    '''
+    if module_code == preclude_code:
+        return False
+
+    if not is_existing_module(module_code) or not is_existing_module(preclude_code):
+        return False
+
+    sql_command = "INSERT INTO precludes VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
+        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def get_preclusion(module_code):
+    '''
+        Get all preclusions of module_code from the precludes table.
+    '''
+    sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
+
+
+def get_preclusion_as_string(module_code):
+    '''
+        Returns a string of preclusions of specified module_code
+    '''
+    preclusions = get_preclusion(module_code)
+    preclude_list = convert_to_list(preclusions)
+    processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
+
+    preclude_string = ", ".join(processed_list)
+
+    return preclude_string
+
+
+def delete_preclusion(module_code, prereq_code):
+    '''
+        Delete a preclusion from the precludes table.
+        Returns true if successful, false otherwise.
+    '''
+    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
+                  "AND precludedByModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
         CONNECTION.commit()
     except psycopg2.IntegrityError:
         CONNECTION.rollback()
