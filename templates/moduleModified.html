@@ -162,16 +162,14 @@ $else:
                 $elif modify_type == "moduleDetails":
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
                     <br>
-                    $if len(targetModuleModifiedInfo) == 0:
+                    $if targetModuleModifiedInfo is None:
                         <div class="jumbotron text-center">
                             <h1><span class="glyphicon glyphicon-remove-circle"></span></h1>
                             <br>
                             <p>There are no changes to module details for this module.</p>
                         </div>
                     $else:
-                        $ module = None
-                        $for entry in targetModuleModifiedInfo:
-                            $ module = entry
+                        $ module = targetModuleModifiedInfo
                         
                         $ moduleCode = module[0][0]
                         $ moduleName = module[0][4]
@@ -520,7 +518,7 @@ $else:
                                                     <input class="btn btn-primary" type="submit" value="View Module"/>
                                                 </form-->
                                                 <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
-                                                    <input type="hidden" name="code" value="$module[0]">
+                                                    <input type="hidden" name="code" value="$module[0][0]">
                                                     <input type="hidden" name="restoreType" value="moduleDetails">
                                                     <!--input class="btn btn-primary" type="submit" value="Restore Details"/-->
                                                     <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Details"><span class="glyphicon glyphicon-refresh"></span></button>
