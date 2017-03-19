@@ -155,17 +155,11 @@ $var title:View Modified Modules
                     $ isDescModified = module[1][1]
                     $ isMcModified = module[1][2]
 
-                    $# stub for module name
                     $ originalName = module[0][1]
-                    $# stub for modified module name
                     $ modifiedName = module[0][4]
-                    $# stub for module description
                     $ originalDescription = module[0][2]
-                    $# stub for modified module description
                     $ modifiedDescription = module[0][5]
-                    $# stub for module MC
                     $ originalMc = module[0][3]
-                    $# stub for modified module MC
                     $ modifiedMc = module[0][6]
                     
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
@@ -177,19 +171,28 @@ $var title:View Modified Modules
                             <div class="panel panel-primary">
                                 <div class="panel-heading"><b>Name</b></div>
                                 <div class="panel-body">
-                                    $originalName
+                                    $if isNameModified:
+                                        <b>$originalName</b>
+                                    $else:
+                                        $originalName
                                 </div>
                             </div>
                             <div class="panel panel-primary">
                                 <div class="panel-heading"><b>Description</b></div>
                                 <div class="panel-body">
-                                    $originalDescription
+                                    $if isDescModified:
+                                        <b>$originalDescription</b>
+                                    $else:
+                                        $originalDescription
                                 </div>
                             </div>
                             <div class="panel panel-primary">
                                 <div class="panel-heading"><b>MCs</b></div>
                                 <div class="panel-body">
-                                    $originalMc
+                                    $if isMcModified:
+                                        <b>$originalMc</b>
+                                    $else:
+                                        $originalMc
                                 </div>
                             </div>
                         </div>
@@ -197,34 +200,43 @@ $var title:View Modified Modules
                             <h3 class="text-center">New Details</h3>
                             <br>
                             $if isNameModified:
-                                <div class="panel panel-warning">
-                                    <div class="panel-heading"><b>Name (changed)</b></div>
+                                <div class="panel panel-danger">
+                                    <div class="panel-heading"><b>Name</b></div>
+                                    <div class="panel-body">
+                                        <b>$modifiedName</b>
+                                    </div>
                             $else:
                                 <div class="panel panel-primary">
                                     <div class="panel-heading"><b>Name</b></div>
-                            <div class="panel-body">
-                                $modifiedName
-                            </div>
+                                        <div class="panel-body">
+                                            <i>(unchanged)</i>
+                                        </div>
                             </div>
                             $if isDescModified:
                                 <div class="panel panel-danger">
-                                    <div class="panel-heading"><b>Description (changed)</b></div>
+                                    <div class="panel-heading"><b>Description</b></div>
+                                    <div class="panel-body">
+                                        <b>$modifiedDescription</b>
+                                    </div>
                             $else:
                                 <div class="panel panel-primary">
                                     <div class="panel-heading"><b>Description</b></div>
-                            <div class="panel-body">
-                                $modifiedDescription
-                            </div>
+                                    <div class="panel-body">
+                                        <i>(unchanged)</i>
+                                    </div>
                             </div>
                             $if isMcModified:
-                                <div class="panel panel-warning">
-                                    <div class="panel-heading"><b>MCs (changed)</b></div>
+                                <div class="panel panel-danger">
+                                    <div class="panel-heading"><b>MCs</b></div>
+                                    <div class="panel-body">
+                                        <b>$modifiedMc</b>
+                                    </div>
                             $else:
                                 <div class="panel panel-primary">
                                     <div class="panel-heading"><b>MCs</b></div>
-                            <div class="panel-body">
-                                $modifiedMc
-                            </div>
+                                    <div class="panel-body">
+                                        <i>(unchanged)</i>
+                                    </div>
                             </div>
                         </div>
                     </div>
