@@ -9,6 +9,12 @@ $ overviewURL = '/viewModule'
 $ title_string = 'Module Info for ' + moduleCode + ' in ' + aySem
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ individualModuleInfo = ['#', 'Module Info for ' + aySem]
+
+$var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo]
 
 <script type="text/javascript">
 	var year_of_study_bar_values = [];
