@@ -18,7 +18,10 @@ $var title:Modules with Specific Class Size
                             <select class="form-control" name="sem" required>
                                 <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
                                 $for aysem in allAySems:
-                                    <option value="$aysem">$aysem</option>
+                                    $if ayOfInterest == aysem:
+                                        <option value="$aysem" selected>$aysem</option>
+                                    $else:
+                                        <option value="$aysem">$aysem</option>
                             </select>
                             <label for="low"> with class size between </label>
                             <input type="number" class="form-control" name="lowerClassSize" min="0" max="999" required>
