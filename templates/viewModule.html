@@ -26,6 +26,28 @@ $var title:$title_string
                 <h1 class="text-center"><b>Module Info Overview</b></h1>
                 <hr>
             </div>
+            <div class="row">
+                <!--buttons-->
+                <div class="input-group-btn dropdown-btm-custom">
+                    <button type="button" class="btn btn-primary btn-lg dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Actions</button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-item text-center">
+                            <form id="edit-module-button" name="edit-module-button" action="/editModule" method="post" class="no-padding-margin">
+                                <input type="hidden" name="status" value="load">
+                                <input type="hidden" name="code" value="$moduleCode">
+                                <input class="btn btn-default dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+                            </form>
+                        </div>
+                        <div class="dropdown-item text-center">
+                            <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
+                                <input type="hidden" name="code" value="$moduleCode">
+                                <input type="submit" class="btn btn-default dropdown-btn-custom" value="View Modules That Overlap With This Module.">
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 			<div class="row">
                 <!--module info-->
 				<div class="col-md-12 module-header">
@@ -165,24 +187,6 @@ $var title:$title_string
                     </div>
 				</div>
 			</div>
-            <div class="row text-center well">
-                <!--module statics button links-->
-                <h2><b>More Actions</b></h2>
-                <div class="col-md-6 text-center">
-                    <form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-                        <input type="hidden" name="status" value="load">
-                        <input type="hidden" name="code" value="$moduleCode">
-                        <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
-                    </form>
-                </div>
-                <div class="col-md-6 text-center">
-                    <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get">
-                        <input type="hidden" name="code" value="$moduleCode">
-                        <input type="submit" class="btn btn-lg btn-primary" value="View Modules That Overlap With This Module.">
-                    </form>
-                    
-                </div>
-            </div>
 		</div>
     </div>
 </div>

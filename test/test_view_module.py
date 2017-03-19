@@ -29,13 +29,12 @@ class TestCode(object):
     URL_VIEW_MODULE_VALID = '/viewModule?code=BT5110'
     URL_VIEW_MODULE_INVALID = '/viewModule?code=CS0123'
 
-    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
-                                   ' value="Edit General Module Info" ' +\
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
+                            'action="/editModule" method="post" class="no-padding-margin">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
+                                   'type="submit" value="Edit General Module Info" '+\
                                    'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description ' +\
-                                   'and MCs">'
+                                    'title="Edit the module\'s name, description and MCs">'
 
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
@@ -51,10 +50,14 @@ class TestCode(object):
 
     FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" '+\
                               'name="view-overlapping-with-module" '+\
-                              'action="/overlappingWithModule" '+\
-                              'method="get">'
-    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-lg btn-primary" '+\
-                                     'value="View Modules That Overlap With This Module.">'
+                              'action="/overlappingWithModule" method="get" '+\
+                              'class="no-padding-margin">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-default '+\
+                                     'dropdown-btn-custom" value="View Modules That '+\
+                                     'Overlap With This Module.">'
+    DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg '+\
+                         'dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" '+\
+                         'aria-haspopup="true" aria-expanded="false">More Actions</button>'
 
 
     def __init__(self):
@@ -199,6 +202,7 @@ class TestCode(object):
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
         root.mustcontain(self.FORM_OVERLAPPING_MODULE)
         root.mustcontain(self.FORM_OVERLAPPING_MODULE_BUTTON)
+        root.mustcontain(self.DROPDOWN_BTN)
 
 
     def test_goto_edit_general_info(self):
