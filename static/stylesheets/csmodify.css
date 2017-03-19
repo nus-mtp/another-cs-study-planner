@@ -169,13 +169,18 @@ tr > th {
 .module-info-wrapper {
 	padding: 0 2.5% 2.5% 2.5%;
 	border-right: 1px solid black;
-	height: 1500px;
+	height: 1700px;
 }
 
 .module-analysis-wrapper {
 	padding: 0 2.5% 2.5% 2.5%;
 	border-left: 1px solid black;
-	height: 1500px;
+	height: 1700px;
+}
+
+#quota-demand-chart {
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 /*************************************************************************/
@@ -217,4 +222,122 @@ tr > th {
 
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
+}
+
+/*******************************************************************************************/
+/* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
+/*******************************************************************************************/
+#enrollment-student-year-header {
+    margin-bottom: 20px;
+}
+
+#enrollment-student-year-table-container {
+    margin-top: 15px;
+}
+
+#enrollment-student-year-bar-chart {
+    width: 80%;
+    height: 350px;
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+#enrollment-student-year-pie-chart {
+    display: None;
+    height: 350px;
+}
+
+#enrollment-focus-area-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#enrollment-focus-area-table-container {
+    margin-bottom: 30px;
+}
+
+#enrollment-focus-area-bar-chart {
+    width: 92%;
+    margin-top: 20px;
+    margin-left: 4%;
+    margin-bottom: 30px;
+}
+
+#enrollment-focus-area-pie-chart {
+    display: None;
+    margin-bottom: 30px;
+}
+
+.enrollment-chart-button {
+    float: right;
+    margin-left: 5px;
+}
+
+.enrollment-chart-button-container {
+    margin-right: 5px;
+}
+
+/********************************************************************************/
+/* ==================== STYLING FOR MODULE-VIEW-AY-SEM PAGE =================== */
+/********************************************************************************/
+
+#module-view-student-year-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#module-view-student-year-bar-chart {
+    height: 350px;
+}
+
+#module-view-student-year-pie-chart {
+    display: None;   
+    height: 350px;
+}
+
+#module-view-focus-area-header {
+    margin-top: 20px;
+}
+
+#module-view-focus-area-bar-chart {
+    height: 350px;
+}
+
+#module-view-focus-area-pie-chart {
+    display: None;   
+    height: 350px;
+}
+
+.module-view-chart-button {
+    float: right;
+    margin-left: 5px;
+}
+
+.module-view-chart-button-container {
+    margin-top: 30px;
+    margin-right: -5px;
+    margin-bottom: 10px;
+}
+
+#focus-area-list {
+    display: block;
+    visibility: hidden;
+    width: 360px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    padding: 5px 0;
+    opacity: 0.8;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+#focus-area-list-button:hover + #focus-area-list {
+    visibility: visible;
+}
+
+#module-view-stats-footer {
+    margin-bottom: 30px;
 }

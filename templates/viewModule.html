@@ -16,48 +16,71 @@ $code:
 
 $ title_string = 'View Info for ' + moduleCode
 
+<script type="text/javascript">
+	var sem_1_quota = [];
+$for subplan in tentaMountingPlan[-2::-2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+$for subplan in fixedMountingPlan[0::2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+
+	var sem_1_demand = [];
+$for subplan in tentaMountingPlan[-2::-2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+$for subplan in fixedMountingPlan[0::2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+
+	var sem_2_quota = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+
+	var sem_2_demand = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+
+	var filler = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	filler.push({y: 0, label: "$aySem[0:8]"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	filler.push({y: 0, label: "$aySem[0:8]"});
+</script>
+<script type="text/javascript" src="static/javascripts/viewModule.js"></script>
+
 $var title:$title_string
 $ home = ['/', 'Home']
 $ moduleInfo = ['/modules', 'Module Information']
 $ viewModule = ['#', moduleCode]
 $var hierarchy = [home, moduleInfo, viewModule]
 
-<script>
-function scrollToTenta(element, duration) {
-	document.getElementById('editSpecificInfoWarning').style.display = "block";
-	document.getElementById('editSpecificInfoWarning').style.color = "red";
-
-	var startingY = window.pageYOffset;
-	var elementY = getPosY(element);
-	var diff = elementY - startingY;  
-	var start;
-
-	// Bootstrap our animation - it will get called right before next frame shall be rendered.
-	window.requestAnimationFrame(function step(timestamp) {
-		if (!start) start = timestamp
-		// Elapsed miliseconds since start of scrolling.
-		var time = timestamp - start
-		// Get percent of completion in range [0, 1].
-		var percent = Math.min(time / duration, 1)
-
-		window.scrollTo(0, startingY + diff * percent)
-
-		// Proceed with animation as long as we wanted it to.
-		if (time < duration) {
-			window.requestAnimationFrame(step)
-		}
-	});
-}
-
-function getPosY(element) {
-	var bodyRect = document.body.getBoundingClientRect(),
-    elemRect = document.getElementById(element).getBoundingClientRect(),
-    offset = elemRect.top - bodyRect.top;
-    return offset
-}
-</script>
-
-$var title:$title_string
 <!--bottom half module info-->
 <div class="container-fluid">
 	<div class="row"><!--left half of module info-->
@@ -268,6 +291,15 @@ $var title:$title_string
                             </tr>
                     </tbody>
                 </table>
+                <br>
+                <hr>
+                <h3 class="text-center">
+                	Module's Quota and Demand
+                </h3>
+                <div class="row">
+                	  <div id="quota-demand-chart" style="height: 300px; width: 100%;">
+ 					  </div>
+                </div>
             </div>
         </div>
     </div>

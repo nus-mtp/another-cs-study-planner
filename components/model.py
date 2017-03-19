@@ -718,15 +718,31 @@ def get_list_students_take_module(code, aysem):
         (matric number, year of study, focus area 1, focus area 2)
     '''
 
-    sql_command = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
-                "FROM studentPlans sp, student s, takesFocusArea tfa " + \
-                "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
-                "AND sp.studentid = s.nusnetid AND " + \
-                "sp.studentid = tfa.nusnetid"
+    sql_command_1 = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
+                    "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                    "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                    "AND sp.studentid = s.nusnetid AND " + \
+                    "sp.studentid = tfa.nusnetid"
 
-    DB_CURSOR.execute(sql_command, (code, aysem))
+    sql_command_2 = "SELECT sp2.studentid, s2.year " + \
+                    "FROM studentPlans sp2, student s2 " + \
+                    "WHERE sp2.moduleCode = %s AND sp2.acadYearAndSem = %s " + \
+                    "AND sp2.studentid = s2.nusnetid " +\
+                    "AND sp2.studentid NOT IN ( " +\
+                        "SELECT sp.studentid " + \
+                        "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                        "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                        "AND sp.studentid = s.nusnetid AND " + \
+                        "sp.studentid = tfa.nusnetid" + \
+                    ")"
 
+    DB_CURSOR.execute(sql_command_1, (code, aysem))
     current_list_of_students = DB_CURSOR.fetchall()
+
+    DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
+    list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
+    for student in list_of_students_taking_with_no_focus_areas:
+        current_list_of_students.append([student[0], student[1], "-", "-"])
 
     return replace_null_with_dash(current_list_of_students)
 
@@ -899,6 +915,15 @@ def clean_old_sessions(date_to_delete):
         CONNECTION.rollback()
         return False
     return True
+
+
+def get_all_focus_areas():
+    '''
+        Get all distinct focus areas
+    '''
+    sql_command = "SELECT DISTINCT name FROM focusarea"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def add_prerequisite(module_code, prereq_code, index):
