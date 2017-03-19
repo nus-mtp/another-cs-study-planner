@@ -239,9 +239,11 @@ class Modified(object):
         modified_modules_quota = []
         modified_modules_details = []
         modified_modules = []
-        if module_code is not None and (modify_type == "mounting"
-                                        or modify_type == "quota"
-                                        or modify_type == "moduleDetails"):
+        if module_code is not None:
+            module_info = model.get_module(module_code)
+            if module_info is None:
+                return RENDER.notfound("Invalid module code '" + module_code + "'")
+
             if modify_type == "mounting":
                 modified_modules = self.get_modules_with_modified_mounting()
                 module = [module for module in modified_modules if module[0] == module_code]
@@ -251,6 +253,8 @@ class Modified(object):
             elif modify_type == "moduleDetails":
                 modified_modules = self.get_modules_with_modified_details()
                 module = [module for module in modified_modules if module[0][0] == module_code]
+            else:
+                return RENDER.notfound("Invalid modify type '" + modify_type + "'")
 
             modified_modules = module
 
