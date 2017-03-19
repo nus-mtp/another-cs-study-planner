@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList, isStarred)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList, isStarred, prereq, preclude)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -15,6 +15,12 @@ $code:
         return 0
 
 $ title_string = 'View Info for ' + moduleCode
+
+$var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['#', moduleCode]
+$var hierarchy = [home, moduleInfo, viewModule]
 
 <script>
 function scrollToTenta(element, duration) {
@@ -94,10 +100,16 @@ $var title:$title_string
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
-					<p>--not parsed yet</p>
+					$if preclude == "":
+						<p>None</p>
+					$else:
+						<p>$preclude</p>
 					<br>
 					<h4><b>Module Prerequisites:</b></h4>
-					<p>--not parsed yet</p>
+					$if prereq == "":
+						<p>None</p>
+					$else:
+						<p>$prereq</p>
 					<br>
 				</div>
 				<div class="col-md-12">
