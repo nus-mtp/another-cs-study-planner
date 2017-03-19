@@ -2,8 +2,19 @@ $def with (modify_type, modifiedModulesSummary, modifiedModulesMounting, modifie
 
 $var title:View Modified Modules
 $ home = ['/', 'Home']
-$ modifiedModule = ['#', 'Modified Modules']
-$var hierarchy = [home, modifiedModule]
+$ modifiedModulePage = ['#', 'Modified Modules']
+$ modifiedModuleLink = ['/modifiedModules', 'Modified Modules']
+$if modify_type == "mounting":
+    $ modifyType = ['#', 'Modified Mounting of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$elif modify_type == "quota":
+    $ modifyType = ['#', 'Modified Quota of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$elif modify_type == "moduleDetails":
+    $ modifyType = ['#', 'Modified Module Details of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$else:
+    $var hierarchy = [home, modifiedModulePage]
 
 <div class="container-fluid">
     <div class="row">
