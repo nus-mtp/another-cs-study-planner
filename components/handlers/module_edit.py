@@ -118,6 +118,7 @@ class EditMountingInfo(object):
         data = web.input()
         module_code = data.code
         ay_sem = data.aySem
+
         try:
             quota = data.quota
             if quota == "":
@@ -128,13 +129,16 @@ class EditMountingInfo(object):
         old_mounting_value = data.oldMountingValue
         mounting_status = data.mountingStatus
 
-
         module_info = model.get_module(module_code)
+
         if module_info is None:
             outcome = False
         elif ay_sem not in self.list_of_future_ay_sems:
             outcome = False
-        elif quota < 0 or (quota is not None and type(quota) != int):
+        elif int(quota) < 0 and quota is not None:
+            # If quota is being set by the user, it should not fall below 0.
+            # Otherwise, if the user is not interested in leaving a value for
+            # the quota, leaving it blank is acceptable.
             outcome = False
         else:
             if mounting_status == "Mounted":
