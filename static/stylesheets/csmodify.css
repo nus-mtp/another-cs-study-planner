@@ -8,6 +8,7 @@ tr > th {
 	text-align: center;
 }
 
+
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
@@ -62,10 +63,8 @@ tr > th {
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
+td > a {
+    text-decoration: underline;
 }
 
 
@@ -78,9 +77,11 @@ tr > th {
     z-index: 1;
 }
 
+
 /*************************************************************************/
 /* ======================= STYLING FOR HOME PAGE ======================= */
 /*************************************************************************/
+
 #accordion .panel-heading {
     padding: 0;
 }
@@ -104,10 +105,10 @@ tr > th {
 }
 
 
-
 /*************************************************************************/
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */
 /*************************************************************************/
+
 #register-form-wrapper {
     border: 1px solid grey;
     margin: 0 auto;
@@ -116,6 +117,15 @@ tr > th {
 
 .account-form-wrapper > form > table {
     margin: 0 auto;
+}
+
+
+/*************************************************************************/
+/* =================== STYLING FOR 404 NOT-FOUND PAGE ================== */
+/*************************************************************************/
+
+#notfound-error-msg {
+    color: red;
 }
 
 /*************************************************************************/
@@ -132,7 +142,9 @@ tr > th {
 }
 
 #options {
-	height: 30%;
+    padding-bottom: 2.5%;
+	margin-left: 10%;
+    margin-right: 10%;
 }
 
 
@@ -164,14 +176,16 @@ tr > th {
 	height: 1500px;
 }
 
+
 /*************************************************************************/
-/* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
+/* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
 /*************************************************************************/
 
 .modules-taken-together{
     margin: 20px 0px;
     float: right;
 }
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
@@ -203,4 +217,16 @@ tr > th {
 
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
+}
+
+
+/*************************************************************************/
+/* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
+/*************************************************************************/
+.detail-change-text {
+    background-color: #f2f2f2;
+}
+
+tr[id*='modified-details-child-row'] {
+    background-color: #f2f2f2;
 }
