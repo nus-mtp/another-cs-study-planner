@@ -15,6 +15,7 @@ class TestCode(object):
 
     URL_NORMAL = '/studentsAffectedByModule?code=IT1005&aysem=AY+17%2F18+Sem+1'
     CONTENT_TITLE = 'Students Affected By Module Changes'
+    CONTENT_DESCRIPTION = '<p>Students who are planning to take this module.</p>'
     CONTENT_SUBTITLE = 'For <b>IT1005</b> in <b>AY 17/18 Sem 1</b>'
 
 
@@ -54,3 +55,4 @@ class TestCode(object):
         root = self.test_app.get(self.URL_NORMAL)
         root.mustcontain(self.CONTENT_TITLE)
         root.mustcontain(self.CONTENT_SUBTITLE)
+        root.mustcontain(self.CONTENT_DESCRIPTION)
