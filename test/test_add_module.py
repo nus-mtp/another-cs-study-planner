@@ -153,8 +153,10 @@ class TestCode(object):
 
         response = addModuleForm.submit()
 
-        response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE % self.TEST_ADD_MODULE_CODE_RELAXED.upper()))
-        response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT % self.TEST_ADD_MODULE_CODE_RELAXED.upper())
+        response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE %
+                              self.TEST_ADD_MODULE_CODE_RELAXED.upper()))
+        response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT %
+                              self.TEST_ADD_MODULE_CODE_RELAXED.upper())
 
         # For reusing data, delete it after it is successfully added.
         model.delete_module(self.TEST_ADD_MODULE_CODE_RELAXED)
