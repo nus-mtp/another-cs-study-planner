@@ -170,7 +170,7 @@ class IndividualModule(object):
         '''
         if not session.validate_session():
             raise web.seeother('/login')
-            
+
         input_data = web.input()
         module_code = input_data.code
         module_info = model.get_module(module_code)
