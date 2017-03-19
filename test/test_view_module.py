@@ -33,7 +33,7 @@ class TestCode(object):
                             'action="/editModule" method="post" class="no-padding-margin">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
                                    'type="submit" value="Edit General Module Info" '+\
-                                   'data-toggle="tooltip" data-placement="right" ' +\
+                                   'data-toggle="tooltip" data-placement="left" ' +\
                                     'title="Edit the module\'s name, description and MCs">'
 
     CONTENT_SUMMARY = "Module Info Overview"
@@ -53,8 +53,9 @@ class TestCode(object):
                               'action="/overlappingWithModule" method="get" '+\
                               'class="no-padding-margin">'
     FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-default '+\
-                                     'dropdown-btn-custom" value="View Modules That '+\
-                                     'Overlap With This Module.">'
+                                     'dropdown-btn-custom" value="View Modules Overlapping'+\
+                                    ' With This Module" data-toggle="tooltip" data-placement="left" '+\
+                                    'title="Show modules that are also offered in this AY-SEM">'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg '+\
                          'dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" '+\
                          'aria-haspopup="true" aria-expanded="false">More Actions</button>'

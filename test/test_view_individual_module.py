@@ -40,23 +40,27 @@ class TestCode(object):
                             'action="/editModule" method="post" class="no-padding-margin">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
                                    'type="submit" value="Edit General Module Info" data-toggle="tooltip"'+\
-                                   ' data-placement="right" title="Edit the module\'s name,'+\
+                                   ' data-placement="left" title="Edit the module\'s name,'+\
                                    ' description and MCs">'
     FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" name="edit-mounting-button" '+\
                                      'action="/editMounting" method="post" class="no-padding-margin">'
     FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
                                             'type="submit" value="Edit Specific Module Info" '+\
-                                            'data-toggle="tooltip" data-placement="right" title="Edit '+\
+                                            'data-toggle="tooltip" data-placement="left" title="Edit '+\
                                             'the module\'s mounting, prerequisites/preclusions and quota">'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
                              'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-default dropdown-btn-custom" '+\
-                                    'value="View Students That Will Be Affected By This Module">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="btn btn-default dropdown-btn-custom"'+\
+                                    ' value="View Students That Will Be Affected By This Module" '+\
+                                    'data-toggle="tooltip" data-placement="left" title="Show list of '+\
+                                    'students who are planning to take this module">'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
                                    ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="btn btn-default dropdown-btn-custom" '+\
-                                          'value="View Modules Overlapping With This Module">'
+                                          'value="View Modules Overlapping With This Module" data-toggle="tooltip"'+\
+                                          ' data-placement="left" title="Show modules that are also'+\
+                                          ' offered in this AY-SEM">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
