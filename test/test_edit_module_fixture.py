@@ -18,6 +18,10 @@ class TestCode(object):
     EDIT_MODULE_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_FORM_NAME = 'edit-module-form'
 
+    EDIT_MODULE_TITLE = ' <h1 class="row title text-center">Edit <b>General Information</b>'+\
+                        ' For <b>BT5110</b></h1>'
+    TESTING_MODULE = 'BT5110'
+
     def __init__(self):
         self.middleware = None
         self.test_app = None
@@ -48,7 +52,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
-        response.mustcontain('Edit: BT5110')
+        response.mustcontain(self.EDIT_MODULE_TITLE)
 
     def test_module_edit_submit_response(self):
         '''
@@ -63,7 +67,7 @@ class TestCode(object):
 
         assert_equal(goto_edit_response.status, 200)
         #successfully reached editmodule page
-        goto_edit_response.mustcontain('Edit: BT5110')
+        goto_edit_response.mustcontain(self.EDIT_MODULE_TITLE)
 
         edit_submit_button = goto_edit_response.forms__get()[self.EDIT_MODULE_FORM_NAME]
         submit_edit_response = edit_submit_button.submit()
@@ -72,7 +76,7 @@ class TestCode(object):
 
         #successfully reached original moduleview page
         root.mustcontain("Module Info Overview")
-        root.mustcontain("BT5110")
+        root.mustcontain(self.TESTING_MODULE)
 
 
     def test_access_module_edit_from_individual_module_view(self):
@@ -86,4 +90,4 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
-        response.mustcontain('Edit: BT5110')
+        response.mustcontain(self.EDIT_MODULE_TITLE)
