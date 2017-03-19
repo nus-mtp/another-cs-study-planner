@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, overlappingList, isStarred, prereq, preclude)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -17,7 +17,47 @@ $code:
 $ title_string = 'View Info for ' + moduleCode
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['#', moduleCode]
+$var hierarchy = [home, moduleInfo, viewModule]
 
+<script>
+function scrollToTenta(element, duration) {
+	document.getElementById('editSpecificInfoWarning').style.display = "block";
+	document.getElementById('editSpecificInfoWarning').style.color = "red";
+
+	var startingY = window.pageYOffset;
+	var elementY = getPosY(element);
+	var diff = elementY - startingY;  
+	var start;
+
+	// Bootstrap our animation - it will get called right before next frame shall be rendered.
+	window.requestAnimationFrame(function step(timestamp) {
+		if (!start) start = timestamp
+		// Elapsed miliseconds since start of scrolling.
+		var time = timestamp - start
+		// Get percent of completion in range [0, 1].
+		var percent = Math.min(time / duration, 1)
+
+		window.scrollTo(0, startingY + diff * percent)
+
+		// Proceed with animation as long as we wanted it to.
+		if (time < duration) {
+			window.requestAnimationFrame(step)
+		}
+	});
+}
+
+function getPosY(element) {
+	var bodyRect = document.body.getBoundingClientRect(),
+    elemRect = document.getElementById(element).getBoundingClientRect(),
+    offset = elemRect.top - bodyRect.top;
+    return offset
+}
+</script>
+
+$var title:$title_string
 <!--bottom half module info-->
 <div class="container-fluid">
 	<div class="row"><!--left half of module info-->
@@ -29,14 +69,26 @@ $var title:$title_string
 			<div class="row">
 				<div class="col-md-12 module-header">
 					<div class="page-header">
-						<h1><b>$moduleCode</b></h1>
+						<h1>
+							<b>$moduleCode</b> 
+							$if isStarred:
+								<a href="/starModule?code=$moduleCode&amp;action=unstar&amp;return_path=/viewModule?code=$moduleCode" class="star">
+									<span class="glyphicon glyphicon-star"></span>
+								</a>
+							$else:
+								<a href="/starModule?code=$moduleCode&amp;action=star&amp;return_path=/viewModule?code=$moduleCode" class="star">
+									<span class="glyphicon glyphicon-star-empty"></span>
+								</a>
+						</h1>
 						<h3>$moduleName ($moduleMC MCs)</h3>
 						<br>
-						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="post">
-							<input type="hidden" name="status" value="load">
+						<form id="edit-module-button" name="edit-module-button" action="/editModule" method="get">
 							<input type="hidden" name="code" value="$moduleCode">
-                            <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description and MCs">
+                            <input class="btn btn-lg btn-primary" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
                         </form>
+                        <button type="button" style="margin-bottom: 15px;" class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota" onclick="scrollToTenta('infoTentaHeader', 750);">Edit Specific Module Info</button>
+                        <br>
+                        <button type="button" class="btn btn-lg btn-primary" onclick="window.location='/modules';">Back to Module List</button>
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -48,38 +100,39 @@ $var title:$title_string
 					</p>
 					<br>
 					<h4><b>Module Preclusions:</b></h4>
-					<p>--not parsed yet</p>
+					$if preclude == "":
+						<p>None</p>
+					$else:
+						<p>$preclude</p>
 					<br>
 					<h4><b>Module Prerequisites:</b></h4>
-					<p>--not parsed yet</p>
-					<br>
-					<h4><b>Class Quota for AY-Semesters:</b></h4>
+					$if prereq == "":
+						<p>None</p>
+					$else:
+						<p>$prereq</p>
 					<br>
 				</div>
 				<div class="col-md-12">
 					<!--mountingAndQuota-->
-					<h4><b>Current AY (Fixed)</b></h4>
+					<h4><b>Information for Current AY (Fixed):</b></h4>
 					$if moduleStatus[0:3] == "New":
 						<h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
 					$else:
 						<table class="table table-bordered table-hover text-center" id="mountingAndQuota">
 							<thead>
 								<tr>
-									<th>AY/Sem</th>
+									<th style="width:25%;">AY/Sem</th>
 									<th>Mounted</th>
 									<th>Quota</th>
 									<th>Students Planning to Take</th>
+									<th style="width:25%;">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 							$for entry in fixedMountingPlan:
 								<tr>
 									<td>
-										<form action="/individualModuleInfo" method="get">
-											<input type="hidden" name="code" value="$moduleCode">
-											<input type="hidden" name="targetAY" value="$entry[0]">
-											<input class="btn btn-primary" type="submit" value="$entry[0]">
-										</form>	
+										$entry[0]
 									</td>
 								$if entry[1] == 1:
 									<td>
@@ -109,29 +162,35 @@ $var title:$title_string
 										<td>
 											$numberTaking
 										</td>
+								$if True:
+									<td>
+										<form action="/individualModuleInfo" method="get">
+											<input type="hidden" name="code" value="$moduleCode">
+											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input class="btn btn-primary" type="submit" value="View">
+										</form>
+									</td>								
 								</tr>
 							</tbody>
 						</table>
-					<h4><b>Future AYs (Tentative)</b></h4>
+					<br>
+					<h4 id="infoTentaHeader"><b>Information for Future AYs (Tentative):</b></h4>
+					<h4 id="editSpecificInfoWarning" style="font-color:red; display:none;">Please click on the future AY-Semester that you want to edit</h4>
 					<table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
 						<thead>
 							<tr>
-								<th>AY/Sem</th>
+								<th style="width:25%;">AY/Sem</th>
 								<th>Mounted</th>
 								<th>Quota</th>
 								<th>Students Planning to Take</th>
+								<th style="width:25%;">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 						$for entry in tentaMountingPlan:
 							<tr>
 								<td>
-									<form action="/individualModuleInfo" method="get">
-										<input type="hidden" name="code" value="$moduleCode">
-										<input type="hidden" name="targetAY" value="$entry[0]">
-										<input class="btn btn-primary" type="submit" value="$entry[0]">
-									</form>
-								</td>
+									$entry[0]
 								$if entry[1] == 1:
 									<td>
 										<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
@@ -160,6 +219,19 @@ $var title:$title_string
 										<td>
 											$numberTaking
 										</td>
+								$if True:
+									<td>
+										<form style="display:inline-block" action="/individualModuleInfo" method="get">
+											<input type="hidden" name="code" value="$moduleCode">
+											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input class="btn btn-primary" type="submit" value="View">
+										</form>
+										<form style="display:inline-block" action="/editMounting" method="get">
+											<input type="hidden" name="code" value="$moduleCode">
+											<input type="hidden" name="aySem" value="$entry[0]">
+											<input class="btn btn-primary" type="submit" value="Edit">
+										</form>
+									</td>
 								</tr>
 						</tbody>
 					</table>

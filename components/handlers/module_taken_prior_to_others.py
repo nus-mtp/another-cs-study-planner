@@ -83,7 +83,7 @@ class TakePriorTo(object):
             return Outcome().POST("get_module", False, module_A)
         module_data = model.get_module(module_B.upper())
         if module_data is None:
-            return Outcome().POST("get_module", False, module_B)
+            return Outcome().POST("module_taken_prior", False, module_B)
 
         student_counts = model.get_number_of_students_who_took_modA_prior_to_modB(module_A.upper(),
                                                                                   module_B.upper(),

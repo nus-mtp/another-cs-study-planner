@@ -3,6 +3,10 @@ $def with (selectedAY, fullMountingPlan)
 $ title_string = 'Tentative Module Mounting In ' + selectedAY
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ tentativeMounting = ['#', title_string]
+
+$var hierarchy = [home, tentativeMounting]
 
 <div class="container-fluid">
     <div class="row">
@@ -10,16 +14,17 @@ $var title:$title_string
             <h1 class="text-center"><b>Module Mountings for <u>$selectedAY</u></b></h1>
             <p class="text-center">Shows the <b>tentative</b> module mountings for the AY <b>one year after the current AY</b>.</p>
             <br>
-            <div id="options">
-                <h2>Options:</h2>
-                <form class="navForm" action="/modules" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Module Information" data-toggle="tooltip" data-placement="right" title="See all modules that exist in the system">
-                </form>
-                <form class="navForm" action="/moduleMountingFixed" method="post">
-                    <input class="btn btn-primary" type="submit" value="Go To Fixed Module Mountings" data-toggle="tooltip" data-placement="right" title="See fixed module mountings for the current AY">
-                </form>
+            <div class="row" id="options">
+                <h2 class="text-center">Options:</h2>
+                <div class="col-md-12 text-center">
+                    <form class="navForm" action="/modules" method="post">
+                        <input class="btn btn-primary" type="submit" value="Go To Module Information" data-toggle="tooltip" data-placement="right" title="See all modules that exist in the system">
+                    </form>
+                    <form class="navForm" action="/moduleMountingFixed" method="post">
+                        <input class="btn btn-primary" type="submit" value="Go To Module Mountings for Current AY" data-toggle="tooltip" data-placement="right" title="See fixed module mountings for current AY">
+                    </form>
+                </div>
             </div>
-            <br>
             <br>
             <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
                 <thead>

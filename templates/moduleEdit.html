@@ -8,7 +8,12 @@ $ moduleMC = moduleInfo[3]
 $ title_string = 'Editing ' + moduleCode
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInformation = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ editModule = ['#', 'Edit: ' + moduleCode]
 
+$var hierarchy = [home, moduleInformation, viewModule, editModule]
 
 <body>
     <div class="container-block container">
@@ -31,8 +36,18 @@ $var title:$title_string
                             <label for="description">Description</label>
                             <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$moduleDescription</textarea>
                         </div>
-                        <input type="hidden" name="status" value="submit" required>
-                        <input class="btn btn-primary" type="submit" value="Submit" />
+                        <div class="form-group">
+                            <label for="preclusion">Preclusion</label>
+                            <p>-- edit function is not available yet.</p>
+                            <!--textarea class="form-control" id="preclusion" placeholder="e.g. CS1010"></textarea-->
+                        </div>
+                        <div class="form-group">
+                            <label for=" prerequisite"> Prerequisite</label>
+                            <p>-- edit function is not available yet.</p>
+                            <!--textarea class="form-control" id=" prerequisite" placeholder="e.g. CS1010"></textarea-->
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
+                        <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/viewModule?code=$moduleInfo[0]';}">Cancel</button>
                     </form>
                 </div>
                 <br>

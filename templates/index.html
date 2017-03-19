@@ -1,4 +1,6 @@
 $var title:Home
+$ home = ['#', 'Home']
+$var hierarchy = [home]
 
 <h1 class="text-center"><b>Welcome to CSModify</b></h1>
 <br>
@@ -21,10 +23,10 @@ $var title:Home
                             <li><a id="home-page" href="/modules">Module Information</a></li>
                             <li><a id="home-page" href="/modifiedModules">Modified Modules</a></li>
                             <!--li>Sort/Filter Modules</li>
-                            <li>Recently Removed Modules</li>
-                            <li>Starred Modules</li-->
-                            <li><a id="home-page" href="/moduleMountingFixed">View Modules For Current AY</a></li>
-                            <li><a id="home-page" href="/moduleMountingTentative">View Modules For Next AY</a></li>
+                            <li>Recently Removed Modules</li>-->
+                            <li><a id="home-page" href="/starredModules">Starred Modules</a></li>
+                            <li><a id="home-page" href="/moduleMountingFixed">View Module Mountings For Current AY</a></li>
+                            <li><a id="home-page" href="/moduleMountingTentative">View Module Mountings For Next AY</a></li>
                             <!--li>Past Module Demand</li-->
                         </div>
                     </div>
@@ -63,11 +65,14 @@ $var title:Home
                             <li>Prior Modules Taken
                                 <ul>
                                     <li><a id="home-page" href="/moduleTakenPriorToOthers">Before Specified Module</a></li>
-                                    <!--<li>Before Internship</li>-->
+                                    <li><a id="home-page" href="/moduleTakenPriorToInternship">Before Internship</a></li>
                                 </ul>
                             </li>
-                            <!--li>Module Info by Semester</li>
-                            -->
+                            <li>Module Info by Semester
+                                <ul>
+                                    <li><a id="home-page" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
+                                </ul>
+                            </li>
                         </div>
                     </div>
                 </div>
@@ -88,8 +93,7 @@ $var title:Home
                                     <li>In Specific Semester</li>
                                 </ul-->
                             <li><a id="home-page" href="/studentEnrollment">Student Enrollment Info</a></li>
-                            <!--li>Module Timeline</li>
-                            <li>Non-Overlapping Modules</li-->
+                            <!--li>Module Timeline</li-->
                         </div>
                     </div>
                 </div>
