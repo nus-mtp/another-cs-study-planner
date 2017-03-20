@@ -211,6 +211,12 @@ tr > th {
 .dropdown-btn-custom{
     width: 100%;
     align-self: flex-end;
+    background-color: white;
+    border: 0px;
+}
+
+.dropdown-btn-custom:hover{
+    background-color: gainsboro;
 }
 
 .dropdown-btn-custom-main{
