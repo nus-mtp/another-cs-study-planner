@@ -31,7 +31,7 @@ class TestCode(object):
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
                             'action="/editModule" method="post" class="no-padding-margin">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-default dropdown-btn-custom" '+\
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" '+\
                                    'type="submit" value="Edit General Module Info" '+\
                                    'data-toggle="tooltip" data-placement="left" ' +\
                                     'title="Edit the module\'s name, description and MCs">'
@@ -52,13 +52,13 @@ class TestCode(object):
                               'name="view-overlapping-with-module" '+\
                               'action="/overlappingWithModule" method="get" '+\
                               'class="no-padding-margin">'
-    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="btn btn-default '+\
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="'+\
                                      'dropdown-btn-custom" value="View Modules Overlapping'+\
                                     ' With This Module" data-toggle="tooltip" data-placement="left" '+\
                                     'title="Show modules that are also offered in this AY-SEM">'
-    DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg '+\
-                         'dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" '+\
-                         'aria-haspopup="true" aria-expanded="false">More Actions</button>'
+    DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
+                   'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
+                   'aria-expanded="false">More Actions <span class="caret"></span></button>'
 
 
     def __init__(self):
