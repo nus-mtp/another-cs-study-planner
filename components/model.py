@@ -863,7 +863,7 @@ def delete_student_plan(student_id, module_code, ay_sem):
     CONNECTION.commit()
 
 
-def get_number_of_students_taking_module(module_code, ay_sem):
+def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
     '''
         Retrieves the number of students who have taken or are taking the module
         in the target AY-Sem

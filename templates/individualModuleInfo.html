@@ -1,4 +1,4 @@
-$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, isStarred, focus_areas, focus_area_acronyms, student_year_counts, focus_area_counts)
+$def with (moduleInfo, isFutureAY, aySem, mountingStatus, quota, numStudents, isStarred, focus_areas, focus_area_acronyms, student_year_counts, focus_area_counts)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -120,6 +120,10 @@ $for area in focus_area_acronyms:
 							?
 						$else:
 							$quota
+					</h4>
+					<br>
+					<h4><b>Number of Students Taking:&nbsp;&nbsp;&nbsp;</b>
+						$numStudents
 					</h4>
 					<hr>
 				</div>

@@ -180,6 +180,8 @@ class IndividualModule(object):
 
         # Get mounting status, quota and number of students taking
         self.load_mounting_info(module_code, ay_sem)
+        student_count = model.get_number_of_students_taking_module_in_ay_sem(module_code,
+                                                                             ay_sem)
 
         # Check if the selected AY-Sem is in the current AY
         # (To determine whether to display the 'Edit Specific Info' button)
@@ -195,6 +197,6 @@ class IndividualModule(object):
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            ay_sem, self.mounting_status,
-                                           self.quota, is_starred,
+                                           self.quota, student_count, is_starred,
                                            self.focus_areas, self.focus_area_acronyms,
                                            self.student_year_counts, self.focus_area_counts)
