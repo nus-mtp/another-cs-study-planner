@@ -1334,6 +1334,17 @@ def get_mod_before_intern(ay_sem):
 
 
 def validate_input(input_data, input_types):
+    '''
+        Validates that the GET input data (in the URL) is valid.
+
+        input_types indicate the list of data types to validate.
+        e.g. if GET input contains 'code' and 'aysem', then input_types = ["code", "aysem"]
+
+        An input is considered valid if:
+        1) The value was specified and 
+        2) The value exists in the system
+        If any input is invalid, return 404 page.
+    '''
     for input_type in input_types:
         if input_type == "code":
             try:
@@ -1343,7 +1354,7 @@ def validate_input(input_data, input_types):
                 raise web.notfound(error)
             module_exist = is_existing_module(module_code)
             if not module_exist:
-                error = RENDER.notfound('Invalid module code "' + module_code + '"')
+                error = RENDER.notfound('Module code "' + module_code + '" does not exist in our system')
                 raise web.notfound(error)
         elif input_type == "aysem":
             try:
@@ -1353,6 +1364,6 @@ def validate_input(input_data, input_types):
                 raise web.notfound(error)
             is_aysem_valid = is_aysem_in_system(ay_sem)
             if not is_aysem_valid:
-                error = RENDER.notfound('Invalid AY-Semester "' + ay_sem + '"')
+                error = RENDER.notfound('AY-Semester "' + ay_sem + '" does not exist in our system')
                 raise web.notfound(error)
     return input_data
