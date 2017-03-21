@@ -1200,7 +1200,7 @@ def is_aysem_in_list(given_aysem, given_list):
 
 def is_aysem_in_system(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
     '''
-        Returns true if given aysem is found inside the system
+        Returns the aysem if given aysem is found inside the system, otherwise return False
     '''
     current_ay = get_current_ay()
     ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
@@ -1209,7 +1209,12 @@ def is_aysem_in_system(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
         target_ay = get_next_ay(target_ay)
         ay_sems_in_system.append(target_ay+" Sem 1")
         ay_sems_in_system.append(target_ay+" Sem 2")
-    return ay_sem in ay_sems_in_system
+    valid_aysem = False
+    for i in range(len(ay_sems_in_system)):
+        if ay_sem.upper() == ay_sems_in_system[i].upper():
+            valid_aysem = ay_sems_in_system[i]
+            break
+    return valid_aysem
 
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
@@ -1352,18 +1357,22 @@ def validate_input(input_data, input_types):
             except AttributeError:
                 error = RENDER.notfound('Module code is not specified')
                 raise web.notfound(error)
-            module_exist = is_existing_module(module_code)
+            module_exist = is_existing_module(module_code.upper())
             if not module_exist:
                 error = RENDER.notfound('Module code "' + module_code + '" does not exist in our system')
                 raise web.notfound(error)
+            else:
+                input_data.code = module_code.upper()
         elif input_type == "aysem":
             try:
                 ay_sem = input_data.aysem
             except AttributeError:
                 error = RENDER.notfound('AY-Semester is not specified')
                 raise web.notfound(error)
-            is_aysem_valid = is_aysem_in_system(ay_sem)
-            if not is_aysem_valid:
+            valid_aysem = is_aysem_in_system(ay_sem)
+            if not valid_aysem:
                 error = RENDER.notfound('AY-Semester "' + ay_sem + '" does not exist in our system')
                 raise web.notfound(error)
+            else:
+                input_data.aysem = valid_aysem
     return input_data
