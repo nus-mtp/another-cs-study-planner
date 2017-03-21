@@ -56,9 +56,8 @@ class TestCode(object):
     FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
                               ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
     FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Modules'+\
-                                     ' Overlapping With This Module" data-toggle="tooltip" '+\
-                                     'data-placement="left" title="Show modules that are also offered'+\
-                                     ' in this AY-SEM">'
+                                     ' Overlapping With This Module" data-toggle="tooltip" data-placement="left"'+\
+                                     ' title="Show modules that are also taken with this module">'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
                    'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
                    'aria-expanded="false">More Actions <span class="caret"></span></button>'
