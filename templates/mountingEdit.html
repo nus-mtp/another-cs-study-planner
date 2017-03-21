@@ -26,8 +26,8 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                             <!--mounting status-->
                             <label>Mounting Status:</label><br>
                             $if mountingValue == "1":
-                                <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Mounted" checked="checked"> Mounted<br>
-                                <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Not Mounted"> Not Mounted
+                                <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Mounted" checked="checked"> Mounted<br>
+                                <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Not Mounted"> Not Mounted
                             $else:
                                 <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Mounted"> Mounted<br>
                                 <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Not Mounted" checked="checked"> Not Mounted
