@@ -20,5 +20,6 @@ class OverlappingWithModule(object):
 
         data_input = web.input()
         code = data_input.code
+        aysem = data_input.aysem
         lst_of_mods = model.get_mod_taken_together_with(code)
-        return RENDER.overlappingWithModule(code, lst_of_mods)
+        return RENDER.overlappingWithModule(code, aysem, lst_of_mods)

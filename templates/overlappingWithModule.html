@@ -1,4 +1,4 @@
-$def with (moduleCode, overlappingList)
+$def with (moduleCode, aysem, overlappingList)
 
 $ title_string = 'Modules Overlapping with ' + moduleCode
 $var title:$title_string
@@ -7,12 +7,14 @@ $ home = ['/', 'Home']
 $ moduleInfo = ['/modules', 'Module Information']
 $ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
 $ overlapWithThisModule = ['#', 'Overlap with ' + moduleCode]
+
 $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
 
 <div class="container container-fluid">
     <div class="row">
     <!--title-->
-        <h1 class="text-center">Modules Overlapping with <b>$moduleCode</b></h1>
+        <h1 class="text-center">Modules Overlapping with <b>$moduleCode</b> for <b>$aysem</b></h1>
+        <p class="text-center">Shows all modules taken together with this module at a specified semester.</p>
     </div>
     <div class="row">
     <!--table-->
