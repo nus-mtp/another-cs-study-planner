@@ -65,5 +65,10 @@ RENDER = web.template.render('templates', base='base', globals={'web':web})
 '''
 APP = web.application(URLS, globals())
 
+def notfound():
+    return web.notfound(str(RENDER.notfound(message="The page you specified with the URL does not exist.")))
+
+APP.notfound = notfound
+
 if __name__ == '__main__':
     APP.run()
