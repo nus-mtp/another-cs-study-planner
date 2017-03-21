@@ -14,13 +14,13 @@ class TestCode(object):
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                  'value="Go To Module Mountings for Current AY" ' +\
-                                 'data-toggle="tooltip" data-placement="right" ' +\
+                                 'data-toggle="tooltip" data-placement="bottom" ' +\
                                  'title="See fixed module mountings for current AY">'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
     FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                      'value="Go To Module Mountings for Other AYs" ' +\
-                                     'data-toggle="tooltip" data-placement="right" ' +\
+                                     'data-toggle="tooltip" data-placement="bottom" ' +\
                                      'title="See tentative module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
