@@ -154,7 +154,7 @@ td > a {
 /* ================== STYLING FOR MODULE-LISTING PAGE ================== */
 /*************************************************************************/
 
-#form-wrapper, #add-module-form-wrapper, #module-mounting-options, #options {
+#form-wrapper, #add-module-form-wrapper, #module-mounting-options {
 	border: 1px solid black;
 	padding: 1% 5%;
 }
@@ -163,10 +163,8 @@ td > a {
 	height: 400px;
 }
 
-#options {
-    padding-bottom: 2.5%;
-	margin-left: 10%;
-    margin-right: 10%;
+#options > div > * {
+    display: inline;
 }
 
 
