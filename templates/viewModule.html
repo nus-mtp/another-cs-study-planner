@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning)
+$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, isStarred, prereq, preclude)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -16,7 +16,70 @@ $code:
 
 $ title_string = 'View Info for ' + moduleCode
 
+<script type="text/javascript">
+	var sem_1_quota = [];
+$for subplan in tentaMountingPlan[-2::-2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+$for subplan in fixedMountingPlan[0::2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+
+	var sem_1_demand = [];
+$for subplan in tentaMountingPlan[-2::-2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+$for subplan in fixedMountingPlan[0::2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+
+	var sem_2_quota = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	$ quota = subplan[2]
+	$if quota is None or quota == "-":
+		$ quota = 0
+	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+
+	var sem_2_demand = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	$ numberTaking = getNumStudents(aySem)
+	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+
+	var filler = [];
+$for subplan in tentaMountingPlan[-1::-2]:
+	$ aySem = subplan[0]
+	filler.push({y: 0, label: "$aySem[0:8]"});
+$for subplan in fixedMountingPlan[1::2]:
+	$ aySem = subplan[0]
+	filler.push({y: 0, label: "$aySem[0:8]"});
+</script>
+<script type="text/javascript" src="static/javascripts/viewModule.js"></script>
+
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['#', moduleCode]
+$var hierarchy = [home, moduleInfo, viewModule]
 
 <div class="container container-block">
 	<div class="row">
@@ -32,10 +95,9 @@ $var title:$title_string
                     <button type="button" class="btn btn-primary btn-lg dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Actions <span class="caret"></span></button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-item text-center">
-                            <form id="edit-module-button" name="edit-module-button" action="/editModule" method="post" class="no-padding-margin">
-                                <input type="hidden" name="status" value="load">
+                            <form id="edit-module-button" name="edit-module-button" action="/editModule" method="get" class="no-padding-margin">
                                 <input type="hidden" name="code" value="$moduleCode">
-                                <input class="dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="left" title="Edit the module's name, description and MCs">
+                                <input class="dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="left" title="Edit the module's name, description, MC, pre-requisites and preclusions">
                             </form>
                         </div>
                         <div class="dropdown-item text-center">
@@ -43,7 +105,6 @@ $var title:$title_string
                                 <input type="hidden" name="code" value="$moduleCode">
                                 <input type="submit" class="dropdown-btn-custom" value="View Modules Overlapping With This Module" data-toggle="tooltip" data-placement="left" title="Show modules that are also offered in this AY-SEM">
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -53,9 +114,22 @@ $var title:$title_string
 				<div class="col-md-12 module-header">
                     <div class="row">
                         <div class="page-header">
-                            <h1><b>$moduleCode</b></h1>
+                            <h1><b>$moduleCode</b>
+                                $if isStarred:
+                                    <a href="/starModule?code=$moduleCode&amp;action=unstar&amp;return_path=/viewModule?code=$moduleCode" class="star">
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </a>
+                                $else:
+                                    <a href="/starModule?code=$moduleCode&amp;action=star&amp;return_path=/viewModule?code=$moduleCode" class="star">
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    </a>
+                            </h1>
                             <h3>$moduleName ($moduleMC MCs)</h3>
                             <br>
+                            
+                            <button type="button" style="margin-bottom: 15px;" class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota" onclick="scrollToTenta('infoTentaHeader', 750);">Edit Specific Module Info</button>
+                            <br>
+                            <button type="button" class="btn btn-lg btn-primary" onclick="window.location='/modules';">Back to Module List</button>
                         </div>
                     </div>
                     <div class="row">
@@ -67,92 +141,98 @@ $var title:$title_string
                         </p>
                         <br>
                         <h4><b>Module Preclusions:</b></h4>
-                        <p>--not parsed yet</p>
+                        $if preclude == "":
+                            <p>None</p>
+                        $else:
+                            <p>$preclude</p>
                         <br>
                         <h4><b>Module Prerequisites:</b></h4>
-                        <p>--not parsed yet</p>
-                        <br>
-                        <h4><b>Class Quota for AY-Semesters:</b></h4>
+                        $if prereq == "":
+                            <p>None</p>
+                        $else:
+                            <p>$prereq</p>
                         <br>
                     </div>
                     <div class="row">
                         <!--mountingAndQuota-->
-                        <h4><b>Current AY (Fixed)</b></h4>
+                        <h4><b>Information for Current AY (Fixed)</b></h4>
                         $if moduleStatus[0:3] == "New":
                             <h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
                         $else:
                             <table class="table table-bordered table-hover text-center" id="mountingAndQuota">
-                                <thead>
-                                    <tr>
-                                        <th>AY/Sem</th>
-                                        <th>Mounted</th>
-                                        <th>Quota</th>
-                                        <th>Students Planning to Take</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                $for entry in fixedMountingPlan:
-                                    <tr>
-                                        <td>
-                                            <form action="/individualModuleInfo" method="get">
-                                                <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="targetAY" value="$entry[0]">
-                                                <input class="btn btn-primary" type="submit" value="$entry[0]">
-                                            </form>	
-                                        </td>
-                                    $if entry[1] == 1:
-                                        <td>
-                                            <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                                        </td>
-                                    $elif entry[1] == 0:
-                                        <td>
-                                            <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
-                                        </td>
-                                    $elif entry[1] == -1:
-                                        <td>
-                                            <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                                        </td>
-                                    $ numberTaking = getNumStudents(entry[0])
-                                    $if True:
-                                        $if entry[2] == None:
-                                            <td>
-                                                ?
-                                            </td>
-                                            <td>
-                                                $numberTaking
-                                            </td>
-                                        $else:
-                                            <td>
-                                                $entry[2]
-                                            </td>
-                                            <td>
-                                                $numberTaking
-                                            </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+							<thead>
+								<tr>
+									<th style="width:25%;">AY/Sem</th>
+									<th>Mounted</th>
+									<th>Quota</th>
+									<th>Students Planning to Take</th>
+									<th style="width:25%;">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+							$for entry in fixedMountingPlan:
+								<tr>
+									<td>
+										$entry[0]
+									</td>
+								$if entry[1] == 1:
+									<td>
+										<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+									</td>
+								$elif entry[1] == 0:
+									<td>
+										<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+									</td>
+								$elif entry[1] == -1:
+									<td>
+										<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+									</td>
+								$ numberTaking = getNumStudents(entry[0])
+								$if True:
+									$if entry[2] == None:
+										<td>
+											?
+										</td>
+										<td>
+											$numberTaking
+										</td>
+									$else:
+										<td>
+											$entry[2]
+										</td>
+										<td>
+											$numberTaking
+										</td>
+								$if True:
+									<td>
+										<form action="/individualModuleInfo" method="get">
+											<input type="hidden" name="code" value="$moduleCode">
+											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input class="btn btn-primary" type="submit" value="View">
+										</form>
+									</td>								
+								</tr>
+							</tbody>
+						</table>
                     </div>
                     <div class="row">
-                        <h4><b>Future AYs (Tentative)</b></h4>
+                        <h4 id="infoTentaHeader"><b>Information for Future AYs (Tentative):</b></h4>
+                        <h4 id="editSpecificInfoWarning" style="font-color:red; display:none;">Please click on the future AY-Semester that you want to edit</h4>
                         <table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
                             <thead>
                                 <tr>
-                                    <th>AY/Sem</th>
+                                    <th style="width:25%;">AY/Sem</th>
                                     <th>Mounted</th>
                                     <th>Quota</th>
                                     <th>Students Planning to Take</th>
+                                    <th style="width:25%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                             $for entry in tentaMountingPlan:
                                 <tr>
                                     <td>
-                                        <form action="/individualModuleInfo" method="get">
-                                            <input type="hidden" name="code" value="$moduleCode">
-                                            <input type="hidden" name="targetAY" value="$entry[0]">
-                                            <input class="btn btn-primary" type="submit" value="$entry[0]">
-                                        </form>
-                                    </td>
+                                        $entry[0]
                                     $if entry[1] == 1:
                                         <td>
                                             <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
@@ -181,6 +261,19 @@ $var title:$title_string
                                             <td>
                                                 $numberTaking
                                             </td>
+                                    $if True:
+                                        <td>
+                                            <form style="display:inline-block" action="/individualModuleInfo" method="get">
+                                                <input type="hidden" name="code" value="$moduleCode">
+                                                <input type="hidden" name="targetAY" value="$entry[0]">
+                                                <input class="btn btn-primary" type="submit" value="View">
+                                            </form>
+                                            <form style="display:inline-block" action="/editMounting" method="get">
+                                                <input type="hidden" name="code" value="$moduleCode">
+                                                <input type="hidden" name="aySem" value="$entry[0]">
+                                                <input class="btn btn-primary" type="submit" value="Edit">
+                                            </form>
+                                        </td>
                                     </tr>
                             </tbody>
                         </table>

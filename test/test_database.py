@@ -35,6 +35,13 @@ class TestCode(object):
         self.prereq_CRD_tested = False
         self.test_prereq_code = "BB1111"
         self.test_prereq_index = 0
+        self.preclude_CRD_tested = False
+        self.test_preclude_code = "CC1111"
+        self.starred_CRD_tested = False
+        self.test_user = "testUser"
+        self.test_salt = "salt"
+        self.test_password = "pass"
+
 
     def setUp(self):
         '''
@@ -56,6 +63,11 @@ class TestCode(object):
 
         self.test_prereq_CRD()
         self.prereq_CRD_tested = True
+        self.test_preclude_CRD()
+        self.preclude_CRD_tested = True
+        self.test_starred_CRD()
+        self.starred_CRD_tested = True
+
 
     def tearDown(self):
         '''
@@ -274,6 +286,7 @@ class TestCode(object):
         assert_true(model.is_existing_module(current_test_module_code))
         model.delete_module(current_test_module_code)
 
+
     def test_prereq_CRD(self):
         '''
             Tests creating, reading and deleting of prerequisites.
@@ -294,4 +307,58 @@ class TestCode(object):
             model.delete_module(self.test_prereq_code)
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
+            return
+
+
+    def test_preclude_CRD(self):
+        '''
+            Tests creating, reading and deleting of preclusions.
+        '''
+        if not self.preclude_CRD_tested:
+            model.add_module(self.test_preclude_code, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
+
+            outcome = model.add_preclusion(self.test_module_code, self.test_preclude_code)
+            assert_true(outcome)
+
+            # Module should not preclude itself check
+            outcome = model.add_preclusion(self.test_preclude_code, self.test_preclude_code)
+            assert_false(outcome)
+
+            # Modules should mutually preclude each other
+            preclude_info = model.get_preclusion(self.test_module_code)
+            assert_true(preclude_info is not None)
+            assert_equal(self.test_preclude_code, preclude_info[0][0])
+
+            preclude_info = model.get_preclusion(self.test_preclude_code)
+            assert_true(preclude_info is not None)
+            assert_equal(self.test_module_code, preclude_info[0][0])
+
+            model.delete_preclusion(self.test_module_code, self.test_preclude_code)
+            model.delete_module(self.test_preclude_code)
+
+            # After deleting preclusion, it should not exist
+            preclude_info = model.get_preclusion(self.test_module_code)
+            assert_true(len(preclude_info) == 0)
+            return
+
+
+    def test_starred_CRD(self):
+        '''
+            Tests starring, reading and unstarring of modules.
+        '''
+        if not self.starred_CRD_tested:
+            model.add_admin(self.test_user, self.test_salt, self.test_password)
+            model.star_module(self.test_module_code, self.test_user)
+            assert_true(model.is_module_starred(self.test_module_code, self.test_user))
+
+            starred_info = model.get_starred_modules(self.test_user)
+            assert_true(starred_info is not None)
+            assert_equal(self.test_module_code, starred_info[0][0])
+            assert_equal(self.test_module_name, starred_info[0][1])
+
+            model.unstar_module(self.test_module_code, self.test_user)
+            starred_info = model.get_starred_modules(self.test_user)
+            model.delete_admin(self.test_user)
+            assert_true(len(starred_info) == 0)
             return

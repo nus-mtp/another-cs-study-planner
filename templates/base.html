@@ -12,8 +12,8 @@ $def with (page)
 		<script type="text/javascript" src="static/javascripts/jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/dataTables.bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/jquery.easing.min.js"></script>
+		<script type="text/javascript" src="static/javascripts/jquery.canvasjs.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/csmodify.js"></script>
-        
 	</head>
 
 	<body>
@@ -26,19 +26,21 @@ $def with (page)
 
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
-				    <form class="navbar-form navbar-left">
-				    	<a class="btn btn-lg btn-primary" href="/">
-				    		<span class="glyphicon glyphicon-home"></span>
-				    	</a>
-					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
-					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
-					   	</button>
-					</form>
+                    <div class="inline navbar-left">
+                        <form class="navbar-form">
+                            <a class="btn btn-lg btn-primary" href="/">
+                                <span class="glyphicon glyphicon-home"></span>
+                            </a>
+                            <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </button>
+                        </form>
+                    </div>
                     <div class="navbar-right">
-                        <p class="inline"><b>$web.cookies().get('user')</b></p>
-                        <form class="navbar-form inline" action="/logout" method="post">
-                            <button id="logout-button" class="btn btn-lg btn-danger" type="submit">
-                                <span class="glyphicon glyphicon-log-out"></span> Logout
+                        <h3 class="navbar-header navbar-text ex">$web.cookies().get('user')</h3>
+                        <form class="navbar-form ex2" action="/logout" method="post">
+                            <button class="btn btn-lg btn-danger" type="submit">
+                                <span class="glyphicon glyphicon-log-out"></span><font class="inline" size="3"> Logout</font>
                             </button>
                         </form>
                     </div>
@@ -61,9 +63,10 @@ $def with (page)
 					<!--li><a href="#">View by Focus Area</a></li-->
 					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<li><a id="sidebar" href="/modifiedModules">Modified Modules</a></li>
+					<li><a id="sidebar" href="/moduleSpecificSize">Modules with Specific Class Size</a></li>
 					<!--li><a href="#">Sort/Filter Modules</a></li>
-					<li><a href="#">Recently Removed Modules</a></li>
-					<li><a href="#">Starred Modules</a></li-->
+					<li><a href="#">Recently Removed Modules</a></li-->
+					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
 					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
 					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
@@ -79,12 +82,15 @@ $def with (page)
 				<h3><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;Module Relations</h3>
 				<ul>
 					<li><a id="sidebar" href="/overlappingModules">Overlapping Modules</a></li>
-					<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
-					<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
-				    <!--ul>
-					   <li><a href="#">Before Specified Module</a></li>
-				        <li><a href="#">Before Internship</a></li>
-				    </ul-->
+					<li><a href="javascript:void(0)">Prior Modules Taken</a></li>
+					<ul>
+						<li><a id="sidebar" href="/moduleTakenPriorToOthers">Modules Taken Prior to Other Modules</a></li>
+						<li><a id="sidebar" href="/moduleTakenPriorToInternship">Modules Taken Prior to Internship</a></li>
+					</ul>
+					<li><a href="javascript:void(0)">Module Info by Semester</a></li>
+					<ul>
+						<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
+					</ul>
 				</ul>
 				<h3><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;Student Statistics</h3>
 				<ul>
@@ -96,10 +102,17 @@ $def with (page)
 						</ul-->
 					<li><a id="sidebar" href="/studentEnrollment">Student Enrollment Info</a></li>
 					<!--li><a href="#">Module Timeline</a></li-->
-					<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
 				</ul>
 			</div>
-
+			<div class="container">
+				<ol class="breadcrumb">
+					$for entry in page.hierarchy:
+						$if entry[0] != '#':
+							<li><a href='$entry[0]'>$entry[1]</a></li>
+						$else:
+							<li class='active'>$entry[1]</li>
+				</ol>
+			</div>
 			$:page
 
 	</body>

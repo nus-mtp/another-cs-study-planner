@@ -1,6 +1,10 @@
 $def with (lst_of_independ_mods, lst_of_ay_sem, ay_sem)
 
 $var title:Non-Overlapping Modules
+$ home = ['/', 'Home']
+$ nonOverlap = ['#', 'Non-Overlapping Modules']
+
+$var hierarchy = [home, nonOverlap]
 
 <div class="container container-fluid">
     <div class="row">
@@ -43,9 +47,9 @@ $var title:Non-Overlapping Modules
                     <tbody>
                         $for module in lst_of_independ_mods:
                             <tr>
-                                <td>$module[0]</td>
+                                <td><a href="/viewModule?code=$module[0]" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
                                 <td>$module[1]</td>
-                                <td>$module[2]</td>
+                                <td><a href="/viewModule?code=$module[2]" target="_blank" data-toggle="tooltip" title="View general info for $module[2]">$module[2]</a></td>
                                 <td>$module[3]</td>
                             </tr>
                     </tbody>

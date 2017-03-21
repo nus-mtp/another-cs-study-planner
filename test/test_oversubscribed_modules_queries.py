@@ -46,7 +46,14 @@ class TestCode(object):
                           'AY 16/17 Sem 2', '?', 1),
                          ('CS3223', 'Database Systems Implementation', 'AY 16/17 Sem 2', '?', 1),
                          ('CS6101', 'Exploration of Computer Science Research',
-                          'AY 17/18 Sem 1', 0, 1)]
+                          'AY 17/18 Sem 1', 0, 1),
+                         ('CP3200', 'Internship', 'AY 17/18 Sem 1', '?', 3),
+                         ('CP3200', 'Internship', 'AY 17/18 Sem 2', '?', 1),
+                         ('CP3880', 'Advanced Technology Attachment Programme',
+                          'AY 17/18 Sem 1', '?', 1),
+                         ('CP3880', 'Advanced Technology Attachment Programme',
+                          'AY 17/18 Sem 2', '?', 1)
+                        ]
 
         assert_equal(len(list_of_oversub_mod), len(required_list))
         assert_equal(sorted(list_of_oversub_mod), sorted(required_list))

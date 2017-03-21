@@ -36,18 +36,17 @@ class TestCode(object):
                                    '&targetAY=AY+16%2F17+Sem+1'+\
                                    '&quota='
 
+
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
-                            'action="/editModule" method="post" class="no-padding-margin">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" '+\
-                                   'type="submit" value="Edit General Module Info" data-toggle="tooltip"'+\
-                                   ' data-placement="left" title="Edit the module\'s name,'+\
-                                   ' description and MCs">'
+                            'action="/editModule" method="get" class="no-padding-margin">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit General'+\
+                                   ' Module Info" data-toggle="tooltip" data-placement="left" title="Edit '+\
+                                   'the module\'s name, description, MC, pre-requisites and preclusions">'
     FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" name="edit-mounting-button" '+\
-                                     'action="/editMounting" method="post" class="no-padding-margin">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" '+\
-                                            'type="submit" value="Edit Specific Module Info" '+\
-                                            'data-toggle="tooltip" data-placement="left" title="Edit '+\
-                                            'the module\'s mounting, prerequisites/preclusions and quota">'
+                                     'action="/editMounting" method="get" class="no-padding-margin">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
+                                            ' Specific Module Info" data-toggle="tooltip" data-placement="left" '+\
+                                            'title="Edit the module\'s mounting and quota">'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
                              'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
@@ -71,13 +70,14 @@ class TestCode(object):
     CONTENT_MC = "(4 MCs)"
     CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
                                       'value="BT5110">'
-    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="dropdown-btn-custom"'+\
-                                        ' type="submit" value="Back To Overview">'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary"'+\
+                                        ' type="submit" value="Back to Overview">'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
+    CONTENT_FUTURE_QUOTA = "-"
     CONTENT_CLASS_QUOTA_BLANK = "?"
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg'+\
                    ' dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown"'+\
@@ -130,68 +130,18 @@ class TestCode(object):
         root.mustcontain("Not Found")
 
 
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
+    '''
+        Tests if user will fail to access page for showing module overview
+        if the target AY-semester is invalid.
+    '''
+    def test_view_individual_module_invalid_ay_sem_response(self):
+        # AY-Semester used here is '16/18 Sem 1'
+        root = self.test_app.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+        assert_equal(root.status, 200)
 
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        root.mustcontain("Not Found")
 
 
     def test_view_individual_module_contents(self):
@@ -208,8 +158,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
@@ -235,10 +183,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
-        root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
+        root.mustcontain(self.CONTENT_FUTURE_QUOTA)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
         root.mustcontain(self.FORM_EDIT_SPECIFIC_MODULE_INFO)
