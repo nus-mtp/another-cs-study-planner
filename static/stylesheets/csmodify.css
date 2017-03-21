@@ -8,9 +8,21 @@ tr > th {
 	text-align: center;
 }
 
+
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
+/* ========== STYLING FOR NAVBAR ========== */
+span[id*='id-display'] {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#id-well {
+    padding: 12px;
+    margin-right: 25px;
+}
+
 
 /* ========== STYLING FOR SIDEBAR ========== */
 
@@ -22,16 +34,29 @@ tr > th {
     z-index: 1; /* Stay on top */
     top: 0;
     left: 0;
-    background-color: #245580;
+    background-color: #2d6a9f;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.sidebar > ul, .sidebar > ul > ul {
+    list-style: none;
+}
+
+.sidebar a.inner-list-header {
+    color: #ffffff;
+    font-style: italic;
+}
+
+.sidebar a.inner-list-header:hover {
+    text-decoration: none;
+}
+
 /* The navigation menu links */
 .sidebar > h3 {
     padding-left: 20px;
-    color: white;
+    color: #ffffff;
 }
 
 .sidebar > ul {
@@ -42,14 +67,32 @@ tr > th {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
-    color: #919191;
+    color: #ffffff;
     display: block;
     transition: 0.3s
 }
 
+.ex, .ex2, .ex3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align:middle;
+    line-height: normal;
+    padding: 0;
+}
+.navbar-btn{
+    height: 50px;
+}
+
+.inline{
+    display: inline-block;
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
+    color: #ffffff;
+}
+.sidebar a:not([class*='inner-list-header']):not([class*='closebtn']):hover {
+    text-decoration: underline;
 }
 
 /* Position and style the close button (top right corner) */
@@ -61,10 +104,8 @@ tr > th {
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
+td > a {
+    text-decoration: underline;
 }
 
 
@@ -77,9 +118,11 @@ tr > th {
     z-index: 1;
 }
 
+
 /*************************************************************************/
 /* ======================= STYLING FOR HOME PAGE ======================= */
 /*************************************************************************/
+
 #accordion .panel-heading {
     padding: 0;
 }
@@ -103,10 +146,10 @@ tr > th {
 }
 
 
-
 /*************************************************************************/
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */
 /*************************************************************************/
+
 #register-form-wrapper {
     border: 1px solid grey;
     margin: 0 auto;
@@ -115,6 +158,15 @@ tr > th {
 
 .account-form-wrapper > form > table {
     margin: 0 auto;
+}
+
+
+/*************************************************************************/
+/* =================== STYLING FOR 404 NOT-FOUND PAGE ================== */
+/*************************************************************************/
+
+#notfound-error-msg {
+    color: red;
 }
 
 /*************************************************************************/
@@ -131,7 +183,9 @@ tr > th {
 }
 
 #options {
-	height: 30%;
+    padding-bottom: 2.5%;
+	margin-left: 10%;
+    margin-right: 10%;
 }
 
 
@@ -154,23 +208,30 @@ tr > th {
 .module-info-wrapper {
 	padding: 0 2.5% 2.5% 2.5%;
 	border-right: 1px solid black;
-	height: 1500px;
+	height: 1700px;
 }
 
 .module-analysis-wrapper {
 	padding: 0 2.5% 2.5% 2.5%;
 	border-left: 1px solid black;
-	height: 1500px;
+	height: 1700px;
 }
 
+#quota-demand-chart {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
 /*************************************************************************/
-/* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
+/* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
 /*************************************************************************/
 
 .modules-taken-together{
     margin: 20px 0px;
     float: right;
 }
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
@@ -203,3 +264,152 @@ tr > th {
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
 }
+
+.dropdown-btn-custom{
+    width: 100%;
+    align-self: flex-end;
+    background-color: white;
+    border: 0px;
+}
+
+.dropdown-btn-custom:hover{
+    background-color: gainsboro;
+}
+
+.dropdown-btn-custom-main{
+    float: right;
+}
+
+.no-padding-margin{
+    padding: 0px;
+    margin: 0px;
+}
+
+/*************************************************************************/
+/* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
+/*************************************************************************/
+.detail-change-text {
+    background-color: #f2f2f2;
+}
+
+tr[id*='modified-details-child-row'] {
+    background-color: #f2f2f2;
+
+}
+
+/*******************************************************************************************/
+/* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
+/*******************************************************************************************/
+#enrollment-student-year-header {
+    margin-bottom: 20px;
+}
+
+#enrollment-student-year-table-container {
+    margin-top: 15px;
+}
+
+#enrollment-student-year-bar-chart {
+    width: 80%;
+    height: 350px;
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+#enrollment-student-year-pie-chart {
+    display: None;
+    height: 350px;
+}
+
+#enrollment-focus-area-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#enrollment-focus-area-table-container {
+    margin-bottom: 30px;
+}
+
+#enrollment-focus-area-bar-chart {
+    width: 92%;
+    margin-top: 20px;
+    margin-left: 4%;
+    margin-bottom: 30px;
+}
+
+#enrollment-focus-area-pie-chart {
+    display: None;
+    margin-bottom: 30px;
+}
+
+.enrollment-chart-button {
+    float: right;
+    margin-left: 5px;
+}
+
+.enrollment-chart-button-container {
+    margin-right: 5px;
+}
+
+/********************************************************************************/
+/* ==================== STYLING FOR MODULE-VIEW-AY-SEM PAGE =================== */
+/********************************************************************************/
+
+#module-view-student-year-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#module-view-student-year-bar-chart {
+    height: 350px;
+}
+
+#module-view-student-year-pie-chart {
+    display: None;   
+    height: 350px;
+}
+
+#module-view-focus-area-header {
+    margin-top: 20px;
+}
+
+#module-view-focus-area-bar-chart {
+    height: 350px;
+}
+
+#module-view-focus-area-pie-chart {
+    display: None;   
+    height: 350px;
+}
+
+.module-view-chart-button {
+    float: right;
+    margin-left: 5px;
+}
+
+.module-view-chart-button-container {
+    margin-top: 30px;
+    margin-right: -5px;
+    margin-bottom: 10px;
+}
+
+#focus-area-list {
+    display: block;
+    visibility: hidden;
+    width: 360px;
+    background-color: black;
+    color: white;
+    border-radius: 6px;
+    padding: 5px 0;
+    opacity: 0.8;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+#focus-area-list-button:hover + #focus-area-list {
+    visibility: visible;
+}
+
+#module-view-stats-footer {
+    margin-bottom: 30px;
