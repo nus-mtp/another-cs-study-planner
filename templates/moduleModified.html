@@ -259,6 +259,13 @@ $else:
                                         </div>
                                 </div>
                             </div>
+                            <div class="col-md-12 text-center">
+                                <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <input type="hidden" name="restoreType" value="moduleDetails">
+                                    <input class="btn btn-lg btn-primary" type="submit" value="Restore Details">
+                                </form>
+                            </div>
                         </div>
             $else:
                 <ul class="nav nav-tabs nav-justified">
