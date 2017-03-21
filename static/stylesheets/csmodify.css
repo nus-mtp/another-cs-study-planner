@@ -72,7 +72,6 @@ span[id*='id-display'] {
     transition: 0.3s
 }
 
-<<<<<<< HEAD
 .ex, .ex2, .ex3 {
     display: inline-block;
     text-align: center;
@@ -91,9 +90,9 @@ span[id*='id-display'] {
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
     color: #ffffff;
-=======
+}
+
 .sidebar a:not([class*='inner-list-header']):not([class*='closebtn']):hover {
->>>>>>> ca8e4ac63dab2239a0596b63d9e85b4bd8a87a0d
     text-decoration: underline;
 }
 
@@ -267,7 +266,6 @@ td > a {
     padding-bottom: 15px;
 }
 
-<<<<<<< HEAD
 .dropdown-btn-custom{
     width: 100%;
     align-self: flex-end;
@@ -287,7 +285,7 @@ td > a {
     padding: 0px;
     margin: 0px;
 }
-=======
+
 
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
@@ -298,9 +296,9 @@ td > a {
 
 tr[id*='modified-details-child-row'] {
     background-color: #f2f2f2;
+}
 
 
->>>>>>> ca8e4ac63dab2239a0596b63d9e85b4bd8a87a0d
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
 /*******************************************************************************************/
