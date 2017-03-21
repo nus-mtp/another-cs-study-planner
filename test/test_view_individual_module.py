@@ -58,7 +58,7 @@ class TestCode(object):
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
                                           'value="View Modules Overlapping With This Module" data-toggle="tooltip"'+\
                                           ' data-placement="left" title="Show modules that are also'+\
-                                          ' offered in this AY-SEM">'
+                                          ' offered in this AY-Semester">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
