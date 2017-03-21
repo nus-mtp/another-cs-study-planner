@@ -19,10 +19,8 @@ $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
         <table id="common-module-table" class="table table-bordered table-hover display dataTable">
             <thead>
                 <tr>
-                    <th>Module 1</th>
-                    <th>Name of Module 1</th>
-                    <th>Module 2</th>
-                    <th>Name of Module 2</th>
+                    <th>Module Code</th>
+                    <th>Module Name</th>
                     <th>For AY-Sem</th>
                     <th>Number of Students</th>
                 </tr>
@@ -30,8 +28,6 @@ $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
             <tbody>
                 $for row in overlappingList:
                 <tr>
-                    <td class="text-center">$row[0]</td>
-                    <td class="text-center">$row[1]</td>
                     <td class="text-center">$row[2]</td>
                     <td class="text-center">$row[3]</td>
                     <td class="text-center">$row[4]</td>

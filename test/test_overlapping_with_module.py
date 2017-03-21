@@ -15,10 +15,8 @@ class TestCode(object):
     CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
                                         'class="table table-bordered table-hover display ' +\
                                         'dataTable">'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE = '<th>Module Code</th>'
+    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_NAME = '<th>Module Name</th>'
     CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
     CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
 
@@ -56,9 +54,7 @@ class TestCode(object):
         root = self.test_app.get(self.URL_NORMAL)
 
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE)
+        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_NAME)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
