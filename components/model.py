@@ -3,10 +3,12 @@
     Handles queries to the database
 '''
 
+import web
 import hashlib
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 from psycopg2.extensions import AsIs
+from app import RENDER
 
 ## Connects to the postgres database
 CONNECTION = components.database_adapter.connect_db()
@@ -1329,3 +1331,28 @@ def get_mod_before_intern(ay_sem):
     DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
 
     return DB_CURSOR.fetchall()
+
+
+def validate_input(input_data, input_types):
+    for input_type in input_types:
+        if input_type == "code":
+            try:
+                module_code = input_data.code
+            except AttributeError:
+                error = RENDER.notfound('Module code is not specified')
+                raise web.notfound(error)
+            module_exist = is_existing_module(module_code)
+            if not module_exist:
+                error = RENDER.notfound('Invalid module code "' + module_code + '"')
+                raise web.notfound(error)
+        elif input_type == "aysem":
+            try:
+                ay_sem = input_data.aysem
+            except AttributeError:
+                error = RENDER.notfound('AY-Semester is not specified')
+                raise web.notfound(error)
+            is_aysem_valid = is_aysem_in_system(ay_sem)
+            if not is_aysem_valid:
+                error = RENDER.notfound('Invalid AY-Semester "' + ay_sem + '"')
+                raise web.notfound(error)
+    return input_data
