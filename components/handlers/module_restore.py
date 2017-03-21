@@ -28,8 +28,9 @@ class RestoreModule(object):
         if restore_type == "quota":
             ay_sem = data.targetAySem
             quota = data.quota
-            if quota == "?":
+            if quota == "":
                 quota = None
+
             outcome = model.update_quota(module_code, ay_sem, quota)
 
             if not test_data:
