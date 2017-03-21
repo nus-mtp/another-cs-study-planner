@@ -25,9 +25,9 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                         <div class="form-group">
                             <!--mounting status-->
                             <label>Mounting Status:</label><br>
-                            $if mountingValue == "1":
-                                <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Mounted" checked="checked"> Mounted<br>
-                                <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Not Mounted"> Not Mounted
+                            $if mountingValue == 1:
+                                <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Mounted" checked="checked"> Mounted<br>
+                                <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Not Mounted"> Not Mounted
                             $else:
                                 <input type="radio" onclick="document.getElementById('quota').disabled = false;" name="mountingStatus" value="Mounted"> Mounted<br>
                                 <input type="radio" onclick="document.getElementById('quota').disabled = true;" name="mountingStatus" value="Not Mounted" checked="checked"> Not Mounted
@@ -53,8 +53,8 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                         <input type="hidden" name="code" value="$moduleCode" required>
                         <input type="hidden" name="aySem" value="$aySem" required>
                         <input type="hidden" name="oldMountingValue" value="$mountingValue" required>
-                        <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
                         <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/individualModuleInfo?code=$moduleCode&amp;targetAY=$aySem';}">Cancel</button>
+                        <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
                     </form>
                 </div>
             </div>
