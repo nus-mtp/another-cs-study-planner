@@ -36,22 +36,29 @@ class TestCode(object):
                                    '&targetAY=AY+16%2F17+Sem+1'+\
                                    '&quota='
 
-    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="post">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                   'type="submit" value="Edit General Module Info" ' +\
-                                   'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description and '+\
-                                   'MCs">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" ' +\
-                                     'name="edit-mounting-button" ' +\
-                                     'action="/editMounting" method="post">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                            'type="submit" value="Edit Specific ' +\
-                                            'Module Info" data-toggle="tooltip" ' +\
-                                            'data-placement="right" title="Edit the ' +\
-                                            'module\'s mounting, ' +\
-                                            'prerequisites/preclusions and quota">'
+
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
+                            'action="/editModule" method="get" class="no-padding-margin">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit General'+\
+                                   ' Module Info" data-toggle="tooltip" data-placement="left" title="Edit '+\
+                                   'the module\'s name, description, MC, pre-requisites and preclusions">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" name="edit-mounting-button" '+\
+                                     'action="/editMounting" method="get" class="no-padding-margin">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
+                                            ' Specific Module Info" data-toggle="tooltip" data-placement="left" '+\
+                                            'title="Edit the module\'s mounting and quota">'
+    FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
+                             'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
+                             'method="get" class="no-padding-margin">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Students '+\
+                                    'Planning To Take This Module" data-toggle="tooltip" data-placement="left" '+\
+                                    'title="Show list of students who are planning to take this module">'
+    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
+                                   ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
+    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
+                                          'value="View Modules Overlapping With This Module" data-toggle="tooltip"'+\
+                                          ' data-placement="left" title="Show modules that are also'+\
+                                          ' offered in this AY-Semester">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -61,26 +68,20 @@ class TestCode(object):
     CONTENT_NAME = "Data Management and Warehousing"
     CONTENT_MC = "(4 MCs)"
     CONTENT_BUTTON_TO_OVERVIEW_DATA = '<input type="hidden" name="code" ' +\
-                                      'value="BT5110" />'
-    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary" ' +\
-                                        'type="submit" value="Back to Overview" />'
+                                      'value="BT5110">'
+    CONTENT_BUTTON_TO_OVERVIEW_BUTTON = '<input class="btn btn-lg btn-primary"'+\
+                                        ' type="submit" value="Back to Overview">'
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
     CONTENT_QUOTA = "Class Quota"
     CONTENT_QUOTA_ACTUAL = "60"
-    CONTENT_STATS = "Module Statistics"
+    CONTENT_FUTURE_QUOTA = "-"
     CONTENT_CLASS_QUOTA_BLANK = "?"
-
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover' +\
-                                        ' display dataTable">'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
+    DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg'+\
+                   ' dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown"'+\
+                   ' aria-haspopup="true" aria-expanded="false">More Actions <span '+\
+                   'class="caret"></span></button>'
 
 
     def __init__(self):
@@ -128,68 +129,18 @@ class TestCode(object):
         root.mustcontain("Not Found")
 
 
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
+    '''
+        Tests if user will fail to access page for showing module overview
+        if the target AY-semester is invalid.
+    '''
+    def test_view_individual_module_invalid_ay_sem_response(self):
+        # AY-Semester used here is '16/18 Sem 1'
+        root = self.test_app.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
+        assert_equal(root.status, 200)
 
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the target AY-semester is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid AY-semester is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_individual_module_invalid_ay_sem_response(self):
-    #     # AY-Semester used here is '16/18 Sem 1'
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-    # '''
-
-
-    # '''
-    #     Tests if user will fail to access page for showing module overview
-    #     if the quota associated with the target module is invalid.
-
-    #     NOTE: this test case is supposed to FAIL
-    #     NOTE: Checking for invalid module quota is not implemented
-    # '''
-    # '''
-    # @raises(Exception)
-    # def test_view_invalid_module_overview_invalid_quota_response(self):
-    #     # Quota used here is '70' (actual is '60')
-    #     # an exception WILL be encountered here
-    #     root = self.testApp.get(self.URL_CONTAIN_CODE_AY_INVALID_QUOTA)
-    # '''
+        # Presence of these elements indicates that the request direction is correct.
+        # Checks if page contains 'Not Found'
+        root.mustcontain("Not Found")
 
 
     def test_view_individual_module_contents(self):
@@ -206,13 +157,15 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
         root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
-        root.mustcontain(self.CONTENT_STATS)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED_BUTTON)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE_BUTTON)
+        root.mustcontain(self.DROPDOWN_BTN)
 
 
     def test_view_individual_module_contents_with_future_ay(self):
@@ -229,15 +182,16 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_DATA)
         root.mustcontain(self.CONTENT_BUTTON_TO_OVERVIEW_BUTTON)
         root.mustcontain(self.CONTENT_DESCRIPTION)
-        root.mustcontain(self.CONTENT_PRECLUSION)
-        root.mustcontain(self.CONTENT_PREREQUISITE)
         root.mustcontain(self.CONTENT_QUOTA)
-        root.mustcontain(self.CONTENT_QUOTA_ACTUAL)
-        root.mustcontain(self.CONTENT_STATS)
+        root.mustcontain(self.CONTENT_FUTURE_QUOTA)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
         root.mustcontain(self.FORM_EDIT_SPECIFIC_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED)
+        root.mustcontain(self.FORM_STUDENTS_AFFECTED_BUTTON)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_WITH_MODULE_BUTTON)
 
 
     def test_view_individual_module_no_quota_valid_response(self):
@@ -248,20 +202,6 @@ class TestCode(object):
 
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
 
-
-    def test_overlapping_table(self):
-        '''
-            Test if the overlapping modules table is available
-        '''
-        root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
-
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
 
 
     def test_goto_edit_general_info(self):
@@ -281,6 +221,26 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
         edit_form = root.forms__get()["edit-mounting-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_affected_students_page(self):
+        '''
+            Tests if user can access students affected by module page
+        '''
+        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
+        edit_form = root.forms__get()["view-students-planning-to-take-module"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_overlapping_with_module(self):
+        '''
+            Tests if user can access overlapping with module
+        '''
+        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
+        edit_form = root.forms__get()["view-overlapping-with-module"]
 
         response = edit_form.submit()
         assert_equal(response.status, 200)

@@ -1,27 +1,37 @@
-$def with (code, ay_sem, student_lst)
+$def with (moduleCode, aySem, student_lst)
 $ title_string = 'Students Affected By Module Changes'
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInfo = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ individualModuleInfo = ['/individualModuleInfo?code=' + moduleCode + '&amp;targetAY=' + aySem, 'Module Info for ' + aySem]
+$ affectedStudents = ['#', title_string]
+
+$var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, affectedStudents]
 
 <div class="container container-block">
-    <h1 class="text-center">Students Affected By Module Changes</h1>
-    <h3 class="text-center">For <b>$code</b> in <b>$ay_sem</b></h3>
-    <table id="students-taking-module-table" class="table table-bordered table-hover display dataTable">
-        <thead>
-            <tr>
-                <th>Matric No.</th>
-                <th>Year of study</th>
-                <th>Focus Area 1</th>
-                <th>Focus Area 2</th>
-            </tr>
-        </thead>
-        <tbody>
-            $for row in student_lst:
+    <h1 class="text-center">Students Planning To Take This Module</h1>
+    <p class="text-center">Students who are planning to take this module.</p>
+    <h2 class="text-center">For <b>$moduleCode</b> in <b>$aySem</b></h2>
+    <div class="row">
+        <table id="students-taking-module-table" class="table table-bordered table-hover display dataTable">
+            <thead>
                 <tr>
-                    <td class="text-center">$row[0]</td>
-                    <td class="text-center">$row[1]</td>
-                    <td class="text-center">$row[2]</td>
-                    <td class="text-center">$row[3]</td>
+                    <th>Matric No.</th>
+                    <th>Year of study</th>
+                    <th>Focus Area 1</th>
+                    <th>Focus Area 2</th>
                 </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                $for row in student_lst:
+                    <tr>
+                        <td class="text-center">$row[0]</td>
+                        <td class="text-center">$row[1]</td>
+                        <td class="text-center">$row[2]</td>
+                        <td class="text-center">$row[3]</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

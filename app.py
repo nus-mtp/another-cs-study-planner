@@ -36,11 +36,15 @@ URLS = (
     '/restoreModule', 'components.handlers.module_restore.RestoreModule',
     '/overlappingModules', 'components.handlers.overlapping_modules.OverlappingModules',
     '/outcome', 'components.handlers.outcome.Outcome',
-    '/studentsAffectedByModule',
-    'components.handlers.students_affected_by_module.StudentsAffectedByModule',
+    '/studentsAffectedByModule', 'components.handlers.students_affected_by_module.StudentsAffectedByModule',
     '/addModule', 'components.handlers.add_module_handler.AddModule',
     '/moduleTakenPriorToOthers', 'components.handlers.module_taken_prior_to_others.TakePriorTo',
-    '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules'
+    '/overlappingWithModule', 'components.handlers.overlapping_with_module.OverlappingWithModule',
+    '/nonOverlappingModules', 'components.handlers.non_overlapping_modules.NonOverlappingModules',
+    '/moduleSpecificSize', 'components.handlers.module_specific_size.ModuleSpecificSize',
+    '/starModule', 'components.handlers.star_modules.StarModule',
+    '/starredModules', 'components.handlers.star_modules.StarredModulesList',
+    '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship'
 )
 
 
@@ -52,8 +56,7 @@ URLS = (
     'templates' directory and use the 'base.html' as the base template
     for all other pages.
 '''
-RENDER = web.template.render('templates', base='base')
-
+RENDER = web.template.render('templates', base='base', globals={'web':web})
 
 '''
     This creates the application instance with the defined

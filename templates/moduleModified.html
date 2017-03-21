@@ -1,6 +1,21 @@
 $def with (modify_type, modifiedModulesSummary, modifiedModulesMounting, modifiedModulesQuota, modifiedModulesDetails, targetModuleCode, targetModuleModifiedInfo)
 
-$var title:View modified modules
+$var title:View Modified Modules
+
+$ home = ['/', 'Home']
+$ modifiedModulePage = ['#', 'Modified Modules']
+$ modifiedModuleLink = ['/modifiedModules', 'Modified Modules']
+$if modify_type == "mounting":
+    $ modifyType = ['#', 'Modified Mounting of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$elif modify_type == "quota":
+    $ modifyType = ['#', 'Modified Quota of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$elif modify_type == "moduleDetails":
+    $ modifyType = ['#', 'Modified Module Details of ' + targetModuleCode]
+    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$else:
+    $var hierarchy = [home, modifiedModulePage]
 
 <div class="container-fluid">
     <div class="row">
@@ -18,45 +33,54 @@ $var title:View modified modules
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Mounting in Current AY-Semester</th>
-                                <th>Mounting in Target AY-Semester</th>
-                                <th>Mounting Change Applied</th>
-                                <th data-sortable="false">Actions</th>
+                                <!--th>Mounting in Current AY-Semester</th>
+                                <th>Mounting in Target AY-Semester</th-->
+                                <th>Change in Mounting</th>
+                                <th data-sortable="false">Restore</th>
                             </tr>
                         </thead>
                         <tbody>
-                    $for module in targetModuleModifiedInfo:
-                        $ moduleCode = module[0]
-                        $ moduleName = module[1]
-                        $ currentAySem = module[2]
-                        $ targetAySem = module[3]
-                        $ mountingChange = module[4]
-                        <tr>
-                            <td>$moduleCode</td>
-                            <td>$moduleName</td>
-                        $if mountingChange == 1:
-                            <td>Unmounted (in <b>$currentAySem</b>)</td>
-                            <td>Mounted (in <b>$targetAySem</b>)</td>
-                            <td>Unmounted &#8594; Mounted</td>
-                        $elif mountingChange == 0:
-                            <td>Mounted (in <b>$currentAySem</b>)</td>
-                            <td>Unmounted (in <b>$targetAySem</b>)</td>
-                            <td>Mounted &#8594; Unmounted</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input type="hidden" name="currentAySem" value="$currentAySem">
-                                <input type="hidden" name="targetAySem" value="$targetAySem">
-                                <input type="hidden" name="mountingChange" value="$mountingChange">
-                                <input type="hidden" name="restoreType" value="mounting">
-                                <input class="btn btn-danger" type="submit" value="Restore Mounting"/>
-                            </form>
-                        </td>
-                        </tr>
+                    $if len(targetModuleModifiedInfo) == 0:
+                        <tr><td colspan=4>No data found</td></tr>
+                    $else:
+                        $for module in targetModuleModifiedInfo:
+                            $ moduleCode = module[0]
+                            $ moduleName = module[1]
+                            $ currentAySem = module[2]
+                            $ targetAySem = module[3]
+                            $ mountingChange = module[4]
+                            <tr>
+                                <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
+                                <td>$moduleName</td>
+                            $if mountingChange == 1:
+                                <td>
+                                    Unmounted 
+                                    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                    &#8594; 
+                                    Mounted 
+                                    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                </td>
+                            $elif mountingChange == 0:
+                                <td>
+                                    Mounted 
+                                    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                    &#8594; 
+                                    Unmounted
+                                    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                </td>
+                            $if True:
+                                <td>
+                                    <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
+                                        <input type="hidden" name="code" value="$moduleCode">
+                                        <input type="hidden" name="currentAySem" value="$currentAySem">
+                                        <input type="hidden" name="targetAySem" value="$targetAySem">
+                                        <input type="hidden" name="mountingChange" value="$mountingChange">
+                                        <input type="hidden" name="restoreType" value="mounting">
+                                        <!--input class="btn btn-danger" type="submit" value="Restore Mounting"/-->
+                                        <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Mounting"><span class="glyphicon glyphicon-refresh"></span></button>
+                                    </form>
+                                </td>
+                            </tr>
                     </tbody>
                     </table>
                 $elif modify_type == "quota":
@@ -68,129 +92,181 @@ $var title:View modified modules
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Current AY-Semester</th>
-                                <th data-sortable="false">Quota for Current AY-Semester</th>
-                                <th>Target AY-Semester</th>
-                                <th data-sortable="false">Quota for Target AY-Semester</th>
-                                <th>Quota Change</th>
-                                <th data-sortable="false">Actions</th>
+                                <th>Old Quota</th>
+                                <!--th data-sortable="false">Quota for Current AY-Semester</th-->
+                                <th>New Quota</th>
+                                <!--th data-sortable="false">Quota for Target AY-Semester</th-->
+                                <th>Change in Quota</th>
+                                <th data-sortable="false">Restore</th>
                             </tr>
                         </thead>
                         <tbody>
-                    $for module in targetModuleModifiedInfo:
-                        $ moduleCode = module[0]
-                        $ moduleName = module[1]
-                        $ currentAySem = module[2]
-                        $ targetAySem = module[3]
-                        $ currentQuota = module[4]
-                        $ targetQuota = module[5]
-                        $ quotaChange = module[6]
-                        <tr>
-                            <td>$moduleCode</td>
-                            <td>$moduleName</td>
-                            <td>$currentAySem</td>
-                        $if currentQuota is None:
-                            <td>?</td>
-                        $else:
-                            <td>$currentQuota</td>
-                        <td>$targetAySem</td>
-                        $if targetQuota is None:
-                            <td>?</td>
-                        $else:
-                            <td>$targetQuota</td>
-                        <td>$quotaChange</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                        $if currentQuota == "Unmounted" or targetQuota == "Unmounted":
-                            <form action="/modifiedModules" method="get" onsubmit="alert('To restore this module\'s quota, the module\'s mounting has to be restored.');">
-                                <input type="hidden" name="modifyType" value="mounting">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input class="btn btn-danger" type="submit" value="Restore Quota"/>
-                            </form>                    
-                        $else:
-                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input type="hidden" name="targetAySem" value="$targetAySem">
-                                <input type="hidden" name="quota" value="$currentQuota">
-                                <input type="hidden" name="restoreType" value="quota">
-                                <input class="btn btn-danger" type="submit" value="Restore Quota"/>
-                            </form>
-                        </td>
-                        </tr>
+                    $if len(targetModuleModifiedInfo) == 0:
+                        <tr><td colspan=6>No data found</td></tr>
+                    $else:
+                        $for module in targetModuleModifiedInfo:
+                            $ moduleCode = module[0]
+                            $ moduleName = module[1]
+                            $ currentAySem = module[2]
+                            $ targetAySem = module[3]
+                            $ currentQuota = module[4]
+                            $ targetQuota = module[5]
+                            $ quotaChange = module[6]
+                            <tr>
+                                <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
+                                <td>$moduleName</td>
+                                <!--td>$currentAySem</td-->
+                            $if currentQuota is None:
+                                <td>
+                                    ? <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                </td>
+                            $else:
+                                <td>
+                                    $currentQuota <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                </td>
+                            <!--td>$targetAySem</td-->
+                            $if targetQuota is None:
+                                <td>
+                                    ? <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                </td>
+                            $else:
+                                <td>
+                                    $targetQuota <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                </td>
+                            <td>$quotaChange</td>
+                            <td>
+                                <!--form action="/viewModule" method="get">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <input class="btn btn-primary" type="submit" value="View Module"/>
+                                </form-->
+                            $if currentQuota == "Unmounted" or targetQuota == "Unmounted":
+                                <form action="/modifiedModules" method="get" onsubmit="alert('To restore this module\'s quota, the module\'s mounting has to be restored.');">
+                                    <input type="hidden" name="modifyType" value="mounting">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->
+                                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Quota"><span class="glyphicon glyphicon-refresh"></span></button>
+                                </form>                    
+                            $else:
+                                <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <input type="hidden" name="targetAySem" value="$targetAySem">
+                                    <input type="hidden" name="quota" value="$currentQuota">
+                                    <input type="hidden" name="restoreType" value="quota">
+                                    <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->
+                                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Quota"><span class="glyphicon glyphicon-refresh"></span></button>
+                                </form>
+                            </td>
+                            </tr>
                     </tbody>
                     </table>
                 $elif modify_type == "moduleDetails":
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
                     <br>
-                    <table class="table display dataTable table-bordered table-hover text-center" id="specific-modified-module">
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Name Modified?</th>
-                                <th>Description Modified?</th>
-                                <th>Number of MCs Modified?</th>
-                                <th data-sortable="false">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                    $for module in targetModuleModifiedInfo:
-                        $ moduleCode = module[0]
-                        $ moduleName = module[1]
-                        $ isNameModified = module[2][0] is not None
-                        $ isDescModified = module[2][1] is not None
-                        $ isMcModified = module[2][2] is not None
-                        <tr>
-                            <td>$moduleCode</td>
-                            <td>$moduleName</td>
-                        $if isNameModified is True:
-                            $ originalName = module[2][0][0]
-                            $ modifiedName = module[2][0][1]
-                            <td>
-                                <b>From</b><br><br>
-                                <i>"$originalName"</i><br><br>
-                                <b>to</b><br><br>
-                                <i>"$modifiedName"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        $if isDescModified is True:
-                            $ originalDesc = module[2][1][0]
-                            $ modifiedDesc = module[2][1][1]
-                            <td>
-                                <b>From</b><br><br>
-                                <i>"$originalDesc"</i><br><br>
-                                <b>to</b><br><br>
-                                <i>"$modifiedDesc"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        $if isMcModified is True:
-                            $ originalMc = module[2][2][0]
-                            $ modifiedMc = module[2][2][1]
-                            <td>
-                                <b>From</b> <i>"$originalMc"</i><br><br>
-                                <b>to</b> <i>"$modifiedMc"</i><br><br>
-                            </td>
-                        $else:
-                            <td>-</td>
-                        <td>
-                            <form action="/viewModule" method="get">
-                                <input type="hidden" name="code" value="$targetModuleModifiedInfo[0]">
-                                <input class="btn btn-primary" type="submit" value="View Module"/>
-                            </form>
-                            <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$targetModuleModifiedInfo[0]">
-                                <input type="hidden" name="restoreType" value="moduleDetails">
-                                <input class="btn btn-danger" type="submit" value="Restore Details"/>
-                            </form>
-                        </td>
-                        </tr>
-                    </tbody>
-                    </table>
+                    $if targetModuleModifiedInfo is None:
+                        <div class="jumbotron text-center">
+                            <h1><span class="glyphicon glyphicon-remove-circle"></span></h1>
+                            <br>
+                            <p>There are no changes to module details for this module.</p>
+                        </div>
+                    $else:
+                        $ module = targetModuleModifiedInfo
+                        
+                        $ moduleCode = module[0][0]
+                        $ moduleName = module[0][4]
+                        $ isNameModified = module[1][0]
+                        $ isDescModified = module[1][1]
+                        $ isMcModified = module[1][2]
+
+                        $ originalName = module[0][1]
+                        $ modifiedName = module[0][4]
+                        $ originalDescription = module[0][2]
+                        $ modifiedDescription = module[0][5]
+                        $ originalMc = module[0][3]
+                        $ modifiedMc = module[0][6]
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="text-center">Old Details</h3>
+                                <br>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>Name</b></div>
+                                    <div class="panel-body">
+                                        $if isNameModified:
+                                            <b>$originalName</b>
+                                        $else:
+                                            $originalName
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>Description</b></div>
+                                    <div class="panel-body">
+                                        $if isDescModified:
+                                            <b>$originalDescription</b>
+                                        $else:
+                                            $originalDescription
+                                    </div>
+                                </div>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading"><b>MCs</b></div>
+                                    <div class="panel-body">
+                                        $if isMcModified:
+                                            <b>$originalMc</b>
+                                        $else:
+                                            $originalMc
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="text-center">New Details</h3>
+                                <br>
+                                $if isNameModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>Name</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedName</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>Name</b></div>
+                                            <div class="panel-body">
+                                                <i>(unchanged)</i>
+                                            </div>
+                                </div>
+                                $if isDescModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>Description</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedDescription</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>Description</b></div>
+                                        <div class="panel-body">
+                                            <i>(unchanged)</i>
+                                        </div>
+                                </div>
+                                $if isMcModified:
+                                    <div class="panel panel-danger">
+                                        <div class="panel-heading"><b>MCs</b></div>
+                                        <div class="panel-body">
+                                            <b>$modifiedMc</b>
+                                        </div>
+                                $else:
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading"><b>MCs</b></div>
+                                        <div class="panel-body">
+                                            <i>(unchanged)</i>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
+                                    <input type="hidden" name="code" value="$moduleCode">
+                                    <input type="hidden" name="restoreType" value="moduleDetails">
+                                    <input class="btn btn-lg btn-primary" type="submit" value="Restore Details">
+                                </form>
+                            </div>
+                        </div>
             $else:
                 <ul class="nav nav-tabs nav-justified">
                     <li class="active"><a data-toggle="tab" href="#all">Module Modification Summary</a></li>
@@ -200,7 +276,9 @@ $var title:View modified modules
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="all">
-                        <h2>Module Modification Summary</h2><br>
+                        <h2>Module Modification Summary</h2>
+                        <p>Shows an overview of what changes were applied to a modified module.</p>
+                        <br>
                         <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-summary-table">
                             <thead>
                                 <tr>
@@ -209,7 +287,7 @@ $var title:View modified modules
                                     <th>Is Mounting Modified?</th>
                                     <th>Is Quota Modified?</th>
                                     <th>Is Module Details Modified?</th>
-                                    <th data-sortable="false">Actions</th>
+                                    <!--th data-sortable="false">Actions</th-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -224,28 +302,28 @@ $var title:View modified modules
                                         <td>$moduleName</td>
                                         <td>
                                         $if isMountingModified is True:
-                                            <u><a href="/modifiedModules?modifyType=mounting&amp;code=$moduleCode" target="_blank">Yes</a></u>
+                                            <a href="/modifiedModules?modifyType=mounting&amp;code=$moduleCode" target="_blank">Yes</a>
                                         $else:
                                             -
                                         </td>
                                         <td>
                                         $if isQuotaModified is True:
-                                            <u><a href="/modifiedModules?modifyType=quota&amp;code=$moduleCode" target="_blank">Yes</a></u>
+                                            <a href="/modifiedModules?modifyType=quota&amp;code=$moduleCode" target="_blank">Yes</a>
                                         $else:
                                             -
                                         </td>
                                         <td>
                                         $if isDetailsModified is True:
-                                            <u><a href="/modifiedModules?modifyType=moduleDetails&amp;code=$moduleCode" target="_blank">Yes</a></u>
+                                            <a href="/modifiedModules?modifyType=moduleDetails&amp;code=$moduleCode" target="_blank">Yes</a>
                                         $else:
                                             -
                                             </td>
-                                        <td>
+                                        <!--td>
                                             <form action="/viewModule" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
                                                 <input class="btn btn-primary" type="submit" value="View Module"/>
                                             </form>
-                                        </td>
+                                        </td-->
                                     </tr>
                             </tbody>
                         </table>
@@ -259,10 +337,10 @@ $var title:View modified modules
                                 <tr>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th>Mounting in Current AY-Semester</th>
-                                    <th>Mounting in Target AY-Semester</th>
-                                    <th>Mounting Change</th>
-                                    <th data-sortable="false">Actions</th>
+                                    <!--th>Mounting in Current AY-Semester</th>
+                                    <th>Mounting in Target AY-Semester</th-->
+                                    <th>Change in Mounting</th>
+                                    <th data-sortable="false">Restore</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -281,26 +359,37 @@ $var title:View modified modules
                                             <!--td>$currentAySem</td>
                                             <td>$targetAySem</td-->
                                         $if mountingChange == 1:
-                                            <td>Unmounted (in <b>$currentAySem</b>)</td>
-                                            <td>Mounted (in <b>$targetAySem</b>)</td>
-                                            <td>Unmounted &#8594; Mounted</td>
+                                            <td>
+                                                Unmounted 
+                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                                &#8594; 
+                                                Mounted 
+                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                            </td>
+                                            <!--td>Unmounted &#8594; Mounted</td-->
                                         $elif mountingChange == 0:
-                                            <td>Mounted (in <b>$currentAySem</b>)</td>
-                                            <td>Unmounted (in <b>$targetAySem</b>)</td>
-                                            <td>Mounted &#8594; Unmounted</td>
+                                            <td>
+                                                Mounted 
+                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                                &#8594; 
+                                                Unmounted
+                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                            </td>
+                                            <!--td>Mounted &#8594; Unmounted</td-->
                                         $if True:
                                             <td>
-                                                <form action="/viewModule" method="get">
+                                                <!--form action="/viewModule" method="get">
                                                     <input type="hidden" name="code" value="$moduleCode">
                                                     <input class="btn btn-primary" type="submit" value="View Module"/>
-                                                </form>
+                                                </form-->
                                                 <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
                                                     <input type="hidden" name="code" value="$moduleCode">
                                                     <input type="hidden" name="currentAySem" value="$currentAySem">
                                                     <input type="hidden" name="targetAySem" value="$targetAySem">
                                                     <input type="hidden" name="mountingChange" value="$mountingChange">
                                                     <input type="hidden" name="restoreType" value="mounting">
-                                                    <input class="btn btn-danger" type="submit" value="Restore Mounting"/>
+                                                    <!--input class="btn btn-danger" type="submit" value="Restore Mounting"/-->
+                                                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Mounting"><span class="glyphicon glyphicon-refresh"></span></button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -316,12 +405,12 @@ $var title:View modified modules
                                 <tr>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th>Current AY-Semester</th>
-                                    <th data-sortable="false">Quota for Current AY-Semester</th>
-                                    <th>Target AY-Semester</th>
-                                    <th data-sortable="false">Quota for Target AY-Semester</th>
+                                    <th>Old Quota</th>
+                                    <!--th data-sortable="false">Quota for Current AY-Semester</th-->
+                                    <th>New Quota</th>
+                                    <!--th data-sortable="false">Quota for Target AY-Semester</th-->
                                     <th>Change in Quota</th>
-                                    <th data-sortable="false">Actions</th>
+                                    <th data-sortable="false">Restore</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -339,27 +428,36 @@ $var title:View modified modules
                                         <tr>
                                             <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
                                             <td>$moduleName</td>
-                                            <td>$currentAySem</td>
+                                            <!--td>$currentAySem</td-->
                                         $if currentQuota is None:
-                                            <td>?</td>
+                                            <td>
+                                                ? <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                            </td>
                                         $else:
-                                            <td>$currentQuota</td>
-                                        <td>$targetAySem</td>
+                                            <td>
+                                                $currentQuota <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $currentAySem"></span>
+                                            </td>
+                                        <!--td>$targetAySem</td-->
                                         $if targetQuota is None:
-                                            <td>?</td>
+                                            <td>
+                                                ? <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                            </td>
                                         $else:
-                                            <td>$targetQuota</td>
+                                            <td>
+                                                $targetQuota <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="in $targetAySem"></span>
+                                            </td>
                                         <td>$quotaChange</td>
                                         <td>
-                                            <form action="/viewModule" method="get">
+                                            <!--form action="/viewModule" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
                                                 <input class="btn btn-primary" type="submit" value="View Module"/>
-                                            </form>
+                                            </form-->
                                         $if currentQuota == "Unmounted" or targetQuota == "Unmounted":
                                             <form action="/modifiedModules" method="get" onsubmit="alert('To restore this module\'s quota, the module\'s mounting has to be restored.');">
                                                 <input type="hidden" name="modifyType" value="mounting">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input class="btn btn-danger" type="submit" value="Restore Quota"/>
+                                                <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->
+                                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Quota"><span class="glyphicon glyphicon-refresh"></span></button>
                                             </form>                    
                                         $else:
                                             <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
@@ -367,7 +465,8 @@ $var title:View modified modules
                                                 <input type="hidden" name="targetAySem" value="$targetAySem">
                                                 <input type="hidden" name="quota" value="$currentQuota">
                                                 <input type="hidden" name="restoreType" value="quota">
-                                                <input class="btn btn-danger" type="submit" value="Restore Quota"/>
+                                                <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->
+                                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Quota"><span class="glyphicon glyphicon-refresh"></span></button>
                                             </form>
                                         </td>
                                         </tr>
@@ -375,16 +474,19 @@ $var title:View modified modules
                         </table>
                     </div>
                     <div class="tab-pane" id="moduleDetails">
-                        <h2>Modules with Modified Details</h2><br>
+                        <h2>Modules with Modified Details</h2>
+                        <p>Shows which details have been changed for a modified module.</p>
+                        <br>
                         <table class="table display dataTable table-bordered table-hover text-center" id="modified-modules-details-table">
                             <thead>
                                 <tr>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th>Name modified?</th>
+                                    <!--th>Name modified?</th>
                                     <th>Description modified?</th>
-                                    <th>Number of MCs modified?</th>
-                                    <th data-sortable="false">Actions</th>
+                                    <th>Number of MCs modified?</th-->
+                                    <th>Change in Details</th>
+                                    <th data-sortable="false">Restore</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -392,56 +494,62 @@ $var title:View modified modules
                                     <tr><td colspan=6>No data found</td></tr>
                                 $else:
                                     $for module in modifiedModulesDetails:
-                                        $ moduleCode = module[0]
-                                        $ moduleName = module[1]
-                                        $ isNameModified = module[2][0] is not None
-                                        $ isDescModified = module[2][1] is not None
-                                        $ isMcModified = module[2][2] is not None
-                                        <tr>
+                                        $ moduleCode = module[0][0]
+                                        $ moduleName = module[0][4]
+                                        $ isNameModified = module[1][0]
+                                        $ isDescModified = module[1][1]
+                                        $ isMcModified = module[1][2]
+                                        <tr id="$moduleCode" data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
                                             <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
                                             <td>$moduleName</td>
+                                            <td data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
                                         $if isNameModified is True:
-                                            $ originalName = module[2][0][0]
-                                            $ modifiedName = module[2][0][1]
-                                             <td>
-                                                <b>From</b><br><br>
-                                                <i>"$originalName"</i><br><br>
-                                                <b>to</b><br><br>
-                                                <i>"$modifiedName"</i><br><br>
-                                            </td>
-                                        $else:
-                                            <td>-</td>
+                                            $ originalName = module[0][1]
+                                            $ modifiedName = module[0][4]
+                                            Name Changed: <span class="detail-change-text">From <b>$originalName</b> to <b>$modifiedName</b></span>
+                                            <br>
+                                            <br>
                                         $if isDescModified is True:
-                                            $ originalDesc = module[2][1][0]
-                                            $ modifiedDesc = module[2][1][1]
-                                             <td>
-                                                <b>From</b><br><br>
-                                                <i>"$originalDesc"</i><br><br>
-                                                <b>to</b><br><br>
-                                                <i>"$modifiedDesc"</i><br><br>
-                                            </td>
-                                        $else:
-                                            <td>-</td>
+                                            Description Changed: <a href="javascript:void(0)">Click to show</a>
+                                            <br>
+                                            <br>
                                         $if isMcModified is True:
-                                            $ originalMc = module[2][2][0]
-                                            $ modifiedMc = module[2][2][1]
-                                             <td>
-                                                <b>From</b> <i>"$originalMc"</i><br><br>
-                                                <b>to</b> <i>"$modifiedMc"</i><br><br>
-                                            </td>
-                                        $else:
-                                            <td>-</td>
+                                            $ originalMc = module[0][3]
+                                            $ modifiedMc = module[0][6]
+                                            MCs Changed: <span class="detail-change-text">From <b>$originalMc</b> to <b>$modifiedMc</b></span>
+                                        </td>
                                         $if True:
                                             <td>
-                                                <form action="/viewModule" method="get">
+                                                <!--form action="/viewModule" method="get">
                                                     <input type="hidden" name="code" value="$module[0]">
                                                     <input class="btn btn-primary" type="submit" value="View Module"/>
-                                                </form>
+                                                </form-->
                                                 <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s details?')){event.preventDefault();}">
-                                                    <input type="hidden" name="code" value="$module[0]">
+                                                    <input type="hidden" name="code" value="$module[0][0]">
                                                     <input type="hidden" name="restoreType" value="moduleDetails">
-                                                    <input class="btn btn-danger" type="submit" value="Restore Details"/>
+                                                    <!--input class="btn btn-primary" type="submit" value="Restore Details"/-->
+                                                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Details"><span class="glyphicon glyphicon-refresh"></span></button>
                                                 </form>
+                                            </td>
+                                        </tr>
+                                        $if isDescModified is True:
+                                            <tr class="collapse" id="modified-details-child-row-$moduleCode">
+                                            $ originalDesc = module[0][2]
+                                            $ modifiedDesc = module[0][5]
+                                            <td colspan=4>
+                                                <div class="row">
+                                                    <div class="col-md-5 text-justify">
+                                                        <b>From</b><br>
+                                                        <i>"$originalDesc"</i>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <h3>&#8594;</h3>
+                                                    </div>
+                                                    <div class="col-md-5 text-justify">
+                                                        <b>To</b><br>
+                                                        <i>"$modifiedDesc"</i><br><br>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                             </tbody>

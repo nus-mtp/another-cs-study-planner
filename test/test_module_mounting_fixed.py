@@ -40,10 +40,9 @@ class TestCode(object):
                               '"/moduleMountingTentative" ' +\
                               'method="post">'
     FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
-                                     'value="Go To Tentative Module Mountings" ' +\
+                                     'value="Go To Module Mountings for Other AYs" ' +\
                                      'data-toggle="tooltip" data-placement="right" ' +\
-                                     'title="See tentative module mountings for the ' +\
-                                     'other AYs">'
+                                     'title="See tentative module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'

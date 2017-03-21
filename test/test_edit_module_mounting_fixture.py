@@ -16,10 +16,6 @@ class TestCode(object):
     EDIT_MOUNTING_BUTTON_FORM_ID = 'edit-mounting-button'
     EDIT_MOUNTING_FORM_ID = 'edit-mounting-form'
 
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover display ' +\
-                                        'dataTable">'
-
     def __init__(self):
         self.middleware = None
         self.test_app = None
@@ -83,20 +79,3 @@ class TestCode(object):
         #redirect back to individual module info page
         root.mustcontain("Module Info for")
         root.mustcontain("BT5110")
-
-    def test_contains_overlapping_modules_table(self):
-        '''
-            tests if the overlapping modules table exists
-        '''
-        root = self.test_app.get(self.URL_INDIVIDUAL_MOUNTING)
-        assert_equal(root.status, 200)
-        #tests if the correct page is loaded
-        root.mustcontain('BT5110')
-        root.mustcontain('Module Info')
-
-        edit_mounting_button = root.forms__get()[self.EDIT_MOUNTING_BUTTON_FORM_ID]
-        response = edit_mounting_button.submit()
-
-        assert_equal(response.status, 200)
-
-        response.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)

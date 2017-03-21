@@ -1,4 +1,4 @@
-$def with (moduleInfo, overlappingList)
+$def with (moduleInfo)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -8,59 +8,50 @@ $ moduleMC = moduleInfo[3]
 $ title_string = 'Editing ' + moduleCode
 
 $var title:$title_string
+$ home = ['/', 'Home']
+$ moduleInformation = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ editModule = ['#', 'Edit: ' + moduleCode]
 
+$var hierarchy = [home, moduleInformation, viewModule, editModule]
 
 <body>
     <div class="container-block container">
         <div class="row red">
-            <div class="col-md-6 module-info-wrapper">
-                <h1 class="row title text-center">Edit: $moduleCode</h1>
-                <div class="row">
-                    <!--module information-->
-                    <form id="edit-module-form" name="edit-module-form" action="/editModule" method="post">
-                        <input type="hidden" name="code" value="$moduleInfo[0]" required>
-                        <div class="form-group">
-                            <label for="module-name">Module Name:</label>
-                            <input type="text" name="name" value="$moduleName" class="form-control" id="module-name" pattern="[a-zA-Z0-9\s]+" title="Module name should be alphanumeric." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="no-mc">Number of MCs</label>
-                            <input type="number" min="0" max="12" size="10" name="mc" value="$moduleMC" class="form-control" id="no-mc" placeholder="no. MCs" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$moduleDescription</textarea>
-                        </div>
-                        <input type="hidden" name="status" value="submit" required>
-                        <input class="btn btn-primary" type="submit" value="Submit" />
-                    </form>
-                </div>
-                <br>
-                <hr>
-            </div>
-            <div class="col-md-6 module-analysis-wrapper">
-                <h1 class="row title text-center">Statistics</h1>
-                <br>
-                <br>
-                <table id="common-module-table" class="table table-bordered table-hover display dataTable">
-                <thead>
-                    <tr>
-                        <th>Module 1</th>
-                        <th data-sortable="false">Module 2</th>
-                        <th>For AY-Sem</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    $for row in overlappingList:
-                        <tr>
-                            <td class="text-center">$row[0]</td>
-                            <td class="text-center">$row[1]</td>
-                            <td class="text-center">$row[2]</td>
-                            <td class="text-center">$row[3]</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-12">
+                <h1 class="title text-center">Edit <b>General Information</b> For <b>$moduleCode</b></h1>
+                    <div class="row">
+                        <!--module information-->
+                        <form id="edit-module-form" name="edit-module-form" action="/editModule" method="post">
+                            <input type="hidden" name="code" value="$moduleInfo[0]" required>
+                            <div class="form-group">
+                                <label for="module-name">Module Name:</label>
+                                <input type="text" name="name" value="$moduleName" class="form-control" id="module-name" pattern="[a-zA-Z0-9\s]+" title="Module name should be alphanumeric." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="no-mc">Number of MCs</label>
+                                <input type="number" min="0" max="12" size="10" name="mc" value="$moduleMC" class="form-control" id="no-mc" placeholder="no. MCs" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$moduleDescription</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="preclusion">Preclusion</label>
+                                <p>-- edit function is not available yet.</p>
+                                <!--textarea class="form-control" id="preclusion" placeholder="e.g. CS1010"></textarea-->
+                            </div>
+                            <div class="form-group">
+                                <label for=" prerequisite"> Prerequisite</label>
+                                <p>-- edit function is not available yet.</p>
+                                <!--textarea class="form-control" id=" prerequisite" placeholder="e.g. CS1010"></textarea-->
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/viewModule?code=$moduleInfo[0]';}">Cancel</button>
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </form>
+                    </div>
+                    <br>
+                    <hr>
             </div>
         </div>
     </div>

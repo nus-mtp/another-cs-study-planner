@@ -91,6 +91,7 @@ span[id*='id-display'] {
 .sidebar a:hover, .offcanvas a:focus{
     color: #ffffff;
 }
+
 .sidebar a:not([class*='inner-list-header']):not([class*='closebtn']):hover {
     text-decoration: underline;
 }
@@ -285,6 +286,7 @@ td > a {
     margin: 0px;
 }
 
+
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
 /*************************************************************************/
@@ -294,8 +296,8 @@ td > a {
 
 tr[id*='modified-details-child-row'] {
     background-color: #f2f2f2;
-
 }
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
