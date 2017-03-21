@@ -8,9 +8,21 @@ tr > th {
 	text-align: center;
 }
 
+
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
+/* ========== STYLING FOR NAVBAR ========== */
+span[id*='id-display'] {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#id-well {
+    padding: 12px;
+    margin-right: 25px;
+}
+
 
 /* ========== STYLING FOR SIDEBAR ========== */
 
@@ -22,10 +34,23 @@ tr > th {
     z-index: 1; /* Stay on top */
     top: 0;
     left: 0;
-    background-color: #245580;
+    background-color: #2d6a9f;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidebar > ul, .sidebar > ul > ul {
+    list-style: none;
+}
+
+.sidebar a.inner-list-header {
+    color: #ffffff;
+    font-style: italic;
+}
+
+.sidebar a.inner-list-header:hover {
+    text-decoration: none;
 }
 
 /* The navigation menu links */
@@ -42,12 +67,9 @@ tr > th {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
-    color: #dddd3e;
+    color: #ffffff;
     display: block;
     transition: 0.3s
-}
-.inline{
-    display: inline-block;
 }
 
 .ex, .ex2, .ex3 {
@@ -61,9 +83,16 @@ tr > th {
     height: 50px;
 }
 
+.inline{
+    display: inline-block;
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidebar a:hover, .offcanvas a:focus{
     color: #ffffff;
+}
+
+.sidebar a:not([class*='inner-list-header']):not([class*='closebtn']):hover {
     text-decoration: underline;
 }
 
@@ -76,10 +105,8 @@ tr > th {
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
+td > a {
+    text-decoration: underline;
 }
 
 
@@ -92,9 +119,11 @@ tr > th {
     z-index: 1;
 }
 
+
 /*************************************************************************/
 /* ======================= STYLING FOR HOME PAGE ======================= */
 /*************************************************************************/
+
 #accordion .panel-heading {
     padding: 0;
 }
@@ -118,10 +147,10 @@ tr > th {
 }
 
 
-
 /*************************************************************************/
 /* ================ STYLING FOR LOGIN-REGISTRATION PAGE ================ */
 /*************************************************************************/
+
 #register-form-wrapper {
     border: 1px solid grey;
     margin: 0 auto;
@@ -130,6 +159,15 @@ tr > th {
 
 .account-form-wrapper > form > table {
     margin: 0 auto;
+}
+
+
+/*************************************************************************/
+/* =================== STYLING FOR 404 NOT-FOUND PAGE ================== */
+/*************************************************************************/
+
+#notfound-error-msg {
+    color: red;
 }
 
 /*************************************************************************/
@@ -146,7 +184,9 @@ tr > th {
 }
 
 #options {
-	height: 30%;
+    padding-bottom: 2.5%;
+	margin-left: 10%;
+    margin-right: 10%;
 }
 
 
@@ -183,14 +223,16 @@ tr > th {
     margin-bottom: 15px;
 }
 
+
 /*************************************************************************/
-/* ==================== STYLING FOR MODULES TAKEN TOGETHER PAGE =================== */
+/* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
 /*************************************************************************/
 
 .modules-taken-together{
     margin: 20px 0px;
     float: right;
 }
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
@@ -223,6 +265,39 @@ tr > th {
 .modules-taken-prior-stats td {
     padding-bottom: 15px;
 }
+
+.dropdown-btn-custom{
+    width: 100%;
+    align-self: flex-end;
+    background-color: white;
+    border: 0px;
+}
+
+.dropdown-btn-custom:hover{
+    background-color: gainsboro;
+}
+
+.dropdown-btn-custom-main{
+    float: right;
+}
+
+.no-padding-margin{
+    padding: 0px;
+    margin: 0px;
+}
+
+
+/*************************************************************************/
+/* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
+/*************************************************************************/
+.detail-change-text {
+    background-color: #f2f2f2;
+}
+
+tr[id*='modified-details-child-row'] {
+    background-color: #f2f2f2;
+}
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
@@ -340,4 +415,3 @@ tr > th {
 
 #module-view-stats-footer {
     margin-bottom: 30px;
-}

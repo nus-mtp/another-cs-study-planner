@@ -141,8 +141,10 @@ class Modified(object):
     def get_modules_with_modified_details(self):
         '''
             Get all modules whose details (name/description/MC) has been modified.
-            Return the module code, module name,
-            and [name modification, desc modification, MC modification] (if any)
+            Return the module details
+            (code, old name, old desc, old MC, new name, new desc, new MC),
+            and whether the details have been modified
+            (is_named_modified, is_desc_modified, is_MC_modified)
         '''
         modified_modules = model.get_modules_with_modified_details()
         modified_modules = [list(module) for module in modified_modules]
@@ -166,15 +168,9 @@ class Modified(object):
                 del modified_modules[i]
                 continue
 
-            modifications = [None, None, None]
-            if is_name_modified:
-                modifications[0] = (old_module_name, current_module_name)
-            if is_desc_modified:
-                modifications[1] = (old_module_desc, current_module_desc)
-            if is_mc_modified:
-                modifications[2] = (old_module_mc, current_module_mc)
+            modifications = [is_name_modified, is_desc_modified, is_mc_modified]
 
-            modified_modules[i] = (module_code, current_module_name, modifications)
+            modified_modules[i] = (module_details, modifications)
             i += 1
 
         return modified_modules
@@ -191,7 +187,8 @@ class Modified(object):
         modified_details_modules = self.get_modules_with_modified_details()
         modified_mounting_module_codes_names = [module[0:2] for module in modified_mounting_modules]
         modified_quota_module_codes_names = [module[0:2] for module in modified_quota_modules]
-        modified_details_module_codes_names = [module[0:2] for module in modified_details_modules]
+        modified_details_module_codes_names = [module[0][0::4]
+                                               for module in modified_details_modules]
 
         modified_module_codes_names = modified_mounting_module_codes_names +\
                                       modified_quota_module_codes_names +\
@@ -242,18 +239,30 @@ class Modified(object):
         modified_modules_quota = []
         modified_modules_details = []
         modified_modules = []
-        if module_code is not None and (modify_type == "mounting"
-                                        or modify_type == "quota"
-                                        or modify_type == "moduleDetails"):
+        if module_code is not None:
+            module_info = model.get_module(module_code)
+            if module_info is None:
+                return RENDER.notfound("Invalid module code '" + module_code + "'")
+
             if modify_type == "mounting":
                 modified_modules = self.get_modules_with_modified_mounting()
+                module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type == "quota":
                 modified_modules = self.get_modules_with_modified_quota()
+                module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type == "moduleDetails":
+                module = None
                 modified_modules = self.get_modules_with_modified_details()
-            module = [module for module in modified_modules if module[0] == module_code]
+                module = None
+                for mm in modified_modules:
+                    if mm[0][0] == module_code:
+                        module = mm
+                        break
+            else:
+                return RENDER.notfound("Invalid modify type '" + modify_type + "'")
 
             modified_modules = module
+
         # Else return all 4 modification tables, for all the modified modules
         else:
             modified_modules_summary = self.get_all_modified_modules()

@@ -122,7 +122,6 @@ class ViewMod(object):
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
         number_of_student_planning = model.get_number_students_planning(module_code)
-        overlapping_modules_list = self.get_overlapping_mods(module_code)
         prereq_string = model.get_prerequisite_as_string(module_code)
         preclude_string = model.get_preclusion_as_string(module_code)
         is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
@@ -130,10 +129,4 @@ class ViewMod(object):
         #get html of overlapping modules template
         return RENDER.viewModule(module_info, self.fixed_mounting_plan,
                                  self.tenta_mounting_plan, number_of_student_planning,
-                                 overlapping_modules_list, is_starred, prereq_string,
-                                 preclude_string)
-
-
-    def POST(self):
-        ''' Redirect '''
-        raise web.seeother('/viewModule')
+                                 is_starred, prereq_string, preclude_string)
