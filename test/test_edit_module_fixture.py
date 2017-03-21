@@ -145,6 +145,5 @@ class TestCode(object):
         edit_module_mounting_form.__setitem__("quota", -1)
         response = edit_module_mounting_form.submit()
 
-        print(response)
         assert_equal(response.status, 200)
         response.mustcontain("alert('Error: Failed to edit module.');")

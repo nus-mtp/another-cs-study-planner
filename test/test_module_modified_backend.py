@@ -652,12 +652,12 @@ class TestCode(object):
         is_desc_modified = None
         is_mc_modified = None
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[2][0] is not None
-                is_desc_modified = module[2][1] is not None
-                is_mc_modified = module[2][2] is not None
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
         assert_true(is_in_modified_modules)
         assert_true(is_name_modified)
         assert_false(is_desc_modified)
@@ -683,12 +683,12 @@ class TestCode(object):
         is_desc_modified = None
         is_mc_modified = None
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[2][0] is not None
-                is_desc_modified = module[2][1] is not None
-                is_mc_modified = module[2][2] is not None
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_true(is_desc_modified)
@@ -714,12 +714,12 @@ class TestCode(object):
         is_desc_modified = None
         is_mc_modified = None
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[2][0] is not None
-                is_desc_modified = module[2][1] is not None
-                is_mc_modified = module[2][2] is not None
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
         assert_true(is_in_modified_modules)
         assert_false(is_name_modified)
         assert_false(is_desc_modified)
@@ -754,12 +754,12 @@ class TestCode(object):
         is_desc_modified = None
         is_mc_modified = None
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[1][0] is not None
-                is_desc_modified = module[1][1] is not None
-                is_mc_modified = module[1][2] is not None
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
         assert_true(is_in_modified_modules)
         assert_true(is_name_modified)
         assert_true(is_desc_modified)
@@ -782,7 +782,7 @@ class TestCode(object):
 
         is_in_modified_modules = False
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
         assert_false(is_in_modified_modules)
@@ -1068,12 +1068,12 @@ class TestCode(object):
         is_mc_modified = None
 
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
-                is_name_modified = module[2][0]
-                is_desc_modified = module[2][1]
-                is_mc_modified = module[2][2]
+                is_name_modified = module[1][0]
+                is_desc_modified = module[1][1]
+                is_mc_modified = module[1][2]
                 break
 
         assert_true(is_in_modified_modules)
@@ -1088,7 +1088,7 @@ class TestCode(object):
         modified_modules = self.modified_modules_handler.get_modules_with_modified_details()
         is_in_modified_modules = False
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
                 break
@@ -1122,7 +1122,7 @@ class TestCode(object):
         is_mc_modified = None
 
         for module in modified_modules:
-            code = module[0]
+            code = module[0][0]
             if code == test_module_code:
                 is_in_modified_modules = True
                 is_name_modified = module[1][0]
