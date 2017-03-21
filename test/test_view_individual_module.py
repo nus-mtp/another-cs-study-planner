@@ -50,10 +50,9 @@ class TestCode(object):
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
                              'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom"'+\
-                                    ' value="View Students That Will Be Affected By This Module" '+\
-                                    'data-toggle="tooltip" data-placement="left" title="Show list of '+\
-                                    'students who are planning to take this module">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Students '+\
+                                    'Planning To Take This Module" data-toggle="tooltip" data-placement="left" '+\
+                                    'title="Show list of students who are planning to take this module">'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
                                    ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
