@@ -33,14 +33,14 @@ class TestCode(object):
     FORM_ALL_MODULES = '<form class="navForm" action="/modules" method="post">'
     FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                               'value="Go To Module Information" ' +\
-                              'data-toggle="tooltip" data-placement="right" ' +\
+                              'data-toggle="tooltip" data-placement="bottom" ' +\
                               'title="See all modules that exist in the system">'
     FORM_FIXED_MOUNTING = '<form class="navForm" action=' +\
                           '"/moduleMountingFixed" ' +\
                           'method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                  'value="Go To Module Mountings for Current AY" ' +\
-                                 'data-toggle="tooltip" data-placement="right" ' +\
+                                 'data-toggle="tooltip" data-placement="bottom" ' +\
                                  'title="See fixed module mountings for current AY">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
