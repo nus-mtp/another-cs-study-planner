@@ -59,6 +59,20 @@ $(function() {
     });
 });
 
+/*
+ *   FUNCTION FOR SHOWING PROMPT WHEN USER CLICKS ON LOGOUT BUTTON
+ */
+ function confirmLogout() {
+    toLogout = window.confirm("Are you sure you want to logout?");
+    if (toLogout) {
+        $.ajax({
+            type: "POST",
+            url: "/logout"
+        }).done(function() {
+            window.location = "/login";
+        })
+    }
+ }
 
 /*
  * FUNCTIONS FOR ENABLING SORTING FOR CERTAIN TABLES
@@ -89,23 +103,47 @@ $(function() {
     } );
 
     $('#modified-modules-summary-table').DataTable( {
-        "aaSorting": [ 0, "asc" ]
+        "aaSorting": [ 0, "asc" ],
+        "autoWidth": false,
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "35%" }
+        ]
     } );
 
     $('#modified-modules-mounting-table').DataTable( {
-        "aaSorting": [ 0, "asc" ]
+        "aaSorting": [ 0, "asc" ],
+        "autoWidth": false,
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "35%" }
+        ]
     } );
 
     $('#modified-modules-quota-table').DataTable( {
-        "aaSorting": [ 0, "asc" ]
+        "aaSorting": [ 0, "asc" ],
+        "autoWidth": false,
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "35%" },
+            { "targets": [2, 3, 4], "width": "13%" }
+        ]
     } );
 
     $('#modified-modules-details-table').DataTable( {
-        "aaSorting": [ 0, "asc" ]
+        "aaSorting": [ 0, "asc" ],
+        "autoWidth": false,
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "35%" },
+        ]
     } );
 
     $('#specific-modified-module').DataTable( {
-
+        "autoWidth": false,
+        "columnDefs": [
+            { "targets": [0, 1], "width": "25%" }
+        ]
     } );
 
     $('#student-focus-area-table').DataTable( {
@@ -116,23 +154,36 @@ $(function() {
     } );
 
     $('#oversubscribed-modules-table').DataTable( {
-        "order": [[ 3, "desc" ]]
+        "order": [[ 4, "desc" ]],
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "35%" }
+        ]
     } );
 
     $('#modules-taken-prior-table').DataTable( {
-        "order": [[ 6, "desc" ], [ 0, "asc" ], [ 3, "asc" ]]
+        "order": [[ 6, "desc" ], [ 0, "asc" ], [ 3, "asc" ]],
+        "columnDefs": [
+            { "targets": [0, 3], "width": "8%" },
+            { "targets": [1, 4], "width": "20%" },
+            { "targets": 6, "width": "20%" }
+        ]
     } );
 
     $('#modules-taken-prior-intern-table').DataTable( {
-        "order": [[ 2, "desc" ]]
+        "order": [[ 2, "desc" ]],
+        "columnDefs": [
+            { "targets": 0, "width": "15%" },
+            { "targets": 1, "width": "60%" },
+        ]
     } );
      
     $('#common-module-table').DataTable( {
-        aaSorting: []
+        "aaSorting": []
     } );
 
     $('#non-overlap-table').DataTable( {
-        aaSorting: [],
+        "aaSorting": [],
         "deferRender": true
     } );
 
