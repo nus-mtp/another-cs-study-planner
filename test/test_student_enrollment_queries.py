@@ -117,7 +117,9 @@ class TestCode(object):
             'Networking and Distributed Systems': 0,
             'Parallel Computing': 0,
             'Programming Languages': 0,
-            'Software Engineering': 5
+            'Software Engineering': 5,
+            'Interactive Media': 0,
+            'Visual Computing': 0
         }
         num_of_focus_area = len(num_in_focus)
 
