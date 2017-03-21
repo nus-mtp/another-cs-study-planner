@@ -46,6 +46,9 @@ class TestCode(object):
     QUOTA_CHANGES_TABLE_QUOTA_CHANGE = '<th>Change in Quota</th>'
 
     DETAIL_CHANGES_TABLE_DETAIL_CHANGE = '<th>Change in Details</th>'
+    DETAIL_CHANGES_TABLE_DETAIL_CHANGE_BUTTON = '<input class="btn btn-lg ' +\
+                                                'btn-primary" type="submit" ' +\
+                                                'value="Restore Details">'
 
     DETAIL_CHANGES_TARGET_MODULE_PANELS = '<div class="panel panel-primary">'
     DETAIL_CHANGES_TARGET_MODULE_OLD_DETAILS = '<h3 class="text-center">' +\
@@ -199,6 +202,7 @@ class TestCode(object):
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_DESC_HEADER)
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_MC_HEADER)
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_PANEL_BODY)
+        root.mustcontain(self.DETAIL_CHANGES_TABLE_DETAIL_CHANGE_BUTTON)
 
 
     def test_view_changes_for_invalid_module_response(self):
