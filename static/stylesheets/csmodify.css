@@ -72,6 +72,26 @@ span[id*='id-display'] {
     transition: 0.3s
 }
 
+.ex, .ex2, .ex3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align:middle;
+    line-height: normal;
+    padding: 0;
+}
+.navbar-btn{
+    height: 50px;
+}
+
+.inline{
+    display: inline-block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover, .offcanvas a:focus{
+    color: #ffffff;
+}
+
 .sidebar a:not([class*='inner-list-header']):not([class*='closebtn']):hover {
     text-decoration: underline;
 }
@@ -244,6 +264,26 @@ td > a {
     padding-bottom: 15px;
 }
 
+.dropdown-btn-custom{
+    width: 100%;
+    align-self: flex-end;
+    background-color: white;
+    border: 0px;
+}
+
+.dropdown-btn-custom:hover{
+    background-color: gainsboro;
+}
+
+.dropdown-btn-custom-main{
+    float: right;
+}
+
+.no-padding-margin{
+    padding: 0px;
+    margin: 0px;
+}
+
 
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
@@ -254,6 +294,7 @@ td > a {
 
 tr[id*='modified-details-child-row'] {
     background-color: #f2f2f2;
+}
 
 
 /*******************************************************************************************/

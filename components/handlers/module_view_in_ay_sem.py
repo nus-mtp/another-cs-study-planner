@@ -193,12 +193,6 @@ class IndividualModule(object):
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
                                            target_ay_sem, self.mounting_status,
-                                           self.quota, overlapping_mod_list,
-                                           is_starred,
+                                           self.quota, is_starred,
                                            self.focus_areas, self.focus_area_acronyms,
                                            self.student_year_counts, self.focus_area_counts)
-
-
-    def POST(self):
-        ''' Redirect '''
-        raise web.seeother('/')

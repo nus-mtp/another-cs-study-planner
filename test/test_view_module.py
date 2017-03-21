@@ -33,15 +33,12 @@ class TestCode(object):
 
     URL_INDIV_MODULE_VIEW = '/individualModuleInfo?code=BT5110'
     URL_INDIV_MODULE_VIEW_INVALID = '/individualModuleInfo?code=CS0123'
-
-    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" ' +\
-                            'action="/editModule" method="get">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="btn btn-lg btn-primary" type="submit"' +\
-                                   ' value="Edit General Module Info" ' +\
-                                   'data-toggle="tooltip" data-placement="right" ' +\
-                                   'title="Edit the module\'s name, description, ' +\
-                                   'MC, pre-requisites and preclusions">'
-
+    FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
+                            'action="/editModule" method="get" class="no-padding-margin">'
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
+                                   ' General Module Info" data-toggle="tooltip" data-placement="left"'+\
+                                   ' title="Edit the module\'s name, description, MC, '+\
+                                   'pre-requisites and preclusions">'
     CONTENT_SUMMARY = "Module Info Overview"
     CONTENT_CODE = "BT5110"
     CONTENT_NAME = "Data Management and Warehousing"
@@ -49,22 +46,22 @@ class TestCode(object):
     CONTENT_DESCRIPTION = "Module Description:"
     CONTENT_PRECLUSION = "Module Preclusions:"
     CONTENT_PREREQUISITE = "Module Prerequisites"
-    CONTENT_INFO_FIXED = "Information for Current AY (Fixed):"
+    CONTENT_INFO_FIXED = " <h4><b>Information for Current AY (Fixed)</b></h4>"
     CONTENT_INFO_TENTA = "Information for Future AYs (Tentative)"
     CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
-    CONTENT_STATS = "Module Statistics"
 
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover display ' +\
-                                        'dataTable">'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1 = '<th>Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME = '<th>Name of Module 1</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2 = '<th>Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME = '<th>Name of Module 2</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM = '<th>For AY-Sem</th>'
-    CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS = '<th>Number of Students</th>'
+
+    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
+                              ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Modules'+\
+                                     ' Overlapping With This Module" data-toggle="tooltip" data-placement="left"'+\
+                                     ' title="Show modules that are also taken with this module">'
+    DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
+                   'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
+                   'aria-expanded="false">More Actions <span class="caret"></span></button>'
+
     CONTENT_STAR_BUTTON = '<span class="glyphicon glyphicon-star-empty">'
     CONTENT_UNSTAR_BUTTON = '<span class="glyphicon glyphicon-star">'
 
@@ -200,32 +197,29 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_TABLE_MOUNT_FLAG)
         root.mustcontain(self.CONTENT_TABLE_QUOTA)
         root.mustcontain(self.CONTENT_TABLE_STUDENT_DEMAND)
-        root.mustcontain(self.CONTENT_STATS)
         root.mustcontain(self.CONTENT_STAR_BUTTON)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO)
         root.mustcontain(self.FORM_EDIT_MODULE_INFO_BUTTON)
-
+        root.mustcontain(self.FORM_OVERLAPPING_MODULE)
+        root.mustcontain(self.FORM_OVERLAPPING_MODULE_BUTTON)
+        root.mustcontain(self.DROPDOWN_BTN)
 
     def test_contains_overlapping_module_table(self):
-        '''
-            tests if overlapping modules table exists
-        '''
-        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_1_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_2_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
-
-
-    def test_goto_edit_general_info(self):
         '''
             Tests if user can access the 'Edit General Module Info' option
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
         edit_form = root.forms__get()["edit-module-button"]
+
+        response = edit_form.submit()
+        assert_equal(response.status, 200)
+
+    def test_goto_overlapping_with_module(self):
+        '''
+            test if user can access to moverlapping with module page
+        '''
+        root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
+        edit_form = root.forms__get()["view-overlapping-with-module"]
 
         response = edit_form.submit()
         assert_equal(response.status, 200)

@@ -21,9 +21,10 @@ class TestCode(object):
     EDIT_MODULE_SPECIFIC_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_SPECIFIC_FORM_NAME = 'edit-module-form'
 
-    CONTENT_OVERLAPPING_MODULES_TABLE = '<table id="common-module-table" ' +\
-                                        'class="table table-bordered table-hover display ' +\
-                                        'dataTable">'
+    EDIT_MODULE_TITLE = ' <h1 class="title text-center">Edit <b>General Information</b>'+\
+                        ' For <b>BT5110</b></h1>'
+    EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> For <b>AY 17/18 Sem 1</b></h1>'
+    TESTING_MODULE = 'BT5110'
 
     def __init__(self):
         self.middleware = None
@@ -58,7 +59,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
-        response.mustcontain('Edit: BT5110')
+        response.mustcontain(self.EDIT_MODULE_TITLE)
 
 
     def test_access_module_edit_from_individual_module_view(self):
@@ -73,7 +74,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
 
-        response.mustcontain('Edit: BT5110')
+        response.mustcontain(self.EDIT_MODULE_TITLE)
 
 
     def test_module_edit_direct_access_correct_response(self):
@@ -84,7 +85,7 @@ class TestCode(object):
         root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_VALID)
         assert_equal(root.status, 200)
 
-        root.mustcontain('Edit: BT5110')
+        root.mustcontain(self.EDIT_MODULE_SPECIFIC_TITLE)
 
 
     def test_module_edit_direct_access_invalid_code_url(self):
@@ -122,7 +123,7 @@ class TestCode(object):
 
         assert_equal(goto_edit_response.status, 200)
         #successfully reached editmodule page
-        goto_edit_response.mustcontain('Edit: BT5110')
+        goto_edit_response.mustcontain(self.EDIT_MODULE_TITLE)
 
         edit_submit_button = goto_edit_response.forms__get()[self.EDIT_MODULE_SPECIFIC_FORM_NAME]
         submit_edit_response = edit_submit_button.submit()
@@ -131,7 +132,7 @@ class TestCode(object):
 
         #successfully reached original moduleview page
         root.mustcontain("Module Info Overview")
-        root.mustcontain("BT5110")
+        root.mustcontain(self.TESTING_MODULE)
 
 
     def test_module_edit_submit_invalid_quota(self):
@@ -145,19 +146,4 @@ class TestCode(object):
         response = edit_module_mounting_form.submit()
 
         assert_equal(response.status, 200)
-
         response.mustcontain("alert('Error: Failed to edit module.');")
-
-
-    def test_contains_overlapping_modules_table(self):
-        '''
-            Tests if overlapping modules table exist
-        '''
-        root = self.test_app.get(self.URL_INDIVIDUAL_MODULE_VIEW)
-        assert_equal(root.status, 200)
-        submit_button = root.forms__get()[self.EDIT_MODULE_SPECIFIC_BUTTON_FORM_NAME]
-        response = submit_button.submit()
-
-        assert_equal(response.status, 200)
-
-        response.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
