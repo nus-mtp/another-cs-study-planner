@@ -16,6 +16,9 @@ INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
 LENGTH_EMPTY = 0
 
+# Currently, the system only has data for AY 16/17 and AY 17/18 
+NUMBER_OF_AY_SEMS_IN_SYSTEM = 2
+
 def get_all_modules():
     '''
         Get the module code, name, description, and MCs of all modules
@@ -1191,6 +1194,20 @@ def is_aysem_in_list(given_aysem, given_list):
             return True
 
     return False
+
+
+def is_aysem_in_system(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+    '''
+        Returns true if given aysem is found inside the system
+    '''
+    current_ay = get_current_ay()
+    ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
+    target_ay = current_ay
+    for i in range(ay_sem_count-1):
+        target_ay = get_next_ay(target_ay)
+        ay_sems_in_system.append(target_ay+" Sem 1")
+        ay_sems_in_system.append(target_ay+" Sem 2")
+    return ay_sem in ay_sems_in_system
 
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
