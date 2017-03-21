@@ -207,7 +207,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
 									<td>
 										<form action="/individualModuleInfo" method="get">
 											<input type="hidden" name="code" value="$moduleCode">
-											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input type="hidden" name="aysem" value="$entry[0]">
 											<input class="btn btn-primary" type="submit" value="View">
 										</form>
 									</td>								
@@ -265,12 +265,12 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                         <td>
                                             <form style="display:inline-block" action="/individualModuleInfo" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="targetAY" value="$entry[0]">
+                                                <input type="hidden" name="aysem" value="$entry[0]">
                                                 <input class="btn btn-primary" type="submit" value="View">
                                             </form>
                                             <form style="display:inline-block" action="/editMounting" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="aySem" value="$entry[0]">
+                                                <input type="hidden" name="aysem" value="$entry[0]">
                                                 <input class="btn btn-primary" type="submit" value="Edit">
                                             </form>
                                         </td>
