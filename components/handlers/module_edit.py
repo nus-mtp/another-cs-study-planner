@@ -29,9 +29,7 @@ class EditModuleInfo(object):
         if module_info is None:
             return RENDER.notfound("Module " + module_code + " does not exist in the system.")
 
-        overlapping_mod_list = model.get_mod_taken_together_with(module_code)
-
-        return RENDER.moduleEdit(module_info, overlapping_mod_list)
+        return RENDER.moduleEdit(module_info)
 
 
     def POST(self, *test_data):
@@ -106,9 +104,8 @@ class EditMountingInfo(object):
         module_ay_sem_info_handler.load_mounting_info(module_code, ay_sem)
         mounting_value = module_ay_sem_info_handler.get_mounting_status()
         quota = module_ay_sem_info_handler.get_quota()
-        overlapping_list = model.get_mod_taken_together_with(module_code)
 
-        return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota, overlapping_list)
+        return RENDER.mountingEdit(module_code, ay_sem, mounting_value, quota)
 
 
     def POST(self):
@@ -125,7 +122,6 @@ class EditMountingInfo(object):
                 quota = None
         except AttributeError:
             quota = None
-
         old_mounting_value = data.oldMountingValue
         mounting_status = data.mountingStatus
 
