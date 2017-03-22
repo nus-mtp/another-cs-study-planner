@@ -89,26 +89,6 @@ $var hierarchy = [home, moduleInfo, viewModule]
                 <h1 class="text-center"><b>Module Info Overview</b></h1>
                 <hr>
             </div>
-            <div class="row">
-                <!--buttons-->
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary btn-lg dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Actions <span class="caret"></span></button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-item text-center">
-                            <form id="edit-module-button" name="edit-module-button" action="/editModule" method="get" class="no-padding-margin">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input class="dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="left" title="Edit the module's name, description, MC, pre-requisites and preclusions">
-                            </form>
-                        </div>
-                        <div class="dropdown-item text-center">
-                            <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
-                                <input type="hidden" name="code" value="$moduleCode">
-                                <input type="submit" class="dropdown-btn-custom" value="View Modules Overlapping With This Module" data-toggle="tooltip" data-placement="left" title="Show modules that are also taken with this module">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
 			<div class="row">
                 <!--module info-->
 				<div class="col-md-12 module-header">
@@ -126,9 +106,29 @@ $var hierarchy = [home, moduleInfo, viewModule]
                             </h1>
                             <h3>$moduleName ($moduleMC MCs)</h3>
                             <br>
-                            
-                            <button type="button" style="margin-bottom: 15px;" class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota" onclick="scrollToTenta('infoTentaHeader', 750);">Edit Specific Module Info</button>
-                            <br>
+                            <!--buttons-->
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-lg dropdown-toggle dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More Actions <span class="caret"></span></button>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-item text-center">
+                                        <form id="edit-module-button" name="edit-module-button" action="/editModule" method="get" class="no-padding-margin">
+                                            <input type="hidden" name="code" value="$moduleCode">
+                                            <input class="dropdown-btn-custom" type="submit" value="Edit General Module Info" data-toggle="tooltip" data-placement="right" title="Edit the module's name, description, MC, pre-requisites and preclusions">
+                                        </form>
+                                    </div>
+                                    
+                                    <div class="dropdown-item text-center">
+                                        <button type="button" class="dropdown-btn-custom no-padding-margin" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota" onclick="scrollToTenta('infoTentaHeader', 750);">Edit Specific Module Info</button>
+                                    </div>
+                                    <div role="separator" class="dropdown-divider"></div>
+                                    <div class="dropdown-item text-center">
+                                        <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
+                                            <input type="hidden" name="code" value="$moduleCode">
+                                            <input type="submit" class="dropdown-btn-custom" value="View Modules Overlapping With This Module" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <button type="button" class="btn btn-lg btn-primary" onclick="window.location='/modules';">Back to Module List</button>
                         </div>
                     </div>
