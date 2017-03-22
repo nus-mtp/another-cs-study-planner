@@ -1436,6 +1436,7 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
                 raise web.notfound(error)
             else:
                 input_data.code = module_code.upper()
+
         elif input_type == "aysem":
             try:
                 ay_sem = input_data.aysem
@@ -1460,6 +1461,7 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
                 raise web.notfound(error)
             else:
                 input_data.aysem = valid_aysem
+
         elif input_type == "modify_type":
             try:
                 modify_type = input_data.modifyType
@@ -1472,6 +1474,7 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
             if not valid_modify_type:
                 error = RENDER.notfound('Modify type "' + modify_type + '" is not recognised by the system')
                 raise web.notfound(error)
+
         elif input_type == "moduleA" or input_type == "moduleB":
             try:
                 if input_type == "moduleA":
@@ -1487,4 +1490,5 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
                 raise web.notfound(error)
             else:
                 input_data.code = module_code.upper()
+
     return input_data
