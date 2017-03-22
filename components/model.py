@@ -4,6 +4,7 @@
 '''
 
 import hashlib
+import datetime
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 from psycopg2.extensions import AsIs
@@ -15,6 +16,7 @@ DB_CURSOR = CONNECTION.cursor()
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
 LENGTH_EMPTY = 0
+MONTH_AUGUST = 8
 
 def get_all_modules():
     '''
@@ -1312,3 +1314,51 @@ def get_mod_before_intern(ay_sem):
     DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
 
     return DB_CURSOR.fetchall()
+
+
+def get_current_ay_sem():
+    '''
+        Retrieves the current AY-Semester as a string.
+        e.g. "AY 16/17 Sem 2"
+    '''
+    current_date = get_current_date()
+    current_year = current_date.year
+    current_month = current_date.month
+
+    return get_ay_sem(current_year, current_month)
+
+
+def get_ay_sem(year, month):
+    '''
+        Retrieves AY-Semester as a string given the month and year values.
+    '''
+    if month < MONTH_AUGUST:
+        year_where_ay_starts = year - 1
+        acad_year = get_formatted_academic_year(year_where_ay_starts)
+        semester = 2
+    else:
+        acad_year = get_formatted_academic_year(year)
+        semester = 1
+
+    return "AY " + acad_year + " Sem " + str(semester)
+
+
+def get_current_date():
+    '''
+        Returns today's date as a Date Object.
+    '''
+    return datetime.date.today()
+
+
+def get_formatted_academic_year(year_where_ay_starts):
+    '''
+        Given the year which the Academic Year started in, formats and returns
+        the Academic Year (AY) as a string.
+        E.g. if AY started in 2015, this function returns "15/16"
+    '''
+    truncated_year = str(year_where_ay_starts)[-2:] # Retrieves last 2 digits
+    year_where_ay_ends = int(truncated_year) + 1
+
+    ay_formatted = truncated_year + "/" + str(year_where_ay_ends)
+
+    return ay_formatted
