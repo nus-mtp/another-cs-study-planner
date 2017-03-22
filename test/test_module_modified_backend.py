@@ -136,6 +136,7 @@ class TestCode(object):
         '''
             Clean up the database after all test cases are ran
         '''
+        model.NUMBER_OF_AY_SEMS_IN_SYSTEM = 2
         model.delete_fixed_mounting('BB1001', self.current_ay+' Sem 1')
         model.delete_fixed_mounting('BB1001', self.current_ay+' Sem 2')
         model.delete_fixed_mounting('BB1002', self.current_ay+' Sem 1')
@@ -563,7 +564,7 @@ class TestCode(object):
         test_mounting_change = 0
 
         # Set modified module to check for modifications in next two AYs
-        self.modified_modules_handler.number_of_future_ays = 2
+        model.NUMBER_OF_AY_SEMS_IN_SYSTEM = 3
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
         is_in_modified_modules = False
@@ -580,7 +581,7 @@ class TestCode(object):
                 mounting_change = module[4]
                 break
 
-        self.modified_modules_handler.number_of_future_ays = 1
+        model.NUMBER_OF_AY_SEMS_IN_SYSTEM = 2
 
         assert_true(is_in_modified_modules)
         assert_equal(test_current_aysem, current_aysem)

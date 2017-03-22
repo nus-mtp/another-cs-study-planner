@@ -17,8 +17,6 @@ class Modified(object):
         It retrieves a list of modified modules and determine which attributes
         have been modified.
     '''
-
-
     def get_modules_with_modified_mounting(self):
         '''
             Get all modules whose mounting has been modified in a future AY.
@@ -228,7 +226,6 @@ class Modified(object):
         modified_modules = []
         if module_code is not None:
             if modify_type.lower() == "mounting":
-                print "yes"
                 modified_modules = self.get_modules_with_modified_mounting()
                 module = [module for module in modified_modules if module[0] == module_code]
             elif modify_type.lower() == "quota":
