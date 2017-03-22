@@ -16,16 +16,8 @@ class TakePriorInternship(object):
         This class contains the implementations of the GET
         requests.
     '''
-
     CURRENT_SEM = 'AY 16/17 Sem 1'
-    AVAILABLE_AY_SEM = ['AY 16/17 Sem 1', 'AY 16/17 Sem 2', 'AY 17/18 Sem 1', 'AY 17/18 Sem 2']
-
-
-    def validateAYSem(self, aysem):
-        '''
-            Check if entered AY-Sem is correct
-        '''
-        return aysem in self.AVAILABLE_AY_SEM
+    AVAILABLE_AY_SEM = model.get_all_ay_sems()
 
 
     def GET(self):
@@ -40,20 +32,17 @@ class TakePriorInternship(object):
         ay_sem_of_interest = None
 
         #see if the user has already requested a search
+        input_data = model.validate_input(web.input(), ["aysem"], aysem_specific=False, attr_required=False)
         try:
-            input_data = web.input()
-            ay_sem = input_data.sem
+            ay_sem = input_data.aysem
             ay_sem_of_interest = ay_sem
         except AttributeError:
             ay_sem_of_interest = self.CURRENT_SEM
 
-        if self.validateAYSem(ay_sem_of_interest):
-            modules_before_internship = model.get_mod_before_intern(ay_sem_of_interest)
-            return RENDER.modulesTakenPriorToInternship(modules_before_internship,
-                                                        self.AVAILABLE_AY_SEM,
-                                                        ay_sem_of_interest)
-        else:
-            return Outcome().POST("mods-before-internship", False, None)
+        modules_before_internship = model.get_mod_before_intern(ay_sem_of_interest)
+        return RENDER.modulesTakenPriorToInternship(modules_before_internship,
+                                                    self.AVAILABLE_AY_SEM,
+                                                    ay_sem_of_interest)
 
 
     def POST(self):
@@ -63,5 +52,9 @@ class TakePriorInternship(object):
         '''
         # will have input data as function is called from button
         input_data = web.input()
-        ay_sem = input_data.sem
-        raise web.seeother('/moduleTakenPriorToInternship?sem=' + ay_sem)
+        try:
+            ay_sem = input_data.aysem
+        except AttributeError:
+            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
+            raise web.notfound(error)
+        raise web.seeother('/moduleTakenPriorToInternship?aysem=' + ay_sem)
