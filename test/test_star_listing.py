@@ -2,7 +2,7 @@
     test_star_listing.py tests the starred module listing view.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session, model
 
@@ -95,7 +95,7 @@ class TestCode(object):
         # Checks if page contains target module
         response.mustcontain("BT5110")
 
-
+    @raises(Exception)
     def test_index_goto_invalid_module_overview_page_response(self):
         '''
             Tests if navigation to a module overview page with
@@ -103,11 +103,6 @@ class TestCode(object):
         '''
         root = self.test_app.get('/starredModules')
         response = root.goto('/viewModule?code=CS0123', method='get')
-        assert_equal(response.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        response.mustcontain("Not Found")
 
 
     def test_index_starredModules_listing(self):

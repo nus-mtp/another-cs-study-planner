@@ -12,7 +12,7 @@ class TestCode(object):
         go to individual module view, press edit mounting, check if
         edit mounting is loaded correctly.
     '''
-    URL_INDIVIDUAL_MOUNTING = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
+    URL_INDIVIDUAL_MOUNTING = '/individualModuleInfo?code=BT5110&aysem=AY+17%2F18+Sem+1'
     EDIT_MOUNTING_BUTTON_FORM_ID = 'edit-mounting-button'
     EDIT_MOUNTING_FORM_ID = 'edit-mounting-form'
 

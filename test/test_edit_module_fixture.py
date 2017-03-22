@@ -13,7 +13,7 @@ class TestCode(object):
     '''
 
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
-    URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
+    URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&aysem=AY+17%2F18+Sem+1'
     URL_EDIT_MODULE_SPECIFIC_VALID = '/editMounting?code=BT5110&aySem=AY+17%2F18+Sem+1'
     URL_EDIT_MODULE_SPECIFIC_INVALID_CODE = '/editMounting?code=CS0123&aySem=AY+17%2F18+Sem+1'
     URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM = '/editMounting?code=BT5110&aySem=AY+17%2F19+Sem+1'

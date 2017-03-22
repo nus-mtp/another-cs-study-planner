@@ -2,7 +2,7 @@
     test_view_individual_module.py tests the app's view individual mod page
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -13,27 +13,27 @@ class TestCode(object):
 
     URL_CONTAIN_CODE_AY_QUOTA = '/individualModuleInfo?' +\
                                 'code=BT5110' +\
-                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&aysem=AY+16%2F17+Sem+1' +\
                                 '&quota=60'
     URL_CONTAIN_FUTURE_AY = '/individualModuleInfo?' +\
                             'code=BT5110' +\
-                            '&targetAY=AY+17%2F18+Sem+1' +\
+                            '&aysem=AY+17%2F18+Sem+1' +\
                             '&quota=60'
     URL_CONTAIN_INVALID_CODE_AY_QUOTA = '/individualModuleInfo?' +\
                                 'code=CS0123' +\
-                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&aysem=AY+16%2F17+Sem+1' +\
                                 '&quota=60'
     URL_CONTAIN_CODE_INVALID_AY_QUOTA = '/individualModuleInfo?' +\
                                         'code=BT5110' +\
-                                        '&targetAY=AY+16%2F18+Sem+1' +\
+                                        '&aysem=AY+16%2F18+Sem+1' +\
                                         '&quota=60'
     URL_CONTAIN_CODE_AY_INVALID_QUOTA = '/individualModuleInfo?' +\
                                         'code=BT5110' +\
-                                        '&targetAY=AY+16%2F17+Sem+1' +\
+                                        '&aysem=AY+16%2F17+Sem+1' +\
                                         '&quota=70'
     URL_CONTAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
                                    '?code=CP3880' +\
-                                   '&targetAY=AY+16%2F17+Sem+1'+\
+                                   '&aysem=AY+16%2F17+Sem+1'+\
                                    '&quota='
 
 
@@ -116,31 +116,23 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
+    @raises(Exception)
     def test_view_individual_module_invalid_code_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
         '''
         root = self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     '''
         Tests if user will fail to access page for showing module overview
         if the target AY-semester is invalid.
     '''
+    @raises(Exception)
     def test_view_individual_module_invalid_ay_sem_response(self):
         # AY-Semester used here is '16/18 Sem 1'
         root = self.test_app.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     def test_view_individual_module_contents(self):

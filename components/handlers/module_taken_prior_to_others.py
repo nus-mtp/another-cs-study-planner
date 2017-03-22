@@ -88,8 +88,8 @@ class TakePriorTo(object):
         student_counts = model.get_number_of_students_who_took_modA_prior_to_modB(module_A.upper(),
                                                                                   module_B.upper(),
                                                                                   target_ay_sem)
-        students_in_module_B = model.get_number_of_students_taking_module(module_B.upper(),
-                                                                          target_ay_sem)
+        students_in_module_B = model.get_number_of_students_taking_module_in_ay_sem(module_B.upper(),
+                                                                                    target_ay_sem)
 
         student_prior_count = 0
         for count in student_counts:
