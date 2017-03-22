@@ -25,7 +25,7 @@ class Modules(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            module_infos = model.get_all_modules()
+            module_infos = model.get_all_modules_and_focus()
             return RENDER.moduleListing(module_infos)
 
 

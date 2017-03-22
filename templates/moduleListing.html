@@ -30,6 +30,7 @@ $var hierarchy = [home, moduleInfo]
                         <th>Name</th>
                         <th>Description</th>
                         <th>MCs</th>
+                        <th>Focus Area</th>
                         <th>Is New Module?</th>
                         <th data-sortable="false">Actions</th>
                     </tr>
@@ -41,6 +42,10 @@ $var hierarchy = [home, moduleInfo]
                         <td>$moduleInfo[1]</td>
                         <td>$moduleInfo[2]</td>
                         <td class="text-center">$moduleInfo[3]</td>
+                        $if not moduleInfo[5]:
+                            <td class="text-center">-</td>
+                        $else:
+                            <td class="text-center">$moduleInfo[5]</td>
                         $if moduleInfo[4][0:3] == 'New':
                             <td class="text-center">Yes</td>
                         $else:
