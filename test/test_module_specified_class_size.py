@@ -35,10 +35,10 @@ class TestCode(object):
                                'target AY-Semester</option>'
     FORM_QUERY_LOW_CLASS_SIZE_LABEL = '<label for="low"> with class size between </label>'
     FORM_QUERY_LOW_CLASS_SIZE_INPUT = '<input type="number" class="form-control" ' + \
-                                      'name="lowerClassSize" min="0" max="999" required>'
+                                      'name="lowerClassSize" min="0" max="999"'
     FORM_QUERY_HIGH_CLASS_SIZE_LABEL = '<label for="high"> and </label>'
     FORM_QUERY_HIGH_CLASS_SIZE_INPUT = '<input type="number" class="form-control" ' + \
-                                       'name="higherClassSize" min="0" max="999" required>'
+                                       'name="higherClassSize" min="0" max="999"'
     FORM_QUERY_SUBMIT_BUTTON = '<input type="submit"  value="Submit" class="btn btn-primary">'
 
     TABLE_HEADER_TITLE_FOR_PAGE_VALID = 'Modules in AY 16/17 Sem 1 with class size ' + \
