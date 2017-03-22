@@ -5,15 +5,16 @@ $var title:View Modified Modules
 $ home = ['/', 'Home']
 $ modifiedModulePage = ['#', 'Modified Modules']
 $ modifiedModuleLink = ['/modifiedModules', 'Modified Modules']
-$if modify_type == "mounting":
-    $ modifyType = ['#', 'Modified Mounting of ' + targetModuleCode]
-    $var hierarchy = [home, modifiedModuleLink, modifyType]
-$elif modify_type == "quota":
-    $ modifyType = ['#', 'Modified Quota of ' + targetModuleCode]
-    $var hierarchy = [home, modifiedModuleLink, modifyType]
-$elif modify_type == "moduleDetails":
-    $ modifyType = ['#', 'Modified Module Details of ' + targetModuleCode]
-    $var hierarchy = [home, modifiedModuleLink, modifyType]
+$if modify_type is not None:
+    $if modify_type.lower() == "mounting":
+        $ modifyType = ['#', 'Modified Mounting of ' + targetModuleCode]
+        $var hierarchy = [home, modifiedModuleLink, modifyType]
+    $elif modify_type.lower() == "quota":
+        $ modifyType = ['#', 'Modified Quota of ' + targetModuleCode]
+        $var hierarchy = [home, modifiedModuleLink, modifyType]
+    $elif modify_type.lower() == "moduledetails":
+        $ modifyType = ['#', 'Modified Module Details of ' + targetModuleCode]
+        $var hierarchy = [home, modifiedModuleLink, modifyType]
 $else:
     $var hierarchy = [home, modifiedModulePage]
 
@@ -24,7 +25,7 @@ $else:
             <p class="text-center">Shows all modules that have been modified</p>
             <br>
             $if targetModuleCode is not None:
-                $if modify_type == "mounting":
+                $if modify_type.lower() == "mounting":
                     <h2>Modified Mounting of <b>$targetModuleCode</b></h2>
                     <p><b>*Change in module mounting is always illustrated with respect to the module mounting in the current AY.</b></p>
                     <br>
@@ -83,7 +84,7 @@ $else:
                             </tr>
                     </tbody>
                     </table>
-                $elif modify_type == "quota":
+                $elif modify_type.lower() == "quota":
                     <h2>Modified Quota of <b>$targetModuleCode</b></h2>
                     <p><b>*Change in module quota is always illustrated with respect to the module quota in the current AY.</b></p>
                     <br>
@@ -159,7 +160,7 @@ $else:
                             </tr>
                     </tbody>
                     </table>
-                $elif modify_type == "moduleDetails":
+                $elif modify_type.lower() == "moduledetails":
                     <h2>Modified Module Details of <b>$targetModuleCode</b></h2>
                     <br>
                     $if targetModuleModifiedInfo is None:

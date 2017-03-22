@@ -1408,7 +1408,7 @@ def get_mod_before_intern(ay_sem):
     return DB_CURSOR.fetchall()
 
 
-def validate_input(input_data, input_types, is_future=False, aysem_specific=True):
+def validate_input(input_data, input_types, is_future=False, aysem_specific=True, attr_required=True):
     '''
         Validates that the GET input data (in the URL) is valid.
 
@@ -1420,6 +1420,9 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
         2) The value exists in the system
         If any input is invalid, return 404 page.
     '''
+    if attr_required == False and len(input_data) == 0:
+        return input_data
+
     for input_type in input_types:
         if input_type == "code":
             try:
@@ -1457,4 +1460,16 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
                 raise web.notfound(error)
             else:
                 input_data.aysem = valid_aysem
+        elif input_type == "modify_type":
+            try:
+                modify_type = input_data.modifyType
+            except AttributeError:
+                error = RENDER.notfound('Modify type is not specified')
+                raise web.notfound(error)
+            valid_modify_type = modify_type.upper() == "QUOTA" or \
+                                modify_type.upper() == "MOUNTING" or \
+                                modify_type.upper() == "MODULEDETAILS"
+            if not valid_modify_type:
+                error = RENDER.notfound('Modify type "' + modify_type + '" is not recognised by the system')
+                raise web.notfound(error)
     return input_data
