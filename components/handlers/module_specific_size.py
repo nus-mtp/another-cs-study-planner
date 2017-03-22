@@ -71,7 +71,8 @@ class ModuleSpecificSize(object):
         if len(input_data) == 0 or input_data.sem is None or input_data.lowerClassSize is None \
             or input_data.higherClassSize is None:
             # Loading the page without sufficient data (first time load page)
-            return RENDER.moduleSpecificSize(self.all_ay_sems, None, None, None, None)
+            current_aysem = model.get_current_ay_sem()
+            return RENDER.moduleSpecificSize(self.all_ay_sems, None, current_aysem, None, None)
         else:
             # Search request by user
             ay_sem_of_interest = input_data.sem
