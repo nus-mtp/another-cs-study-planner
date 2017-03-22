@@ -1408,7 +1408,7 @@ def get_mod_before_intern(ay_sem):
     return DB_CURSOR.fetchall()
 
 
-def validate_input(input_data, input_types, is_future=False):
+def validate_input(input_data, input_types, is_future=False, aysem_specific=True):
     '''
         Validates that the GET input data (in the URL) is valid.
 
@@ -1437,8 +1437,11 @@ def validate_input(input_data, input_types, is_future=False):
             try:
                 ay_sem = input_data.aysem
             except AttributeError:
-                error = RENDER.notfound('AY-Semester is not specified')
-                raise web.notfound(error)
+                if aysem_specific:
+                    error = RENDER.notfound('AY-Semester is not specified')
+                    raise web.notfound(error)
+                else:
+                    continue
 
             if is_future:
                 valid_aysem = is_aysem_in_system_and_is_future(ay_sem)
