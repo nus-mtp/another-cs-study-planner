@@ -15,15 +15,9 @@ class NonOverlappingModules(object):
         This class contains the implementations of the GET
         requests.
     '''
-
     CURRENT_SEM = 'AY 16/17 Sem 1'
-    AVAILABLE_AY_SEM = ['AY 16/17 Sem 1', 'AY 16/17 Sem 2', 'AY 17/18 Sem 1', 'AY 17/18 Sem 2']
+    AVAILABLE_AY_SEM = model.get_all_ay_sems()
 
-    def validateAYSem(self, aysem):
-        '''
-            check if entered aysem is correct
-        '''
-        return aysem in self.AVAILABLE_AY_SEM
 
     def GET(self):
         '''
@@ -35,20 +29,18 @@ class NonOverlappingModules(object):
         ay_sem_of_interest = None
 
         #see if the user has already requested a search
+        input_data = model.validate_input(web.input(), ["aysem"], aysem_specific=False, attr_required=False)
         try:
-            input_data = web.input()
-            ay_sem = input_data.sem
+            ay_sem = input_data.aysem
             ay_sem_of_interest = ay_sem
         except AttributeError:
             ay_sem_of_interest = self.CURRENT_SEM
 
-        if self.validateAYSem(ay_sem_of_interest):
-            lst_of_independ_mods = model.get_mods_no_one_take(ay_sem_of_interest)
+        lst_of_independ_mods = model.get_mods_no_one_take(ay_sem_of_interest)
 
-            return RENDER.nonOverlappingModules(lst_of_independ_mods,
-                                                self.AVAILABLE_AY_SEM, ay_sem_of_interest)
-        else:
-            return Outcome().POST("non-overlapping-mods", False, None)
+        return RENDER.nonOverlappingModules(lst_of_independ_mods,
+                                            self.AVAILABLE_AY_SEM, ay_sem_of_interest)
+
 
     def POST(self):
         '''
@@ -56,5 +48,9 @@ class NonOverlappingModules(object):
         '''
         #will have input data as function is called from button
         input_data = web.input()
-        ay_sem = input_data.sem
-        raise web.seeother('/nonOverlappingModules?sem=' + ay_sem)
+        try:
+            ay_sem = input_data.aysem
+        except AttributeError:
+            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
+            raise web.notfound(error)
+        raise web.seeother('/nonOverlappingModules?aysem=' + ay_sem)
