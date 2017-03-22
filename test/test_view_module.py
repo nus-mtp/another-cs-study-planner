@@ -36,7 +36,8 @@ class TestCode(object):
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
                             'action="/editModule" method="get" class="no-padding-margin">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
-                                   ' General Module Info" data-toggle="tooltip" data-placement="left"'+\
+                                   ' General Module Info" data-toggle="tooltip" '+\
+                                   'data-placement="right"'+\
                                    ' title="Edit the module\'s name, description, MC, '+\
                                    'pre-requisites and preclusions">'
     CONTENT_SUMMARY = "Module Info Overview"
@@ -53,10 +54,14 @@ class TestCode(object):
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
 
 
-    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
-                              ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
-    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Modules'+\
-                                     ' Overlapping With This Module" data-toggle="tooltip" data-placement="left"'+\
+    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module"'+\
+                              ' name="view-overlapping-with-module"'+\
+                              ' action="/overlappingWithModule" method="get" '+\
+                              'class="no-padding-margin">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
+                                     'value="View Modules'+\
+                                     ' Overlapping With This Module" data-toggle="tooltip"'+\
+                                     ' data-placement="right"'+\
                                      ' title="Show modules that are also taken with this module">'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
                    'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
