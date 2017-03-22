@@ -32,7 +32,8 @@ $if aySpecific:
                 <tr>
                     <th>Module Code</th>
                     <th>Module Name</th>
-                    <th>For AY-Sem</th>
+                    $if not aySpecific:
+                        <th>For AY-Sem</th>
                     <th>Number of Students</th>
                 </tr>
             </thead>
@@ -42,7 +43,8 @@ $if aySpecific:
                         <td class="text-center">$row[2]</td>
                         <td class="text-center">$row[3]</td>
                         <td class="text-center">$row[4]</td>
-                        <td class="text-center">$row[5]</td>
+                        $if not aySpecific:
+                            <td class="text-center">$row[5]</td>
                     </tr>
             </tbody>
         </table>

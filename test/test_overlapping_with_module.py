@@ -92,7 +92,6 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_MODULE_NAME)
-        root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_AY_SEM)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TABLE_NUM_STUDENTS)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_TITLE_SPECIFIC)
         root.mustcontain(self.CONTENT_OVERLAPPING_MODULES_DESCRIPTION_SPECIFIC)
