@@ -877,7 +877,7 @@ class TestCode(object):
             self.restoreType = restoreType
             self.code = code
             self.currentAySem = currentAySem
-            self.targetAySem = targetAySem
+            self.aysem = targetAySem
             self.quota = quota
             self.mountingChange = mountingChange
 

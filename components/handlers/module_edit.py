@@ -39,7 +39,7 @@ class EditModuleInfo(object):
         if test_data:   # for testing purposes
             input_data = test_data[0]
         else:
-            input_data = web.input()
+            input_data = model.validate_input(web.input(), ["code"])
 
         try:
             module_code = input_data.code
@@ -49,7 +49,6 @@ class EditModuleInfo(object):
         except AttributeError:
             error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
             raise web.notfound(error)
-        model.validate_input(web.input(), ["code"])
 
         old_module_info = model.get_module(module_code)
         old_module_name = old_module_info[1]
@@ -111,7 +110,7 @@ class EditMountingInfo(object):
         '''
             Handles the submission of the 'Edit Specific Module Info' page
         '''
-        input_data = web.input()
+        input_data = model.validate_input(web.input(), ["code"])
 
         try:
             module_code = input_data.code
@@ -121,7 +120,6 @@ class EditMountingInfo(object):
         except AttributeError:
             error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
             raise web.notfound(error)
-        model.validate_input(web.input(), ["code", "aysem"], is_future=True)
 
         try:
             quota = input_data.quota
