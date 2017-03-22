@@ -1,20 +1,32 @@
-$def with (moduleCode, aysem, overlappingList)
+$def with (moduleCode, aysem, overlappingList, aySpecific)
 
 $ title_string = 'Modules Overlapping with ' + moduleCode
+$if aySpecific:
+    $ title_string += ' in ' + aysem
+
 $var title:$title_string
 
 $ home = ['/', 'Home']
 $ moduleInfo = ['/modules', 'Module Information']
 $ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
 $ overlapWithThisModule = ['#', 'Modules Overlapping With ' + moduleCode]
-
+$ viewModuleMounting = ['/individualModuleInfo?code=' + moduleCode + '&targetAY=' + aysem, 'Module Info for ' + aysem]
 $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
+
+
+$if aySpecific:
+    $ overlapWithThisModule = ['#', 'Modules Overlapping With ' + moduleCode + ' in ' + aysem]
+    $var hierarchy = [home, moduleInfo, viewModule, viewModuleMounting, overlapWithThisModule]
+
 
 <div class="container container-fluid">
     <div class="row">
     <!--title-->
         <h1 class="text-center">Modules Overlapping with <b>$moduleCode</b> for <b>$aysem</b></h1>
-        <p class="text-center">Shows all modules taken together with this module at a specified semester.</p>
+        $if aySpecific:
+            <p class="text-center">Shows all modules taken together with this module at a specified semester.</p>
+        $else:
+            <p class="text-center">Shows all modules taken together with this module in all semesters.</p>
     </div>
     <div class="row">
     <!--table-->
@@ -23,7 +35,8 @@ $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
                 <tr>
                     <th>Module Code</th>
                     <th>Module Name</th>
-                    <th>For AY-Sem</th>
+                    $if not aySpecific:
+                        <th>For AY-Sem</th>
                     <th>Number of Students</th>
                 </tr>
             </thead>
@@ -33,7 +46,8 @@ $var hierarchy = [home, moduleInfo, viewModule, overlapWithThisModule]
                         <td class="text-center">$row[2]</td>
                         <td class="text-center">$row[3]</td>
                         <td class="text-center">$row[4]</td>
-                        <td class="text-center">$row[5]</td>
+                        $if not aySpecific:
+                            <td class="text-center">$row[5]</td>
                     </tr>
             </tbody>
         </table>
