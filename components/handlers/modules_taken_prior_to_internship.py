@@ -51,10 +51,7 @@ class TakePriorInternship(object):
             before internship with a specified AY-Sem
         '''
         # will have input data as function is called from button
-        input_data = web.input()
-        try:
-            ay_sem = input_data.aysem
-        except AttributeError:
-            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
-            raise web.notfound(error)
+        input_data = model.validate_input(web.input(), ["aysem"])
+        ay_sem = input_data.aysem
+        
         raise web.seeother('/moduleTakenPriorToInternship?aysem=' + ay_sem)

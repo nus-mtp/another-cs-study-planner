@@ -85,9 +85,8 @@ class ModuleSpecificSize(object):
             called from search with form
         '''
         # Input data will have valid inputs as function is called from submit button
-        input_data = web.input()
+        input_data = model.validate_input(web.input(), ["aysem"])
         try:
-            ay_sem_of_interest = input_data.aysem
             lower_range_class_size = input_data.lowerClassSize
             higher_range_class_size = input_data.higherClassSize
         except AttributeError:

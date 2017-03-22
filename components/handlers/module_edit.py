@@ -49,6 +49,7 @@ class EditModuleInfo(object):
         except AttributeError:
             error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
             raise web.notfound(error)
+        model.validate_input(web.input(), ["code"])
 
         old_module_info = model.get_module(module_code)
         old_module_name = old_module_info[1]
@@ -120,6 +121,7 @@ class EditMountingInfo(object):
         except AttributeError:
             error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
             raise web.notfound(error)
+        model.validate_input(web.input(), ["code", "aysem"], is_future=True)
 
         try:
             quota = input_data.quota
