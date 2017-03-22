@@ -22,8 +22,8 @@ class EditModuleInfo(object):
         '''
             Handles the loading of the 'Edit General Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
+        input_data = model.validate_input(web.input(), ["code"])
+        module_code = input_data.code
 
         module_info = model.get_module(module_code)
         if module_info is None:
@@ -37,14 +37,18 @@ class EditModuleInfo(object):
             Handles the submission of the 'Edit General Module Info' page
         '''
         if test_data:   # for testing purposes
-            data = test_data[0]
+            input_data = test_data[0]
         else:
-            data = web.input()
+            input_data = web.input()
 
-        module_code = data.code
-        module_name = data.name
-        module_desc = data.desc
-        module_mc = data.mc
+        try:
+            module_code = input_data.code
+            module_name = input_data.name
+            module_desc = input_data.desc
+            module_mc = input_data.mc
+        except AttributeError:
+            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
+            raise web.notfound(error)
 
         old_module_info = model.get_module(module_code)
         old_module_name = old_module_info[1]
@@ -90,15 +94,9 @@ class EditMountingInfo(object):
         '''
             Handles the loading of the 'Edit Specific Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
-        ay_sem = data.aySem
-
-        module_info = model.get_module(module_code)
-        if module_info is None:
-            return RENDER.notfound("Module " + module_code + " does not exist in the system.")
-        if ay_sem not in self.list_of_future_ay_sems:
-            return RENDER.notfound(ay_sem + " is not in the system's list of future AY-Semesters.")
+        input_data = model.validate_input(web.input(), ["code", "aysem"], is_future=True)
+        module_code = input_data.code
+        ay_sem = input_data.aysem
 
         module_ay_sem_info_handler = IndividualModule()
         module_ay_sem_info_handler.load_mounting_info(module_code, ay_sem)
@@ -112,18 +110,23 @@ class EditMountingInfo(object):
         '''
             Handles the submission of the 'Edit Specific Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
-        ay_sem = data.aySem
+        input_data = web.input()
 
         try:
-            quota = data.quota
+            module_code = input_data.code
+            ay_sem = input_data.aysem
+            old_mounting_value = input_data.oldMountingValue
+            mounting_status = input_data.mountingStatus
+        except AttributeError:
+            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
+            raise web.notfound(error)
+
+        try:
+            quota = input_data.quota
             if quota == "":
                 quota = None
         except AttributeError:
             quota = None
-        old_mounting_value = data.oldMountingValue
-        mounting_status = data.mountingStatus
 
         outcome = None
         # If quota is being set by the user, it should not fall below 0.

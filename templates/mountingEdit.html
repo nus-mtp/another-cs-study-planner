@@ -6,7 +6,7 @@ $var title:$title_string
 $ home = ['/', 'Home']
 $ moduleInfo = ['/modules', 'Module Information']
 $ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
-$ individualModuleInfo = ['/individualModuleInfo?code=' + moduleCode + '&amp;targetAY=' + aySem, 'Module Info for ' + aySem]
+$ individualModuleInfo = ['/individualModuleInfo?code=' + moduleCode + '&aysem=' + aySem, 'Module Info for ' + aySem]
 $ editIndividualModule = ['#', title_string]
 $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndividualModule]
 
@@ -51,9 +51,9 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                         </div>
                         <br>
                         <input type="hidden" name="code" value="$moduleCode" required>
-                        <input type="hidden" name="aySem" value="$aySem" required>
+                        <input type="hidden" name="aysem" value="$aySem" required>
                         <input type="hidden" name="oldMountingValue" value="$mountingValue" required>
-                        <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/individualModuleInfo?code=$moduleCode&amp;targetAY=$aySem';}">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/individualModuleInfo?code=$moduleCode&aysem=$aySem';}">Cancel</button>
                         <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
                     </form>
                 </div>

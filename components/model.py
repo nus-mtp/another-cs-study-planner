@@ -1198,10 +1198,10 @@ def is_aysem_in_list(given_aysem, given_list):
     return False
 
 
-def is_aysem_in_system(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+def get_all_ay_sems(ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
     '''
-        Returns the aysem if given aysem is found inside the system, otherwise return False
-    '''
+        Returns all the AY-Sems in the system
+    '''   
     current_ay = get_current_ay()
     ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
     target_ay = current_ay
@@ -1209,12 +1209,50 @@ def is_aysem_in_system(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
         target_ay = get_next_ay(target_ay)
         ay_sems_in_system.append(target_ay+" Sem 1")
         ay_sems_in_system.append(target_ay+" Sem 2")
+    return ay_sems_in_system
+
+
+def get_all_future_ay_sems(ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+    '''
+        Returns all the FUTURE AY-Sems in the system
+    '''   
+    future_ay_sems_in_system = []
+    target_ay = get_current_ay()
+    for i in range(ay_sem_count-1):
+        target_ay = get_next_ay(target_ay)
+        future_ay_sems_in_system.append(target_ay+" Sem 1")
+        future_ay_sems_in_system.append(target_ay+" Sem 2")
+    return future_ay_sems_in_system
+
+
+def is_aysem_in_system(ay_sem):
+    '''
+        Returns the AY-Sem if given AY-Sem is found inside the system, otherwise return False
+    '''
+    current_ay = get_current_ay()
+    ay_sems_in_system = get_all_ay_sems()
+
     valid_aysem = False
     for i in range(len(ay_sems_in_system)):
         if ay_sem.upper() == ay_sems_in_system[i].upper():
             valid_aysem = ay_sems_in_system[i]
-            break
+            break    
     return valid_aysem
+
+
+def is_aysem_in_system_and_is_future(ay_sem, ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+    '''
+        Returns the aysem if given aysem is found inside the system AND is a future AY-Sem, 
+        otherwise return False
+    '''
+    future_ay_sems_in_system = get_all_future_ay_sems()
+
+    valid_future_aysem = False
+    for i in range(len(future_ay_sems_in_system)):
+        if ay_sem.upper() == future_ay_sems_in_system[i].upper():
+            valid_future_aysem = future_ay_sems_in_system[i]
+            break    
+    return valid_future_aysem
 
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
@@ -1338,7 +1376,7 @@ def get_mod_before_intern(ay_sem):
     return DB_CURSOR.fetchall()
 
 
-def validate_input(input_data, input_types):
+def validate_input(input_data, input_types, is_future=False):
     '''
         Validates that the GET input data (in the URL) is valid.
 
@@ -1369,9 +1407,18 @@ def validate_input(input_data, input_types):
             except AttributeError:
                 error = RENDER.notfound('AY-Semester is not specified')
                 raise web.notfound(error)
-            valid_aysem = is_aysem_in_system(ay_sem)
+
+            if is_future:
+                valid_aysem = is_aysem_in_system_and_is_future(ay_sem)
+            else:
+                valid_aysem = is_aysem_in_system(ay_sem)
+
             if not valid_aysem:
-                error = RENDER.notfound('AY-Semester "' + ay_sem + '" does not exist in our system')
+                if is_future:
+                    error = RENDER.notfound('AY-Semester "' + ay_sem + '" does not exist in our system,' +\
+                                            ' or is not in a future AY')
+                else:
+                    error = RENDER.notfound('AY-Semester "' + ay_sem + '" does not exist in our system')
                 raise web.notfound(error)
             else:
                 input_data.aysem = valid_aysem

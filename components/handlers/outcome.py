@@ -46,7 +46,7 @@ class Outcome(object):
                     outcome_message = "Module " + module_code + " has been edited successfully!"
                 else:
                     outcome_message = "Error: Failed to edit module."
-                redirect_page = "individualModuleInfo?code="+module_code+"&targetAY="+\
+                redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
                                 ay_sem.replace(' ', '+').replace('/', '%2F')
 
             elif action == "restore_module":
