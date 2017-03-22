@@ -27,8 +27,7 @@ class TestCode(object):
     URL_NON_OVERLAP_MODS = '/nonOverlappingModules'
     URL_NON_OVERLAP_MODS_16_17_SEM2 = '/nonOverlappingModules?sem=AY%2016/17%20Sem%202'
     URL_NON_OVERLAP_MODS_INVALID = '/nonOverlappingModules?sem=AY%2016/18%20Sem%202'
-    CURRENT_SEM = 'AY 16/17 Sem 1'
-    DEFAULT_TITLE = 'Non-Overlapping Modules for AY 16/17 Sem 1'
+    DEFAULT_TITLE = 'Non-Overlapping Modules for AY '
     TEXT = '<p class="text-center" >Shows all module pairs which no student takes'+\
            ' together in a particular semester.<span data-toggle="tooltip" '+\
            'data-placement="bottom" title="By default, these pairs are shown for the '+\

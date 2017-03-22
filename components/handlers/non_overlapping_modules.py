@@ -15,15 +15,29 @@ class NonOverlappingModules(object):
         This class contains the implementations of the GET
         requests.
     '''
+    def __init__(self):
+        self.CURRENT_SEM = model.get_current_ay_sem()
+        self.AVAILABLE_AY_SEM = self.getAllAySem()
 
-    CURRENT_SEM = 'AY 16/17 Sem 1'
-    AVAILABLE_AY_SEM = ['AY 16/17 Sem 1', 'AY 16/17 Sem 2', 'AY 17/18 Sem 1', 'AY 17/18 Sem 2']
+
+    def getAllAySem(self):
+        '''
+            Retrieves a list of all available AY-Semesters.
+        '''
+        fixed_ay_sems = model.get_all_fixed_ay_sems()
+        tenta_ay_sems = model.get_all_tenta_ay_sems()
+        fixed_ay_sems_list = [aysem[0] for aysem in fixed_ay_sems]
+        tenta_ay_sems_list = [aysem[0] for aysem in tenta_ay_sems]
+
+        return fixed_ay_sems_list + tenta_ay_sems_list
+
 
     def validateAYSem(self, aysem):
         '''
             check if entered aysem is correct
         '''
         return aysem in self.AVAILABLE_AY_SEM
+
 
     def GET(self):
         '''
@@ -49,6 +63,7 @@ class NonOverlappingModules(object):
                                                 self.AVAILABLE_AY_SEM, ay_sem_of_interest)
         else:
             return Outcome().POST("non-overlapping-mods", False, None)
+
 
     def POST(self):
         '''
