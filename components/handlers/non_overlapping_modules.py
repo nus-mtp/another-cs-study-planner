@@ -55,6 +55,8 @@ class NonOverlappingModules(object):
             ay_sem_of_interest = ay_sem
         except AttributeError:
             ay_sem_of_interest = self.CURRENT_SEM
+            if not self.validateAYSem(ay_sem_of_interest):
+                ay_sem_of_interest = "AY 16/17 Sem 1"
 
         if self.validateAYSem(ay_sem_of_interest):
             lst_of_independ_mods = model.get_mods_no_one_take(ay_sem_of_interest)
