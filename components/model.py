@@ -1472,4 +1472,19 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
             if not valid_modify_type:
                 error = RENDER.notfound('Modify type "' + modify_type + '" is not recognised by the system')
                 raise web.notfound(error)
+        elif input_type == "moduleA" or input_type == "moduleB":
+            try:
+                if input_type == "moduleA":
+                    module_code = input_data.moduleA
+                else:
+                    module_code = input_data.moduleB
+            except AttributeError:
+                error = RENDER.notfound("Module " + input_type[-1] + "'s code is not specified")
+                raise web.notfound(error)
+            module_exist = is_existing_module(module_code.upper())
+            if not module_exist:
+                error = RENDER.notfound('Module code "' + module_code + '" does not exist in our system')
+                raise web.notfound(error)
+            else:
+                input_data.code = module_code.upper()
     return input_data
