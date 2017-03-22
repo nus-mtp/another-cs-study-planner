@@ -74,7 +74,7 @@ $else:
                                     <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
                                         <input type="hidden" name="code" value="$moduleCode">
                                         <input type="hidden" name="currentAySem" value="$currentAySem">
-                                        <input type="hidden" name="targetAySem" value="$targetAySem">
+                                        <input type="hidden" name="aysem" value="$targetAySem">
                                         <input type="hidden" name="mountingChange" value="$mountingChange">
                                         <input type="hidden" name="restoreType" value="mounting">
                                         <!--input class="btn btn-danger" type="submit" value="Restore Mounting"/-->
@@ -150,7 +150,7 @@ $else:
                             $else:
                                 <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
                                     <input type="hidden" name="code" value="$moduleCode">
-                                    <input type="hidden" name="targetAySem" value="$targetAySem">
+                                    <input type="hidden" name="aysem" value="$targetAySem">
                                     <input type="hidden" name="quota" value="$currentQuota">
                                     <input type="hidden" name="restoreType" value="quota">
                                     <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->
@@ -386,7 +386,7 @@ $else:
                                                 <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s mounting status?')){event.preventDefault();}">
                                                     <input type="hidden" name="code" value="$moduleCode">
                                                     <input type="hidden" name="currentAySem" value="$currentAySem">
-                                                    <input type="hidden" name="targetAySem" value="$targetAySem">
+                                                    <input type="hidden" name="aysem" value="$targetAySem">
                                                     <input type="hidden" name="mountingChange" value="$mountingChange">
                                                     <input type="hidden" name="restoreType" value="mounting">
                                                     <!--input class="btn btn-danger" type="submit" value="Restore Mounting"/-->
@@ -463,7 +463,7 @@ $else:
                                         $else:
                                             <form action="/restoreModule" method="post" onsubmit="if(!confirm('Are you sure you want to restore this module\'s quota?')){event.preventDefault();}">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="targetAySem" value="$targetAySem">
+                                                <input type="hidden" name="aysem" value="$targetAySem">
                                                 <input type="hidden" name="quota" value="$currentQuota">
                                                 <input type="hidden" name="restoreType" value="quota">
                                                 <!--input class="btn btn-danger" type="submit" value="Restore Quota"/-->

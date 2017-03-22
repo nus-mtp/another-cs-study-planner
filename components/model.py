@@ -1462,17 +1462,26 @@ def validate_input(input_data, input_types, is_future=False, aysem_specific=True
             else:
                 input_data.aysem = valid_aysem
 
-        elif input_type == "modify_type":
+        elif input_type == "modify_type" or input_type == "restore_type":
             try:
-                modify_type = input_data.modifyType
+                if input_type == "modify_type":
+                    info_type = input_data.modifyType
+                else:
+                    info_type = input_data.restoreType
             except AttributeError:
-                error = RENDER.notfound('Modify type is not specified')
+                if input_type == "modify_type":
+                    error = RENDER.notfound('Modify type is not specified')
+                else:
+                    error = RENDER.notfound('Restore type is not specified')
                 raise web.notfound(error)
-            valid_modify_type = modify_type.upper() == "QUOTA" or \
-                                modify_type.upper() == "MOUNTING" or \
-                                modify_type.upper() == "MODULEDETAILS"
-            if not valid_modify_type:
-                error = RENDER.notfound('Modify type "' + modify_type + '" is not recognised by the system')
+            valid_info_type = info_type.upper() == "QUOTA" or \
+                                info_type.upper() == "MOUNTING" or \
+                                info_type.upper() == "MODULEDETAILS"
+            if not valid_info_type:
+                if input_type == "modify_type":
+                    error = RENDER.notfound('Modify type "' + info_type + '" is not recognised by the system')
+                else:
+                    error = RENDER.notfound('Restore type "' + info_type + '" is not recognised by the system')
                 raise web.notfound(error)
 
         elif input_type == "moduleA" or input_type == "moduleB":
