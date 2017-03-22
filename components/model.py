@@ -686,6 +686,38 @@ def get_mod_taken_together_with(code):
     return DB_CURSOR.fetchall()
 
 
+def get_mod_taken_together_with_mod_and_aysem(code, aysem):
+    '''
+        Retrieves the list of modules taken together with the specified
+        module code in the specified semester.
+
+        Returns a table of lists. Each list contains
+        (specified module code, specified module name,
+        module taken together's code, module taken together's name,
+        number of students)
+
+        e.g. [(CS1010, Programming Methodology, CS1231,
+        Discrete Structures, 5)] means there are 5 students
+        taking CS1010 and CS1231 together in the specified AY-Semester.
+    '''
+
+    sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name" + \
+                ", COUNT(*) " + \
+                "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
+                "WHERE sp1.moduleCode = %s AND " + \
+                "sp2.moduleCode <> sp1.moduleCode AND " + \
+                "sp1.studentId = sp2.studentId AND " + \
+                "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
+                "sp1.acadYearAndSem = %s " + \
+                "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name " + \
+                "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command, (code, aysem))
+
+    return DB_CURSOR.fetchall()
+
+
 def get_all_mods_taken_together():
     '''
         Retrieves the list of all modules taken together in the same semester.
