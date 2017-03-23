@@ -19,7 +19,7 @@ $var hierarchy = [home, addModule]
                     <form id="mod-class-size-form" action="/moduleSpecificSize" method="post" class="form-inline">
                         <div class="form-group">
                             <label for="ay-sem">Find modules in </label>
-                            <select class="form-control" name="sem" required>
+                            <select class="form-control selectpicker" name="sem" required>
                                 <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
                                 $for aysem in allAySems:
                                     $if ayOfInterest == aysem:
