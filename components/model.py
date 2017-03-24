@@ -19,7 +19,8 @@ INDEX_SECOND_ELEM = 1
 LENGTH_EMPTY = 0
 
 # Currently, the system only has data for AY 16/17 and AY 17/18
-NUMBER_OF_AY_SEMS_IN_SYSTEM = 2
+NUMBER_OF_AY_IN_SYSTEM = 2
+
 
 def get_all_modules():
     '''
@@ -1230,27 +1231,27 @@ def is_aysem_in_list(given_aysem, given_list):
     return False
 
 
-def get_all_ay_sems(ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+def get_all_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
     '''
         Returns all the AY-Sems in the system
     '''
     current_ay = get_current_ay()
     ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
     target_ay = current_ay
-    for i in range(ay_sem_count-1):
+    for i in range(ay_count-1):
         target_ay = get_next_ay(target_ay)
         ay_sems_in_system.append(target_ay+" Sem 1")
         ay_sems_in_system.append(target_ay+" Sem 2")
     return ay_sems_in_system
 
 
-def get_all_future_ay_sems(ay_sem_count=NUMBER_OF_AY_SEMS_IN_SYSTEM):
+def get_all_future_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
     '''
         Returns all the FUTURE AY-Sems in the system
     '''
     future_ay_sems_in_system = []
     target_ay = get_current_ay()
-    for i in range(ay_sem_count-1):
+    for i in range(ay_count-1):
         target_ay = get_next_ay(target_ay)
         future_ay_sems_in_system.append(target_ay+" Sem 1")
         future_ay_sems_in_system.append(target_ay+" Sem 2")

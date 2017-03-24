@@ -33,7 +33,7 @@ class Modified(object):
         target_ay = current_ay
 
         # Loop through each future AY
-        for i in range(model.NUMBER_OF_AY_SEMS_IN_SYSTEM-1):
+        for i in range(model.NUMBER_OF_AY_IN_SYSTEM-1):
             target_ay = model.get_next_ay(target_ay)
 
             # Generate tentative mounting plan
