@@ -66,7 +66,16 @@ RENDER = web.template.render('templates', base='base', globals={'web':web})
 APP = web.application(URLS, globals())
 
 def notfound():
-    return web.notfound(str(RENDER.notfound(message="The page you specified with the URL does not exist.")))
+    '''
+        This function handles general '404 Not Found' error.
+        When a non-existing URL is being accessed,
+        this will render the 404 page with a general error message.
+
+        For more specific errors in the URL (e.g. invalid/missing GET inputs),
+        the rendering of 404 is handled by the validate_input method in model.py
+    '''
+    return web.notfound(str(RENDER.notfound(
+        message="The page you specified with the URL does not exist.")))
 
 APP.notfound = notfound
 

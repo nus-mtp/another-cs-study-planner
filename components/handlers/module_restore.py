@@ -28,7 +28,7 @@ class RestoreModule(object):
         if restore_type.lower() == "quota":
             model.validate_input(input_data, ["aysem"])
             ay_sem = input_data.aysem
-            
+
             quota = input_data.quota
             if quota == "":
                 quota = None

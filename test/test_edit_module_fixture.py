@@ -23,7 +23,8 @@ class TestCode(object):
 
     EDIT_MODULE_TITLE = ' <h1 class="title text-center">Edit <b>General Information</b>'+\
                         ' For <b>BT5110</b></h1>'
-    EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> For <b>AY 17/18 Sem 1</b></h1>'
+    EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
+                                 'For <b>AY 17/18 Sem 1</b></h1>'
     TESTING_MODULE = 'BT5110'
 
     def __init__(self):

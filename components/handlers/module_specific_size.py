@@ -53,7 +53,8 @@ class ModuleSpecificSize(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
-        input_data = model.validate_input(web.input(), ["aysem"], aysem_specific=False, attr_required=False)
+        input_data = model.validate_input(web.input(), ["aysem"],
+                                          aysem_specific=False, attr_required=False)
         try:
             # Search request by user
             ay_sem_of_interest = input_data.aysem

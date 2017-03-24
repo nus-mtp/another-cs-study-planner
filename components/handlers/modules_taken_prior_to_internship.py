@@ -8,7 +8,6 @@
 from app import RENDER
 import web
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class TakePriorInternship(object):
@@ -32,7 +31,8 @@ class TakePriorInternship(object):
         ay_sem_of_interest = None
 
         #see if the user has already requested a search
-        input_data = model.validate_input(web.input(), ["aysem"], aysem_specific=False, attr_required=False)
+        input_data = model.validate_input(web.input(), ["aysem"],
+                                          aysem_specific=False, attr_required=False)
         try:
             ay_sem = input_data.aysem
             ay_sem_of_interest = ay_sem
@@ -53,5 +53,5 @@ class TakePriorInternship(object):
         # will have input data as function is called from button
         input_data = model.validate_input(web.input(), ["aysem"])
         ay_sem = input_data.aysem
-        
+
         raise web.seeother('/moduleTakenPriorToInternship?aysem=' + ay_sem)

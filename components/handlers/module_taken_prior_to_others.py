@@ -8,7 +8,6 @@
 from app import RENDER
 import web
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class TakePriorTo(object):
@@ -30,8 +29,9 @@ class TakePriorTo(object):
         else:
             if not session.validate_session():
                 raise web.seeother('/login')
-            input_data = model.validate_input(web.input(), ["moduleA", "moduleB", "aysem"], attr_required=False)
-            
+            input_data = model.validate_input(web.input(), ["moduleA", "moduleB", "aysem"],
+                                              attr_required=False)
+
             try:
                 module_A = input_data.moduleA
                 module_B = input_data.moduleB
@@ -40,18 +40,19 @@ class TakePriorTo(object):
                 module_pairs = model.get_modA_taken_prior_to_modB()
 
                 # Get a list of all AY-Sems (for users to select)
-                current_ay = model.get_current_ay()
                 all_ay_sems = model.get_all_ay_sems()
 
                 return RENDER.modulesTakenPriorToOthers(module_pairs, all_ay_sems, None, None,
                                                         None, None, None, None)
 
 
-        student_counts = model.get_number_of_students_who_took_modA_prior_to_modB(module_A.upper(),
+        student_counts = \
+                         model.get_number_of_students_who_took_modA_prior_to_modB(module_A.upper(),
                                                                                   module_B.upper(),
                                                                                   target_ay_sem)
-        students_in_module_B = model.get_number_of_students_taking_module_in_ay_sem(module_B.upper(),
-                                                                                    target_ay_sem)
+        module_B_students = \
+                            model.get_number_of_students_taking_module_in_ay_sem(module_B.upper(),
+                                                                                 target_ay_sem)
 
         student_prior_count = 0
         for count in student_counts:
@@ -59,11 +60,9 @@ class TakePriorTo(object):
             student_prior_count += count
 
         if is_testing:
-            return [student_counts, student_prior_count, students_in_module_B]
+            return [student_counts, student_prior_count, module_B_students]
         else:
             return RENDER.modulesTakenPriorToOthers(None, None, student_counts,
                                                     student_prior_count, module_A.upper(),
                                                     module_B.upper(), target_ay_sem,
-                                                    students_in_module_B)
-
-
+                                                    module_B_students)
