@@ -18,16 +18,6 @@ class IndividualModule(object):
             Define the AY-Sems that are in the system
             By right, these settings hould be set by the superadmin
         '''
-        self.number_of_future_ays = 1
-        self.current_ay = model.get_current_ay()
-        self.list_of_ay_sems = [self.current_ay+" Sem 1", self.current_ay+" Sem 2"]
-
-        ay = self.current_ay
-        for i in range(self.number_of_future_ays):
-            ay = model.get_next_ay(ay)
-            self.list_of_ay_sems.append(ay+" Sem 1")
-            self.list_of_ay_sems.append(ay+" Sem 2")
-
         self.mounting_status = -1
         self.quota = None
         self.is_current_ay = False
@@ -46,38 +36,47 @@ class IndividualModule(object):
         fixed_quota = None
         is_current_ay = False
 
-        # Get mounting status in current AY
+        # Get mounting status and quota in current AY
         target_ay = ay_sem[0:8]
         current_ay = model.get_current_ay()
         if target_ay == current_ay:
             is_current_ay = True
+            fixed_mounting_status = model.get_mounting_of_target_fixed_ay_sem(module_code, ay_sem)
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, ay_sem)
         else:
             target_sem = ay_sem[9:14]
+            fixed_mounting_status = model.get_mounting_of_target_fixed_ay_sem(module_code,
+                                                                              current_ay+" "
+                                                                              +target_sem)
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code,
                                                                  current_ay+" "+target_sem)
+
         if fixed_quota is False:
             fixed_quota = '-'
-        else:
-            fixed_mounting_status = 1
 
         if is_current_ay:
-            self.mounting_status = fixed_mounting_status
+            if fixed_mounting_status is True:
+                self.mounting_status = 1
+            else:
+                self.mounting_status = -1
             self.quota = fixed_quota
+
         else:
-            # Get mounting status in target (future) AY
+            # Get mounting status and quota in target (future) AY
+            tenta_mounting_status = model.get_mounting_of_target_tenta_ay_sem(module_code, ay_sem)
             tenta_quota = model.get_quota_of_target_tenta_ay_sem(module_code, ay_sem)
-            tenta_mounting_status = -1
+
             if tenta_quota is False:
                 tenta_quota = '-'
-                if fixed_mounting_status == 1:
-                    tenta_mounting_status = 0
-                else:
-                    tenta_mounting_status = -1
-            else:
-                tenta_mounting_status = 1
-            self.mounting_status = tenta_mounting_status
             self.quota = tenta_quota
+
+            if tenta_mounting_status is True:
+                self.mounting_status = 1
+            else:
+                if fixed_mounting_status is True:
+                    self.mounting_status = 0
+                else:
+                    self.mounting_status = -1
 
         self.is_current_ay = is_current_ay
 
