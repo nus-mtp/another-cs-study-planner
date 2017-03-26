@@ -227,6 +227,38 @@ def get_num_students_by_focus_areas():
 
 
 ######################################################################################
+# Functions that add/modify/delete student or student plans
+######################################################################################
+
+def add_student(student_id, year_of_study):
+    return database.add_student(student_id, year_of_study)
+
+
+def delete_student(student_id):
+    return database.delete_student(student_id)
+
+
+def add_student_plan(student_id, is_taken, module_code, ay_sem):
+    return database.add_student_plan(student_id, is_taken, module_code, ay_sem)
+
+
+def delete_student_plan(student_id, module_code, ay_sem):
+    return database.delete_student_plan(student_id, module_code, ay_sem)
+
+
+def delete_all_plans_of_student(student_id):
+    return database.delete_all_plans_of_student(student_id)
+
+
+def add_student_focus_area(student_id, focus_area_1, focus_area_2):
+    return database.add_student_focus_area(student_id, focus_area_1, focus_area_2)
+
+
+def delete_student_focus_area(student_id):
+    return database.delete_student_focus_area(student_id)
+
+
+######################################################################################
 # Functions that retrieve information of modules that are modified
 ######################################################################################
 

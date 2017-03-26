@@ -632,6 +632,74 @@ def get_num_students_by_focus_areas():
 
 
 ######################################################################################
+# Functions that add/modify/delete student or student plans
+######################################################################################
+
+def add_student(student_id, year_of_study):
+    '''
+        Add a student into the database
+    '''
+    sql_command = "INSERT INTO student VALUES(%s, %s)"
+    DB_CURSOR.execute(sql_command, (student_id, year_of_study))
+    CONNECTION.commit()
+
+
+def delete_student(student_id):
+    '''
+        Delete a student from the database
+    '''
+    sql_command = "DELETE FROM student WHERE nusnetid = %s"
+    DB_CURSOR.execute(sql_command, (student_id,))
+    CONNECTION.commit()
+
+
+def add_student_plan(student_id, is_taken, module_code, ay_sem):
+    '''
+        Add a student plan into the database
+    '''
+    sql_command = "INSERT INTO studentPlans VALUES(%s, %s, %s, %s)"
+    DB_CURSOR.execute(sql_command, (student_id, is_taken, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_student_plan(student_id, module_code, ay_sem):
+    '''
+        Delete a student plan from the database
+    '''
+    sql_command = "DELETE FROM studentPlans WHERE studentId=%s " +\
+                  "AND moduleCode=%s AND acadYearAndSem=%s"
+    DB_CURSOR.execute(sql_command, (student_id, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_all_plans_of_student(student_id):
+    '''
+        Delete all plans by a student from the database
+    '''
+    sql_command = "DELETE FROM studentPlans WHERE studentId = %s"
+    DB_CURSOR.execute(sql_command, (student_id,))
+    CONNECTION.commit()
+
+
+def add_student_focus_area(student_id, focus_area_1, focus_area_2):
+    '''
+        Add a student's focus area(s) into the database
+    '''
+    sql_command = "INSERT INTO takesFocusArea VALUES(%s, %s, %s)"
+    DB_CURSOR.execute(sql_command, (student_id, focus_area_1, focus_area_2))
+    CONNECTION.commit()
+
+
+def delete_student_focus_area(student_id):
+    '''
+        Delete a student's focus area(s) from the database
+    '''
+    sql_command = "DELETE FROM takesFocusArea  WHERE nusnetid = %s"
+    DB_CURSOR.execute(sql_command, (student_id,))
+    CONNECTION.commit()
+
+
+######################################################################################
 # Functions that retrieve information of modules that are modified
 ######################################################################################
 
