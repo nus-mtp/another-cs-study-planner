@@ -52,7 +52,6 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                         <br>
                         <input type="hidden" name="code" value="$moduleCode" required>
                         <input type="hidden" name="aysem" value="$aySem" required>
-                        <input type="hidden" name="oldMountingValue" value="$mountingValue" required>
                         <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/individualModuleInfo?code=$moduleCode&aysem=$aySem';}">Cancel</button>
                         <input class="btn btn-primary" type="submit" value="Submit" />&nbsp;
                     </form>
