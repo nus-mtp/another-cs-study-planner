@@ -290,7 +290,21 @@ def validate_input(input_data, input_types, is_future=False,
         An input is considered valid if:
         1) The value was specified and
         2) The value exists in the system
-        If any input is invalid, return 404 page.
+
+        If any input is invalid, return 404 page (by default).
+
+        Depending on the circumstances, optional arguments may be passed into the function:
+        is_future:
+            Set to True if want to ensure that AY-Sem is in a future AY
+            (if AY-Sem is not required at all, then ignore this argument)
+        aysem_specific:
+            Set to True if the AY-Sem attribute is mandatory, False if it is optional
+            (if AY-Sem is not required at all, then ignore this argument)
+        attr_required:
+            Set to True if at least one attribute is required
+            Set to False if it is acceptable to have no input data
+        show_404:
+            Set to False if don't want to return 404 page (function will return False instead)
     '''
     if attr_required is False and len(input_data) == 0:
         return input_data
