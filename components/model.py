@@ -22,6 +22,10 @@ LENGTH_EMPTY = 0
 NUMBER_OF_AY_IN_SYSTEM = 2
 
 
+######################################################################################
+# Functions that query general module information
+######################################################################################
+
 def get_all_modules():
     '''
         Get the module code, name, description, and MCs of all modules
@@ -40,6 +44,16 @@ def get_module(code):
     return DB_CURSOR.fetchone()
 
 
+def get_module_name(code):
+    '''
+        Retrieves the module name of a module given its module code.
+    '''
+    sql_command = "SELECT name FROM module WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+
+    return DB_CURSOR.fetchone()[0]
+
+
 def is_existing_module(code):
     '''
         Returns true if specified module code exists in the database,
@@ -52,13 +66,108 @@ def is_existing_module(code):
     return number_module > 0
 
 
+def get_original_module_info(code):
+    '''
+        Get the original info of a module from module backup
+    '''
+    sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchone()
+
+
+######################################################################################
+# Functions that add/modify/delete general module information
+######################################################################################
+
+def add_module(code, name, description, module_credits, status):
+    '''
+        Insert a module into the module table.
+        Returns true if successful, false if duplicate primary key detected
+    '''
+    sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (code, name, description, module_credits, status))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def update_module(code, name, description, module_credits):
+    '''
+        Update a module with edited info
+    '''
+    sql_command = "UPDATE module SET name=%s, description=%s, mc=%s " +\
+                  "WHERE code=%s"
+    try:
+        DB_CURSOR.execute(sql_command, (name, description, module_credits, code))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def delete_module(code):
+    '''
+        Delete a newly added module from the module table
+        if and only if no (tentative) mountings refer to it.
+    '''
+    try:
+        # Delete backup of module info
+        sql_command = "DELETE FROM moduleBackup WHERE code=%s"
+        DB_CURSOR.execute(sql_command, (code,))
+        # Delete the module
+        sql_command = "DELETE FROM module WHERE code=%s"
+        DB_CURSOR.execute(sql_command, (code,))
+        CONNECTION.commit()
+
+    except psycopg2.Error:  # If module has mounting, module deletion will fail
+        CONNECTION.rollback()
+        return False
+
+    return True
+
+
+def store_original_module_info(code, name, description, module_credits):
+    '''
+        Store the original name, description and MC of a module
+        so that 1. Can track which module has been modified, 2. Can reset module to original state
+        If original info already exists in table, the original info will NOT be overwritten
+        (the primary key constraint will prevent that)
+    '''
+    sql_command = "INSERT INTO moduleBackup VALUES (%s,%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+def remove_original_module_info(code):
+    '''
+        Remove the original info of the module from module backup
+        (when the original module info has been restored)
+    '''
+    sql_command = "DELETE FROM moduleBackup WHERE code=%s"
+    DB_CURSOR.execute(sql_command, (code, ))
+    CONNECTION.commit()
+
+
+######################################################################################
+# Functions that query mounting and/or quota information
+######################################################################################
+
 def get_all_fixed_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all fixed mounted modules
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                    "FROM module m1, moduleMounted m2 WHERE m2.moduleCode = m1.code " +\
-                    "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+                  "FROM module m1, moduleMounted m2 WHERE m2.moduleCode = m1.code " +\
+                  "ORDER BY m2.moduleCode, m2.acadYearAndSem"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -68,8 +177,8 @@ def get_all_tenta_mounted_modules():
         Get the module code, name, AY/Sem and quota of all tentative mounted modules
     '''
     sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                    "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
-                    "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+                  "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                  "ORDER BY m2.moduleCode, m2.acadYearAndSem"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -85,46 +194,6 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     processed_ay = selected_ay + "%"
 
     DB_CURSOR.execute(sql_command, (processed_ay,))
-    return DB_CURSOR.fetchall()
-
-
-def get_current_ay():
-    '''
-        Get the current AY from the fixed mounting table.
-        All fixed mountings should be from the same AY,
-        so just get the AY from the first entry.
-        Test case will ensure that all entries in fixed mountings have the same AY
-    '''
-    sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
-    DB_CURSOR.execute(sql_command)
-    return DB_CURSOR.fetchone()[0]
-
-
-def get_next_ay(ay):
-    '''
-        Return the AY that comes after the given AY
-    '''
-    ay = ay.split(' ')[1].split('/')
-    return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
-
-
-def get_all_fixed_ay_sems():
-    '''
-        Get all the distinct AY/Sem in the fixed mounting table
-    '''
-    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted " +\
-                  "ORDER BY acadYearAndSem ASC"
-    DB_CURSOR.execute(sql_command)
-    return DB_CURSOR.fetchall()
-
-
-def get_all_tenta_ay_sems():
-    '''
-        Get all the distinct AY/Sem in the tentative mounting table
-    '''
-    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative " +\
-                  "ORDER BY acadYearAndSem ASC"
-    DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
 
@@ -198,241 +267,53 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
         return False
 
 
-def get_number_students_planning(code):
+def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
     '''
-        Get the number of students planning to take a mounted module
+        Retrieves the list of modules with quota/class size in the
+        specified AY-Semester if the quota falls within the given range
+        of quota_lower <= retrieved module quota <= quota_higher
     '''
-    sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE " +\
-                    "moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
-    DB_CURSOR.execute(sql_command, (code, ))
-    return DB_CURSOR.fetchall()
+    sql_command = "SELECT mm.moduleCode, m.name, mm.quota " + \
+                "FROM %(table)s mm, module m " + \
+                "WHERE mm.acadYearAndSem = %(aysem)s " + \
+                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s " + \
+                "AND mm.moduleCode = m.code"
+
+    STRING_MODULE_MOUNTED = "moduleMounted"
+    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
+
+    MAP_TABLE_TO_MODULE_MOUNTED = {
+        "table": AsIs(STRING_MODULE_MOUNTED),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
+        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
+        "aysem": given_aysem,
+        "lower_range": quota_lower,
+        "higher_range": quota_higher
+    }
+
+    fixed_sems = get_all_fixed_ay_sems()
+    tenta_sems = get_all_tenta_ay_sems()
+
+    if is_aysem_in_list(given_aysem, fixed_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+    elif is_aysem_in_list(given_aysem, tenta_sems):
+        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+    else: # No such aysem found
+        return list()
+
+    required_list = DB_CURSOR.fetchall()
+    processed_list = convert_to_list(required_list)
+
+    return processed_list
 
 
-def add_module(code, name, description, module_credits, status):
-    '''
-        Insert a module into the module table.
-        Returns true if successful, false if duplicate primary key detected
-    '''
-    sql_command = "INSERT INTO module VALUES (%s,%s,%s,%s,%s)"
-    try:
-        DB_CURSOR.execute(sql_command, (code, name, description, module_credits, status))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:        # duplicate key error
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def update_module(code, name, description, module_credits):
-    '''
-        Update a module with edited info
-    '''
-    sql_command = "UPDATE module SET name=%s, description=%s, mc=%s " +\
-                  "WHERE code=%s"
-    try:
-        DB_CURSOR.execute(sql_command, (name, description, module_credits, code))
-        CONNECTION.commit()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def store_original_module_info(code, name, description, module_credits):
-    '''
-        Store the original name, description and MC of a module
-        so that 1. Can track which module has been modified, 2. Can reset module to original state
-        If original info already exists in table, the original info will NOT be overwritten
-        (the prmary key constraint will prevent that)
-    '''
-    sql_command = "INSERT INTO moduleBackup VALUES (%s,%s,%s,%s)"
-    try:
-        DB_CURSOR.execute(sql_command, (code, name, description, module_credits))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:        # duplicate key error
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def get_original_module_info(code):
-    '''
-        Get the original info of a module from module backup
-    '''
-    sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code, ))
-    return DB_CURSOR.fetchone()
-
-
-def remove_original_module_info(code):
-    '''
-        Remove the original info of the module from module backup
-        (when the original module info has been restored)
-    '''
-    sql_command = "DELETE FROM moduleBackup WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code, ))
-    CONNECTION.commit()
-
-
-def flag_module_as_removed(code):
-    '''
-        Change the status of a module to 'To Be Removed'
-    '''
-    sql_command = "UPDATE module SET status='To Be Removed' WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code, ))
-    CONNECTION.commit()
-
-
-def flag_module_as_active(code):
-    '''
-        Change the status of a module to 'Active'
-    '''
-    sql_command = "UPDATE module SET status='Active' WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code, ))
-    CONNECTION.commit()
-
-
-def delete_module(code):
-    '''
-        Delete a newly added module from the module table
-        if and only if no (tentative) mountings refer to it.
-    '''
-    try:
-        # Delete backup of module info
-        sql_command = "DELETE FROM moduleBackup WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code,))
-        # Delete the module
-        sql_command = "DELETE FROM module WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code,))
-        CONNECTION.commit()
-
-    except psycopg2.Error:  # If module has mounting, module deletion will fail
-        CONNECTION.rollback()
-        return False
-
-    return True
-
-
-def get_module_name(code):
-    '''
-        Retrieves the module name of a module given its module code.
-    '''
-    sql_command = "SELECT name FROM module WHERE code=%s"
-    DB_CURSOR.execute(sql_command, (code,))
-
-    return DB_CURSOR.fetchone()[0]
-
-
-def get_oversub_mod():
-    '''
-        Retrieves a list of modules which are oversubscribed.
-        Returns module code, module name, AY/Sem, quota, number students interested
-        i.e. has more students interested than the quota
-    '''
-    list_of_oversub_with_info = []
-    list_all_mod_info = get_all_modules()
-
-    for module_info in list_all_mod_info:
-        mod_code = module_info[0]
-
-        aysem_quota_fixed_list = get_fixed_mounting_and_quota(mod_code)
-        aysem_quota_tenta_list = get_tenta_mounting_and_quota(mod_code)
-        aysem_quota_merged_list = aysem_quota_fixed_list + \
-                                aysem_quota_tenta_list
-
-        num_student_plan_aysem_list = get_number_students_planning(mod_code)
-        for num_plan_aysem_pair in num_student_plan_aysem_list:
-            num_student_planning = num_plan_aysem_pair[0]
-            ay_sem = num_plan_aysem_pair[1]
-            real_quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
-
-            # ensures that quota will be a number which is not None
-            if real_quota is None:
-                quota = 0
-                real_quota = '?'
-            else:
-                quota = real_quota
-
-            if num_student_planning > quota:
-                module_name = get_module_name(mod_code)
-                oversub_info = (mod_code, module_name, ay_sem,
-                                real_quota, num_student_planning)
-                list_of_oversub_with_info.append(oversub_info)
-
-    return list_of_oversub_with_info
-
-
-def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
-    '''
-        This is a helper function.
-        Retrieves the correct quota from ay_sem listed inside
-        aysem_quota_merged_list parameter.
-    '''
-    for aysem_quota_pair in aysem_quota_merged_list:
-        aysem_in_pair = aysem_quota_pair[0]
-        if ay_sem == aysem_in_pair:
-            quota_in_pair = aysem_quota_pair[1]
-
-            return quota_in_pair
-
-    return None # quota not found in list
-
-
-def add_admin(username, salt, hashed_pass):
-    '''
-        Register an admin into the database.
-        Note: to change last argument to false once
-        activation done
-    '''
-    try:
-        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
-        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
-        CONNECTION.commit()
-    except psycopg2.DataError: #if username too long
-        CONNECTION.rollback()
-
-
-def is_userid_taken(userid):
-    '''
-        Retrieves all account ids for testing if a user id supplied
-        during account creation
-    '''
-    sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (userid,))
-
-    result = DB_CURSOR.fetchall()
-    return len(result) != 0
-
-
-def delete_admin(username):
-    '''
-        Delete an admin from the database.
-    '''
-    # Delete the foreign key references first.
-    sql_command = "DELETE FROM starred WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-    sql_command = "DELETE FROM sessions WHERE staffid=%s"
-    DB_CURSOR.execute(sql_command, (username, ))
-
-    sql_command = "DELETE FROM admin WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-    CONNECTION.commit()
-
-
-def validate_admin(username, unhashed_pass):
-    '''
-        Check if a provided admin-password pair is valid.
-    '''
-    sql_command = "SELECT salt, password FROM admin WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-    admin = DB_CURSOR.fetchall()
-    if not admin:
-        return False
-    else:
-        hashed_pass = hashlib.sha512(unhashed_pass + admin[0][0]).hexdigest()
-        is_valid = (admin[0][1] == hashed_pass)
-        return is_valid
-
+######################################################################################
+# Functions that add/modify/delete mounting and/or quota information
+######################################################################################
 
 def add_fixed_mounting(code, ay_sem, quota):
     '''
@@ -500,39 +381,258 @@ def delete_tenta_mounting(code, ay_sem):
     return True
 
 
-def get_modules_with_modified_details():
+######################################################################################
+# Functions that query AY and semester information
+######################################################################################
+
+def get_current_ay():
     '''
-        Get all modules whose details (name/description/MC) has been modified.
-        Return the module's code, old name, old description, old MC,
-        current name, current description, and current MC
+        Get the current AY from the fixed mounting table.
+        All fixed mountings should be from the same AY,
+        so just get the AY from the first entry.
+        Test case will ensure that all entries in fixed mountings have the same AY
     '''
-    sql_command = "SELECT m1.code, m1.name, m1.description, m1.mc, " +\
-                  "m2.name, m2.description, m2.mc " +\
-                  "FROM moduleBackup m1, module m2 " +\
-                  "WHERE m1.code = m2.code " +\
-                  "ORDER BY code ASC"
+    sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchone()[0]
+
+
+def get_next_ay(ay):
+    '''
+        Return the AY that comes after the given AY
+    '''
+    ay = ay.split(' ')[1].split('/')
+    return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
+
+
+def get_all_fixed_ay_sems():
+    '''
+        Get all the distinct AY/Sem in the fixed mounting table
+    '''
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted " +\
+                  "ORDER BY acadYearAndSem ASC"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
 
-def get_modules_with_modified_quota():
+def get_all_tenta_ay_sems():
     '''
-        Find modules whose quota in target AY/Sem is different from quota in current AY/Sem
-        and return the module code, module name, current AY/Sem, current AY/Sem's quota,
-        target AY/Sem, and target AY/Sem's quota
+        Get all the distinct AY/Sem in the tentative mounting table
     '''
-    sql_command = "SELECT m1.moduleCode, m3.name, m1.acadYearAndSem, m2.acadYearAndSem, " +\
-                  "m1.quota, m2.quota " +\
-                  "FROM moduleMounted m1, moduleMountTentative m2, module m3 " +\
-                  "WHERE m1.moduleCode = m2.moduleCode " +\
-                  "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
-                  "AND (" +\
-                  "    m1.quota != m2.quota " +\
-                  "    OR (m1.quota IS NULL AND m2.quota IS NOT NULL) " +\
-                  "    OR (m2.quota IS NULL AND m1.quota IS NOT NULL) " +\
-                  ") " +\
-                  "AND m1.moduleCode = m3.code " +\
-                  "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
+    sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative " +\
+                  "ORDER BY acadYearAndSem ASC"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
+def get_all_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
+    '''
+        Returns all the AY-Sems in the system
+    '''
+    current_ay = get_current_ay()
+    ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
+    target_ay = current_ay
+    for i in range(ay_count-1):
+        target_ay = get_next_ay(target_ay)
+        ay_sems_in_system.append(target_ay+" Sem 1")
+        ay_sems_in_system.append(target_ay+" Sem 2")
+    return ay_sems_in_system
+
+
+def get_all_future_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
+    '''
+        Returns all the FUTURE AY-Sems in the system
+    '''
+    future_ay_sems_in_system = []
+    target_ay = get_current_ay()
+    for i in range(ay_count-1):
+        target_ay = get_next_ay(target_ay)
+        future_ay_sems_in_system.append(target_ay+" Sem 1")
+        future_ay_sems_in_system.append(target_ay+" Sem 2")
+    return future_ay_sems_in_system
+
+
+def is_aysem_in_list(given_aysem, given_list):
+    '''
+        Returns true if given_aysem is found inside given_list.
+        Example:
+        given_list is a list of [('AY 16/17 Sem 1',), ('AY 16/17 Sem 2',)] structure.
+    '''
+    for aysem_tuple in given_list:
+        retrieved_aysem = aysem_tuple[0]
+        if given_aysem == retrieved_aysem:
+            return True
+
+    return False
+
+
+def is_aysem_in_system(ay_sem):
+    '''
+        Returns the AY-Sem if given AY-Sem is found inside the system, otherwise return False
+    '''
+    ay_sems_in_system = get_all_ay_sems()
+
+    valid_aysem = False
+    for i in range(len(ay_sems_in_system)):
+        if ay_sem.upper() == ay_sems_in_system[i].upper():
+            valid_aysem = ay_sems_in_system[i]
+            break
+    return valid_aysem
+
+
+def is_aysem_in_system_and_is_future(ay_sem):
+    '''
+        Returns the aysem if given aysem is found inside the system AND is a future AY-Sem,
+        otherwise return False
+    '''
+    future_ay_sems_in_system = get_all_future_ay_sems()
+
+    valid_future_aysem = False
+    for i in range(len(future_ay_sems_in_system)):
+        if ay_sem.upper() == future_ay_sems_in_system[i].upper():
+            valid_future_aysem = future_ay_sems_in_system[i]
+            break
+    return valid_future_aysem
+
+
+######################################################################################
+# Functions that query information related to students demand for a module
+######################################################################################
+
+def get_number_students_planning(code):
+    '''
+        Get the number of students planning to take a mounted module
+    '''
+    sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE " +\
+                  "moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
+    DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchall()
+
+
+def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
+    '''
+        Retrieves the number of students who have taken or are taking the module
+        in the target AY-Sem
+    '''
+    sql_command = "SELECT COUNT(*) " + \
+                  "FROM studentPlans sp " + \
+                  "WHERE sp.moduleCode = %s " + \
+                  "AND sp.acadYearAndSem = %s " + \
+                  "ORDER BY COUNT(*) DESC"
+
+    DB_CURSOR.execute(sql_command, (module_code, ay_sem))
+
+    return DB_CURSOR.fetchone()[0]
+
+
+def get_list_students_take_module(code, aysem):
+    '''
+        Retrieves the list of students who take specified module at specified aysem.
+
+        Returns a table of lists. Each list represents a student and it contains
+        (matric number, year of study, focus area 1, focus area 2)
+    '''
+
+    sql_command_1 = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
+                    "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                    "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                    "AND sp.studentid = s.nusnetid AND " + \
+                    "sp.studentid = tfa.nusnetid"
+
+    sql_command_2 = "SELECT sp2.studentid, s2.year " + \
+                    "FROM studentPlans sp2, student s2 " + \
+                    "WHERE sp2.moduleCode = %s AND sp2.acadYearAndSem = %s " + \
+                    "AND sp2.studentid = s2.nusnetid " +\
+                    "AND sp2.studentid NOT IN ( " +\
+                        "SELECT sp.studentid " + \
+                        "FROM studentPlans sp, student s, takesFocusArea tfa " + \
+                        "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
+                        "AND sp.studentid = s.nusnetid AND " + \
+                        "sp.studentid = tfa.nusnetid" + \
+                    ")"
+
+    DB_CURSOR.execute(sql_command_1, (code, aysem))
+    current_list_of_students = DB_CURSOR.fetchall()
+
+    DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
+    list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
+    for student in list_of_students_taking_with_no_focus_areas:
+        current_list_of_students.append([student[0], student[1], "-", "-"])
+
+    return replace_null_with_dash(current_list_of_students)
+
+
+def get_oversub_mod():
+    '''
+        Retrieves a list of modules which are oversubscribed.
+        Returns module code, module name, AY/Sem, quota, number students interested
+        i.e. has more students interested than the quota
+    '''
+    list_of_oversub_with_info = []
+    list_all_mod_info = get_all_modules()
+
+    for module_info in list_all_mod_info:
+        mod_code = module_info[0]
+
+        aysem_quota_fixed_list = get_fixed_mounting_and_quota(mod_code)
+        aysem_quota_tenta_list = get_tenta_mounting_and_quota(mod_code)
+        aysem_quota_merged_list = aysem_quota_fixed_list + \
+                                aysem_quota_tenta_list
+
+        num_student_plan_aysem_list = get_number_students_planning(mod_code)
+        for num_plan_aysem_pair in num_student_plan_aysem_list:
+            num_student_planning = num_plan_aysem_pair[0]
+            ay_sem = num_plan_aysem_pair[1]
+            real_quota = get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+
+            # ensures that quota will be a number which is not None
+            if real_quota is None:
+                quota = 0
+                real_quota = '?'
+            else:
+                quota = real_quota
+
+            if num_student_planning > quota:
+                module_name = get_module_name(mod_code)
+                oversub_info = (mod_code, module_name, ay_sem,
+                                real_quota, num_student_planning)
+                list_of_oversub_with_info.append(oversub_info)
+
+    return list_of_oversub_with_info
+
+
+######################################################################################
+# Functions that add/modify/delete student plans
+######################################################################################
+
+def add_student_plan(student_id, is_taken, module_code, ay_sem):
+    '''
+        Add a student plan into the database
+    '''
+    sql_command = 'INSERT INTO studentPlans VALUES(%s, %s, %s, %s);'
+    DB_CURSOR.execute(sql_command, (student_id, is_taken, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_student_plan(student_id, module_code, ay_sem):
+    '''
+        Delete a student plan from the database
+    '''
+    sql_command = "DELETE FROM studentPlans WHERE studentId = %s " +\
+                  "AND moduleCode = %s AND acadYearAndSem = %s;"
+    DB_CURSOR.execute(sql_command, (student_id, module_code, ay_sem))
+    CONNECTION.commit()
+
+
+######################################################################################
+# Functions that query general student enrollment information
+######################################################################################
+
+def get_all_focus_areas():
+    '''
+        Get all distinct focus areas
+    '''
+    sql_command = "SELECT DISTINCT name FROM focusarea"
     DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
@@ -545,7 +645,7 @@ def get_num_students_by_yr_study():
         and two year 3 students
     '''
     sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
-        " ORDER BY year"
+                  " ORDER BY year"
     DB_CURSOR.execute(sql_command)
 
     table_with_non_zero_students = DB_CURSOR.fetchall()
@@ -557,32 +657,6 @@ def get_num_students_by_yr_study():
     return final_table
 
 
-def append_missing_year_of_study(initial_table):
-    '''
-        Helper function to append missing years of study to the
-        given initial table.
-        initial_table given in lists of (year, number of students)
-        pair.
-        e.g. If year 5 is missing from table, appends (5,0) to table
-        and returns the table
-    '''
-    MAX_POSSIBLE_YEAR = 6
-    for index in range(0, MAX_POSSIBLE_YEAR):
-        year = index + 1
-        year_exists_in_table = False
-
-        for year_count_pair in initial_table:
-            req_year = year_count_pair[0]
-            if req_year == year:
-                year_exists_in_table = True
-                break
-
-        if not year_exists_in_table:
-            initial_table.append((year, 0))
-
-    return initial_table
-
-
 def get_num_students_by_focus_area_non_zero():
     '''
         Retrieves the number of students for each focus area as a table,
@@ -592,7 +666,7 @@ def get_num_students_by_focus_area_non_zero():
         See: get_num_students_by_focus_areas() for more details.
     '''
     sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
-        " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
+                  " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
@@ -603,9 +677,9 @@ def get_focus_areas_with_no_students_taking():
         Retrieves a list of focus areas with no students taking.
     '''
     sql_command = "SELECT f2.name FROM focusarea f2 WHERE NOT EXISTS(" + \
-        "SELECT f.name FROM focusarea f, takesfocusarea t " + \
-        "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
-        "AND f2.name = f.name GROUP BY f.name)"
+                  "SELECT f.name FROM focusarea f, takesfocusarea t " + \
+                  "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
+                  "AND f2.name = f.name GROUP BY f.name)"
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
@@ -617,7 +691,7 @@ def get_number_students_without_focus_area():
         area.
     '''
     sql_command = "SELECT COUNT(*) FROM takesfocusarea WHERE " + \
-        "focusarea1 IS NULL AND focusarea2 IS NULL"
+                  "focusarea1 IS NULL AND focusarea2 IS NULL"
     DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchone()
@@ -655,6 +729,51 @@ def get_num_students_by_focus_areas():
 
     return final_table
 
+
+######################################################################################
+# Functions that retrieve information of modules that are modified
+######################################################################################
+
+def get_modules_with_modified_details():
+    '''
+        Get all modules whose details (name/description/MC) has been modified.
+        Return the module's code, old name, old description, old MC,
+        current name, current description, and current MC
+    '''
+    sql_command = "SELECT m1.code, m1.name, m1.description, m1.mc, " +\
+                  "m2.name, m2.description, m2.mc " +\
+                  "FROM moduleBackup m1, module m2 " +\
+                  "WHERE m1.code = m2.code " +\
+                  "ORDER BY code ASC"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
+def get_modules_with_modified_quota():
+    '''
+        Find modules whose quota in target AY/Sem is different from quota in current AY/Sem
+        and return the module code, module name, current AY/Sem, current AY/Sem's quota,
+        target AY/Sem, and target AY/Sem's quota
+    '''
+    sql_command = "SELECT m1.moduleCode, m3.name, m1.acadYearAndSem, m2.acadYearAndSem, " +\
+                  "m1.quota, m2.quota " +\
+                  "FROM moduleMounted m1, moduleMountTentative m2, module m3 " +\
+                  "WHERE m1.moduleCode = m2.moduleCode " +\
+                  "AND RIGHT(m1.acadYearAndSem, 1) = RIGHT(m2.acadYearAndSem, 1) " +\
+                  "AND (" +\
+                  "    m1.quota != m2.quota " +\
+                  "    OR (m1.quota IS NULL AND m2.quota IS NOT NULL) " +\
+                  "    OR (m2.quota IS NULL AND m1.quota IS NOT NULL) " +\
+                  ") " +\
+                  "AND m1.moduleCode = m3.code " +\
+                  "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
+######################################################################################
+# Functions that query information involving module relations
+######################################################################################
 
 def get_mod_taken_together_with(code):
     '''
@@ -748,72 +867,6 @@ def get_all_mods_taken_together():
     return DB_CURSOR.fetchall()
 
 
-def get_list_students_take_module(code, aysem):
-    '''
-        Retrieves the list of students who take specified module at specified aysem.
-
-        Returns a table of lists. Each list represents a student and it contains
-        (matric number, year of study, focus area 1, focus area 2)
-    '''
-
-    sql_command_1 = "SELECT sp.studentid, s.year, tfa.focusarea1, tfa.focusarea2 " + \
-                    "FROM studentPlans sp, student s, takesFocusArea tfa " + \
-                    "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
-                    "AND sp.studentid = s.nusnetid AND " + \
-                    "sp.studentid = tfa.nusnetid"
-
-    sql_command_2 = "SELECT sp2.studentid, s2.year " + \
-                    "FROM studentPlans sp2, student s2 " + \
-                    "WHERE sp2.moduleCode = %s AND sp2.acadYearAndSem = %s " + \
-                    "AND sp2.studentid = s2.nusnetid " +\
-                    "AND sp2.studentid NOT IN ( " +\
-                        "SELECT sp.studentid " + \
-                        "FROM studentPlans sp, student s, takesFocusArea tfa " + \
-                        "WHERE sp.moduleCode = %s AND sp.acadYearAndSem = %s " + \
-                        "AND sp.studentid = s.nusnetid AND " + \
-                        "sp.studentid = tfa.nusnetid" + \
-                    ")"
-
-    DB_CURSOR.execute(sql_command_1, (code, aysem))
-    current_list_of_students = DB_CURSOR.fetchall()
-
-    DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
-    list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
-    for student in list_of_students_taking_with_no_focus_areas:
-        current_list_of_students.append([student[0], student[1], "-", "-"])
-
-    return replace_null_with_dash(current_list_of_students)
-
-
-def replace_null_with_dash(table):
-    '''
-        Changes all the NULL values found in the table to '-'
-        This function supports a 2D table.
-    '''
-    table = convert_to_list(table)
-
-    for row in table:
-        row_length = len(row)
-        for col in range(row_length):
-            if row[col] is None:
-                row[col] = '-'
-
-    return table
-
-
-def convert_to_list(table):
-    '''
-        Converts a list of tuples to a list of lists.
-    '''
-    converted_table = list()
-
-    for row in table:
-        conveted_list = list(row)
-        converted_table.append(conveted_list)
-
-    return converted_table
-
-
 def get_modA_taken_prior_to_modB():
     '''
         Retrieves the list of pairs of modules where there is at least 1 student
@@ -877,292 +930,33 @@ def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, modul
     return DB_CURSOR.fetchall()
 
 
-def add_student_plan(student_id, is_taken, module_code, ay_sem):
+def get_mod_before_intern(ay_sem):
     '''
-        Add a student plan into the database
+        Retrieves a list of modules which is taken by students prior to
+        their internship in specified ay_sem.
+
+        Returns a table of lists, each list contains
+        (module code, module name, number of students who took)
+        where ('CS1010', 'Programming Methodology', 3) means
+        3 students have taken CS1010 before their internship on
+        specified ay_sem
     '''
-    sql_command = 'INSERT INTO studentPlans VALUES(%s, %s, %s, %s);'
-    DB_CURSOR.execute(sql_command, (student_id, is_taken, module_code, ay_sem))
-    CONNECTION.commit()
+    sql_command = "SELECT sp.moduleCode, m.name, COUNT(*) " + \
+                  "FROM studentPlans sp, module m " + \
+                  "WHERE sp.moduleCode = m.code " + \
+                  "AND sp.acadYearAndSem < %s " + \
+                  "AND sp.moduleCode <> 'CP3200' AND sp.moduleCode <> 'CP3202' " + \
+                  "AND sp.moduleCode <> 'CP3880' " + \
+                  "AND EXISTS (" + \
+                  "SELECT * FROM studentPlans sp2 " + \
+                  "WHERE sp2.acadYearAndSem = %s " + \
+                  "AND sp2.studentid = sp.studentid " + \
+                  "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
+                  "OR sp2.moduleCode = 'CP3880')) " + \
+                  "GROUP BY sp.moduleCode, m.name"
+    DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
 
-
-def delete_student_plan(student_id, module_code, ay_sem):
-    '''
-        Delete a student plan from the database
-    '''
-    sql_command = "DELETE FROM studentPlans WHERE studentId = %s " +\
-                  "AND moduleCode = %s AND acadYearAndSem = %s;"
-    DB_CURSOR.execute(sql_command, (student_id, module_code, ay_sem))
-    CONNECTION.commit()
-
-
-def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
-    '''
-        Retrieves the number of students who have taken or are taking the module
-        in the target AY-Sem
-    '''
-    sql_command = "SELECT COUNT(*) " + \
-                  "FROM studentPlans sp " + \
-                  "WHERE sp.moduleCode = %s " + \
-                  "AND sp.acadYearAndSem = %s " + \
-                  "ORDER BY COUNT(*) DESC"
-
-    DB_CURSOR.execute(sql_command, (module_code, ay_sem))
-
-    return DB_CURSOR.fetchone()[0]
-
-
-def add_session(username, session_salt):
-    '''
-        Register a session into the database, overwriting
-        existing sessions by same user
-    '''
-    # Delete existing session, if any
-    sql_command = "DELETE FROM sessions WHERE staffid=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-
-    sql_command = "INSERT INTO sessions VALUES (%s, %s)"
-    DB_CURSOR.execute(sql_command, (username, session_salt))
-    CONNECTION.commit()
-
-
-def validate_session(username, session_id):
-    '''
-        Check if a provided session-id is valid.
-    '''
-    sql_command = "SELECT sessionSalt FROM sessions WHERE staffID=%s"
-    DB_CURSOR.execute(sql_command, (username,))
-    session = DB_CURSOR.fetchall()
-    if not session:
-        return False
-    else:
-        hashed_id = hashlib.sha512(username + session[0][0]).hexdigest()
-        is_valid = (session_id == hashed_id)
-        return is_valid
-
-
-def clean_old_sessions(date_to_delete):
-    '''
-        Delete all sessions dating before specified date
-    '''
-    sql_command = "DELETE FROM sessions WHERE date < %s;"
-    try:
-        DB_CURSOR.execute(sql_command, (date_to_delete,))
-        CONNECTION.commit()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def get_all_focus_areas():
-    '''
-        Get all distinct focus areas
-    '''
-    sql_command = "SELECT DISTINCT name FROM focusarea"
-    DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
-
-
-def add_prerequisite(module_code, prereq_code, index):
-    '''
-        Insert a prerequisite into the prerequisite table.
-        Returns true if successful, false if duplicate primary key detected
-    '''
-    sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:        # duplicate key error
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def get_prerequisite(module_code):
-    '''
-        Get a prerequisite from the prerequisite table.
-    '''
-    sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
-    DB_CURSOR.execute(sql_command, (module_code,))
-    return DB_CURSOR.fetchall()
-
-
-def get_prerequisite_as_string(module_code):
-    '''
-        Returns a string of pre-requisites of specified module_code
-    '''
-    prerequisites = get_prerequisite(module_code)
-    prereq_list = convert_to_list(prerequisites)
-
-    # sort list of lists based on index (which is the first elem of each row)
-    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
-
-    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
-
-    return prereq_string
-
-
-def convert_list_of_prereqs_to_string(prereq_list):
-    '''
-        Converts given list of lists (prereq_list) into string form of prereqs.
-        Pre-condition: Given list must have the rows' first index sorted.
-        Example: [['0', 'CS1010'], ['0', 'CS1231'], ['1', 'CS2105']] will yield
-        the string (CS1010 or CS1231) and CS2105.
-        Same index elements have an "OR" relationship, different index elements
-        have an "AND" relationship.
-    '''
-    number_of_prereq = len(prereq_list)
-    if number_of_prereq == LENGTH_EMPTY:
-        return ""
-
-    required_string = ""
-    temp_list_for_or = list()
-    previous_index = None
-    for prereq_with_index in prereq_list:
-        current_index = prereq_with_index[INDEX_FIRST_ELEM]
-        current_prereq = prereq_with_index[INDEX_SECOND_ELEM]
-
-        if previous_index is None:
-            previous_index = current_index
-            temp_list_for_or.append(current_prereq)
-        else:
-            if previous_index == current_index:
-                temp_list_for_or.append(current_prereq)
-            else:
-                prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
-                required_string = process_and_relation_prereq(required_string,
-                                                              prereq_of_or_string)
-                previous_index = current_index
-                temp_list_for_or = [current_prereq]
-
-    if len(required_string) == LENGTH_EMPTY:
-        # there is no 'and' relation
-        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or,
-                                                               False)
-        required_string = prereq_of_or_string
-    else:
-        # there is 'and' relation to process
-        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
-        required_string = process_and_relation_prereq(required_string,
-                                                      prereq_of_or_string)
-
-    return required_string
-
-
-def convert_list_prereq_to_or_string(temp_list, to_add_brackets=True):
-    '''
-        Converts all elements in temp_list to a string separated by "or"
-    '''
-    number_of_prereq = len(temp_list)
-    if number_of_prereq == 1:
-        return temp_list[INDEX_FIRST_ELEM]
-    else:
-        # more than 1 prereq
-        required_string = " or ".join(temp_list)
-
-        if to_add_brackets:
-            required_string_with_brackets = "(" + required_string + ")"
-
-            return required_string_with_brackets
-        else:
-            return required_string
-
-
-def process_and_relation_prereq(existing_string, prereq_of_or_string):
-    '''
-        Appends the prereq_of_or_string into existing_string by building
-        "and" relations between existing prereqs in existing_string
-        with those in prereq_of_or_string
-    '''
-    existing_string_length = len(existing_string)
-
-    if existing_string_length == LENGTH_EMPTY:
-        return prereq_of_or_string
-    else:
-        and_string = " and "
-        required_string = existing_string + and_string + prereq_of_or_string
-
-        return required_string
-
-
-def delete_prerequisite(module_code, prereq_code):
-    '''
-        Delete a prerequisite from the prerequisite table.
-        Returns true if successful.
-    '''
-    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s " +\
-                  "AND prerequisiteModuleCode = %s"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def add_preclusion(module_code, preclude_code):
-    '''
-        Insert a preclusion into the precludes table.
-        Returns true if successful, false if duplicate primary key detected or
-        when module precludes itself (i.e. module_code == preclude_code) or
-        when invalid module/preclude code is given.
-    '''
-    if module_code == preclude_code:
-        return False
-
-    if not is_existing_module(module_code) or not is_existing_module(preclude_code):
-        return False
-
-    sql_command = "INSERT INTO precludes VALUES (%s,%s)"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
-        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:        # duplicate key error
-        CONNECTION.rollback()
-        return False
-    return True
-
-
-def get_preclusion(module_code):
-    '''
-        Get all preclusions of module_code from the precludes table.
-    '''
-    sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
-    DB_CURSOR.execute(sql_command, (module_code,))
-    return DB_CURSOR.fetchall()
-
-
-def get_preclusion_as_string(module_code):
-    '''
-        Returns a string of preclusions of specified module_code
-    '''
-    preclusions = get_preclusion(module_code)
-    preclude_list = convert_to_list(preclusions)
-    processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
-
-    preclude_string = ", ".join(processed_list)
-
-    return preclude_string
-
-
-def delete_preclusion(module_code, prereq_code):
-    '''
-        Delete a preclusion from the precludes table.
-        Returns true if successful, false otherwise.
-    '''
-    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
-                  "AND precludedByModuleCode = %s"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
-        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
-        CONNECTION.commit()
-    except psycopg2.IntegrityError:
-        CONNECTION.rollback()
-        return False
-    return True
 
 
 def get_mods_no_one_take(aysem):
@@ -1217,119 +1011,135 @@ def get_mods_no_one_take(aysem):
     return required_list
 
 
-def is_aysem_in_list(given_aysem, given_list):
+######################################################################################
+# Functions that query prerequisite or preclusion information
+######################################################################################
+
+def get_prerequisite(module_code):
     '''
-        Returns true if given_aysem is found inside given_list.
-        Example:
-        given_list is a list of [('AY 16/17 Sem 1',), ('AY 16/17 Sem 2',)] structure.
+        Get a prerequisite from the prerequisite table.
     '''
-    for aysem_tuple in given_list:
-        retrieved_aysem = aysem_tuple[0]
-        if given_aysem == retrieved_aysem:
-            return True
-
-    return False
+    sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
 
 
-def get_all_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
+def get_prerequisite_as_string(module_code):
     '''
-        Returns all the AY-Sems in the system
+        Returns a string of pre-requisites of specified module_code
     '''
-    current_ay = get_current_ay()
-    ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
-    target_ay = current_ay
-    for i in range(ay_count-1):
-        target_ay = get_next_ay(target_ay)
-        ay_sems_in_system.append(target_ay+" Sem 1")
-        ay_sems_in_system.append(target_ay+" Sem 2")
-    return ay_sems_in_system
+    prerequisites = get_prerequisite(module_code)
+    prereq_list = convert_to_list(prerequisites)
+
+    # sort list of lists based on index (which is the first elem of each row)
+    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
+
+    return prereq_string
 
 
-def get_all_future_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
+def get_preclusion(module_code):
     '''
-        Returns all the FUTURE AY-Sems in the system
+        Get all preclusions of module_code from the precludes table.
     '''
-    future_ay_sems_in_system = []
-    target_ay = get_current_ay()
-    for i in range(ay_count-1):
-        target_ay = get_next_ay(target_ay)
-        future_ay_sems_in_system.append(target_ay+" Sem 1")
-        future_ay_sems_in_system.append(target_ay+" Sem 2")
-    return future_ay_sems_in_system
+    sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
+    DB_CURSOR.execute(sql_command, (module_code,))
+    return DB_CURSOR.fetchall()
 
 
-def is_aysem_in_system(ay_sem):
+def get_preclusion_as_string(module_code):
     '''
-        Returns the AY-Sem if given AY-Sem is found inside the system, otherwise return False
+        Returns a string of preclusions of specified module_code
     '''
-    ay_sems_in_system = get_all_ay_sems()
+    preclusions = get_preclusion(module_code)
+    preclude_list = convert_to_list(preclusions)
+    processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
 
-    valid_aysem = False
-    for i in range(len(ay_sems_in_system)):
-        if ay_sem.upper() == ay_sems_in_system[i].upper():
-            valid_aysem = ay_sems_in_system[i]
-            break
-    return valid_aysem
+    preclude_string = ", ".join(processed_list)
+
+    return preclude_string
 
 
-def is_aysem_in_system_and_is_future(ay_sem):
+######################################################################################
+# Functions that add/modify/delete prerequisite or preclusion information
+######################################################################################
+
+def add_prerequisite(module_code, prereq_code, index):
     '''
-        Returns the aysem if given aysem is found inside the system AND is a future AY-Sem,
-        otherwise return False
+        Insert a prerequisite into the prerequisite table.
+        Returns true if successful, false if duplicate primary key detected
     '''
-    future_ay_sems_in_system = get_all_future_ay_sems()
+    sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
 
-    valid_future_aysem = False
-    for i in range(len(future_ay_sems_in_system)):
-        if ay_sem.upper() == future_ay_sems_in_system[i].upper():
-            valid_future_aysem = future_ay_sems_in_system[i]
-            break
-    return valid_future_aysem
 
-
-def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
+def delete_prerequisite(module_code, prereq_code):
     '''
-        Retrieves the list of modules with quota/class size in the
-        specified AY-Semester if the quota falls within the given range
-        of quota_lower <= retrieved module quota <= quota_higher
+        Delete a prerequisite from the prerequisite table.
+        Returns true if successful.
     '''
-    sql_command = "SELECT mm.moduleCode, m.name, mm.quota " + \
-                "FROM %(table)s mm, module m " + \
-                "WHERE mm.acadYearAndSem = %(aysem)s " + \
-                "AND mm.quota >= %(lower_range)s AND mm.quota <= %(higher_range)s " + \
-                "AND mm.moduleCode = m.code"
+    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s " +\
+                  "AND prerequisiteModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
 
-    STRING_MODULE_MOUNTED = "moduleMounted"
-    STRING_MODULE_MOUNT_TENTA = "moduleMountTentative"
 
-    MAP_TABLE_TO_MODULE_MOUNTED = {
-        "table": AsIs(STRING_MODULE_MOUNTED),
-        "aysem": given_aysem,
-        "lower_range": quota_lower,
-        "higher_range": quota_higher
-    }
-    MAP_TABLE_TO_MODULE_MOUNT_TENTA = {
-        "table": AsIs(STRING_MODULE_MOUNT_TENTA),
-        "aysem": given_aysem,
-        "lower_range": quota_lower,
-        "higher_range": quota_higher
-    }
+def add_preclusion(module_code, preclude_code):
+    '''
+        Insert a preclusion into the precludes table.
+        Returns true if successful, false if duplicate primary key detected or
+        when module precludes itself (i.e. module_code == preclude_code) or
+        when invalid module/preclude code is given.
+    '''
+    if module_code == preclude_code:
+        return False
 
-    fixed_sems = get_all_fixed_ay_sems()
-    tenta_sems = get_all_tenta_ay_sems()
+    if not is_existing_module(module_code) or not is_existing_module(preclude_code):
+        return False
 
-    if is_aysem_in_list(given_aysem, fixed_sems):
-        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    elif is_aysem_in_list(given_aysem, tenta_sems):
-        DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
-    else: # No such aysem found
-        return list()
+    sql_command = "INSERT INTO precludes VALUES (%s,%s)"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
+        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:        # duplicate key error
+        CONNECTION.rollback()
+        return False
+    return True
 
-    required_list = DB_CURSOR.fetchall()
-    processed_list = convert_to_list(required_list)
 
-    return processed_list
+def delete_preclusion(module_code, prereq_code):
+    '''
+        Delete a preclusion from the precludes table.
+        Returns true if successful, false otherwise.
+    '''
+    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
+                  "AND precludedByModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
+        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
 
+
+######################################################################################
+# Functions that are related to starred modules
+######################################################################################
 
 def star_module(module_code, staff_id):
     '''
@@ -1379,34 +1189,112 @@ def is_module_starred(module_code, staff_id):
         return True
 
 
-def get_mod_before_intern(ay_sem):
+######################################################################################
+# Functions that are related to managing user (admin) accounts and the login system
+######################################################################################
+
+def add_admin(username, salt, hashed_pass):
     '''
-        Retrieves a list of modules which is taken by students prior to
-        their internship in specified ay_sem.
-
-        Returns a table of lists, each list contains
-        (module code, module name, number of students who took)
-        where ('CS1010', 'Programming Methodology', 3) means
-        3 students have taken CS1010 before their internship on
-        specified ay_sem
+        Register an admin into the database.
+        Note: to change last argument to false once
+        activation done
     '''
-    sql_command = "SELECT sp.moduleCode, m.name, COUNT(*) " + \
-                  "FROM studentPlans sp, module m " + \
-                  "WHERE sp.moduleCode = m.code " + \
-                  "AND sp.acadYearAndSem < %s " + \
-                  "AND sp.moduleCode <> 'CP3200' AND sp.moduleCode <> 'CP3202' " + \
-                  "AND sp.moduleCode <> 'CP3880' " + \
-                  "AND EXISTS (" + \
-                  "SELECT * FROM studentPlans sp2 " + \
-                  "WHERE sp2.acadYearAndSem = %s " + \
-                  "AND sp2.studentid = sp.studentid " + \
-                  "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
-                  "OR sp2.moduleCode = 'CP3880')) " + \
-                  "GROUP BY sp.moduleCode, m.name"
-    DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
+    try:
+        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
+        CONNECTION.commit()
+    except psycopg2.DataError: #if username too long
+        CONNECTION.rollback()
 
-    return DB_CURSOR.fetchall()
 
+def is_userid_taken(userid):
+    '''
+        Retrieves all account ids for testing if a user id supplied
+        during account creation
+    '''
+    sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (userid,))
+
+    result = DB_CURSOR.fetchall()
+    return len(result) != 0
+
+
+def delete_admin(username):
+    '''
+        Delete an admin from the database.
+    '''
+    # Delete the foreign key references first.
+    sql_command = "DELETE FROM starred WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    sql_command = "DELETE FROM sessions WHERE staffid=%s"
+    DB_CURSOR.execute(sql_command, (username, ))
+
+    sql_command = "DELETE FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    CONNECTION.commit()
+
+
+def validate_admin(username, unhashed_pass):
+    '''
+        Check if a provided admin-password pair is valid.
+    '''
+    sql_command = "SELECT salt, password FROM admin WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    admin = DB_CURSOR.fetchall()
+    if not admin:
+        return False
+    else:
+        hashed_pass = hashlib.sha512(unhashed_pass + admin[0][0]).hexdigest()
+        is_valid = (admin[0][1] == hashed_pass)
+        return is_valid
+
+
+def add_session(username, session_salt):
+    '''
+        Register a session into the database, overwriting
+        existing sessions by same user
+    '''
+    # Delete existing session, if any
+    sql_command = "DELETE FROM sessions WHERE staffid=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+
+    sql_command = "INSERT INTO sessions VALUES (%s, %s)"
+    DB_CURSOR.execute(sql_command, (username, session_salt))
+    CONNECTION.commit()
+
+
+def validate_session(username, session_id):
+    '''
+        Check if a provided session-id is valid.
+    '''
+    sql_command = "SELECT sessionSalt FROM sessions WHERE staffID=%s"
+    DB_CURSOR.execute(sql_command, (username,))
+    session = DB_CURSOR.fetchall()
+    if not session:
+        return False
+    else:
+        hashed_id = hashlib.sha512(username + session[0][0]).hexdigest()
+        is_valid = (session_id == hashed_id)
+        return is_valid
+
+
+def clean_old_sessions(date_to_delete):
+    '''
+        Delete all sessions dating before specified date
+    '''
+    sql_command = "DELETE FROM sessions WHERE date < %s;"
+    try:
+        DB_CURSOR.execute(sql_command, (date_to_delete,))
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
+######################################################################################
+# Function that validates input that are used to query or modify the database 
+######################################################################################
 
 def validate_input(input_data, input_types, is_future=False,
                    aysem_specific=True, attr_required=True):
@@ -1509,3 +1397,161 @@ def validate_input(input_data, input_types, is_future=False,
                 input_data.code = module_code.upper()
 
     return input_data
+
+
+######################################################################################
+# General helper functions that are used by database functions
+######################################################################################
+
+def replace_null_with_dash(table):
+    '''
+        Changes all the NULL values found in the table to '-'
+        This function supports a 2D table.
+    '''
+    table = convert_to_list(table)
+
+    for row in table:
+        row_length = len(row)
+        for col in range(row_length):
+            if row[col] is None:
+                row[col] = '-'
+
+    return table
+
+
+def convert_to_list(table):
+    '''
+        Converts a list of tuples to a list of lists.
+    '''
+    converted_table = list()
+
+    for row in table:
+        conveted_list = list(row)
+        converted_table.append(conveted_list)
+
+    return converted_table
+
+
+def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
+    '''
+        This is a helper function.
+        Retrieves the correct quota from ay_sem listed inside
+        aysem_quota_merged_list parameter.
+    '''
+    for aysem_quota_pair in aysem_quota_merged_list:
+        aysem_in_pair = aysem_quota_pair[0]
+        if ay_sem == aysem_in_pair:
+            quota_in_pair = aysem_quota_pair[1]
+
+            return quota_in_pair
+
+    return None # quota not found in list
+
+
+def append_missing_year_of_study(initial_table):
+    '''
+        Helper function to append missing years of study to the
+        given initial table.
+        initial_table given in lists of (year, number of students)
+        pair.
+        e.g. If year 5 is missing from table, appends (5,0) to table
+        and returns the table
+    '''
+    MAX_POSSIBLE_YEAR = 6
+    for index in range(0, MAX_POSSIBLE_YEAR):
+        year = index + 1
+        year_exists_in_table = False
+
+        for year_count_pair in initial_table:
+            req_year = year_count_pair[0]
+            if req_year == year:
+                year_exists_in_table = True
+                break
+
+        if not year_exists_in_table:
+            initial_table.append((year, 0))
+
+    return initial_table
+
+
+def convert_list_of_prereqs_to_string(prereq_list):
+    '''
+        Converts given list of lists (prereq_list) into string form of prereqs.
+        Pre-condition: Given list must have the rows' first index sorted.
+        Example: [['0', 'CS1010'], ['0', 'CS1231'], ['1', 'CS2105']] will yield
+        the string (CS1010 or CS1231) and CS2105.
+        Same index elements have an "OR" relationship, different index elements
+        have an "AND" relationship.
+    '''
+    number_of_prereq = len(prereq_list)
+    if number_of_prereq == LENGTH_EMPTY:
+        return ""
+
+    required_string = ""
+    temp_list_for_or = list()
+    previous_index = None
+    for prereq_with_index in prereq_list:
+        current_index = prereq_with_index[INDEX_FIRST_ELEM]
+        current_prereq = prereq_with_index[INDEX_SECOND_ELEM]
+
+        if previous_index is None:
+            previous_index = current_index
+            temp_list_for_or.append(current_prereq)
+        else:
+            if previous_index == current_index:
+                temp_list_for_or.append(current_prereq)
+            else:
+                prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+                required_string = process_and_relation_prereq(required_string,
+                                                              prereq_of_or_string)
+                previous_index = current_index
+                temp_list_for_or = [current_prereq]
+
+    if len(required_string) == LENGTH_EMPTY:
+        # there is no 'and' relation
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or,
+                                                               False)
+        required_string = prereq_of_or_string
+    else:
+        # there is 'and' relation to process
+        prereq_of_or_string = convert_list_prereq_to_or_string(temp_list_for_or)
+        required_string = process_and_relation_prereq(required_string,
+                                                      prereq_of_or_string)
+
+    return required_string
+
+
+def convert_list_prereq_to_or_string(temp_list, to_add_brackets=True):
+    '''
+        Converts all elements in temp_list to a string separated by "or"
+    '''
+    number_of_prereq = len(temp_list)
+    if number_of_prereq == 1:
+        return temp_list[INDEX_FIRST_ELEM]
+    else:
+        # more than 1 prereq
+        required_string = " or ".join(temp_list)
+
+        if to_add_brackets:
+            required_string_with_brackets = "(" + required_string + ")"
+
+            return required_string_with_brackets
+        else:
+            return required_string
+
+
+def process_and_relation_prereq(existing_string, prereq_of_or_string):
+    '''
+        Appends the prereq_of_or_string into existing_string by building
+        "and" relations between existing prereqs in existing_string
+        with those in prereq_of_or_string
+    '''
+    existing_string_length = len(existing_string)
+
+    if existing_string_length == LENGTH_EMPTY:
+        return prereq_of_or_string
+    else:
+        and_string = " and "
+        required_string = existing_string + and_string + prereq_of_or_string
+
+        return required_string
