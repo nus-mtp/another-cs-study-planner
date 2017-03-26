@@ -39,16 +39,16 @@ class EditModuleInfo(object):
         if test_data:   # for testing purposes
             input_data = test_data[0]
         else:
-            input_data = model.validate_input(web.input(), ["code"])
+            input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
+        module_code = None
         try:
             module_code = input_data.code
             module_name = input_data.name
             module_desc = input_data.desc
             module_mc = input_data.mc
         except AttributeError:
-            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
-            raise web.notfound(error)
+            return Outcome().POST("edit_module", False, module_code)
 
         old_module_info = model.get_module(module_code)
         old_module_name = old_module_info[1]
@@ -110,16 +110,17 @@ class EditMountingInfo(object):
         '''
             Handles the submission of the 'Edit Specific Module Info' page
         '''
-        input_data = model.validate_input(web.input(), ["code"])
+        input_data = model.validate_input(web.input(), ["code", "aysem"], show_404=False)
 
+        module_code = None
+        ay_sem = None
         try:
             module_code = input_data.code
             ay_sem = input_data.aysem
             old_mounting_value = input_data.oldMountingValue
             mounting_status = input_data.mountingStatus
         except AttributeError:
-            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
-            raise web.notfound(error)
+            return Outcome().POST("edit_mounting", False, module_code, ay_sem)
 
         try:
             quota = input_data.quota

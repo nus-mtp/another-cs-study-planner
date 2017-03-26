@@ -413,9 +413,10 @@ def clean_old_sessions(date_to_delete):
 ######################################################################################
 
 def validate_input(input_data, input_types, is_future=False,
-                   aysem_specific=True, attr_required=True):
+                   aysem_specific=True, attr_required=True, show_404=True):
     return helper.validate_input(input_data, input_types, is_future=is_future,
-                                 aysem_specific=aysem_specific, attr_required=attr_required)
+                                 aysem_specific=aysem_specific, attr_required=attr_required,
+                                 show_404=show_404)
 
 
 ######################################################################################

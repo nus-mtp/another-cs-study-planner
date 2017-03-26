@@ -280,7 +280,7 @@ def process_and_relation_prereq(existing_string, prereq_of_or_string):
 ######################################################################################
 
 def validate_input(input_data, input_types, is_future=False,
-                   aysem_specific=True, attr_required=True):
+                   aysem_specific=True, attr_required=True, show_404=True):
     '''
         Validates that the GET input data (in the URL) is valid.
 
@@ -300,13 +300,19 @@ def validate_input(input_data, input_types, is_future=False,
             try:
                 module_code = input_data.code
             except AttributeError:
-                error = RENDER.notfound('Module code is not specified')
-                raise web.notfound(error)
+                if show_404:
+                    error = RENDER.notfound('Module code is not specified')
+                    raise web.notfound(error)
+                else:
+                    return False
             module_exist = model.is_existing_module(module_code.upper())
             if not module_exist:
-                error = RENDER.notfound('Module code "' + module_code +\
-                                        '" does not exist in our system')
-                raise web.notfound(error)
+                if show_404:
+                    error = RENDER.notfound('Module code "' + module_code +\
+                                            '" does not exist in our system')
+                    raise web.notfound(error)
+                else:
+                    return False
             else:
                 input_data.code = module_code.upper()
 
@@ -315,8 +321,11 @@ def validate_input(input_data, input_types, is_future=False,
                 ay_sem = input_data.aysem
             except AttributeError:
                 if aysem_specific:
-                    error = RENDER.notfound('AY-Semester is not specified')
-                    raise web.notfound(error)
+                    if show_404:
+                        error = RENDER.notfound('AY-Semester is not specified')
+                        raise web.notfound(error)
+                    else:
+                        return False
                 else:
                     continue
 
@@ -333,7 +342,10 @@ def validate_input(input_data, input_types, is_future=False,
                 else:
                     error = RENDER.notfound('AY-Semester "' + ay_sem +\
                                             '" does not exist in our system')
-                raise web.notfound(error)
+                if show_404:
+                    raise web.notfound(error)
+                else:
+                    return False
             else:
                 input_data.aysem = valid_aysem
 

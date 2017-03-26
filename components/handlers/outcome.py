@@ -36,18 +36,27 @@ class Outcome(object):
             elif action == "edit_module":
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been edited successfully!"
+                    redirect_page = "/viewModule?code="+module_code
                 else:
                     outcome_message = "Error: Failed to edit module."
-                redirect_page = "/viewModule?code="+module_code
-
+                    if module_code is None:
+                        redirect_page = "/modules"
+                    else:
+                        redirect_page = "/viewModule?code="+module_code
+                
             elif action == "edit_mounting":
                 ay_sem = data[3]
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been edited successfully!"
+                    redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
+                                    ay_sem.replace(' ', '+').replace('/', '%2F')
                 else:
                     outcome_message = "Error: Failed to edit module."
-                redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
-                                ay_sem.replace(' ', '+').replace('/', '%2F')
+                    if module_code is None or ay_sem is None:
+                        redirect_page = "/modules"
+                    else:
+                        redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
+                                        ay_sem.replace(' ', '+').replace('/', '%2F')
 
             elif action == "restore_module":
                 if outcome is True:
