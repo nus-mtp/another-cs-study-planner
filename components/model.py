@@ -138,6 +138,10 @@ def get_next_ay(ay):
     return helper.get_next_ay(ay)
 
 
+def get_number_of_ay_in_system():
+    return helper.get_number_of_ay_in_system()
+
+
 def get_all_fixed_ay_sems():
     return database.get_all_fixed_ay_sems()
 

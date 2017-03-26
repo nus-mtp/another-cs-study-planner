@@ -33,6 +33,13 @@ def get_next_ay(ay):
     return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
 
 
+def get_number_of_ay_in_system():
+    '''
+        Return the number of AY in the system
+    '''
+    return NUMBER_OF_AY_IN_SYSTEM
+
+
 def get_all_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
     '''
         Returns all the AY-Sems in the system

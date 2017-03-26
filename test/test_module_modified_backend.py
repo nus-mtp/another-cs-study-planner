@@ -4,6 +4,7 @@
 '''
 from nose.tools import assert_equal, assert_not_equal, assert_true, assert_false
 from components import model
+from components import helper
 from components.handlers.modified_modules import Modified
 from components.handlers.module_edit import EditModuleInfo
 from components.handlers.module_restore import RestoreModule
@@ -564,7 +565,7 @@ class TestCode(object):
         test_mounting_change = 0
 
         # Set modified module to check for modifications in next two AYs
-        model.NUMBER_OF_AY_IN_SYSTEM = 3
+        helper.NUMBER_OF_AY_IN_SYSTEM = 3
 
         modified_modules = self.modified_modules_handler.get_modules_with_modified_mounting()
         is_in_modified_modules = False
@@ -581,7 +582,7 @@ class TestCode(object):
                 mounting_change = module[4]
                 break
 
-        model.NUMBER_OF_AY_IN_SYSTEM = 2
+        helper.NUMBER_OF_AY_IN_SYSTEM = 2
 
         assert_true(is_in_modified_modules)
         assert_equal(test_current_aysem, current_aysem)
