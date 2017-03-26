@@ -3,8 +3,8 @@
     Handles queries to the database
 '''
 
-import web
 import hashlib
+import web
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 from psycopg2.extensions import AsIs
