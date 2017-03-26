@@ -116,7 +116,7 @@ class EditMountingInfo(object):
         '''
             Handles the submission of the 'Edit Specific Module Info' page
         '''
-        input_data = model.validate_input(web.input(), ["code", "aysem"], 
+        input_data = model.validate_input(web.input(), ["code", "aysem"],
                                           is_future=True, show_404=False)
 
         module_code = None
@@ -156,7 +156,8 @@ class EditMountingInfo(object):
             else:
                 if mounting_status == "Mounted":
                     outcome = None
-                    old_mounting_status = model.get_mounting_of_target_tenta_ay_sem(module_code, ay_sem)
+                    old_mounting_status = model.get_mounting_of_target_tenta_ay_sem(module_code,
+                                                                                    ay_sem)
                     if old_mounting_status is True:
                         outcome = model.update_quota(module_code, ay_sem, quota)
                     else:

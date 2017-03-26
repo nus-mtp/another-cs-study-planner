@@ -43,7 +43,7 @@ class Outcome(object):
                         redirect_page = "/modules"
                     else:
                         redirect_page = "/viewModule?code="+module_code
-                
+
             elif action == "edit_mounting":
                 ay_sem = data[3]
                 if outcome is True:
