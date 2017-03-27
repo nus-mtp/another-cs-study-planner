@@ -19,17 +19,7 @@ def get_all_modules():
 
 
 def get_all_modules_and_focus():
-    '''
-        Get the module code, name, description, MCs,
-        and focus areas of all modules
-    '''
-    sql_command = "SELECT m.*, b.focusArea " +\
-                    "FROM module m " +\
-                    "LEFT JOIN belongstofocus b " +\
-                    "ON m.code = b.ModuleCode " +\
-                    "ORDER BY m.code"
-    DB_CURSOR.execute(sql_command)
-    return DB_CURSOR.fetchall()
+    return database.get_all_modules_and_focus()
 
 
 def get_module(code):
