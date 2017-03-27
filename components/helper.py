@@ -22,7 +22,7 @@ NUMBER_OF_AY_IN_SYSTEM = 2
 
 
 ######################################################################################
-# Functions that are realted to AY and semester information
+# Functions that are related to AY and semester information
 ######################################################################################
 
 def get_next_ay(ay):
