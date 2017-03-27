@@ -11,7 +11,7 @@ $var hierarchy = [home, deleteModule]
             <h1 class="text-center"><b>Delete Module</b></h1>
             <p class="text-center">Delete a <b>new module</b> that was added into the system.</p>
             <br>
-            <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
+            <table class="table table-bordered table-hover display dataTable" id="delete-module-table">
                 <thead>
                     <tr>
                         <th>Code</th>
@@ -36,7 +36,7 @@ $var hierarchy = [home, deleteModule]
                         <td class="text-center" style="width:5%;">$moduleMc</td>
                         <td class="text-center" style="width:8%;">
                             <form action="/deleteModule" method="post" onsubmit="if(!confirm('Are you sure you want to delete this module?')){event.preventDefault();}">
-                                <input type="hidden" name="code" value="$moduleInfo[0]">
+                                <input type="hidden" name="code" value="$moduleCode">
                                 <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Delete Module">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>

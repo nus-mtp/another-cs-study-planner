@@ -88,6 +88,10 @@ $(function() {
         "aaSorting": []
     } );
 
+    $('#delete-module-table').DataTable( {
+        "aaSorting": []
+    } );
+
     $('#fixed-mounting-table').DataTable( {
         "aaSorting": []
     } );
