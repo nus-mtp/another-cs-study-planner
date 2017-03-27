@@ -44,19 +44,27 @@ $var hierarchy = [home, fixedMounting]
                             <td>$moduleName</td>
                         $if sem1Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                </a>
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                </a>
                             </td>
                         $if sem2Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                </a>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                </a>
                             </td>
                         </tr>
                 </tbody>

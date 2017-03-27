@@ -47,27 +47,39 @@ $var hierarchy = [home, tentativeMounting]
                             <td>$moduleName</td>
                         $if sem1Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                </a>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                                </a>
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                </a>
                             </td>
                         $if sem2Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                </a>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                                </a>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                </a>
                             </td>
                         </tr>
                 </tbody>
