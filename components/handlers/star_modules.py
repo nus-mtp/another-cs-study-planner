@@ -24,8 +24,8 @@ class StarModule(object):
             return_path = web.input().return_path
             # modify return path if individual module info to include aySem
             if return_path == '/individualModuleInfo':
-                target_ay = web.input().target_ay
-                return_path = return_path + '?code=' + module_code + '&targetAY=' + target_ay
+                target_ay = web.input().aysem
+                return_path = return_path + '?code=' + module_code + '&aysem=' + target_ay
             if action == "star":
                 model.star_module(module_code, web.cookies().get('user'))
             else:

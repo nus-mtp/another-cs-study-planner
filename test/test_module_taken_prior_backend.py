@@ -234,7 +234,7 @@ class TestCode(object):
         test_module_B = "PT1005"
         target_ay_sem = self.next_ay+" Sem 1"
         taken_prior_handler = self.taken_prior_handler
-        result = taken_prior_handler.POST(test_module_A, test_module_B, target_ay_sem)
+        result = taken_prior_handler.GET(test_module_A, test_module_B, target_ay_sem)
 
         # 2 students took PT1001 in 16/17 Sem 1, and 1 student took it in 16/17 Sem 2
         student_counts = result[0]

@@ -96,11 +96,11 @@ $var hierarchy = [home, moduleInfo, viewModule]
                         <div class="page-header">
                             <h1><b>$moduleCode</b>
                                 $if isStarred:
-                                    <a href="/starModule?code=$moduleCode&amp;action=unstar&amp;return_path=/viewModule?code=$moduleCode" class="star">
+                                    <a href="/starModule?code=$moduleCode&action=unstar&return_path=/viewModule?code=$moduleCode" class="star">
                                         <span class="glyphicon glyphicon-star"></span>
                                     </a>
                                 $else:
-                                    <a href="/starModule?code=$moduleCode&amp;action=star&amp;return_path=/viewModule?code=$moduleCode" class="star">
+                                    <a href="/starModule?code=$moduleCode&action=star&return_path=/viewModule?code=$moduleCode" class="star">
                                         <span class="glyphicon glyphicon-star-empty"></span>
                                     </a>
                             </h1>
@@ -207,7 +207,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
 									<td>
 										<form action="/individualModuleInfo" method="get">
 											<input type="hidden" name="code" value="$moduleCode">
-											<input type="hidden" name="targetAY" value="$entry[0]">
+											<input type="hidden" name="aysem" value="$entry[0]">
 											<input class="btn btn-primary" type="submit" value="View">
 										</form>
 									</td>								
@@ -265,12 +265,12 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                         <td>
                                             <form style="display:inline-block" action="/individualModuleInfo" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="targetAY" value="$entry[0]">
+                                                <input type="hidden" name="aysem" value="$entry[0]">
                                                 <input class="btn btn-primary" type="submit" value="View">
                                             </form>
                                             <form style="display:inline-block" action="/editMounting" method="get">
                                                 <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="aySem" value="$entry[0]">
+                                                <input type="hidden" name="aysem" value="$entry[0]">
                                                 <input class="btn btn-primary" type="submit" value="Edit">
                                             </form>
                                         </td>
@@ -278,6 +278,9 @@ $var hierarchy = [home, moduleInfo, viewModule]
                             </tbody>
                         </table>
                     </div>
+                    <h3 class="text-center">Module's Quota/Demand for each AY-Sem</h3>
+                    <div class="row" id="quota-demand-chart"></div>
+                    <div class="row" style="height: 30px;">
 				</div>
 			</div>
 		</div>

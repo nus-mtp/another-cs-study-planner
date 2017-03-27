@@ -16,8 +16,10 @@ class StudentsAffectedByModule(object):
         '''
         if not session.validate_session():
             raise web.seeother('/login')
-        input_data = web.input()
+
+        input_data = model.validate_input(web.input(), ["code", "aysem"])
         module_code = input_data.code
         ay_sem = input_data.aysem
+
         student_list = model.get_list_students_take_module(module_code, ay_sem)
         return RENDER.studentsAffectedByModule(module_code, ay_sem, student_list)

@@ -3,7 +3,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -13,17 +13,18 @@ class TestCode(object):
     '''
 
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
-    URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&targetAY=AY+17%2F18+Sem+1'
-    URL_EDIT_MODULE_SPECIFIC_VALID = '/editMounting?code=BT5110&aySem=AY+17%2F18+Sem+1'
-    URL_EDIT_MODULE_SPECIFIC_INVALID_CODE = '/editMounting?code=CS0123&aySem=AY+17%2F18+Sem+1'
-    URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM = '/editMounting?code=BT5110&aySem=AY+17%2F19+Sem+1'
+    URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&aysem=AY+17%2F18+Sem+1'
+    URL_EDIT_MODULE_SPECIFIC_VALID = '/editMounting?code=BT5110&aysem=AY+17%2F18+Sem+1'
+    URL_EDIT_MODULE_SPECIFIC_INVALID_CODE = '/editMounting?code=CS0123&aysem=AY+17%2F18+Sem+1'
+    URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM = '/editMounting?code=BT5110&aysem=AY+17%2F19+Sem+1'
 
     EDIT_MODULE_SPECIFIC_BUTTON_FORM_NAME = 'edit-module-button'
     EDIT_MODULE_SPECIFIC_FORM_NAME = 'edit-module-form'
 
     EDIT_MODULE_TITLE = ' <h1 class="title text-center">Edit <b>General Information</b>'+\
                         ' For <b>BT5110</b></h1>'
-    EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> For <b>AY 17/18 Sem 1</b></h1>'
+    EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
+                                 'For <b>AY 17/18 Sem 1</b></h1>'
     TESTING_MODULE = 'BT5110'
 
     def __init__(self):
@@ -88,26 +89,22 @@ class TestCode(object):
         root.mustcontain(self.EDIT_MODULE_SPECIFIC_TITLE)
 
 
+    @raises(Exception)
     def test_module_edit_direct_access_invalid_code_url(self):
         '''
             Tests whether user will fail to access edit-module
             page if an invalid URL (invalid module code) is used.
         '''
         root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_CODE)
-        assert_equal(root.status, 200)
-
-        root.mustcontain('Not Found')
 
 
+    @raises(Exception)
     def test_module_edit_direct_access_invalid_aysem_url(self):
         '''
             Tests whether user will fail to access edit-module
             page if an invalid URL (invalid AY-Semester) is used.
         '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)
-        assert_equal(root.status, 200)
-
-        root.mustcontain('Not Found')
+        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)\
 
 
     def test_module_edit_submit_response(self):

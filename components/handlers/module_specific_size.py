@@ -15,21 +15,7 @@ class ModuleSpecificSize(object):
         This class contains the implementations of the GET
         requests.
     '''
-    def __init__(self):
-        fixed_ay_sems = model.get_all_fixed_ay_sems()
-        tenta_ay_sems = model.get_all_tenta_ay_sems()
-        fixed_ay_sems_list = [aysem[0] for aysem in fixed_ay_sems]
-        tenta_ay_sems_list = [aysem[0] for aysem in tenta_ay_sems]
-        self.all_ay_sems = fixed_ay_sems_list + tenta_ay_sems_list
-
-
-    def is_valid_ay_sem(self, aysem):
-        '''
-            Returns true if given aysem is valid (exists in database),
-            returns false otherwise.
-        '''
-        return aysem in self.all_ay_sems
-
+    all_ay_sems = model.get_all_ay_sems()
 
     def is_a_number(self, given_input):
         '''
@@ -67,24 +53,21 @@ class ModuleSpecificSize(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
-        input_data = web.input()
-        if len(input_data) == 0 or input_data.sem is None or input_data.lowerClassSize is None \
-            or input_data.higherClassSize is None:
-            # Loading the page without sufficient data (first time load page)
-            return RENDER.moduleSpecificSize(self.all_ay_sems, None, None, None, None)
-        else:
+        input_data = model.validate_input(web.input(), ["aysem"],
+                                          aysem_specific=False, attr_required=False)
+        try:
             # Search request by user
-            ay_sem_of_interest = input_data.sem
+            ay_sem_of_interest = input_data.aysem
             lower_range_class_size = input_data.lowerClassSize
             higher_range_class_size = input_data.higherClassSize
+        except AttributeError:
+            # Loading the page without sufficient data (first time load page)
+            return RENDER.moduleSpecificSize(self.all_ay_sems, None, None, None, None)
 
-        if not self.is_valid_ay_sem(ay_sem_of_interest):
-            return Outcome().POST("mods-specific-size-aysem", False, None)
-        elif not self.is_valid_range(lower_range_class_size, higher_range_class_size):
+        if not self.is_valid_range(lower_range_class_size, higher_range_class_size):
             return Outcome().POST("mods-specific-size-range", False, None)
         else:
             # All inputs are valid
-
             # Convert unicode to int
             lower_range = int(lower_range_class_size)
             higher_range = int(higher_range_class_size)
@@ -103,12 +86,16 @@ class ModuleSpecificSize(object):
             called from search with form
         '''
         # Input data will have valid inputs as function is called from submit button
-        input_data = web.input()
-        ay_sem_of_interest = input_data.sem
-        lower_range_class_size = input_data.lowerClassSize
-        higher_range_class_size = input_data.higherClassSize
+        input_data = model.validate_input(web.input(), ["aysem"])
+        try:
+            ay_sem_of_interest = input_data.aysem
+            lower_range_class_size = input_data.lowerClassSize
+            higher_range_class_size = input_data.higherClassSize
+        except AttributeError:
+            error = RENDER.notfound('Please do not tamper with our html forms. Thank you! ;)')
+            raise web.notfound(error)
 
-        webpage_to_redirect = "/moduleSpecificSize?sem=" + ay_sem_of_interest + \
+        webpage_to_redirect = "/moduleSpecificSize?aysem=" + ay_sem_of_interest + \
                               "&lowerClassSize=" + lower_range_class_size + \
                               "&higherClassSize=" + higher_range_class_size
 
