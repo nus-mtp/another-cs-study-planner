@@ -70,10 +70,12 @@ class Outcome(object):
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been deleted successfully!"
                 else:
-                    outcome_message = "Error: Module " + module_code + " currently has " +\
-                                      "mountings that refer to it or is starred. " +\
-                                      "Remove all mountings and unstar before deleting module!"
-                redirect_page = "/modules"
+                    outcome_message = "Error: Failed to delete module. "
+                    if module_code is not None:
+                        outcome_message += "Module " + module_code + " may have " +\
+                                           "mountings that refer to it or is starred. " +\
+                                           "Remove all mountings and unstar before deleting module!"
+                redirect_page = "/deleteModule"
 
             elif action == "create_user":
                 if outcome is True:

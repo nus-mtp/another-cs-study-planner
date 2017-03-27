@@ -1,0 +1,50 @@
+$def with (moduleInfos) 
+
+$var title:Delete Module
+$ home = ['/', 'Home']
+$ deleteModule = ['#', 'Delete Module']
+$var hierarchy = [home, deleteModule]
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center"><b>Delete Module</b></h1>
+            <p class="text-center">Delete a <b>new module</b> that was added into the system.</p>
+            <br>
+            <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>MCs</th>
+                        <th data-sortable="false">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                $for moduleInfo in moduleInfos:
+                    <tr>
+                    $ moduleCode = moduleInfo[0]
+                    $ moduleName = moduleInfo[1]
+                    $ moduleDesc = moduleInfo[2] 
+                    $ moduleMc = moduleInfo[3] 
+                        <td class="text-center" style="width:8%;">
+                            <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
+                        </td>
+                        <td>$moduleName</td>
+                        <td>$moduleDesc</td>
+                        <td class="text-center" style="width:5%;">$moduleMc</td>
+                        <td class="text-center" style="width:8%;">
+                            <form action="/deleteModule" method="post" onsubmit="if(!confirm('Are you sure you want to delete this module?')){event.preventDefault();}">
+                                <input type="hidden" name="code" value="$moduleInfo[0]">
+                                <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="bottom" title="Delete Module">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

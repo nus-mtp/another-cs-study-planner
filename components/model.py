@@ -34,6 +34,10 @@ def get_original_module_info(code):
     return database.get_original_module_info(code)
 
 
+def get_new_modules():
+    return database.get_new_modules()
+
+
 ######################################################################################
 # Functions that add/modify/delete general module information
 ######################################################################################
