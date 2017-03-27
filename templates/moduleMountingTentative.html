@@ -32,45 +32,42 @@ $var hierarchy = [home, tentativeMounting]
                         <th>Name</th>
                         <th data-sortable="false">Mounted In Sem 1</th>
                         <th data-sortable="false">Mounted In Sem 2</th>
-                        <th data-sortable="false">Action</th>
                     </tr>
                 </thead>
                 <tbody> 
                     $for subplan in fullMountingPlan:
-
+                        $ moduleCode = subplan[0]
+                        $ moduleName = subplan[1]
+                        $ sem1Mounting = subplan[2]
+                        $ sem2Mounting = subplan[3]
                         <tr>
-                            <td>$subplan[0]</td>
-                            <td>$subplan[1]</td>
-                        $if subplan[2] == 1:
+                            <td class="text-center">
+                                <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
+                            </td>
+                            <td>$moduleName</td>
+                        $if sem1Mounting == 1:
                             <td>
                                 <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
                             </td>
-                        $elif subplan[2] == 0:
+                        $elif sem1Mounting == 0:
                             <td>
                                 <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
                             </td>
-                        $elif subplan[2] == -1:
+                        $elif sem1Mounting == -1:
                             <td>
                                 <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
                             </td>
-                        $if subplan[3] == 1:
+                        $if sem2Mounting == 1:
                             <td>
                                 <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
                             </td>
-                        $elif subplan[3] == 0:
+                        $elif sem2Mounting == 0:
                             <td>
                                 <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
                             </td>
-                        $elif subplan[3] == -1:
+                        $elif sem2Mounting == -1:
                             <td>
                                 <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-                            </td>
-                        $if True:
-                            <td>
-                                <form action="/viewModule" method="get">
-                                    <input type="hidden" name="code" value="$subplan[0]">
-                                    <input class="btn btn-primary" type="submit" value="View Module"/>
-                                </form>
                             </td>
                         </tr>
                 </tbody>
