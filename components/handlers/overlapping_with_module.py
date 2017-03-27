@@ -18,15 +18,15 @@ class OverlappingWithModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
-        data_input = web.input()
+        data_input = model.validate_input(web.input(), ["code", "aysem"], aysem_specific=False)
         code = data_input.code
         try:
             aysem = data_input.aysem
             #need to change to overlapping for one sem
-            lst_of_mods = model.get_mod_taken_together_with(code)
-            return RENDER.overlappingWithModule(code, aysem, lst_of_mods)
+            lst_of_mods = model.get_mod_taken_together_with_mod_and_aysem(code, aysem)
+            return RENDER.overlappingWithModule(code, aysem, lst_of_mods, True)
         except AttributeError:
             aysem = 'All Semesters'
             #need to change to overlapping for one sem
             lst_of_mods = model.get_mod_taken_together_with(code)
-            return RENDER.overlappingWithModule(code, aysem, lst_of_mods)
+            return RENDER.overlappingWithModule(code, aysem, lst_of_mods, False)

@@ -174,7 +174,7 @@ td > a {
 /* ================== STYLING FOR MODULE-LISTING PAGE ================== */
 /*************************************************************************/
 
-#form-wrapper, #add-module-form-wrapper, #module-mounting-options, #options {
+#form-wrapper, #add-module-form-wrapper, #module-mounting-options {
 	border: 1px solid black;
 	padding: 1% 5%;
 }
@@ -183,10 +183,8 @@ td > a {
 	height: 400px;
 }
 
-#options {
-    padding-bottom: 2.5%;
-	margin-left: 10%;
-    margin-right: 10%;
+#options > div > * {
+    display: inline;
 }
 
 
@@ -221,6 +219,7 @@ td > a {
 #quota-demand-chart {
     margin-top: 5px;
     margin-bottom: 15px;
+    height: 350px;
 }
 
 
@@ -415,3 +414,20 @@ tr[id*='modified-details-child-row'] {
 
 #module-view-stats-footer {
     margin-bottom: 30px;
+}
+/********************************************************************************/
+/* ==================== General =================== */
+/********************************************************************************/
+.tooltip-inner {
+    max-width: 350px;
+    /* If max-width does not work, try using width instead */
+    width: 350px; 
+}
+
+
+.dropdown-divider {
+    height: 1px;
+    margin: .5rem 0;
+    overflow: hidden;
+    background-color: #eceeef;
+}

@@ -50,8 +50,7 @@ class TestCode(object):
             works for year 5 students as well.
         '''
         # Inject year 5 student temporarily
-        sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
-        model.DB_CURSOR.execute(sql_command)
+        model.add_student('D9818872A', 5)
 
         num_in_year = [6, 5, 4, 3, 1, 0]
 
@@ -70,8 +69,7 @@ class TestCode(object):
             assert_equal(num_in_year[current_year - 1], current_number_of_student)
 
         # Clean up the database
-        sql_command = "DELETE FROM student WHERE nusnetid='D9818872A'"
-        model.DB_CURSOR.execute(sql_command)
+        model.delete_student('D9818872A')
 
 
     def is_table_sorted_by_first_elem(self, table_to_test):
@@ -100,11 +98,8 @@ class TestCode(object):
             Tests querying number of students for each focus area
         '''
         # Inject year 5 student temporarily with no focus area
-        sql_command = "INSERT INTO student VALUES('D9818872A', 5)"
-        model.DB_CURSOR.execute(sql_command)
-        sql_command = "INSERT INTO takesFocusArea VALUES('D9818872A'" + \
-            ", NULL, NULL)"
-        model.DB_CURSOR.execute(sql_command)
+        model.add_student('D9818872A', 5)
+        model.add_student_focus_area('D9818872A', None, None)
 
         num_in_focus = {
             'Have Not Indicated': 1,
@@ -145,10 +140,8 @@ class TestCode(object):
                          current_number_of_student)
 
         # Clean up the database
-        sql_command = "DELETE FROM takesFocusArea WHERE nusnetid ='D9818872A'"
-        model.DB_CURSOR.execute(sql_command)
-        sql_command = "DELETE FROM student WHERE nusnetid = 'D9818872A'"
-        model.DB_CURSOR.execute(sql_command)
+        model.delete_student_focus_area('D9818872A')
+        model.delete_student('D9818872A')
 
 
     def test_query_num_students_in_year_of_study_for_target_module(self):

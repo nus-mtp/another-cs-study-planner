@@ -54,6 +54,34 @@ class TestCode(object):
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
 
+    def test_query_module_taken_together_specified_mod_specified_aysem(self):
+        '''
+            Tests querying the list of modules taken together
+            with specified module in the specified semester
+        '''
+
+        list_of_mod_taken_together = \
+            model.get_mod_taken_together_with_mod_and_aysem('CS2105', 'AY 16/17 Sem 1')
+
+        required_list = [('CS2105', 'Introduction to Computer Networks', 'CS1231',
+                          'Discrete Structures', 2),
+                         ('CS2105', 'Introduction to Computer Networks', 'CS1010',
+                          'Programming Methodology', 2)]
+
+        assert_equal(len(list_of_mod_taken_together), len(required_list))
+        assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
+        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
+
+        list_of_mod_taken_together = \
+            model.get_mod_taken_together_with_mod_and_aysem('CS2105', 'AY 17/18 Sem 1')
+
+        required_list = []
+
+        assert_equal(len(list_of_mod_taken_together), len(required_list))
+        assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
+        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
+
+
     def test_query_module_taken_together_entire_list(self):
         '''
             Tests querying the list of modules taken together

@@ -14,7 +14,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -36,7 +36,8 @@ class TestCode(object):
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
                             'action="/editModule" method="get" class="no-padding-margin">'
     FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
-                                   ' General Module Info" data-toggle="tooltip" data-placement="left"'+\
+                                   ' General Module Info" data-toggle="tooltip" '+\
+                                   'data-placement="right"'+\
                                    ' title="Edit the module\'s name, description, MC, '+\
                                    'pre-requisites and preclusions">'
     CONTENT_SUMMARY = "Module Info Overview"
@@ -53,10 +54,14 @@ class TestCode(object):
     CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
 
 
-    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
-                              ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
-    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Modules'+\
-                                     ' Overlapping With This Module" data-toggle="tooltip" data-placement="left"'+\
+    FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module"'+\
+                              ' name="view-overlapping-with-module"'+\
+                              ' action="/overlappingWithModule" method="get" '+\
+                              'class="no-padding-margin">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
+                                     'value="View Modules'+\
+                                     ' Overlapping With This Module" data-toggle="tooltip"'+\
+                                     ' data-placement="right"'+\
                                      ' title="Show modules that are also taken with this module">'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
                    'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
@@ -98,17 +103,13 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
+    @raises(Exception)
     def test_view_invalid_module_overview_valid_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_INVALID)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     def test_view_module_overview_goto_valid_individual_module(self):
@@ -120,13 +121,14 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(response.status, 200)
 
 
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_code(self):
         '''
             Tests if navigation to an individual module view
@@ -136,16 +138,11 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW_INVALID + '&targetAY=AY+16%2F17+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW_INVALID + '&aysem=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
-        assert_equal(response.status, 200)
 
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        response.mustcontain("Not Found")
-
-
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay(self):
         '''
             Tests if navigation to an individual module view
@@ -155,13 +152,11 @@ class TestCode(object):
             and semester but invalid AY)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F18+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F18+Sem+1'
         response = root.goto(url, method='get')
 
-        assert_equal(response.status, 200)
-        response.mustcontain("Not Found")
 
-
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_sem(self):
         '''
             Tests if navigation to an individual module view
@@ -171,11 +166,8 @@ class TestCode(object):
             and AY but invalid semester)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+3'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F17+Sem+3'
         response = root.goto(url, method='get')
-
-        assert_equal(response.status, 200)
-        response.mustcontain("Not Found")
 
 
     def test_view_module_overview_contents(self):

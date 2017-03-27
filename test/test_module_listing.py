@@ -2,7 +2,7 @@
     test_module_listing.py test the module listing view.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -14,13 +14,13 @@ class TestCode(object):
     FORM_FIXED_MOUNTING = '<form action="/moduleMountingFixed" method="post">'
     FORM_FIXED_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                  'value="Go To Module Mountings for Current AY" ' +\
-                                 'data-toggle="tooltip" data-placement="right" ' +\
+                                 'data-toggle="tooltip" data-placement="bottom" ' +\
                                  'title="See fixed module mountings for current AY">'
     FORM_TENTATIVE_MOUNTING = '<form action="/moduleMountingTentative" ' +\
                               'method="post">'
     FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                      'value="Go To Module Mountings for Other AYs" ' +\
-                                     'data-toggle="tooltip" data-placement="right" ' +\
+                                     'data-toggle="tooltip" data-placement="bottom" ' +\
                                      'title="See tentative module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
@@ -110,6 +110,7 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
+    @raises(Exception)
     def test_index_goto_invalid_module_overview_page_response(self):
         '''
             Tests if navigation to a module overview page with
@@ -118,11 +119,7 @@ class TestCode(object):
         root = self.test_app.get('/modules')
         # an exception WILL be encountered here
         response = root.goto('/viewModule?code=CS0123', method='get')
-        assert_equal(response.status, 200)
 
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        response.mustcontain("Not Found")
 
     def test_index_module_mounting_view_options(self):
         '''

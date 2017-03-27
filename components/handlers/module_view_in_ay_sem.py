@@ -18,16 +18,6 @@ class IndividualModule(object):
             Define the AY-Sems that are in the system
             By right, these settings hould be set by the superadmin
         '''
-        self.number_of_future_ays = 1
-        self.current_ay = model.get_current_ay()
-        self.list_of_ay_sems = [self.current_ay+" Sem 1", self.current_ay+" Sem 2"]
-
-        ay = self.current_ay
-        for i in range(self.number_of_future_ays):
-            ay = model.get_next_ay(ay)
-            self.list_of_ay_sems.append(ay+" Sem 1")
-            self.list_of_ay_sems.append(ay+" Sem 2")
-
         self.mounting_status = -1
         self.quota = None
         self.is_current_ay = False
@@ -38,7 +28,7 @@ class IndividualModule(object):
         self.student_year_counts = None
 
 
-    def load_mounting_info(self, module_code, target_ay_sem):
+    def load_mounting_info(self, module_code, ay_sem):
         '''
             Load the mounting status and quota of the target module and AY/Sem
         '''
@@ -46,38 +36,47 @@ class IndividualModule(object):
         fixed_quota = None
         is_current_ay = False
 
-        # Get mounting status in current AY
-        target_ay = target_ay_sem[0:8]
+        # Get mounting status and quota in current AY
+        target_ay = ay_sem[0:8]
         current_ay = model.get_current_ay()
         if target_ay == current_ay:
             is_current_ay = True
-            fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, target_ay_sem)
+            fixed_mounting_status = model.get_mounting_of_target_fixed_ay_sem(module_code, ay_sem)
+            fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code, ay_sem)
         else:
-            target_sem = target_ay_sem[9:14]
+            target_sem = ay_sem[9:14]
+            fixed_mounting_status = model.get_mounting_of_target_fixed_ay_sem(module_code,
+                                                                              current_ay+" "
+                                                                              +target_sem)
             fixed_quota = model.get_quota_of_target_fixed_ay_sem(module_code,
                                                                  current_ay+" "+target_sem)
+
         if fixed_quota is False:
             fixed_quota = '-'
-        else:
-            fixed_mounting_status = 1
 
         if is_current_ay:
-            self.mounting_status = fixed_mounting_status
+            if fixed_mounting_status is True:
+                self.mounting_status = 1
+            else:
+                self.mounting_status = -1
             self.quota = fixed_quota
+
         else:
-            # Get mounting status in target (future) AY
-            tenta_quota = model.get_quota_of_target_tenta_ay_sem(module_code, target_ay_sem)
-            tenta_mounting_status = -1
+            # Get mounting status and quota in target (future) AY
+            tenta_mounting_status = model.get_mounting_of_target_tenta_ay_sem(module_code, ay_sem)
+            tenta_quota = model.get_quota_of_target_tenta_ay_sem(module_code, ay_sem)
+
             if tenta_quota is False:
                 tenta_quota = '-'
-                if fixed_mounting_status == 1:
-                    tenta_mounting_status = 0
-                else:
-                    tenta_mounting_status = -1
-            else:
-                tenta_mounting_status = 1
-            self.mounting_status = tenta_mounting_status
             self.quota = tenta_quota
+
+            if tenta_mounting_status is True:
+                self.mounting_status = 1
+            else:
+                if fixed_mounting_status is True:
+                    self.mounting_status = 0
+                else:
+                    self.mounting_status = -1
 
         self.is_current_ay = is_current_ay
 
@@ -136,13 +135,13 @@ class IndividualModule(object):
         self.focus_area_counts = focus_area_counts
 
 
-    def load_student_enrollments(self, module_code, target_ay_sem):
+    def load_student_enrollments(self, module_code, ay_sem):
         '''
             Retrieve the number of students in each year of study,
             and the number of students in each focus area,
             that are taking this module
         '''
-        student_list = model.get_list_students_take_module(module_code, target_ay_sem)
+        student_list = model.get_list_students_take_module(module_code, ay_sem)
         student_year_counts = [0] * 6
 
         for student in student_list:
@@ -171,28 +170,32 @@ class IndividualModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
-        input_data = web.input()
+        input_data = model.validate_input(web.input(), ["code", "aysem"])
         module_code = input_data.code
-        module_info = model.get_module(module_code)
-        if module_info is None:
-            error_message = module_code + " does not exist in the system."
-            return RENDER.notfound(error_message)
-        target_ay_sem = input_data.targetAY
-        if target_ay_sem not in self.list_of_ay_sems:
-            return RENDER.notfound(target_ay_sem + " is not in the " +\
-                                   "system's list of AY-Semesters.")
+        ay_sem = input_data.aysem
 
-        self.load_mounting_info(module_code, target_ay_sem)
+        # Get module's name, description, MC and status
+        module_info = model.get_module(module_code)
+
+        # Get mounting status, quota and number of students taking
+        self.load_mounting_info(module_code, ay_sem)
+        student_count = model.get_number_of_students_taking_module_in_ay_sem(module_code,
+                                                                             ay_sem)
+
+        # Check if the selected AY-Sem is in the current AY
+        # (To determine whether to display the 'Edit Specific Info' button)
         is_future_ay = not self.is_current_ay
 
-        overlapping_mod_list = model.get_mod_taken_together_with(module_code)
+        # Check if module is starred
         is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 
+        # Get the year of study and focus area distriubtions of students taking the module
+        # (To be rendered as charts)
         self.load_focus_areas()
-        self.load_student_enrollments(module_code, target_ay_sem)
+        self.load_student_enrollments(module_code, ay_sem)
 
         return RENDER.individualModuleInfo(module_info, is_future_ay,
-                                           target_ay_sem, self.mounting_status,
-                                           self.quota, is_starred,
+                                           ay_sem, self.mounting_status,
+                                           self.quota, student_count, is_starred,
                                            self.focus_areas, self.focus_area_acronyms,
                                            self.student_year_counts, self.focus_area_counts)

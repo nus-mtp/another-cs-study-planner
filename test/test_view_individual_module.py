@@ -2,7 +2,7 @@
     test_view_individual_module.py tests the app's view individual mod page
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -13,51 +13,66 @@ class TestCode(object):
 
     URL_CONTAIN_CODE_AY_QUOTA = '/individualModuleInfo?' +\
                                 'code=BT5110' +\
-                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&aysem=AY+16%2F17+Sem+1' +\
                                 '&quota=60'
     URL_CONTAIN_FUTURE_AY = '/individualModuleInfo?' +\
                             'code=BT5110' +\
-                            '&targetAY=AY+17%2F18+Sem+1' +\
+                            '&aysem=AY+17%2F18+Sem+1' +\
                             '&quota=60'
     URL_CONTAIN_INVALID_CODE_AY_QUOTA = '/individualModuleInfo?' +\
                                 'code=CS0123' +\
-                                '&targetAY=AY+16%2F17+Sem+1' +\
+                                '&aysem=AY+16%2F17+Sem+1' +\
                                 '&quota=60'
     URL_CONTAIN_CODE_INVALID_AY_QUOTA = '/individualModuleInfo?' +\
                                         'code=BT5110' +\
-                                        '&targetAY=AY+16%2F18+Sem+1' +\
+                                        '&aysem=AY+16%2F18+Sem+1' +\
                                         '&quota=60'
     URL_CONTAIN_CODE_AY_INVALID_QUOTA = '/individualModuleInfo?' +\
                                         'code=BT5110' +\
-                                        '&targetAY=AY+16%2F17+Sem+1' +\
+                                        '&aysem=AY+16%2F17+Sem+1' +\
                                         '&quota=70'
     URL_CONTAIN_CODE_AY_NO_QUOTA = '/individualModuleInfo' +\
                                    '?code=CP3880' +\
-                                   '&targetAY=AY+16%2F17+Sem+1'+\
+                                   '&aysem=AY+16%2F17+Sem+1'+\
                                    '&quota='
 
 
     FORM_EDIT_MODULE_INFO = '<form id="edit-module-button" name="edit-module-button" '+\
                             'action="/editModule" method="get" class="no-padding-margin">'
-    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit General'+\
-                                   ' Module Info" data-toggle="tooltip" data-placement="left" title="Edit '+\
-                                   'the module\'s name, description, MC, pre-requisites and preclusions">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button" name="edit-mounting-button" '+\
-                                     'action="/editMounting" method="get" class="no-padding-margin">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" type="submit" value="Edit'+\
-                                            ' Specific Module Info" data-toggle="tooltip" data-placement="left" '+\
+    FORM_EDIT_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom" '+\
+                                   'type="submit" value="Edit General'+\
+                                   ' Module Info" data-toggle="tooltip" '+\
+                                   'data-placement="right" title="Edit '+\
+                                   'the module\'s name, description, MC, '+\
+                                   'pre-requisites and preclusions">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO = '<form id="edit-mounting-button"'+\
+                                     ' name="edit-mounting-button" '+\
+                                     'action="/editMounting" method="get" '+\
+                                     'class="no-padding-margin">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom"'+\
+                                            ' type="submit" value="Edit'+\
+                                            ' Specific Module Info" data-toggle="tooltip"'+\
+                                            ' data-placement="right" '+\
                                             'title="Edit the module\'s mounting and quota">'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
-                             'name="view-students-planning-to-take-module" action="/studentsAffectedByModule" '+\
+                             'name="view-students-planning-to-take-module"'+\
+                             ' action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom" value="View Students '+\
-                                    'Planning To Take This Module" data-toggle="tooltip" data-placement="left" '+\
-                                    'title="Show list of students who are planning to take this module">'
-    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" name="view-overlapping-with-module"'+\
-                                   ' action="/overlappingWithModule" method="get" class="no-padding-margin">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom"'+\
+                                    ' value="View Students '+\
+                                    'Planning To Take This Module" data-toggle="tooltip"'+\
+                                    ' data-placement="right" '+\
+                                    'title="Show list of students who are '+\
+                                    'planning to take this module">'
+    FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
+                                   'name="view-overlapping-with-module"'+\
+                                   ' action="/overlappingWithModule" method="get" '+\
+                                   'class="no-padding-margin">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
-                                          'value="View Modules Overlapping With This Module" data-toggle="tooltip"'+\
-                                          ' data-placement="left" title="Show modules that are also'+\
+                                          'value="View Modules Overlapping With This Module" '+\
+                                          'data-toggle="tooltip"'+\
+                                          ' data-placement="right" title="Show '+\
+                                          'modules that are also'+\
                                           ' offered in this AY-Semester">'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
@@ -116,31 +131,27 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
+    @raises(Exception)
     def test_view_individual_module_invalid_code_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
         '''
         root = self.test_app.get(self.URL_CONTAIN_INVALID_CODE_AY_QUOTA)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     '''
         Tests if user will fail to access page for showing module overview
         if the target AY-semester is invalid.
     '''
+    @raises(Exception)
     def test_view_individual_module_invalid_ay_sem_response(self):
+        '''
+            Tests if user will fail to access page for showing module overview
+            if the target AY-semester is invalid.
+        '''
         # AY-Semester used here is '16/18 Sem 1'
         root = self.test_app.get(self.URL_CONTAIN_CODE_INVALID_AY_QUOTA)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     def test_view_individual_module_contents(self):
