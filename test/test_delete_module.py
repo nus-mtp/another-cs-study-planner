@@ -36,7 +36,8 @@ class TestCode(object):
         self.test_app = TestApp(APP.wsgifunc(*self.middleware))
         session.set_up(self.test_app)
 
-        model.add_module(self.DUMMY_MODULE_CODE, self.DUMMY_MODULE_NAME, self.DUMMY_MODULE_NAME, 1, "New")
+        model.add_module(self.DUMMY_MODULE_CODE, self.DUMMY_MODULE_NAME, self.DUMMY_MODULE_NAME,
+                         1, "New")
 
 
     def tearDown(self):
@@ -80,8 +81,3 @@ class TestCode(object):
 
         root.mustcontain(self.DUMMY_MODULE_CODE)
         root.mustcontain(self.DUMMY_MODULE_NAME)
-
-        
-
-
-
