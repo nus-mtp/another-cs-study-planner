@@ -15,7 +15,7 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -34,14 +34,14 @@ class TestCode(object):
     FORM_ALL_MODULES = '<form class="navForm" action="/modules" method="post">'
     FORM_ALL_MODULES_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                               'value="Go To Module Information" ' +\
-                              'data-toggle="tooltip" data-placement="right" ' +\
+                              'data-toggle="tooltip" data-placement="bottom" ' +\
                               'title="See all modules that exist in the system">'
     FORM_TENTATIVE_MOUNTING = '<form class="navForm" action=' +\
                               '"/moduleMountingTentative" ' +\
                               'method="post">'
     FORM_TENTATIVE_MOUNTING_BUTTON = '<input class="btn btn-primary" type="submit" ' +\
                                      'value="Go To Module Mountings for Other AYs" ' +\
-                                     'data-toggle="tooltip" data-placement="right" ' +\
+                                     'data-toggle="tooltip" data-placement="bottom" ' +\
                                      'title="See tentative module mountings for other AYs">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
@@ -113,6 +113,7 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
+    @raises(Exception)
     def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
             self):
         '''

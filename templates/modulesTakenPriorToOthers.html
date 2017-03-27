@@ -2,9 +2,13 @@ $def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, mo
 
 $var title:View Modules Taken Prior to Others
 $ home = ['/', 'Home']
-$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
-
-$var hierarchy = [home, modulesPriorOthers]
+$if moduleA is not None and moduleB is not None and targetAySem is not None:
+	$ modulesPriorOthers = ['/moduleTakenPriorToOthers', 'Modules Taken Prior to Other Modules']
+	$ searchResult = ['#', 'Search Result']
+	$var hierarchy = [home, modulesPriorOthers, searchResult]
+$else:
+	$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
+	$var hierarchy = [home, modulesPriorOthers]
 
 $if modulePairs is not None:
 	<div class="container-fluid">
@@ -12,7 +16,7 @@ $if modulePairs is not None:
 		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
 		<br>
 		<div class="modules-taken-prior-search-form">
-			<form action="/moduleTakenPriorToOthers" method="POST">
+			<form action="/moduleTakenPriorToOthers" method="GET">
 				<p>Tell me the number of students who have taken</p>
 				<input type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
 				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
@@ -20,7 +24,7 @@ $if modulePairs is not None:
 				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
 				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
-				<select style="display:inline-block;" name="aySem" required>
+				<select style="display:inline-block;" name="aysem" required>
 				$for aySem in allAySems:
 					<option value="$aySem">$aySem</option>
 				</select><br>

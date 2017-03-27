@@ -2,7 +2,7 @@
     test_modules_modified.py tests the application's Modified Modules page.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -205,6 +205,7 @@ class TestCode(object):
         root.mustcontain(self.DETAIL_CHANGES_TABLE_DETAIL_CHANGE_BUTTON)
 
 
+    @raises(Exception)
     def test_view_changes_for_invalid_module_response(self):
         '''
             Tests if viewing page displaying module changes
@@ -213,8 +214,6 @@ class TestCode(object):
             Expected view is the custom 404 Not Found page.
         '''
         root = self.test_app.get(self.URL_INVALID_MODULE_CODE)
-        assert_equal(root.status, 200)
-        root.mustcontain("Not Found")
 
 
     def test_view_invalid_changes_for_module_response(self):

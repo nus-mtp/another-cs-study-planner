@@ -3,7 +3,7 @@
     size listing view in specified AY-Semester.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -14,13 +14,13 @@ class TestCode(object):
         size listing view in specified AY-Semester.
     '''
     URL_PAGE = '/moduleSpecificSize'
-    URL_PAGE_VALID_SUBMIT = 'moduleSpecificSize?sem=AY%2016/17%20Sem%201&' + \
+    URL_PAGE_VALID_SUBMIT = 'moduleSpecificSize?aysem=AY%2016/17%20Sem%201&' + \
                             'lowerClassSize=2&higherClassSize=90'
-    URL_PAGE_INVALID_AYSEM = 'moduleSpecificSize?sem=AY%2016/18%20Sem%201&' + \
+    URL_PAGE_INVALID_AYSEM = 'moduleSpecificSize?aysem=AY%2016/18%20Sem%201&' + \
                              'lowerClassSize=2&higherClassSize=90'
-    URL_PAGE_INVALID_RANGE = 'moduleSpecificSize?sem=AY%2016/17%20Sem%201&' + \
+    URL_PAGE_INVALID_RANGE = 'moduleSpecificSize?aysem=AY%2016/17%20Sem%201&' + \
                              'lowerClassSize=31&higherClassSize=30'
-    URL_PAGE_INVALID_RANGE_INPUT = 'moduleSpecificSize?sem=AY%2016/17%20Sem%201&' + \
+    URL_PAGE_INVALID_RANGE_INPUT = 'moduleSpecificSize?aysem=AY%2016/17%20Sem%201&' + \
                                    'lowerClassSize=e&higherClassSize=30'
 
     CONTENT_HEADER = 'Modules with Specific Class Size'
@@ -30,7 +30,7 @@ class TestCode(object):
                                        'action="/moduleSpecificSize" ' + \
                                        'method="post" class="form-inline">'
     FORM_QUERY_AY_SEM_LABEL = '<label for="ay-sem">Find modules in </label>'
-    FORM_QUERY_AY_SEM_SELECT = '<select class="form-control selectpicker" name="sem" required>'
+    FORM_QUERY_AY_SEM_SELECT = '<select class="form-control selectpicker" name="aysem" required>'
     FORM_QUERY_AY_SEM_OPTION = '<option value="" disabled selected hidden>Please choose a ' + \
                                'target AY-Semester</option>'
     FORM_QUERY_LOW_CLASS_SIZE_LABEL = '<label for="low"> with class size between </label>'
@@ -136,6 +136,7 @@ class TestCode(object):
         response.mustcontain(self.TABLE_HEADER_QUOTA)
 
 
+    @raises(Exception)
     def test_mod_specific_class_size_invalid_aysem_submit_response(self):
         '''
             Tests if submitting invalid ay_sem input will fail.
@@ -147,13 +148,8 @@ class TestCode(object):
         assert_equal(response.status, 303)
 
         redirected = response.follow()
-        # redirected page must have HTTP response code 200 (= OK)
-        assert_equal(redirected.status, 200)
 
-        # Tests if correct error script is shown.
-        redirected.mustcontain(self.SCRIPT_INVALID_AYSEM)
-
-
+    @raises(Exception)
     def test_mod_specific_class_size_invalid_aysem_url_page_response(self):
         '''
             Tests if typing invalid ay_sem in url will fail.
@@ -161,12 +157,6 @@ class TestCode(object):
         root = self.test_app.get(self.URL_PAGE)
 
         response = root.goto(self.URL_PAGE_INVALID_AYSEM, method='get')
-
-        # checks if HTTP response code is 200 (= OK)
-        assert_equal(response.status, 200)
-
-        # Tests if correct error script is shown.
-        response.mustcontain(self.SCRIPT_INVALID_AYSEM)
 
 
     def test_mod_specific_class_size_invalid_range_submit_response(self):

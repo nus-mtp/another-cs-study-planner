@@ -14,7 +14,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -103,17 +103,13 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
+    @raises(Exception)
     def test_view_invalid_module_overview_valid_response(self):
         '''
             Tests if user will fail to access page for showing module overview
             if target module is invalid.
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_INVALID)
-        assert_equal(root.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        root.mustcontain("Not Found")
 
 
     def test_view_module_overview_goto_valid_individual_module(self):
@@ -125,13 +121,14 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(response.status, 200)
 
 
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_code(self):
         '''
             Tests if navigation to an individual module view
@@ -141,16 +138,11 @@ class TestCode(object):
             valid target AY-semester and quota)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW_INVALID + '&targetAY=AY+16%2F17+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW_INVALID + '&aysem=AY+16%2F17+Sem+1'
         response = root.goto(url, method='get')
 
-        assert_equal(response.status, 200)
 
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        response.mustcontain("Not Found")
-
-
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_ay(self):
         '''
             Tests if navigation to an individual module view
@@ -160,13 +152,11 @@ class TestCode(object):
             and semester but invalid AY)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F18+Sem+1'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F18+Sem+1'
         response = root.goto(url, method='get')
 
-        assert_equal(response.status, 200)
-        response.mustcontain("Not Found")
 
-
+    @raises(Exception)
     def test_view_module_overview_goto_individual_module_invalid_sem(self):
         '''
             Tests if navigation to an individual module view
@@ -176,11 +166,8 @@ class TestCode(object):
             and AY but invalid semester)
         '''
         root = self.test_app.get(self.URL_VIEW_MODULE_VALID)
-        url = self.URL_INDIV_MODULE_VIEW + '&targetAY=AY+16%2F17+Sem+3'
+        url = self.URL_INDIV_MODULE_VIEW + '&aysem=AY+16%2F17+Sem+3'
         response = root.goto(url, method='get')
-
-        assert_equal(response.status, 200)
-        response.mustcontain("Not Found")
 
 
     def test_view_module_overview_contents(self):

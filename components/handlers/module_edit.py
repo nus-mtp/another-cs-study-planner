@@ -16,14 +16,12 @@ class EditModuleInfo(object):
         This class handles the editing of general module info
         (Module name, description and MCs)
     '''
-
-
     def GET(self):
         '''
             Handles the loading of the 'Edit General Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
+        input_data = model.validate_input(web.input(), ["code"])
+        module_code = input_data.code
 
         module_info = model.get_module(module_code)
         if module_info is None:
@@ -37,14 +35,26 @@ class EditModuleInfo(object):
             Handles the submission of the 'Edit General Module Info' page
         '''
         if test_data:   # for testing purposes
-            data = test_data[0]
+            input_data = test_data[0]
         else:
-            data = web.input()
+            input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
-        module_code = data.code
-        module_name = data.name
-        module_desc = data.desc
-        module_mc = data.mc
+        module_code = None
+        try:
+            module_code = input_data.code
+            module_name = input_data.name
+            module_desc = input_data.desc
+            module_mc = input_data.mc
+        except AttributeError:
+            return Outcome().POST("edit_module", False, module_code)
+
+        # Validate that MC is a number and is between 0 and 12
+        try:
+            module_mc = int(module_mc)
+        except ValueError:
+            return Outcome().POST("edit_module", False, module_code)
+        if module_mc < 0 or module_mc > 12:
+            return Outcome().POST("edit_module", False, module_code)
 
         old_module_info = model.get_module(module_code)
         old_module_name = old_module_info[1]
@@ -90,15 +100,9 @@ class EditMountingInfo(object):
         '''
             Handles the loading of the 'Edit Specific Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
-        ay_sem = data.aySem
-
-        module_info = model.get_module(module_code)
-        if module_info is None:
-            return RENDER.notfound("Module " + module_code + " does not exist in the system.")
-        if ay_sem not in self.list_of_future_ay_sems:
-            return RENDER.notfound(ay_sem + " is not in the system's list of future AY-Semesters.")
+        input_data = model.validate_input(web.input(), ["code", "aysem"], is_future=True)
+        module_code = input_data.code
+        ay_sem = input_data.aysem
 
         module_ay_sem_info_handler = IndividualModule()
         module_ay_sem_info_handler.load_mounting_info(module_code, ay_sem)
@@ -112,18 +116,24 @@ class EditMountingInfo(object):
         '''
             Handles the submission of the 'Edit Specific Module Info' page
         '''
-        data = web.input()
-        module_code = data.code
-        ay_sem = data.aySem
+        input_data = model.validate_input(web.input(), ["code", "aysem"],
+                                          is_future=True, show_404=False)
+
+        module_code = None
+        ay_sem = None
+        try:
+            module_code = input_data.code
+            ay_sem = input_data.aysem
+            mounting_status = input_data.mountingStatus
+        except AttributeError:
+            return Outcome().POST("edit_mounting", False, module_code, ay_sem)
 
         try:
-            quota = data.quota
+            quota = input_data.quota
             if quota == "":
                 quota = None
         except AttributeError:
             quota = None
-        old_mounting_value = data.oldMountingValue
-        mounting_status = data.mountingStatus
 
         outcome = None
         # If quota is being set by the user, it should not fall below 0.
@@ -146,11 +156,15 @@ class EditMountingInfo(object):
             else:
                 if mounting_status == "Mounted":
                     outcome = None
-                    if old_mounting_value == "1":
+                    old_mounting_status = model.get_mounting_of_target_tenta_ay_sem(module_code,
+                                                                                    ay_sem)
+                    if old_mounting_status is True:
                         outcome = model.update_quota(module_code, ay_sem, quota)
                     else:
                         outcome = model.add_tenta_mounting(module_code, ay_sem, quota)
                 elif mounting_status == "Not Mounted":
                     outcome = model.delete_tenta_mounting(module_code, ay_sem)
+                else:
+                    outcome = False
 
         return Outcome().POST("edit_mounting", outcome, module_code, ay_sem)

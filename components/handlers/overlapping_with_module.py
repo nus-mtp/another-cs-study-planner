@@ -18,7 +18,7 @@ class OverlappingWithModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
-        data_input = web.input()
+        data_input = model.validate_input(web.input(), ["code", "aysem"], aysem_specific=False)
         code = data_input.code
         try:
             aysem = data_input.aysem
