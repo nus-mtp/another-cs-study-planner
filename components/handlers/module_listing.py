@@ -7,12 +7,11 @@
 from app import RENDER
 import web
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class Modules(object):
     '''
-        This class handles the 'Add Module' form and the displaying of list of modules
+        This class handles the display of the full list of modules and their information
     '''
     URL_THIS_PAGE = '/modules'
 
@@ -33,21 +32,10 @@ class Modules(object):
         '''
             This function might be called from button links from other pages.
         '''
-
         # Detects if this function is called from button links from another page.
         referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
         parts = referrer_page.split("/")
         referrer_page_shortform = "/" + parts[len(parts) - 1]
         # If referred from another page, direct to this page straight away.
         if referrer_page_shortform != self.URL_THIS_PAGE:
-            raise web.seeother(self.URL_THIS_PAGE)
-
-        try:
-            data = web.input()
-            action = data.action  # if action is not 'delete', will trigger AttributeError
-            module_code = data.code
-            outcome = model.delete_module(module_code)
-            return Outcome().POST("delete_module", outcome, module_code)
-
-        except AttributeError:
             raise web.seeother(self.URL_THIS_PAGE)
