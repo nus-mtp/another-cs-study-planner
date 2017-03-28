@@ -18,6 +18,10 @@ def get_all_modules():
     return database.get_all_modules()
 
 
+def get_all_modules_and_focus():
+    return database.get_all_modules_and_focus()
+
+
 def get_module(code):
     return database.get_module(code)
 

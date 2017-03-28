@@ -29,6 +29,8 @@ INSERT INTO focusArea VALUES('Networking and Distributed Systems');
 INSERT INTO focusArea VALUES('Parallel Computing');
 INSERT INTO focusArea VALUES('Programming Languages');
 INSERT INTO focusArea VALUES('Software Engineering');
+INSERT INTO focusArea VALUES('Interactive Media');
+INSERT INTO focusArea VALUES('Visual Computing');
 
 --Takes Focus Areas--
 INSERT INTO takesFocusArea VALUES('D1000000A', 'Artificial Intelligence', NULL);
