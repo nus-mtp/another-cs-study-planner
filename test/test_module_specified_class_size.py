@@ -30,7 +30,7 @@ class TestCode(object):
                                        'action="/moduleSpecificSize" ' + \
                                        'method="post" class="form-inline">'
     FORM_QUERY_AY_SEM_LABEL = '<label for="ay-sem">Find modules in </label>'
-    FORM_QUERY_AY_SEM_SELECT = '<select class="form-control selectpicker" name="aysem" required>'
+    FORM_QUERY_AY_SEM_SELECT = '<select class="form-control" name="aysem" required>'
     FORM_QUERY_AY_SEM_OPTION = '<option value="" disabled selected hidden>Please choose a ' + \
                                'target AY-Semester</option>'
     FORM_QUERY_LOW_CLASS_SIZE_LABEL = '<label for="low"> with class size between </label>'

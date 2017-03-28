@@ -37,7 +37,7 @@ class TestCode(object):
     FORM = '<form id="ay-form" class="form-inline" ' +\
            'action="/moduleTakenPriorToInternship" method="post">'
     SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
-    SELECT_ELEMENT = '<select class="form-control selectpicker" name="aysem">'
+    SELECT_ELEMENT = '<select class="form-control" name="aysem">'
     TABLE_HEADER_MODULE_CODE = '<th>Code</th>'
     TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_NUM_STUDENTS = '<th>Number of Students</th>'
