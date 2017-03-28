@@ -45,25 +45,28 @@ $var hierarchy = [home, fixedMounting]
                         $if sem1Mounting == 1:
                             <td>
                                 <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
-                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Mounted<br>(Click to go to module's AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
                                 <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
-                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module's AY-Sem view)"></span>
                                 </a>
                             </td>
                         $if sem2Mounting == 1:
                             <td>
                                 <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
-                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-                                </a>
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module's AY-Sem view)"></span>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
                                 <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
-                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module's AY-Sem view)"></span>
                                 </a>
                             </td>
                         </tr>
