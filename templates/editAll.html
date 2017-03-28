@@ -9,9 +9,47 @@ $ editAll = ['#', title_string]
 $var hierarchy = [home, editAll]
 
 <script type="text/javascript">
+    //Disable quota input when mounting is unchecked, enable quota input when checked
     function toggleQuotaState(id) {
         var state = document.getElementById(id).disabled;
         document.getElementById(id).disabled = !state;
+    }
+
+    //Add red highlight to mounting and quota if mounting is changed
+    function checkMountingChange(element, oldMounting, oldQuota, mountingID, quotaID) {
+        var oldMounting = (oldMounting == 1);
+        var newMounting = element.checked;
+
+        if (oldMounting != newMounting) {
+            addRedHighlight(mountingID);
+            addRedHighlight(quotaID);
+        } else {
+            removeRedHighlight(mountingID);
+            removeRedHighlight(quotaID);
+            if (oldMounting == 1) {
+                checkQuotaChange(document.getElementById(quotaID), oldQuota, quotaID)
+            }
+        }
+    }
+
+    //Add red highlight to quota if quota is changed
+    function checkQuotaChange(element, oldQuota, quotaID) {
+        var newQuota = element.value;
+
+        if (oldQuota == '?') oldQuota = '';
+        if (oldQuota != newQuota) {
+            addRedHighlight(quotaID);
+        } else {
+            removeRedHighlight(quotaID);
+        }
+    }
+
+    function addRedHighlight(id) {
+        document.getElementById(id).parentElement.style.backgroundColor = "#ffaea5";
+    }
+
+    function removeRedHighlight(id) {
+        document.getElementById(id).parentElement.style.backgroundColor = "white";
     }
 </script>
 
@@ -27,9 +65,9 @@ $var hierarchy = [home, editAll]
                         <th>Code</th>
                         <th>Name</th>
                         <th data-sortable="false">Mounted In Sem 1</th>
-                        <th>Sem 1 Quota</th>
+                        <th data-sortable="false">Sem 1 Quota</th>
                         <th data-sortable="false">Mounted In Sem 2</th>
-                        <th>Sem 2 Quota</th>
+                        <th data-sortable="false">Sem 2 Quota</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,18 +91,15 @@ $var hierarchy = [home, editAll]
 
                         $if sem1Mounting == 1:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
-                                name="$sem1MountingOption" value="sem1Mounting" checked>
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting" checked>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
-                                name="$sem1MountingOption" value="sem1Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
-                                name="$sem1MountingOption" value="sem1Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
                             </td>
 
                         $if sem1Quota == '-':
@@ -73,27 +108,26 @@ $var hierarchy = [home, editAll]
                             </td>
                         $elif sem1Quota == '?':
                             <td>
-                                <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput">
+                                <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
+                                id="$sem1QuotaInput" name="$sem1QuotaInput">
                             </td>
                         $else:
                             <td>
-                                <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
+                                <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
+                                id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
                             </td>
 
                         $if sem2Mounting == 1:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
-                                name="$sem2MountingOption" value="sem2Mounting" checked>
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting" checked>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
-                                name="$sem2MountingOption" value="sem2Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
-                                name="$sem2MountingOption" value="sem2Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
                             </td>
 
                         $if sem2Quota == '-':
@@ -102,11 +136,13 @@ $var hierarchy = [home, editAll]
                             </td>
                         $elif sem2Quota == '?':
                             <td>
-                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput">
+                                <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                id="$sem2QuotaInput" name="$sem2QuotaInput">
                             </td>
                         $else:
                             <td>
-                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
+                                <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
                             </td>
                         </tr>
                     <input class="btn btn-primary" type="submit" value="Submit">
