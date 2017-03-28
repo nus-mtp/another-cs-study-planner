@@ -1,0 +1,98 @@
+$def with (selectedAY, fullMountingPlan)  
+
+$ title_string = 'Edit All Mountings and Quotas'
+
+$var title:$title_string
+$ home = ['/', 'Home']
+$ editAll = ['#', title_string]
+
+$var hierarchy = [home, editAll]
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center"><b>Edit All Mountings and Quotas in <u>$selectedAY</u></b></h1>
+            <p class="text-center">Edit the mountings and quotas for the AY <b>one year after the current AY</b>.</p>
+            <br>
+            <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th data-sortable="false">Mounted In Sem 1</th>
+                        <th>Sem 1 Quota</th>
+                        <th data-sortable="false">Mounted In Sem 2</th>
+                        <th>Sem 2 Quota</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    $for subplan in fullMountingPlan:
+                        $ moduleCode = subplan[0]
+                        $ moduleName = subplan[1]
+                        $ sem1Mounting = subplan[2]
+                        $ sem2Mounting = subplan[3]
+                        $ sem1Quota = subplan[4]
+                        $ sem2Quota = subplan[5]
+                        <tr>
+                            <td class="text-center">
+                                <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
+                            </td>
+                            <td>$moduleName</td>
+                        $if sem1Mounting == 1:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $elif sem1Mounting == 0:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $elif sem1Mounting == -1:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $if True:
+                            <td>
+                                $sem1Quota
+                            </td>
+                        $if sem2Mounting == 1:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $elif sem2Mounting == 0:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $elif sem2Mounting == -1:
+                            <td>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
+                            </td>
+                        $if True:
+                            <td>
+                                $sem2Quota
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
