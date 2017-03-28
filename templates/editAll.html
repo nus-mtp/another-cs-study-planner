@@ -9,6 +9,18 @@ $ editAll = ['#', title_string]
 $var hierarchy = [home, editAll]
 
 <script type="text/javascript">
+    $$(document).ready(function(){
+        var moduleSource = [];
+        var moduleCodeAndName = "";
+        $for subplan in fullMountingPlan:
+            moduleCodeAndName = "$subplan[0]"+" - "+"$subplan[1]"
+            moduleSource.push(moduleCodeAndName);
+        $$("input").typeahead({
+            minLength: 1,
+            source: moduleSource
+        });
+    });
+
     //Disable quota input when mounting is unchecked, enable quota input when checked
     function toggleQuotaState(id) {
         var state = document.getElementById(id).disabled;
@@ -59,96 +71,110 @@ $var hierarchy = [home, editAll]
             <h1 class="text-center"><b>Edit All Mountings and Quotas in <u>$selectedAY</u></b></h1>
             <p class="text-center">Edit the mountings and quotas for the AY <b>one year after the current AY</b>.</p>
             <br>
-            <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th data-sortable="false">Mounted In Sem 1</th>
-                        <th data-sortable="false">Sem 1 Quota</th>
-                        <th data-sortable="false">Mounted In Sem 2</th>
-                        <th data-sortable="false">Sem 2 Quota</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post"> 
-                    $for subplan in fullMountingPlan:
-                        $ moduleCode = subplan[0]
-                        $ moduleName = subplan[1]
-                        $ sem1Mounting = subplan[2]
-                        $ sem2Mounting = subplan[3]
-                        $ sem1Quota = subplan[4]
-                        $ sem2Quota = subplan[5]
-                        $ sem1MountingOption = moduleCode + "_Sem1Mounting"
-                        $ sem2MountingOption = moduleCode + "_Sem2Mounting"
-                        $ sem1QuotaInput = moduleCode + "_Sem1Quota"
-                        $ sem2QuotaInput = moduleCode + "_Sem2Quota"
+            <div id="select-mod-to-edit" class="col-md-8 col-md-offset-2 text-center"><b>Select module(s) to edit:&nbsp;&nbsp;</b>
+                <input type="text" name="selectModuleToEdit" data-provide="typeahead">
+                <!--input type="search" placeholder="Search..." data-provide="typeahead" />-->
+                <button id="select-mod-to-edit-submit" class="btn btn-primary" >Select</button>
+            </div>
+            <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
+                <table class="table table-bordered table-hover text-center" id="edit-all-table">
+                    <thead id="edit-all-table-header">
                         <tr>
-                            <td class="text-center">
-                                <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
-                            </td>
-                            <td>$moduleName</td>
-
-                        $if sem1Mounting == 1:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting" checked>
-                            </td>
-                        $elif sem1Mounting == 0:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
-                            </td>
-                        $elif sem1Mounting == -1:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
-                            </td>
-
-                        $if sem1Quota == '-':
-                            <td>
-                                <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
-                            </td>
-                        $elif sem1Quota == '?':
-                            <td>
-                                <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                id="$sem1QuotaInput" name="$sem1QuotaInput">
-                            </td>
-                        $else:
-                            <td>
-                                <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
-                            </td>
-
-                        $if sem2Mounting == 1:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting" checked>
-                            </td>
-                        $elif sem2Mounting == 0:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
-                            </td>
-                        $elif sem2Mounting == -1:
-                            <td>
-                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
-                            </td>
-
-                        $if sem2Quota == '-':
-                            <td>
-                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" disabled>
-                            </td>
-                        $elif sem2Quota == '?':
-                            <td>
-                                <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                id="$sem2QuotaInput" name="$sem2QuotaInput">
-                            </td>
-                        $else:
-                            <td>
-                                <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
-                            </td>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th data-sortable="false">Mounted In Sem 1</th>
+                            <th data-sortable="false">Sem 1 Quota</th>
+                            <th data-sortable="false">Mounted In Sem 2</th>
+                            <th data-sortable="false">Sem 2 Quota</th>
                         </tr>
-                    <input class="btn btn-primary" type="submit" value="Submit">
-                    </form>
-                </tbody>
-            </table>
+                        <tr>
+                            <td colspan=6>No modules selected</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        $for subplan in fullMountingPlan:
+                            $ moduleCode = subplan[0]
+                            $ moduleName = subplan[1]
+                            $ sem1Mounting = subplan[2]
+                            $ sem2Mounting = subplan[3]
+                            $ sem1Quota = subplan[4]
+                            $ sem2Quota = subplan[5]
+
+                            $ moduleRow = moduleCode + "_row"
+                            $ sem1MountingOption = moduleCode + "_Sem1Mounting"
+                            $ sem2MountingOption = moduleCode + "_Sem2Mounting"
+                            $ sem1QuotaInput = moduleCode + "_Sem1Quota"
+                            $ sem2QuotaInput = moduleCode + "_Sem2Quota"
+
+                            <tr id="$moduleRow">
+                                <td class="text-center">
+                                    <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
+                                </td>
+                                <td>$moduleName</td>
+
+                            $if sem1Mounting == 1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting" checked>
+                                </td>
+                            $elif sem1Mounting == 0:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
+                                </td>
+                            $elif sem1Mounting == -1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
+                                </td>
+
+                            $if sem1Quota == '-':
+                                <td>
+                                    <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
+                                </td>
+                            $elif sem1Quota == '?':
+                                <td>
+                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
+                                    id="$sem1QuotaInput" name="$sem1QuotaInput">
+                                </td>
+                            $else:
+                                <td>
+                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
+                                    id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
+                                </td>
+
+                            $if sem2Mounting == 1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting" checked>
+                                </td>
+                            $elif sem2Mounting == 0:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
+                                </td>
+                            $elif sem2Mounting == -1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
+                                </td>
+
+                            $if sem2Quota == '-':
+                                <td>
+                                    <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" disabled>
+                                </td>
+                            $elif sem2Quota == '?':
+                                <td>
+                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                    id="$sem2QuotaInput" name="$sem2QuotaInput">
+                                </td>
+                            $else:
+                                <td>
+                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                    id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
+                                </td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <button id="edit-all-button" class="btn btn-primary" >Submit</button>
+                </div>
+            </form>
             <br>
             <br>
         </div>
