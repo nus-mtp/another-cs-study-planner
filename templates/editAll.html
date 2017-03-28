@@ -25,7 +25,8 @@ $var hierarchy = [home, editAll]
                         <th>Sem 2 Quota</th>
                     </tr>
                 </thead>
-                <tbody> 
+                <tbody>
+                    <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post"> 
                     $for subplan in fullMountingPlan:
                         $ moduleCode = subplan[0]
                         $ moduleName = subplan[1]
@@ -33,62 +34,69 @@ $var hierarchy = [home, editAll]
                         $ sem2Mounting = subplan[3]
                         $ sem1Quota = subplan[4]
                         $ sem2Quota = subplan[5]
+                        $ sem1MountingOption = moduleCode + "_Sem1Mounting"
+                        $ sem2MountingOption = moduleCode + "_Sem2Mounting"
+                        $ sem1QuotaInput = moduleCode + "_Sem1Quota"
+                        $ sem2QuotaInput = moduleCode + "_Sem2Quota"
                         <tr>
                             <td class="text-center">
                                 <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
                             </td>
                             <td>$moduleName</td>
+
                         $if sem1Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
-                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
-                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting" checked>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
-                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
-                                    title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting">
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
-                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting">
                             </td>
-                        $if True:
+
+                        $if sem1Quota == '-':
                             <td>
-                                $sem1Quota
+                                <input type="text" name="$sem1QuotaInput" disabled>
                             </td>
+                        $elif sem1Quota == '?':
+                            <td>
+                                <input type="text" name="$sem1QuotaInput">
+                            </td>
+                        $else:
+                            <td>
+                                <input type="text" name="$sem1QuotaInput" value="$sem1Quota">
+                            </td>
+
                         $if sem2Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
-                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
-                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting" checked>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
-                                    <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
-                                    title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting">
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
-                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
-                                </a>
+                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting">
                             </td>
-                        $if True:
+
+                        $if sem2Quota == '-':
                             <td>
-                                $sem2Quota
+                                <input type="text" name="$sem2QuotaInput" disabled>
+                            </td>
+                        $elif sem2Quota == '?':
+                            <td>
+                                <input type="text" name="$sem2QuotaInput">
+                            </td>
+                        $else:
+                            <td>
+                                <input type="text" name="$sem2QuotaInput" value="$sem2Quota">
                             </td>
                         </tr>
+                    </form>
                 </tbody>
             </table>
             <br>
