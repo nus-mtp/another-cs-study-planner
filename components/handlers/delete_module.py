@@ -45,4 +45,12 @@ class DeleteMod(object):
 
         else:
             outcome = model.delete_module(module_code)
-            return Outcome().POST("delete_module", outcome, module_code)
+            if outcome is False:
+                tenta_mounted_modules = model.get_all_tenta_mounted_modules()
+                tenta_mounted_module_codes = [module[0] for module in tenta_mounted_modules]
+                if module_code in tenta_mounted_module_codes:
+                    return Outcome().POST("delete_module", "has_mounting", module_code)
+                else:
+                    return Outcome().POST("delete_module", "is_starred", module_code)
+            else:
+                return Outcome().POST("delete_module", True, module_code)
