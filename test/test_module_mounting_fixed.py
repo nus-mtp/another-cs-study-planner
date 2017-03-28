@@ -15,7 +15,7 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -113,6 +113,7 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
+    @raises(Exception)
     def test_fixed_module_mounting_goto_invalid_module_overview_page_response(
             self):
         '''

@@ -12,7 +12,7 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -25,8 +25,8 @@ class TestCode(object):
 
 
     URL_NON_OVERLAP_MODS = '/nonOverlappingModules'
-    URL_NON_OVERLAP_MODS_16_17_SEM2 = '/nonOverlappingModules?sem=AY%2016/17%20Sem%202'
-    URL_NON_OVERLAP_MODS_INVALID = '/nonOverlappingModules?sem=AY%2016/18%20Sem%202'
+    URL_NON_OVERLAP_MODS_16_17_SEM2 = '/nonOverlappingModules?aysem=AY%2016/17%20Sem%202'
+    URL_NON_OVERLAP_MODS_INVALID = '/nonOverlappingModules?aysem=AY%2016/18%20Sem%202'
     CURRENT_SEM = 'AY 16/17 Sem 1'
     DEFAULT_TITLE = 'Non-Overlapping Modules for AY 16/17 Sem 1'
     TEXT = '<p class="text-center" >Shows all module pairs which no student takes'+\
@@ -36,16 +36,17 @@ class TestCode(object):
            'default, these pairs are shown for the current AY-Semester."></span></p>'
     FORM = '<form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">'
     SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
-    SELECT_ELEMENT = '<select class="form-control" name="sem">'
+    SELECT_ELEMENT = '<select class="form-control" name="aysem">'
     TABLE_HEADER_MODULE_CODE_ONE = '<th>Module 1</th>'
     TABLE_HEADER_MODULE_NAME_ONE = '<th>Name of Module 1</th>'
     TABLE_HEADER_MODULE_CODE_TWO = '<th>Module 2</th>'
     TABLE_HEADER_MODULE_NAME_TWO = '<th>Name of Module 2</th>'
 
     REDIRECT_CHANGED_CONTENT = 'Non-Overlapping Modules for AY 16/17 Sem 2'
-    VALIDATING_TITLE = 'Validating...'
     SCRIPT_REDIRECT_TO_DEFAULT = "window.location = '/nonOverlappingModules'"
     SCRIPT_ERROR_MESSAGE = "alert('The AY-Semester you specified does not exist!');"
+
+
     def __init__(self):
         self.middleware = None
         self.test_app = None
@@ -92,6 +93,7 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_MODULE_CODE_TWO)
         root.mustcontain(self.TABLE_HEADER_MODULE_NAME_TWO)
 
+
     def test_redirect_button(self):
         '''
             tests if redirect works
@@ -99,7 +101,7 @@ class TestCode(object):
 
         root = self.test_app.get(self.URL_NON_OVERLAP_MODS)
         form = root.forms__get()["ay-form"]
-        form.__setitem__("sem", "AY 16/17 Sem 2")
+        form.__setitem__("aysem", "AY 16/17 Sem 2")
         response = form.submit()
 
         #check response is 303 see other
@@ -112,6 +114,8 @@ class TestCode(object):
 
         redirected.mustcontain(self.REDIRECT_CHANGED_CONTENT)
 
+
+    @raises(Exception)
     def test_error_redirect(self):
         '''
             tests if redirect to outcome when ay-sem is invalid
@@ -120,8 +124,3 @@ class TestCode(object):
 
         #checks if directs to validating page
         assert_equal(root.status, 200)
-        root.mustcontain(self.VALIDATING_TITLE)
-
-        #checks if validating page contain expected elements
-        root.mustcontain(self.SCRIPT_REDIRECT_TO_DEFAULT)
-        root.mustcontain(self.SCRIPT_ERROR_MESSAGE)

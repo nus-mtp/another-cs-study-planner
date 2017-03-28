@@ -105,20 +105,11 @@ class TestCode(object):
             Populates some dummy data for more testing
         '''
         if self.isDuringTesting:
-            sql_command = "INSERT INTO student VALUES('D9818873B', 1)"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_1 + "', 'AY 17/18 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_2 + "', 'AY 17/18 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_3 + "', 'AY 17/18 Sem 2')"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "INSERT INTO studentplans VALUES('D9818873B', " + \
-            "false, '" + self.TEST_MOD_4 + "', 'AY 16/17 Sem 1')"
-            model.DB_CURSOR.execute(sql_command)
+            model.add_student('D9818873B', 1)
+            model.add_student_plan('D9818873B', False, self.TEST_MOD_1, 'AY 17/18 Sem 1')
+            model.add_student_plan('D9818873B', False, self.TEST_MOD_2, 'AY 17/18 Sem 1')
+            model.add_student_plan('D9818873B', False, self.TEST_MOD_3, 'AY 17/18 Sem 2')
+            model.add_student_plan('D9818873B', False, self.TEST_MOD_4, 'AY 16/17 Sem 1')
 
             self.isDuringTesting = False
 
@@ -128,9 +119,7 @@ class TestCode(object):
             Clean up dummy data for testing
         '''
         if self.isDuringTesting:
-            sql_command = "DELETE FROM studentplans WHERE studentid='D9818873B'"
-            model.DB_CURSOR.execute(sql_command)
-            sql_command = "DELETE FROM student WHERE nusnetid='D9818873B'"
-            model.DB_CURSOR.execute(sql_command)
+            model.delete_all_plans_of_student('D9818873B')
+            model.delete_student('D9818873B')
 
             self.isDuringTesting = False

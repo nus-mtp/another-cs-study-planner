@@ -15,7 +15,7 @@
 
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal
+from nose.tools import assert_equal, raises
 from app import APP
 from components import session
 
@@ -112,6 +112,7 @@ class TestCode(object):
         response.mustcontain("BT5110")
 
 
+    @raises(Exception)
     def test_tentative_module_mounting_goto_invalid_module_overview_response(
             self):
         '''
@@ -123,11 +124,6 @@ class TestCode(object):
         root = self.test_app.get(self.URL_MODULE_MOUNTING_TENTATIVE)
         # an exception WILL be encountered here
         response = root.goto(self.URL_MODULE_VIEW_INVALID, method='get')
-        assert_equal(response.status, 200)
-
-        # Presence of these elements indicates that the request direction is correct.
-        # Checks if page contains 'Not Found'
-        response.mustcontain("Not Found")
 
 
     def test_tentative_module_mounting_view_options(self):

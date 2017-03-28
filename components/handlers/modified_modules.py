@@ -17,22 +17,6 @@ class Modified(object):
         It retrieves a list of modified modules and determine which attributes
         have been modified.
     '''
-    def __init__(self):
-        '''
-            Define the number of future AYs that will be included
-            By right, this value should be set by the superadmin
-        '''
-        self.number_of_future_ays = 1
-
-
-    def get_next_ay(self, ay):
-        '''
-            Return the AY that comes after the given AY
-        '''
-        ay = ay.split(' ')[1].split('/')
-        return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
-
-
     def get_modules_with_modified_mounting(self):
         '''
             Get all modules whose mounting has been modified in a future AY.
@@ -49,8 +33,8 @@ class Modified(object):
         target_ay = current_ay
 
         # Loop through each future AY
-        for i in range(self.number_of_future_ays):
-            target_ay = self.get_next_ay(target_ay)
+        for i in range(model.get_number_of_ay_in_system()-1):
+            target_ay = model.get_next_ay(target_ay)
 
             # Generate tentative mounting plan
             tenta_mounting_handler = Tentative()
@@ -223,8 +207,9 @@ class Modified(object):
         # By default, the page will show ALL modified modules
         modify_type = None
         module_code = None
+        input_data = model.validate_input(web.input(), ["code", "modify_type"], attr_required=False)
+
         try:
-            input_data = web.input()
             modify_type = input_data.modifyType
         except AttributeError:
             modify_type = None
@@ -240,17 +225,13 @@ class Modified(object):
         modified_modules_details = []
         modified_modules = []
         if module_code is not None:
-            module_info = model.get_module(module_code)
-            if module_info is None:
-                return RENDER.notfound("Invalid module code '" + module_code + "'")
-
-            if modify_type == "mounting":
+            if modify_type.lower() == "mounting":
                 modified_modules = self.get_modules_with_modified_mounting()
                 module = [module for module in modified_modules if module[0] == module_code]
-            elif modify_type == "quota":
+            elif modify_type.lower() == "quota":
                 modified_modules = self.get_modules_with_modified_quota()
                 module = [module for module in modified_modules if module[0] == module_code]
-            elif modify_type == "moduleDetails":
+            elif modify_type.lower() == "moduledetails":
                 module = None
                 modified_modules = self.get_modules_with_modified_details()
                 module = None
@@ -258,8 +239,6 @@ class Modified(object):
                     if mm[0][0] == module_code:
                         module = mm
                         break
-            else:
-                return RENDER.notfound("Invalid modify type '" + modify_type + "'")
 
             modified_modules = module
 
