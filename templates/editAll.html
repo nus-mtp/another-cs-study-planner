@@ -9,17 +9,34 @@ $ editAll = ['#', title_string]
 $var hierarchy = [home, editAll]
 
 <script type="text/javascript">
+    var selectedModuleCount = 0;
+
     $$(document).ready(function(){
         var moduleSource = [];
         var moduleCodeAndName = "";
         $for subplan in fullMountingPlan:
             moduleCodeAndName = "$subplan[0]"+" - "+"$subplan[1]"
             moduleSource.push(moduleCodeAndName);
-        $$("input").typeahead({
+        $$("input.typeahead").typeahead({
             minLength: 1,
-            source: moduleSource
-        });
+            source: moduleSource,
+            updater: function(selectedModule) {
+                var selectedModuleCode = selectedModule.split(" ")[0];
+                selectedModuleCount++;
+                showModuleInTable(selectedModuleCode);
+            }
+        })
     });
+
+    function showModuleInTable(selectedModuleCode) {
+        var moduleRow = selectedModuleCode + "_row";
+        document.getElementById(moduleRow).style.display = "table-row";
+        if (selectedModuleCount > 0) {
+            document.getElementById("edit-all-table-no-modules").style.display = "none";
+        } else {
+            document.getElementById("edit-all-table-no-modules").style.display = "table-row";
+        }
+    }
 
     //Disable quota input when mounting is unchecked, enable quota input when checked
     function toggleQuotaState(id) {
@@ -71,10 +88,10 @@ $var hierarchy = [home, editAll]
             <h1 class="text-center"><b>Edit All Mountings and Quotas in <u>$selectedAY</u></b></h1>
             <p class="text-center">Edit the mountings and quotas for the AY <b>one year after the current AY</b>.</p>
             <br>
-            <div id="select-mod-to-edit" class="col-md-8 col-md-offset-2 text-center"><b>Select module(s) to edit:&nbsp;&nbsp;</b>
-                <input type="text" name="selectModuleToEdit" data-provide="typeahead">
-                <!--input type="search" placeholder="Search..." data-provide="typeahead" />-->
-                <button id="select-mod-to-edit-submit" class="btn btn-primary" >Select</button>
+            <div id="select-mod-to-edit-div" class="col-md-8 col-md-offset-2 text-center">
+                <b>Select module(s) to edit:&nbsp;&nbsp;</b>
+                <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">
+                <!--<button id="select-mod-to-edit-submit" class="btn btn-primary" >Select</button>-->
             </div>
             <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
                 <table class="table table-bordered table-hover text-center" id="edit-all-table">
@@ -87,7 +104,7 @@ $var hierarchy = [home, editAll]
                             <th data-sortable="false">Mounted In Sem 2</th>
                             <th data-sortable="false">Sem 2 Quota</th>
                         </tr>
-                        <tr>
+                        <tr id="edit-all-table-no-modules">
                             <td colspan=6>No modules selected</td>
                         </tr>
                     </thead>

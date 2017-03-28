@@ -419,13 +419,13 @@ tr[id*='modified-details-child-row'] {
 /*******************************************************************************************/
 /* ==================== STYLING FOR EDIT-ALL-MOUNTINGS-AND-QUOTAS PAGE =================== */
 /*******************************************************************************************/
-#select-mod-to-edit {
+#select-mod-to-edit-div {
     margin-top: 25px;
     margin-bottom: 40px;
     font-size: 18px;
 }
 
-#select-mod-to-edit input {
+#select-mod-to-edit {
     width: 400px;
     height: 33px;
 }
@@ -435,7 +435,7 @@ tr[id*='modified-details-child-row'] {
 }
 
 #edit-all-table tr {
-    display: None;
+    display: none;
 }
 
 #edit-all-table-header tr {
