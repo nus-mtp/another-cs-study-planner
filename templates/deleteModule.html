@@ -9,7 +9,12 @@ $var hierarchy = [home, deleteModule]
     <div class="row">
         <div class="col-md-12">
             <h1 class="text-center"><b>Delete Module</b></h1>
-            <p class="text-center">Delete a <b>new module</b> that was added into the system.</p>
+            <p class="text-center">
+                Delete a <b style="color:red;">new module</b>
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom"
+                title="Only modules with status 'New' will appear here. Modules with status 'Active' CANNOT be directly deleted from the system"></span>
+                that was added into the system.
+            </p>
             <br>
             <table class="table table-bordered table-hover display dataTable" id="delete-module-table">
                 <thead>
