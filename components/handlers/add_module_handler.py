@@ -4,7 +4,7 @@
 
 from app import RENDER
 import web
-from components import model, session
+from components import model, session, check_string
 from components.handlers.outcome import Outcome
 
 class AddModule(object):
@@ -30,6 +30,10 @@ class AddModule(object):
         module_name = data.name
         module_desc = data.description
         module_mc = data.mc
+
+        if not (check_string.check_code(module_code) and check_string.check_name(module_name)
+                and check_string.check_mc(str(module_mc))):
+            return Outcome().POST("add_module_invalid_input")
 
         outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
         return Outcome().POST("add_module", outcome, module_code)

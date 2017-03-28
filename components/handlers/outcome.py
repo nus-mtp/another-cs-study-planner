@@ -32,6 +32,10 @@ class Outcome(object):
                     outcome_message = "Error: Module code already exists! " +\
                                       "Please use another module code."
                     redirect_page = "/modules"
+            elif action == "add_module_invalid_input":
+                #if code/name/mc is not in correct format, warn and redirect back to add module
+                outcome_message = "Invalid input for module name/code/MCs/description"
+                redirect_page = "/addModule"
 
             elif action == "edit_module":
                 if outcome is True:
