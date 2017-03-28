@@ -23,7 +23,7 @@ URLS = (
     '/viewModule', 'components.handlers.module_overview.ViewMod',
     '/flagAsRemoved/(.*)', 'components.handlers.module_listing.FlagAsRemoved',
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
-    '/deleteModule/(.*)', 'components.handlers.module_listing.DeleteMod',
+    '/deleteModule', 'components.handlers.delete_module.DeleteMod',
     '/editModule', 'components.handlers.module_edit.EditModuleInfo',
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
