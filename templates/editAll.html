@@ -8,6 +8,13 @@ $ editAll = ['#', title_string]
 
 $var hierarchy = [home, editAll]
 
+<script type="text/javascript">
+    function toggleQuotaState(id) {
+        var state = document.getElementById(id).disabled;
+        document.getElementById(id).disabled = !state;
+    }
+</script>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -46,54 +53,60 @@ $var hierarchy = [home, editAll]
 
                         $if sem1Mounting == 1:
                             <td>
-                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting" checked>
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
+                                name="$sem1MountingOption" value="sem1Mounting" checked>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
+                                name="$sem1MountingOption" value="sem1Mounting">
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <input type="checkbox" name="$sem1MountingOption" value="sem1Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput');"
+                                name="$sem1MountingOption" value="sem1Mounting">
                             </td>
 
                         $if sem1Quota == '-':
                             <td>
-                                <input type="text" name="$sem1QuotaInput" disabled>
+                                <input type="text" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
                             </td>
                         $elif sem1Quota == '?':
                             <td>
-                                <input type="text" name="$sem1QuotaInput">
+                                <input type="text" id="$sem1QuotaInput" name="$sem1QuotaInput">
                             </td>
                         $else:
                             <td>
-                                <input type="text" name="$sem1QuotaInput" value="$sem1Quota">
+                                <input type="text" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
                             </td>
 
                         $if sem2Mounting == 1:
                             <td>
-                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting" checked>
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
+                                name="$sem2MountingOption" value="sem2Mounting" checked>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
+                                name="$sem2MountingOption" value="sem2Mounting">
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <input type="checkbox" name="$sem2MountingOption" value="sem2Mounting">
+                                <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput');"
+                                name="$sem2MountingOption" value="sem2Mounting">
                             </td>
 
                         $if sem2Quota == '-':
                             <td>
-                                <input type="text" name="$sem2QuotaInput" disabled>
+                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" disabled>
                             </td>
                         $elif sem2Quota == '?':
                             <td>
-                                <input type="text" name="$sem2QuotaInput">
+                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput">
                             </td>
                         $else:
                             <td>
-                                <input type="text" name="$sem2QuotaInput" value="$sem2Quota">
+                                <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
                             </td>
                         </tr>
                     </form>
