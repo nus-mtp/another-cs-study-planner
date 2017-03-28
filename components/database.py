@@ -77,6 +77,15 @@ def get_original_module_info(code):
     return DB_CURSOR.fetchone()
 
 
+def get_new_modules():
+    '''
+        Get the module code, name, description and MCs of modules with status 'New'
+    '''
+    sql_command = "SELECT * FROM module WHERE status='New'"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
 ######################################################################################
 # Functions that add/modify/delete general module information
 ######################################################################################
