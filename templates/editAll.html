@@ -69,15 +69,15 @@ $var hierarchy = [home, editAll]
 
                         $if sem1Quota == '-':
                             <td>
-                                <input type="text" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
+                                <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
                             </td>
                         $elif sem1Quota == '?':
                             <td>
-                                <input type="text" id="$sem1QuotaInput" name="$sem1QuotaInput">
+                                <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput">
                             </td>
                         $else:
                             <td>
-                                <input type="text" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
+                                <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
                             </td>
 
                         $if sem2Mounting == 1:
@@ -109,6 +109,7 @@ $var hierarchy = [home, editAll]
                                 <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
                             </td>
                         </tr>
+                    <input class="btn btn-primary" type="submit" value="Submit">
                     </form>
                 </tbody>
             </table>
