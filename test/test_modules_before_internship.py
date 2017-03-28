@@ -30,7 +30,7 @@ class TestCode(object):
     CURRENT_SEM = 'AY 16/17 Sem 1'
     DEFAULT_TITLE = 'Modules Taken Prior to Internship for AY 16/17 Sem 1'
     TEXT = '<p class="text-center">Shows all modules taken by students prior to taking ' +\
-           'internship for a particular semester, and how many students took them.</b> ' +\
+           'internship for a particular semester, and how many students took them. ' +\
            '<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" ' +\
            'data-placement="bottom" title="By default, this shows all data before ' +\
            'students take internship in the current AY-Sem."></span></p>'

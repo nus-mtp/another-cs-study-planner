@@ -13,16 +13,14 @@ $else:
 $if modulePairs is not None:
 	<div class="container-fluid">
 		<h1 class="text-center"><b>Modules Taken Prior to Other Modules</b></h1>
-		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
+		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</p>
 		<br>
 		<div class="modules-taken-prior-search-form">
-			<form action="/moduleTakenPriorToOthers" method="GET">
+			<form action="/moduleTakenPriorToOthers" id="module-filter-form" method="GET">
 				<p>Tell me the number of students who have taken</p>
-				<input type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
-				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+				<input type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 				<p>before taking</p>
-				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
-				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
 				<select style="display:inline-block;" name="aysem" required>
 				$for aySem in allAySems:
