@@ -38,8 +38,8 @@ class TestCode(object):
 
         # Clean up database
         model.delete_all_plans_of_student('dummyYr1A')
-        model.delete_student('dummyYr1A')
         model.delete_student_focus_area('dummyYr1A')
+        model.delete_student('dummyYr1A')
 
         assert required_entry in list_of_students_take_mod
 
@@ -63,8 +63,8 @@ class TestCode(object):
 
         # Clean up database
         model.delete_all_plans_of_student('dummyYr1A')
-        model.delete_student('dummyYr1A')
         model.delete_student_focus_area('dummyYr1A')
+        model.delete_student('dummyYr1A')
 
         assert required_entry in list_of_students_take_mod
 
