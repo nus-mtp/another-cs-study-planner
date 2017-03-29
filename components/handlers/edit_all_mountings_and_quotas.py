@@ -66,7 +66,8 @@ class EditAll(object):
         '''
         all_modules = model.get_all_modules()
         input_data = web.input()
-
+        target_ay = model.get_next_ay(model.get_current_ay())
+        
         for module in all_modules:
             module_code = module[0]
             try:
@@ -98,8 +99,6 @@ class EditAll(object):
                         sem2_quota = None
                 except KeyError:  # quota = '-'
                     sem2_quota = None
-
-                target_ay = model.get_next_ay(model.get_current_ay())
 
                 target_aysem = target_ay+" Sem 1"
                 outcome = None
