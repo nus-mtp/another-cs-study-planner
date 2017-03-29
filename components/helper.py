@@ -5,6 +5,8 @@
 
 ## Prevent model.py from being imported twice
 from sys import modules
+import datetime
+
 try:
     from components import model
 except ImportError:
@@ -16,6 +18,7 @@ from app import RENDER
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
 LENGTH_EMPTY = 0
+MONTH_AUGUST = 8
 
 # Currently, the system only has data for AY 16/17 and AY 17/18
 NUMBER_OF_AY_IN_SYSTEM = 2
@@ -110,6 +113,54 @@ def is_aysem_in_system_and_is_future(ay_sem):
     return valid_future_aysem
 
 
+def get_current_ay_sem():
+    '''
+        Retrieves the current AY-Semester as a string.
+        e.g. "AY 16/17 Sem 2"
+    '''
+    current_date = get_current_date()
+    current_year = current_date.year
+    current_month = current_date.month
+
+    return get_ay_sem(current_year, current_month)
+
+
+def get_ay_sem(year, month):
+    '''
+        Retrieves AY-Semester as a string given the month and year values.
+    '''
+    if month < MONTH_AUGUST:
+        year_where_ay_starts = year - 1
+        acad_year = get_formatted_academic_year(year_where_ay_starts)
+        semester = 2
+    else:
+        acad_year = get_formatted_academic_year(year)
+        semester = 1
+
+    return "AY " + acad_year + " Sem " + str(semester)
+
+
+def get_current_date():
+    '''
+        Returns today's date as a Date Object.
+    '''
+    return datetime.date.today()
+
+
+def get_formatted_academic_year(year_where_ay_starts):
+    '''
+        Given the year which the Academic Year started in, formats and returns
+        the Academic Year (AY) as a string.
+        E.g. if AY started in 2015, this function returns "15/16"
+    '''
+    truncated_year = str(year_where_ay_starts)[-2:] # Retrieves last 2 digits
+    year_where_ay_ends = int(truncated_year) + 1
+
+    ay_formatted = truncated_year + "/" + str(year_where_ay_ends)
+
+    return ay_formatted
+
+
 ######################################################################################
 # Functions that are related to mounting and/or quota information
 ######################################################################################
@@ -168,15 +219,63 @@ def get_prerequisite_as_string(module_code):
     '''
         Returns a string of pre-requisites of specified module_code
     '''
+    prereq_list = get_prerequisite_sorted_list(module_code)
+
+    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
+
+    return prereq_string
+
+
+def get_prerequisite_units(module_code):
+    '''
+        Retrieves all the prerequisite of given module_code as a list
+        of lists. The list will be a list of units having the "and" relationship.
+        Each unit is a list of modules having the "or" relationship.
+
+        Example: ("CS1010" or "CS1231") and "MA1100" will return
+        [["CS1010", "CS1231"], ["MA1100"]]
+    '''
+    prereq_list = get_prerequisite_sorted_list(module_code)
+
+    if len(prereq_list) == LENGTH_EMPTY:
+        return list()
+    else:
+        final_list = list()
+        first_unit = prereq_list[INDEX_FIRST_ELEM]
+        previous_index = first_unit[INDEX_FIRST_ELEM]
+        module_to_add = first_unit[INDEX_SECOND_ELEM]
+
+        current_list_of_module = [module_to_add]
+
+        for index in range(INDEX_SECOND_ELEM, len(prereq_list)):
+            current_index = prereq_list[index][INDEX_FIRST_ELEM]
+            current_module = prereq_list[index][INDEX_SECOND_ELEM]
+
+            if current_index == previous_index:
+                current_list_of_module.append(current_module)
+            else:
+                final_list.append(current_list_of_module)
+                previous_index = current_index
+                current_list_of_module = [current_module]
+
+        final_list.append(current_list_of_module)
+
+        return final_list
+
+
+def get_prerequisite_sorted_list(module_code):
+    '''
+        Get the prerequisites of the given module_code as a list of pairs,
+        where each pair is (index, prereq module) from the database, the list is
+        sorted in ascending order for the index values.
+    '''
     prerequisites = model.get_prerequisite(module_code)
     prereq_list = convert_to_list(prerequisites)
 
     # sort list of lists based on index (which is the first elem of each row)
     prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
 
-    prereq_string = convert_list_of_prereqs_to_string(prereq_list)
-
-    return prereq_string
+    return prereq_list
 
 
 def get_preclusion_as_string(module_code):

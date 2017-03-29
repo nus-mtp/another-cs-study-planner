@@ -449,9 +449,9 @@ tr[id*='modified-details-child-row'] {
 /* ==================== General =================== */
 /********************************************************************************/
 .tooltip-inner {
-    max-width: 350px;
+    max-width: 250px;
     /* If max-width does not work, try using width instead */
-    width: 350px; 
+    width: 250px; 
 }
 
 .dropdown-divider {
