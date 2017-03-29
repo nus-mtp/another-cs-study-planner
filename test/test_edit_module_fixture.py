@@ -25,6 +25,9 @@ class TestCode(object):
                         ' For <b>BT5110</b></h1>'
     EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
                                  'For <b>AY 17/18 Sem 1</b></h1>'
+    EDIT_MODULE_PREREQUISITES_BUTTON = '<a class="btn btn-primary" ' +\
+                                       'href="/editModulePrerequisites?code=BT5110" ' +\
+                                       'target="_blank">Edit Prerequisites</a>'
     TESTING_MODULE = 'BT5110'
 
     def __init__(self):
@@ -61,6 +64,7 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
         response.mustcontain(self.EDIT_MODULE_TITLE)
+        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_BUTTON)
 
 
     def test_access_module_edit_from_individual_module_view(self):
@@ -104,7 +108,7 @@ class TestCode(object):
             Tests whether user will fail to access edit-module
             page if an invalid URL (invalid AY-Semester) is used.
         '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)\
+        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)
 
 
     def test_module_edit_submit_response(self):

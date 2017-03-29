@@ -43,9 +43,11 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule]
                             </div>
                             <div class="form-group">
                                 <label for=" prerequisite"> Prerequisite</label>
-                                <p>-- edit function is not available yet.</p>
+                                <br>
+                                <a class="btn btn-primary" href="/editModulePrerequisites?code=$moduleCode" target="_blank">Edit Prerequisites</a>
                                 <!--textarea class="form-control" id=" prerequisite" placeholder="e.g. CS1010"></textarea-->
                             </div>
+                            <br>
                             <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/viewModule?code=$moduleInfo[0]';}">Cancel</button>
                             <input class="btn btn-primary" type="submit" value="Submit">
                         </form>
