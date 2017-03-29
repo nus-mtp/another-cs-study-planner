@@ -15,8 +15,16 @@ class TakePriorInternship(object):
         This class contains the implementations of the GET
         requests.
     '''
-    CURRENT_SEM = 'AY 16/17 Sem 1'
-    AVAILABLE_AY_SEM = model.get_all_ay_sems()
+    def __init__(self):
+        self.CURRENT_SEM = model.get_current_ay_sem()
+        self.AVAILABLE_AY_SEM = model.get_all_ay_sems()
+
+
+    def validateAYSem(self, aysem):
+        '''
+            Check if entered AY-Sem is correct
+        '''
+        return aysem in self.AVAILABLE_AY_SEM
 
 
     def GET(self):
@@ -38,6 +46,8 @@ class TakePriorInternship(object):
             ay_sem_of_interest = ay_sem
         except AttributeError:
             ay_sem_of_interest = self.CURRENT_SEM
+            if not self.validateAYSem(ay_sem_of_interest):
+                ay_sem_of_interest = "AY 16/17 Sem 1"
 
         modules_before_internship = model.get_mod_before_intern(ay_sem_of_interest)
         return RENDER.modulesTakenPriorToInternship(modules_before_internship,
