@@ -4,10 +4,10 @@
 '''
 
 
+import json
 from app import RENDER
 import web
 from components import model, session
-from components.handlers.outcome import Outcome
 
 
 class EditModulePrerequisites(object):
@@ -26,7 +26,8 @@ class EditModulePrerequisites(object):
 
             module_info = model.get_module(module_code)
             if module_info is None:
-                return RENDER.notfound("Module " + module_code + " does not exist in the system.")
+                raise web.notfound(RENDER.notfound("Module " +\
+                 module_code + " does not exist in the system."))
 
             prerequisites = model.get_prerequisite_units(module_code)
             return RENDER.moduleEditPrerequisite(module_code, prerequisites)
@@ -37,11 +38,9 @@ class EditModulePrerequisites(object):
             Handles the submission of updated module prerequisites
             for a target module.
         '''
-        module_code = web.input()['code']
-        prerequisites = web.input()['prerequisites']
+        module_code = web.input().get('code')
+        prerequisites = json.loads(web.input().get('prerequisites'))
 
-        # TODO: call model API for updating the module prerequisites for a target module
-        # isSucessfullyUpdated = model.<something>(module_code, prerequisites)
-        '''
+        isSucessfullyUpdated = model.edit_prerequisite(module_code, prerequisites)
+
         return isSucessfullyUpdated
-        '''
