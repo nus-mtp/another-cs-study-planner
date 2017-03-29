@@ -21,6 +21,10 @@ class TestCode(object):
         pass
 
 
+    ######################################################################################
+    # We test for all "or" cases here
+    ######################################################################################
+
     def test_query_module_association_prereq_all_or(self):
         '''
             Tests querying the modules prerequisite as a string, where prereq is all 'or'
@@ -30,6 +34,20 @@ class TestCode(object):
 
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
+
+    def test_query_module_association_prereq_units_all_or(self):
+        '''
+            Tests querying the modules prerequisite units, where prereq is all 'or'
+        '''
+        prereq_units = model.get_prerequisite_units('CS2010')
+        required_prereq_units = [["CG1103", "CS1020E", "CS1020"]]
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+
+    ######################################################################################
+    # We test for mix "or" & "and" cases here
+    ######################################################################################
 
     def test_query_module_association_prereq_mix_or_and(self):
         '''
@@ -47,6 +65,26 @@ class TestCode(object):
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
 
+    def test_query_module_association_prereq_units_mix_or_and(self):
+        '''
+            Tests querying the modules prerequisite units, where prereq is a
+            mixture of 'or' and 'and'
+        '''
+        prereq_units = model.get_prerequisite_units('CS3230')
+        required_prereq_units = [["MA1100", "CS1231"], ["CS2010"]]
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+        prereq_units = model.get_prerequisite_units('CS4222')
+        required_prereq_units = [["ST2334", "ST2131"], ["EE3204", "CS2105"]]
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+
+    ######################################################################################
+    # We test for all "and" cases here
+    ######################################################################################
+
     def test_query_module_association_prereq_all_and(self):
         '''
             Tests querying the modules prerequisite as a string, where prereq is all 'and'
@@ -56,6 +94,20 @@ class TestCode(object):
 
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
+
+    def test_query_module_association_prereq_units_all_and(self):
+        '''
+            Tests querying the modules prerequisite units, where prereq is all 'and'
+        '''
+        prereq_units = model.get_prerequisite_units('CS3215')
+        required_prereq_units = [["CS2103"], ["CS2301"]]
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+
+    ######################################################################################
+    # We test for no prerequisite cases here
+    ######################################################################################
 
     def test_query_module_association_no_prereq(self):
         '''
@@ -68,6 +120,21 @@ class TestCode(object):
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
 
+    def test_query_module_association_no_prereq_units(self):
+        '''
+            Tests querying the modules prerequisite units, where there is no
+            prereq
+        '''
+        prereq_units = model.get_prerequisite_units('CS1010')
+        required_prereq_units = list()
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+
+    ######################################################################################
+    # We test for one prerequisite cases here
+    ######################################################################################
+
     def test_query_module_association_one_prereq(self):
         '''
             Tests querying the modules prerequisite as a string, where there is
@@ -78,6 +145,21 @@ class TestCode(object):
 
         assert_true(is_prereq_equal(prereq_string, required_prereq_string))
 
+
+    def test_query_module_association_one_prereq_units(self):
+        '''
+            Tests querying the modules prerequisite units, where there is
+            only one prereq
+        '''
+        prereq_units = model.get_prerequisite_units('CS1020')
+        required_prereq_units = [["CS1010"]]
+
+        assert_true(is_prereq_units_equal(prereq_units, required_prereq_units))
+
+
+    ######################################################################################
+    # We test for preclusion cases here
+    ######################################################################################
 
     def test_query_module_association_no_preclusion(self):
         '''
@@ -123,6 +205,21 @@ STRING_OR = "or"
 STRING_OPEN_BRACKET = "("
 STRING_CLOSE_BRACKET = ")"
 STRING_COMMA = ","
+
+
+def is_prereq_units_equal(unit1, unit2):
+    '''
+        Checks if the 2 given prerequisite units are equal.
+        Each prerequisite unit consist of a list of lists.
+        Returns true if they are equal, false otherwise.
+    '''
+
+    # sort inner list
+    unit1_sorted = [sorted(unit) for unit in unit1]
+    unit2_sorted = [sorted(unit) for unit in unit2]
+
+    # sort outer list and check if they are equal
+    return sorted(unit1_sorted) == sorted(unit2_sorted)
 
 
 def is_preclude_equal(preclude1, preclude2):
