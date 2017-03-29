@@ -3,6 +3,7 @@
     checks if a string matches a pattern
 '''
 import re
+from components.handlers.outcome import Outcome
 
 def check_code(code_str):
     #check if code_str matches code pattern
@@ -37,3 +38,10 @@ def check_mcs(mc_str):
     '''
     pattern = re.compile('^[0-9][12]{0,1}$')
     return bool(pattern.match(mc_str))
+
+def outcome_invalid():
+    '''
+        Return:
+        Outcome page: returns the outcome page when an invalid input is detected
+    '''
+    return Outcome().POST("invalid_input", None, None)

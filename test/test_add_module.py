@@ -52,6 +52,9 @@ class TestCode(object):
     OUTCOME_SUCCESS_MESSAGE = "alert('Module %s has been added successfully!');"
     OUTCOME_SUCCESS_REDIRECT = "window.location = '/viewModule?code=%s';"
 
+    OUTCOME = '<title>Validating...</title>'
+    ERR_MESSAGE = 'Invalid input for module name/code/MCs/description'
+
 
     def __init__(self):
         self.middleware = None
@@ -130,7 +133,6 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
         response = addModuleForm.submit()
-        print response.status
         response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE % self.TEST_ADD_MODULE_CODE))
         response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT % self.TEST_ADD_MODULE_CODE)
 
@@ -218,21 +220,24 @@ class TestCode(object):
     # not implemented yet.
     #
     # @raises(Exception)
-    # def test_add_module_with_invalid_module_code(self):
-    #     '''
-    #         Tests that adding a module with invalid module code
-    #         should fail.
-    #     '''
-    #     root = self.test_app.get(self.URL_NORMAL)
+    def test_add_module_with_invalid_module_code(self):
+         '''
+             Tests that adding a module with invalid module code
+             should fail.
+         '''
+         root = self.test_app.get(self.URL_NORMAL)
 
-    #     addModuleForm = root.forms__get()['addModForm']
-    #     addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
-    #     addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
-    #     addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-    #     addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
+         addModuleForm = root.forms__get()['addModForm']
+         addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
+         addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
+         addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
+         addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
 
-    #     response = addModuleForm.submit()
-    #     print(response)
+         response = addModuleForm.submit()
+         assert_equal(response.status, 200)
+
+         response.mustcontain(self.OUTCOME)
+         response.mustcontain(self.ERR_MESSAGE)
 
 
     # @raises(Exception)
