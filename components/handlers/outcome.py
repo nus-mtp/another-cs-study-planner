@@ -43,7 +43,7 @@ class Outcome(object):
                     else:
                         redirect_page = "/viewModule?code="+module_code
             elif action == "invalid_input":
-                outcome_message = "Invalid input for module name/code/MCs/description by passed UI, malicious intent detected!"
+                outcome_message = "Invalid input for module name/code/MCs/description"
                 redirect_page = "/"
 
             elif action == "edit_mounting":
@@ -111,5 +111,9 @@ class Outcome(object):
             elif action == "mods-before-internship":
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/moduleTakenPriorToInternship"
+
+            elif action == "back-to-listing":
+                outcome_message = "The module you want to view has been deleted by another user!"
+                redirect_page = "/"
 
             return RENDER.outcome(outcome_message, redirect_page)

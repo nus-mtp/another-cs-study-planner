@@ -23,9 +23,6 @@ class RestoreModule(object):
             input_data = model.validate_input(web.input(), ["code", "restore_type"])
 
         module_code = input_data.code
-        #check that module_code is valid
-        if not check_string.check_code(module_code):
-            return Outcome().POST("invalid_input")
         restore_type = input_data.restoreType
 
         if restore_type.lower() == "quota":
