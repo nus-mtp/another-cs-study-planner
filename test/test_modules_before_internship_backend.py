@@ -20,6 +20,7 @@ class TestCode(object):
         self.INTERN_MOD = 'CP3200'
         self.INTERN_SEM = 'AY 17/18 Sem 1'
 
+
     def test_query_module_before_internship_empty(self):
         '''
             Tests querying the list of modules taken before internship,

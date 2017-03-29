@@ -18,8 +18,6 @@ class TestCode(object):
         This class runs the test cases for querying list of students who plan
         to take a certain mod in a specified semester
     '''
-    def __init__(self):
-        pass
 
 
     def test_list_students_take_module_one_focus(self):
@@ -78,7 +76,7 @@ class TestCode(object):
             where these are no students planning to take the module.
         '''
         model.add_module('AAA1111', 'Dummy Module', 'Description', 4, 'Active')
-        
+
         list_of_students_take_mod = \
             model.get_list_students_take_module('AAA1111', 'AY 17/18 Sem 1')
 

@@ -17,8 +17,6 @@ class TestCode(object):
         This class runs the test cases for querying modules
         taken together in the same semester
     '''
-    def __init__(self):
-        pass
 
 
     def test_query_module_taken_together_specified_mod(self):
