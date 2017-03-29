@@ -365,13 +365,34 @@ $(document).ready(function() {
         ]
     } );
 
-    $('#modified-modules-details-table').DataTable( {
+    var modifiedModuleDetailsTable = $('#modified-modules-details-table').DataTable( {
         "aaSorting": [ 0, "asc" ],
         "autoWidth": false,
         "columnDefs": [
             { "targets": 0, "width": "15%" },
             { "targets": 1, "width": "35%" },
         ]
+    } );
+
+    // Add event listener for opening and closing details
+    $('#modified-modules-details-table tbody').on('click', 'td.details-control', function () {
+        var cell_data = modifiedModuleDetailsTable.cell(this).data();
+        var tr = $(this).closest('tr');
+        var row = modifiedModuleDetailsTable.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            var formattedData = format(cell_data);
+            if (formattedData != '') {
+                // Open this row
+                row.child(formattedData).show();
+                tr.addClass('shown');
+            }
+        }
     } );
 
     $('#specific-modified-module').DataTable( {
@@ -431,3 +452,30 @@ $(document).ready(function() {
         "order": [[ 2, "asc"]]
     } );
 });
+
+function format(data) {
+    var split = data.split("<!--p>");
+    if (split.length > 1) {
+        var d1 = split[1].trim();
+        var d2 = split[2].split("</p-->")[0];
+
+        var originalDescription = d1.substring(0, d1.length - 6);
+        var modifiedDescription = d2;
+
+        return '<div class="row">' +
+               '<div class="col-md-5 text-justify">' +
+               '<b>From</b><br>' +
+               '<i>' + originalDescription + '</i>' +
+               '</div>' +
+               '<div class="col-md-2">' +
+               '<h3>&#8594;</h3>' +
+               '</div>' +
+               '<div class="col-md-5 text-justify">' +
+               '<b>To</b><br>' +
+               '<i>' + modifiedDescription + '</i><br><br>' +
+               '</div>' +
+               '</div>';
+    } else {
+        return '';
+    }    
+}
