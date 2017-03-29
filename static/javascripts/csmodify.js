@@ -25,24 +25,28 @@ function closeSidebar() {
 }
 
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 
-  $('#sidebar-button').click(function(e) {
-    e.stopPropagation();
-    openSidebar();
-  });
+    $('#sidebar-button').click(function(e) {
+        e.stopPropagation();
+        openSidebar();
+    });
 
-  $('body').click(function(e) {
-    if (e.target.id != 'sidebar') {
-        closeSidebar();
+    $('body').click(function(e) {
+        if (e.target.id != 'sidebar') {
+            closeSidebar();
+        }
+    });
+
+    unitTemplate = document.getElementById("prereq-unit-template");
+    if (unitTemplate != null) {
+        unitTemplate.removeAttribute("id");
     }
-  });
 
-  unitTemplate = document.getElementById("prereq-unit-template");
-  unitTemplate.removeAttribute("id");
-
-  addModuleTemplate = document.getElementById("module-template");
-  addModuleTemplate.removeAttribute("id");
+    addModuleTemplate = document.getElementById("module-template");
+    if (addModuleTemplate != null) {
+        addModuleTemplate.removeAttribute("id");
+    }
 })
 
 /*
@@ -237,20 +241,29 @@ function deletePrereqUnit(btn) {
 
 function saveChanges() {
     // Submit data to backend for updating the prerequisites for module.
-    modulePrerequisites = convertToData();
-    moduleCode = document.getElementById("module-code").value;
-    console.log(moduleCode);
+    var modulePrerequisites = convertToData();
+    var modulePrereqsJSON = JSON.stringify(modulePrerequisites);
+
+    // Retrieve the module code to pass to the handler backend.
+    moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
 
     toSave = window.confirm("Are you sure you want to save your changes?");
     if (toSave) {
         $.ajax({
             type: "POST",
-            url: "/moduleEditPrerequisites",
-            data: { 'prerequisites': modulePrerequisites }
+            url: "/editModulePrerequisites",
+            data: {
+                'code': moduleCode,
+                'prerequisites': modulePrereqsJSON,
+            }
         }).success(function(isUpdated) {
-            if (isUpdated) {
+            if (isUpdated == true) {
                 window.alert("Your changes have been saved.");
-                window.close();
+                if (window.opener != null) {
+                    window.close();
+                } else {
+                    window.location.href = "/editModule?code=CS3283";
+                }
             } else {
                 window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
             }
@@ -285,7 +298,6 @@ function convertToData() {
         }
     }
 
-    console.log(prerequisites);
     return prerequisites;
 }
 
