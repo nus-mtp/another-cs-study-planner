@@ -11,7 +11,6 @@ except ImportError:
     model = modules['components.model']
 
 import web
-from app import RENDER
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
@@ -306,6 +305,8 @@ def validate_input(input_data, input_types, is_future=False,
         show_404:
             Set to False if don't want to return 404 page (function will return False instead)
     '''
+    from app import RENDER
+    
     if attr_required is False and len(input_data) == 0:
         return input_data
 
