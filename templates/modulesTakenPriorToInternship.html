@@ -37,17 +37,12 @@ $var hierarchy = [home, modulesPriorIntern]
 			</tr>
 		</thead>
 		<tbody>
-			$if len(moduleListWithCount) == 0 or moduleListWithCount == None:
+			$for module_with_count in moduleListWithCount:
 				<tr>
-					<td colspan="3">No data found</td>
+					<td><a href="/viewModule?code=$module_with_count[0]" target="_blank" data-toggle="tooltip" title="View general info for $module_with_count[0]">$module_with_count[0]</td> <!-- Module Name -->
+					<td>$module_with_count[1]</td> <!-- Module Code -->
+					<td>$module_with_count[2]</td> <!-- Number students took this mod before intern-->
 				</tr>
-			$else:
-				$for module_with_count in moduleListWithCount:
-					<tr>
-						<td><a href="/viewModule?code=$module_with_count[0]" target="_blank" data-toggle="tooltip" title="View general info for $module_with_count[0]">$module_with_count[0]</td> <!-- Module Name -->
-						<td>$module_with_count[1]</td> <!-- Module Code -->
-						<td>$module_with_count[2]</td> <!-- Number students took this mod before intern-->
-					</tr>
 		</tbody>
 	</table>
 </div>

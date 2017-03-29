@@ -48,19 +48,16 @@ $if modulePairs is not None:
 				</tr>
 			</thead>
 			<tbody>
-				$if len(modulePairs) == 0 or modulePairs == None:
-					<tr><td colspan=5>No data found</td></tr>
-				$else:
-					$for modulePair in modulePairs:
-						<tr>
-							<td><a href="/viewModule?code=$modulePair[0]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[0]">$modulePair[0]</a></td>
-							<td>$modulePair[1]</td>
-							<td>$modulePair[2]</td>
-							<td><a href="/viewModule?code=$modulePair[3]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[3]">$modulePair[3]</a></td>
-							<td>$modulePair[4]</td>
-							<td>$modulePair[5]</td>
-							<td>$modulePair[6]</td>
-						</tr>
+				$for modulePair in modulePairs:
+					<tr>
+						<td><a href="/viewModule?code=$modulePair[0]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[0]">$modulePair[0]</a></td>
+						<td>$modulePair[1]</td>
+						<td>$modulePair[2]</td>
+						<td><a href="/viewModule?code=$modulePair[3]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[3]">$modulePair[3]</a></td>
+						<td>$modulePair[4]</td>
+						<td>$modulePair[5]</td>
+						<td>$modulePair[6]</td>
+					</tr>
 			</tbody>
 		</table>
 	</div>
