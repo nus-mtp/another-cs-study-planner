@@ -13,6 +13,7 @@ class TestCode(object):
     '''
 
     URL_MODULE_VIEW = '/viewModule?code=BT5110'
+    URL_MODULE_EDIT = '/editModule?code=BT5110'
     URL_INDIVIDUAL_MODULE_VIEW = '/individualModuleInfo?code=BT5110&aysem=AY+17%2F18+Sem+1'
     URL_EDIT_MODULE_SPECIFIC_VALID = '/editMounting?code=BT5110&aysem=AY+17%2F18+Sem+1'
     URL_EDIT_MODULE_SPECIFIC_INVALID_CODE = '/editMounting?code=CS0123&aysem=AY+17%2F18+Sem+1'
@@ -26,6 +27,8 @@ class TestCode(object):
     EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
                                  'For <b>AY 17/18 Sem 1</b></h1>'
     TESTING_MODULE = 'BT5110'
+
+    ERR_MSG = 'Invalid input for module name/code/MCs/description'
 
     def __init__(self):
         self.middleware = None
@@ -144,3 +147,16 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
         response.mustcontain("alert('Error: Failed to edit module.');")
+
+    def test_module_edit_submit_invalid_name(self):
+        '''
+            Tests whether submitting the edit-module form with invalid
+            inputs will fail.
+        '''
+        root = self.test_app.get(self.URL_MODULE_EDIT)
+        edit_module_form = root.forms__get()["edit-module-form"]
+        edit_module_form.__setitem__("name", "@@")
+        response = edit_module_form.submit()
+
+        assert_equal(response.status, 200)
+        response.mustcontain(self.ERR_MSG)
