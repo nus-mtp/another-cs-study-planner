@@ -58,6 +58,13 @@ class Outcome(object):
                         redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
                                         ay_sem.replace(' ', '+').replace('/', '%2F')
 
+            elif action == "edit_all_mountings_and_quotas":
+                if outcome is True:
+                    outcome_message = "Modules have been edited successfully!"
+                else:
+                    outcome_message = "Error: Failed to edit modules."
+                redirect_page = "/moduleMountingTentative"
+
             elif action == "restore_module":
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been restored successfully!"

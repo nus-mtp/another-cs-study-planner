@@ -34,7 +34,7 @@ $var hierarchy = [home, editAll]
         selectedModuleCount++;
         var moduleRow = selectedModuleCode + "_row";
         document.getElementById(moduleRow).style.display = "table-row";
-        document.getElementById(isModuleEdited).value = true;
+        document.getElementById(isModuleEdited).value = "True";
         if (selectedModuleCount > 0) {
             document.getElementById("edit-all-table-no-modules").style.display = "none";
         }
@@ -44,7 +44,7 @@ $var hierarchy = [home, editAll]
     function removeModuleFromTable(moduleRow, isModuleEdited) {
         selectedModuleCount--;
         document.getElementById(moduleRow).style.display = "none";
-        document.getElementById(isModuleEdited).value = false;
+        document.getElementById(isModuleEdited).value = "False";
         if (selectedModuleCount <= 0) {
             document.getElementById("edit-all-table-no-modules").style.display = "table-row";
         }
@@ -131,7 +131,6 @@ $var hierarchy = [home, editAll]
             <div id="select-mod-to-edit-div" class="col-md-8 col-md-offset-2 text-center">
                 <b>Select module(s) to edit:&nbsp;&nbsp;</b>
                 <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">
-                <!--<button id="select-mod-to-edit-submit" class="btn btn-primary" >Select</button>-->
             </div>
             <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
                 <table class="table table-bordered table-hover text-center" id="edit-all-table">
@@ -232,7 +231,7 @@ $var hierarchy = [home, editAll]
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
                                 </td>
-                                <input type="hidden" id="$isModuleEdited" name="$isModuleEdited" value=false>      
+                                <input type="hidden" id="$isModuleEdited" name="$isModuleEdited" value="False">      
                             </tr>
                         </form>
                     </tbody>
