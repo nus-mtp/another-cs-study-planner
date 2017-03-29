@@ -243,6 +243,7 @@ function saveChanges() {
     // Submit data to backend for updating the prerequisites for module.
     var modulePrerequisites = convertToData();
     var modulePrereqsJSON = JSON.stringify(modulePrerequisites);
+    console.log(modulePrereqsJSON);
 
     // Retrieve the module code to pass to the handler backend.
     moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
@@ -257,12 +258,13 @@ function saveChanges() {
                 'prerequisites': modulePrereqsJSON,
             }
         }).success(function(isUpdated) {
-            if (isUpdated == true) {
+            console.log(isUpdated);
+            if (isUpdated == 'True') {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
                     window.close();
                 } else {
-                    window.location.href = "/editModule?code=CS3283";
+                    window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
                 window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
