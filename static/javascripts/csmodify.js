@@ -4,6 +4,12 @@
 /* custom-defined animations or interactions on the page.       */
 /****************************************************************/
 
+/* VARIABLES USED FOR THE INTERFACE FOR EDITING MODULE PREREQUISITES */
+var unitTemplate;
+var addUnitConnector = '<tr><td colspan="12">and</td></tr>';
+var addModuleTemplate;
+var addModuleTemplateConnector = '<td>or</td>';
+
 /*
  * FUNCTIONS FOR SIDEBAR ANIMATIONS
  */
@@ -20,6 +26,7 @@ function closeSidebar() {
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+
   $('#sidebar-button').click(function(e) {
     e.stopPropagation();
     openSidebar();
@@ -29,6 +36,15 @@ $(function () {
         closeSidebar();
     }
   });
+
+  if (window.location.href.includes("moduleEditPrerequisite")) {
+      console.log("Page accessed is edit-module-prerequisite page.");
+      unitTemplate = document.getElementById("prereq-unit-template");
+      unitTemplate.removeAttribute("id");
+
+      addModuleTemplate = document.getElementById("module-template");
+      addModuleTemplate.removeAttribute("id");
+  }
 })
 
 /*
@@ -84,6 +100,176 @@ function check(input) {
     } else if (input.validity.valueMissing) {
         input.setCustomValidity("Please fill in your User ID.");
     }
+}
+
+/*
+ * FUNCTIONS USED FOR THE INTERFACE FOR EDITING MODULE PREREQUISITES
+ */
+function addModule(btn) {
+    // Get the parent row, to add <td> elements to.
+    var parentRow = btn.parentElement.parentElement;
+
+    // Creates a table column <td>, which represents the 'OR'
+    // module prerequisite unit.
+    var moduleUnit = addModuleTemplate.cloneNode(true);
+
+    // Creates another table column containing the word 'or',
+    // as a 'connector' to the 'OR' unit.
+    var moduleConnectorUnit = document.createElement("td");
+    moduleConnectorUnit.innerHTML = addModuleTemplateConnector;
+
+    // Hide the last 'OR'.
+    moduleConnectorUnit.style.display = "none"
+    
+    // Add the module unit to the row.
+    parentRow.appendChild(moduleUnit);
+    parentRow.appendChild(moduleConnectorUnit);
+
+    // Reveal the previous 'OR'.
+    moduleUnit.previousElementSibling.style.display = "";
+
+    // Re-initialize all tooltips to ensure that even newly added
+    // HTML elements receive the tooltip event listener.
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+function removeModule(btn) {
+    // Gets the target column and the 'OR' column.
+    var parentTd = btn.parentElement;
+    var nextTd = parentTd.nextElementSibling;
+
+    // Gets the row that the column belongs to.
+    var parentRow = parentTd.parentElement;
+
+    // Case 1: Prerequisite unit only contains 1 module.
+    // (Options column + [Module column & 'OR' column])
+    // Action: Drop the whole unit altogether, and
+    // perform hiding + deletion of adjacent 'AND' rows.
+    if (parentRow.children.length == 3) {
+        // Retrieve the target row's delete button.
+        var deleteUnitButton = btn.parentElement.parentElement.firstElementChild.children[1];
+
+        // Call the delete-prerequisite-unit function with it.
+        deletePrereqUnit(deleteUnitButton);
+    }
+    else {
+        // Case 2: Module deleted from the end.
+        // Action: after deletion of module unit,
+        // hide the new last 'OR' column.
+        if (parentRow.lastElementChild.previousElementSibling == parentTd) {
+            // Hide the new last 'OR' column.
+            parentTd.previousElementSibling.style.display = "none";
+
+            // Delete the module unit with its accompanying 'OR' column.
+            parentRow.removeChild(parentTd);
+            parentRow.removeChild(nextTd);
+        }
+        else {
+            // Delete the module unit with its accompanying 'OR' column.
+            parentRow.removeChild(parentTd);
+            parentRow.removeChild(nextTd);
+        }
+    }
+}
+
+function addPrereqUnit() {
+    // Creates a table row <tr>, which represents the 'AND'
+    // module prerequisite unit.
+    var prereqUnit = unitTemplate.cloneNode(true);
+
+    // Also create the row containing the 'AND'.
+    var prereqUnitConnector = document.createElement("tr");
+    prereqUnitConnector.innerHTML = addUnitConnector;
+    prereqUnitConnector.children[0].style.display = "none";
+
+    document.getElementsByTagName("tbody")[0].appendChild(prereqUnit);
+    document.getElementsByTagName("tbody")[0].appendChild(prereqUnitConnector);
+
+    // Reveal the 'AND' row (when there is more than 1 AND unit).
+    if (prereqUnit.previousElementSibling != null) {
+        prereqUnit.previousElementSibling.children[0].style.display = ""
+    }
+
+    // Creates a table column <td>, which represents the 'OR'
+    // module prerequisite unit.
+    var moduleUnit = addModuleTemplate.cloneNode(true);
+
+    // Creates another table column containing the word 'or',
+    // as a 'connector' to the 'OR' unit.
+    var moduleConnectorUnit = document.createElement("td");
+    moduleConnectorUnit.innerHTML = addModuleTemplateConnector;
+
+    // Hide the last 'OR'.
+    moduleConnectorUnit.style.display = "none"
+    
+    // Add the module unit to the row.
+    prereqUnit.appendChild(moduleUnit);
+    prereqUnit.appendChild(moduleConnectorUnit);
+
+    // Re-initialize all tooltips to ensure that even newly added
+    // HTML elements receive the tooltip event listener.
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+function deletePrereqUnit(btn) {
+    var parentTr = btn.parentElement.parentElement;
+    var tableBody = parentTr.parentElement;
+
+    // Case 1: Only 1 'AND' unit present.
+    // Action: Delete whole unit.
+    if (tableBody.children.length == 2) {
+        tableBody.removeChild(parentTr.nextElementSibling);
+        tableBody.removeChild(parentTr);
+    }
+    else {
+        // Case 2: Last prerequisite unit is deleted.
+        // Action: delete the last prerequisite unit,
+        // and hide the 'AND' row.
+        if (tableBody.lastElementChild.previousElementSibling == parentTr) {
+            parentTr.previousElementSibling.children[0].style.display = "none";
+            tableBody.removeChild(parentTr.nextElementSibling);
+            tableBody.removeChild(parentTr);
+        }
+        else {
+            tableBody.removeChild(parentTr.nextElementSibling);
+            tableBody.removeChild(parentTr);
+        }
+    }
+}
+
+function saveChanges() {
+    window.alert("Your changes have been saved.");
+    // Submit data to backend for updating the prerequisites for module.
+    modulePrerequisites = convertToData();
+}
+
+function convertToData() {
+    var prerequisites = [];
+    // For iterating through units comprising of
+    // [[Module-columns],[AND-column]]
+    var rows = document.getElementsByTagName("tbody")[0].children;
+
+    for (i = 0; i < rows.length; i+=2) {
+        // Reads the prerequisite modules for each unit
+        var modulesInUnit = [];
+        var columns = rows[i].children;
+
+        for (j = 1; j < columns.length; j+=2) {
+            // Reads off the module code in the input fields for each unit.
+            var moduleCode = columns[j].children[0].value;
+
+            if (moduleCode != "") {
+                modulesInUnit.push(columns[j].children[0].value);
+            }
+        }
+
+        if (modulesInUnit.length != 0) {
+            prerequisites.push(modulesInUnit);
+        }
+    }
+
+    console.log(prerequisites);
+    return prerequisites;
 }
 
 
