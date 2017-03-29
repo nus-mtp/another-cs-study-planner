@@ -12,6 +12,7 @@ $var hierarchy = [home, editAll]
     var selectedModuleCount = 0;
 
     $$(document).ready(function(){
+        //Load the list of modules into the 'Select module to edit' input
         var moduleSource = [];
         var moduleCodeAndName = "";
         $for subplan in fullMountingPlan:
@@ -22,18 +23,29 @@ $var hierarchy = [home, editAll]
             source: moduleSource,
             updater: function(selectedModule) {
                 var selectedModuleCode = selectedModule.split(" ")[0];
-                selectedModuleCount++;
-                showModuleInTable(selectedModuleCode);
+                var isModuleEdited = selectedModuleCode + "_isEdited";
+                showModuleInTable(selectedModuleCode, isModuleEdited);
             }
         })
     });
 
-    function showModuleInTable(selectedModuleCode) {
+    //Show a module in the edit table
+    function showModuleInTable(selectedModuleCode, isModuleEdited) {
+        selectedModuleCount++;
         var moduleRow = selectedModuleCode + "_row";
         document.getElementById(moduleRow).style.display = "table-row";
+        document.getElementById(isModuleEdited).value = true;
         if (selectedModuleCount > 0) {
             document.getElementById("edit-all-table-no-modules").style.display = "none";
-        } else {
+        }
+    }
+
+    //Remove a module from the edit table
+    function removeModuleFromTable(moduleRow, isModuleEdited) {
+        selectedModuleCount--;
+        document.getElementById(moduleRow).style.display = "none";
+        document.getElementById(isModuleEdited).value = false;
+        if (selectedModuleCount <= 0) {
             document.getElementById("edit-all-table-no-modules").style.display = "table-row";
         }
     }
@@ -80,6 +92,34 @@ $var hierarchy = [home, editAll]
     function removeRedHighlight(id) {
         document.getElementById(id).parentElement.style.backgroundColor = "white";
     }
+
+    //Reset the mounting and quota of a module to when page first load
+    function resetMountingAndQuota(sem1Mounting, sem2Mounting, sem1Quota, sem2Quota,
+                                   sem1MountingOption, sem2MountingOption,
+                                   sem1QuotaInput, sem2QuotaInput) {
+        if (sem1Quota == '-' || sem1Quota == '?') sem1Quota = '';
+        document.getElementById(sem1QuotaInput).value = sem1Quota;
+        removeRedHighlight(sem1QuotaInput);
+        if (sem2Quota == '-' || sem2Quota == '?') sem2Quota = '';
+        document.getElementById(sem2QuotaInput).value = sem2Quota;
+        removeRedHighlight(sem2QuotaInput);
+
+        sem1Mounting = (sem1Mounting == 1);
+        var sem1MountingNew = document.getElementById(sem1MountingOption).checked;
+        if (sem1MountingNew != sem1Mounting) {
+            toggleQuotaState(sem1QuotaInput);
+        }
+        document.getElementById(sem1MountingOption).checked = sem1Mounting;
+        removeRedHighlight(sem1MountingOption);
+
+        sem2Mounting = (sem2Mounting == 1);
+        var sem2MountingNew = document.getElementById(sem2MountingOption).checked;
+        if (sem2MountingNew != sem2Mounting) {
+            toggleQuotaState(sem2QuotaInput);
+        }
+        document.getElementById(sem2MountingOption).checked = sem2Mounting;
+        removeRedHighlight(sem2MountingOption);
+    }
 </script>
 
 <div class="container-fluid">
@@ -99,13 +139,14 @@ $var hierarchy = [home, editAll]
                         <tr>
                             <th>Code</th>
                             <th>Name</th>
-                            <th data-sortable="false">Mounted In Sem 1</th>
-                            <th data-sortable="false">Sem 1 Quota</th>
-                            <th data-sortable="false">Mounted In Sem 2</th>
-                            <th data-sortable="false">Sem 2 Quota</th>
+                            <th>Mounted In Sem 1</th>
+                            <th>Sem 1 Quota</th>
+                            <th>Mounted In Sem 2</th>
+                            <th>Sem 2 Quota</th>
+                            <th>Remove</th>
                         </tr>
                         <tr id="edit-all-table-no-modules">
-                            <td colspan=6>No modules selected</td>
+                            <td colspan=7>No modules selected</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,6 +163,7 @@ $var hierarchy = [home, editAll]
                             $ sem2MountingOption = moduleCode + "_Sem2Mounting"
                             $ sem1QuotaInput = moduleCode + "_Sem1Quota"
                             $ sem2QuotaInput = moduleCode + "_Sem2Quota"
+                            $ isModuleEdited = moduleCode + "_isEdited"
 
                             <tr id="$moduleRow">
                                 <td class="text-center">
@@ -184,12 +226,19 @@ $var hierarchy = [home, editAll]
                                     <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
                                     id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
                                 </td>
+                            $if True:
+                                <td>
+                                    <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom" title="Remove module from this table" onclick="resetMountingAndQuota('$sem1Mounting', '$sem2Mounting', '$sem1Quota', '$sem2Quota', '$sem1MountingOption', '$sem2MountingOption', '$sem1QuotaInput', '$sem2QuotaInput'); removeModuleFromTable('$moduleRow', '$isModuleEdited');">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                                <input type="hidden" id="$isModuleEdited" name="$isModuleEdited" value=false>      
                             </tr>
                         </form>
                     </tbody>
                 </table>
                 <div class="col-md-6 col-md-offset-3 text-center">
-                    <button id="edit-all-button" class="btn btn-primary" >Submit</button>
+                    <button type="submit" id="edit-all-button" class="btn btn-primary" >Submit</button>
                 </div>
             </form>
             <br>
