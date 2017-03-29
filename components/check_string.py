@@ -13,7 +13,7 @@ def check_code(code_str):
         Return:
         bool: if the code string matches the correct pattern
     '''
-    pattern = re.compile('^[A-Z]{2,3}[0-9]{4}[A-Z]{0,2}$')
+    pattern = re.compile('^[A-Za-z]{2,3}[0-9]{4}[A-Za-z]{0,2}$')
     return bool(pattern.match(code_str))
 
 def check_name(name_str):
