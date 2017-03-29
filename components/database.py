@@ -22,6 +22,7 @@ DB_CURSOR = CONNECTION.cursor()
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
+LENGTH_EMPTY = 0
 
 
 ######################################################################################
@@ -1031,7 +1032,7 @@ def get_preclusion(module_code):
 # Functions that add/modify/delete prerequisite or preclusion information
 ######################################################################################
 
-def add_prerequisite(module_code, prereq_code, index):
+def add_prerequisite(module_code, prereq_code, index, to_commit=True):
     '''
         Insert a prerequisite into the prerequisite table.
         Returns true if successful, false if duplicate primary key detected
@@ -1039,7 +1040,8 @@ def add_prerequisite(module_code, prereq_code, index):
     sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
     try:
         DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
-        CONNECTION.commit()
+        if to_commit:
+            CONNECTION.commit()
     except psycopg2.IntegrityError:        # duplicate key error
         CONNECTION.rollback()
         return False
@@ -1062,7 +1064,7 @@ def delete_prerequisite(module_code, prereq_code):
     return True
 
 
-def delete_all_prerequisite(module_code):
+def delete_all_prerequisite(module_code, to_commit=True):
     '''
         Deletes all prerequisites of the given module_code from the
         prerequisite table.
@@ -1072,10 +1074,49 @@ def delete_all_prerequisite(module_code):
     sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s "
     try:
         DB_CURSOR.execute(sql_command, (module_code,))
-        CONNECTION.commit()
+        if to_commit:
+            CONNECTION.commit()
     except psycopg2.IntegrityError:
         CONNECTION.rollback()
         return False
+    return True
+
+
+def edit_prerequisite(module_code, prereq_units):
+    '''
+        Changes the prerequisites of given module_code into a new
+        set of prerequisites found in prereq_units.
+        Returns true if successful, false otherwise.
+    '''
+    outcome = delete_all_prerequisite(module_code, False)
+    if not outcome:
+        CONNECTION.rollback()
+        return False
+
+    # Repopulate the prereqs
+    if len(prereq_units) != LENGTH_EMPTY:
+        index = INDEX_FIRST_ELEM
+        module_list = {}
+
+        for unit in prereq_units:
+            for module in unit:
+                if module_list.has_key(module):
+                    CONNECTION.rollback()
+                    return False
+                else:
+                    outcome = add_prerequisite(module_code, module, index, False)
+                    if not outcome:
+                        CONNECTION.rollback()
+                        return False
+                    module_list[module] = True
+            index += 1
+
+        try:
+            CONNECTION.commit()
+        except psycopg2.IntegrityError:
+            CONNECTION.rollback()
+            return False
+
     return True
 
 

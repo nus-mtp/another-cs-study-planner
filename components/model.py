@@ -380,6 +380,10 @@ def delete_all_prerequisite(module_code):
     return database.delete_all_prerequisite(module_code)
 
 
+def edit_prerequisite(module_code, prereq_units):
+    return database.edit_prerequisite(module_code, prereq_units)
+
+
 def add_preclusion(module_code, preclude_code):
     return database.add_preclusion(module_code, preclude_code)
 
