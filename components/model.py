@@ -340,6 +340,10 @@ def get_prerequisite_as_string(module_code):
     return helper.get_prerequisite_as_string(module_code)
 
 
+def get_prerequisite_units(module_code):
+    return helper.get_prerequisite_units(module_code)
+
+
 def get_preclusion(module_code):
     return database.get_preclusion(module_code)
 
