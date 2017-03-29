@@ -27,31 +27,3 @@ class Modules(object):
         else:
             module_infos = model.get_all_modules()
             return RENDER.moduleListing(module_infos)
-
-
-    def POST(self):
-        '''
-            This function might be called from button links from other pages.
-        '''
-
-        # Detects if this function is called from button links from another page.
-        referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
-        parts = referrer_page.split("/")
-        referrer_page_shortform = "/" + parts[len(parts) - 1]
-        # If referred from another page, direct to this page straight away.
-        if referrer_page_shortform != self.URL_THIS_PAGE:
-            raise web.seeother(self.URL_THIS_PAGE)
-
-        try:
-            data = web.input()
-            action = data.action  # if action is not 'delete', will trigger AttributeError
-            module_code = data.code
-
-            if not (check_string.check_code(module_code)):
-                return Outcome().POST("invalid_input")
-            
-            outcome = model.delete_module(module_code)
-            return Outcome().POST("delete_module", outcome, module_code)
-
-        except AttributeError:
-            raise web.seeother(self.URL_THIS_PAGE)

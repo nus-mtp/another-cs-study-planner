@@ -30,6 +30,10 @@ class TestCode(object):
     TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
     TABLE_HEADER_ACTIONS = '<th data-sortable="false">Actions</th>'
 
+
+
+    ERR_MSG = 'Invalid input for module name/code/MCs/description'
+
     global_var = None
 
     def __init__(self):
