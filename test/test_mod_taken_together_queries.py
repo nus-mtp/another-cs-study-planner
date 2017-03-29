@@ -26,31 +26,37 @@ class TestCode(object):
             Tests querying the list of modules taken together
             with specified module in the same semester
         '''
+        # Add some dummy students and modules
+        model.add_student('dummyYr1A', 1)
+        model.add_module('AAA1111', 'Dummy 1', 'Description', 4, 'Active')
+        model.add_module('AAA1112', 'Dummy 2', 'Description', 4, 'Active')
+        model.add_student_plan('dummyYr1A', True, 'AAA1111', 'AY 17/18 Sem 2')
+        model.add_student_plan('dummyYr1A', True, 'AAA1112', 'AY 17/18 Sem 2')
+
+        list_of_mod_taken_together = \
+            model.get_mod_taken_together_with('AAA1111')
+
+        # Clean up database
+        model.delete_all_plans_of_student('dummyYr1A')
+        model.delete_module('AAA1111')
+        model.delete_module('AAA1112')
+        model.delete_student('dummyYr1A')
+
+        assert ('AAA1111', 'Dummy 1', 'AAA1112',
+                'Dummy 2', 'AY 17/18 Sem 2', 1) in list_of_mod_taken_together
+
+
+    def test_query_module_taken_together_sorted(self):
+        '''
+            Tests querying the list of modules taken together
+            with specified module in the same semester
+            returns a list sorted by number of students
+            in non-ascending order.
+        '''
 
         list_of_mod_taken_together = \
             model.get_mod_taken_together_with('CS1010')
 
-        required_list = [('CS1010', 'Programming Methodology', 'CS1231',
-                          'Discrete Structures', 'AY 16/17 Sem 1', 3),
-                         ('CS1010', 'Programming Methodology', 'CS2105',
-                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
-                         ('CS1010', 'Programming Methodology', 'CS2106',
-                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1)]
-
-        assert_equal(len(list_of_mod_taken_together), len(required_list))
-        assert_equal(list_of_mod_taken_together, required_list)
-        assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
-
-        list_of_mod_taken_together = \
-            model.get_mod_taken_together_with('CS2105')
-
-        required_list = [('CS2105', 'Introduction to Computer Networks', 'CS1231',
-                          'Discrete Structures', 'AY 16/17 Sem 1', 2),
-                         ('CS2105', 'Introduction to Computer Networks', 'CS1010',
-                          'Programming Methodology', 'AY 16/17 Sem 1', 2)]
-
-        assert_equal(len(list_of_mod_taken_together), len(required_list))
-        assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
 
@@ -60,20 +66,24 @@ class TestCode(object):
             with specified module in the specified semester
         '''
 
-        list_of_mod_taken_together = \
-            model.get_mod_taken_together_with_mod_and_aysem('CS2105', 'AY 16/17 Sem 1')
+        # Add some dummy students and modules
+        model.add_student('dummyYr1A', 1)
+        model.add_module('AAA1111', 'Dummy 1', 'Description', 4, 'Active')
+        model.add_module('AAA1112', 'Dummy 2', 'Description', 4, 'Active')
+        model.add_student_plan('dummyYr1A', True, 'AAA1111', 'AY 17/18 Sem 2')
+        model.add_student_plan('dummyYr1A', True, 'AAA1112', 'AY 17/18 Sem 2')
 
-        required_list = [('CS2105', 'Introduction to Computer Networks', 'CS1231',
-                          'Discrete Structures', 2),
-                         ('CS2105', 'Introduction to Computer Networks', 'CS1010',
-                          'Programming Methodology', 2)]
+        list_of_mod_taken_together = \
+            model.get_mod_taken_together_with_mod_and_aysem('AAA1111', 'AY 17/18 Sem 2')
+
+        required_list = [('AAA1111', 'Dummy 1', 'AAA1112', 'Dummy 2', 1)]
 
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
         list_of_mod_taken_together = \
-            model.get_mod_taken_together_with_mod_and_aysem('CS2105', 'AY 17/18 Sem 1')
+            model.get_mod_taken_together_with_mod_and_aysem('AAA1111', 'AY 17/18 Sem 1')
 
         required_list = []
 
@@ -81,32 +91,44 @@ class TestCode(object):
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
+        # Clean up database
+        model.delete_all_plans_of_student('dummyYr1A')
+        model.delete_module('AAA1111')
+        model.delete_module('AAA1112')
+        model.delete_student('dummyYr1A')
+
 
     def test_query_module_taken_together_entire_list(self):
         '''
             Tests querying the list of modules taken together
             in the same semester
         '''
+        # Add some dummy students and modules
+        model.add_student('dummyYr1A', 1)
+        model.add_module('AAA1111', 'Dummy 1', 'Description', 4, 'Active')
+        model.add_module('AAA1112', 'Dummy 2', 'Description', 4, 'Active')
+        model.add_module('AAA1113', 'Dummy 3', 'Description', 4, 'Active')
+        model.add_student_plan('dummyYr1A', True, 'AAA1111', 'AY 17/18 Sem 1')
+        model.add_student_plan('dummyYr1A', True, 'AAA1112', 'AY 17/18 Sem 1')
+        model.add_student_plan('dummyYr1A', True, 'AAA1112', 'AY 17/18 Sem 2')
+        model.add_student_plan('dummyYr1A', True, 'AAA1113', 'AY 17/18 Sem 2')
 
         list_of_mod_taken_together = \
             model.get_all_mods_taken_together()
 
-        required_list = [('CS1010', 'Programming Methodology', 'CS1231',
-                          'Discrete Structures', 'AY 16/17 Sem 1', 3),
-                         ('CS1010', 'Programming Methodology', 'CS2105',
-                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
-                         ('CS1010', 'Programming Methodology', 'CS2106',
-                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1),
-                         ('BT5110', 'Data Management and Warehousing', 'CS4246',
-                          'AI Planning and Decision Making', 'AY 16/17 Sem 1', 1),
-                         ('CS1231', 'Discrete Structures', 'CS2105',
-                          'Introduction to Computer Networks', 'AY 16/17 Sem 1', 2),
-                         ('CS1231', 'Discrete Structures', 'CS2106',
-                          'Introduction to Operating Systems', 'AY 16/17 Sem 1', 1)]
-
-        assert_equal(len(list_of_mod_taken_together), len(required_list))
-        assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
+
+        assert ('AAA1111', 'Dummy 1', 'AAA1112',
+                'Dummy 2', 'AY 17/18 Sem 1', 1) in list_of_mod_taken_together
+        assert ('AAA1112', 'Dummy 2', 'AAA1113',
+                'Dummy 3', 'AY 17/18 Sem 2', 1) in list_of_mod_taken_together
+
+        # Clean up database
+        model.delete_all_plans_of_student('dummyYr1A')
+        model.delete_module('AAA1111')
+        model.delete_module('AAA1112')
+        model.delete_module('AAA1113')
+        model.delete_student('dummyYr1A')
 
 
     def is_count_in_non_ascending_order(self, list_of_mods):
