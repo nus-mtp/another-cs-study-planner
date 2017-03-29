@@ -6,7 +6,7 @@
 
 from app import RENDER
 import web
-from components import model
+from components import model, check_string
 from components.handlers.outcome import Outcome
 from components.handlers.module_view_in_ay_sem import IndividualModule
 
@@ -45,6 +45,12 @@ class EditModuleInfo(object):
             module_name = input_data.name
             module_desc = input_data.desc
             module_mc = input_data.mc
+
+            #validate inputs
+
+            if not(check_string.check_code(module_code) and check_string.check_name(module_name)
+                   and check_string.check_mcs(module_mc)):
+                return OutCome().POST("invalid_input")
         except AttributeError:
             return Outcome().POST("edit_module", False, module_code)
 
