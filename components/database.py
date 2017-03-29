@@ -349,6 +349,15 @@ def delete_fixed_mounting(code, ay_sem):
     CONNECTION.commit()
 
 
+def delete_all_fixed_mountings(code):
+    '''
+        Delete all fixed mountings of a module
+    '''
+    sql_command = "DELETE FROM modulemounted WHERE moduleCode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    CONNECTION.commit()
+
+
 def add_tenta_mounting(code, ay_sem, quota):
     '''
         Insert a new mounting into tentative mounting table
@@ -390,6 +399,15 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
+
+
+def delete_all_tenta_mountings(code):
+    '''
+        Delete all tentative mountings of a module
+    '''
+    sql_command = "DELETE FROM moduleMountTentative WHERE moduleCode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    CONNECTION.commit()
 
 
 ######################################################################################

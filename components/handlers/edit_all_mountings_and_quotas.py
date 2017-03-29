@@ -60,14 +60,17 @@ class EditAll(object):
         return RENDER.editAll(selected_ay, full_mounting_plan)
 
 
-    def POST(self):
+    def POST(self, *test_data):
         '''
             Handles the editing operations for all mountings and quotas
         '''
+        if test_data:
+            input_data = test_data[0]
+        else:
+            input_data = web.input()
         all_modules = model.get_all_modules()
-        input_data = web.input()
         target_ay = model.get_next_ay(model.get_current_ay())
-        
+
         for module in all_modules:
             module_code = module[0]
             try:
@@ -132,4 +135,5 @@ class EditAll(object):
                 if outcome is False:
                     return Outcome().POST("edit_all_mountings_and_quotas", False, None)
 
-        return Outcome().POST("edit_all_mountings_and_quotas", True, None)
+        if not test_data:
+            return Outcome().POST("edit_all_mountings_and_quotas", True, None)
