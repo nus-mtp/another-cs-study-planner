@@ -33,8 +33,11 @@ class TestCode(object):
         self.fixed_mounting_CRD_tested = False
         self.tenta_mounting_CRD_tested = False
         self.prereq_CRD_tested = False
+        self.prereq_delete_all_tested = False
         self.test_prereq_code = "BB1111"
         self.test_prereq_index = 0
+        self.test_prereq2_code = "BB1112"
+        self.test_prereq2_index = 1
         self.preclude_CRD_tested = False
         self.test_preclude_code = "CC1111"
         self.starred_CRD_tested = False
@@ -63,6 +66,8 @@ class TestCode(object):
 
         self.test_prereq_CRD()
         self.prereq_CRD_tested = True
+        self.test_prereq_delete_all()
+        self.prereq_delete_all_tested = True
         self.test_preclude_CRD()
         self.preclude_CRD_tested = True
         self.test_starred_CRD()
@@ -305,6 +310,31 @@ class TestCode(object):
 
             model.delete_prerequisite(self.test_module_code, self.test_prereq_code)
             model.delete_module(self.test_prereq_code)
+            prereq_info = model.get_prerequisite(self.test_module_code)
+            assert_true(len(prereq_info) == 0)
+            return
+
+
+    def test_prereq_delete_all(self):
+        '''
+            Tests deleting all prerequisites of specific module.
+        '''
+        if not self.prereq_delete_all_tested:
+            model.add_module(self.test_prereq_code, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
+            model.add_module(self.test_prereq2_code, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
+
+            model.add_prerequisite(self.test_module_code, self.test_prereq_code,
+                                   self.test_prereq_index)
+            model.add_prerequisite(self.test_module_code, self.test_prereq2_code,
+                                   self.test_prereq2_index)
+
+            outcome = model.delete_all_prerequisite(self.test_module_code)
+            assert_true(outcome)
+
+            model.delete_module(self.test_prereq_code)
+            model.delete_module(self.test_prereq2_code)
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
             return
