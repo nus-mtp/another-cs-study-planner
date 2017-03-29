@@ -32,8 +32,8 @@ class AddModule(object):
         module_mc = data.mc
 
         if not (check_string.check_code(module_code) and check_string.check_name(module_name)
-                and check_string.check_mc(str(module_mc))):
-            return Outcome().POST("add_module_invalid_input")
+                and check_string.check_mcs(str(module_mc))):
+            return Outcome().POST("invalid_input")
 
         outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
         return Outcome().POST("add_module", outcome, module_code)
