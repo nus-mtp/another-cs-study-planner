@@ -48,7 +48,7 @@ class EditModuleInfo(object):
 
             #validate inputs
 
-            if not(check_string.check_name(module_name)):
+            if not check_string.check_name(module_name):
                 return check_string.outcome_invalid()
         except AttributeError:
             return Outcome().POST("edit_module", False, module_code)

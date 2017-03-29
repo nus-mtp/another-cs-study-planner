@@ -151,11 +151,14 @@ class TestCode(object):
     def test_module_edit_submit_invalid_name(self):
         '''
             Tests whether submitting the edit-module form with invalid
-            inputs will fail.
+            name will fail.
         '''
         root = self.test_app.get(self.URL_MODULE_EDIT)
         edit_module_form = root.forms__get()["edit-module-form"]
         edit_module_form.__setitem__("name", "@@")
+        edit_module_form.__setitem__("code", "BT5110")
+        edit_module_form.__setitem__("mc", 1)
+        edit_module_form.__setitem__("desc", "some desc")
         response = edit_module_form.submit()
 
         assert_equal(response.status, 200)
