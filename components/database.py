@@ -1062,6 +1062,23 @@ def delete_prerequisite(module_code, prereq_code):
     return True
 
 
+def delete_all_prerequisite(module_code):
+    '''
+        Deletes all prerequisites of the given module_code from the
+        prerequisite table.
+        Returns true if this operation is successful,
+        returns false otherwise.
+    '''
+    sql_command = "DELETE FROM prerequisite WHERE moduleCode = %s "
+    try:
+        DB_CURSOR.execute(sql_command, (module_code,))
+        CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 def add_preclusion(module_code, preclude_code):
     '''
         Insert a preclusion into the precludes table.

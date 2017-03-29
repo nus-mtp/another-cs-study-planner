@@ -376,6 +376,10 @@ def delete_prerequisite(module_code, prereq_code):
     return database.delete_prerequisite(module_code, prereq_code)
 
 
+def delete_all_prerequisite(module_code):
+    return database.delete_all_prerequisite(module_code)
+
+
 def add_preclusion(module_code, preclude_code):
     return database.add_preclusion(module_code, preclude_code)
 
