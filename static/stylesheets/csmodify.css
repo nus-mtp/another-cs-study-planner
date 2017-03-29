@@ -79,6 +79,7 @@ span[id*='id-display'] {
     line-height: normal;
     padding: 0;
 }
+
 .navbar-btn{
     height: 50px;
 }
@@ -169,6 +170,7 @@ td > a {
 #notfound-error-msg {
     color: red;
 }
+
 
 /*************************************************************************/
 /* ================== STYLING FOR MODULE-LISTING PAGE ================== */
@@ -289,6 +291,7 @@ td > a {
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
 /*************************************************************************/
+
 .detail-change-text {
     background-color: #f2f2f2;
 }
@@ -301,6 +304,7 @@ tr[id*='modified-details-child-row'] {
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
 /*******************************************************************************************/
+
 #enrollment-student-year-header {
     margin-bottom: 20px;
 }
@@ -350,6 +354,7 @@ tr[id*='modified-details-child-row'] {
 .enrollment-chart-button-container {
     margin-right: 5px;
 }
+
 
 /********************************************************************************/
 /* ==================== STYLING FOR MODULE-VIEW-AY-SEM PAGE =================== */
@@ -415,6 +420,31 @@ tr[id*='modified-details-child-row'] {
 #module-view-stats-footer {
     margin-bottom: 30px;
 }
+
+
+/********************************************************************************/
+/* =============== STYLING FOR EDIT-MODULE-PREREQUISITE INTERFACE ============= */
+/********************************************************************************/
+
+.table#edit-prereq-interface > tbody > tr > td {
+    border: none;
+}
+
+.table#edit-prereq-interface > tbody > tr > td.edit-options {
+    min-width: 150px;
+    width: 150px;
+}
+
+.table#edit-prereq-interface > tbody > tr.unit {
+    background-color: #9bc2e4;
+}
+
+.glyphicon {
+    position: inherit;
+    vertical-align: middle;
+}
+
+
 /********************************************************************************/
 /* ==================== General =================== */
 /********************************************************************************/
@@ -423,7 +453,6 @@ tr[id*='modified-details-child-row'] {
     /* If max-width does not work, try using width instead */
     width: 350px; 
 }
-
 
 .dropdown-divider {
     height: 1px;
