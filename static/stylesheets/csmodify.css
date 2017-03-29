@@ -1,9 +1,5 @@
 /* ========== GENERAL CSS RULES ========== */
 
-body {
-	overflow-x: hidden;
-}
-
 tr > th {
 	text-align: center;
 }
@@ -442,6 +438,10 @@ tr[id*='modified-details-child-row'] {
 .glyphicon {
     position: inherit;
     vertical-align: middle;
+}
+
+#back-to-top-btn {
+    position: relative;
 }
 
 
