@@ -13,11 +13,6 @@ $var hierarchy = [home, editAll]
 
     $$(document).ready(function(){
         //Load the list of modules into the 'Select module to edit' input
-        var moduleSource = [];
-        var moduleCodeAndName = "";
-        $for subplan in fullMountingPlan:
-            moduleCodeAndName = "$subplan[0]"+" - "+"$subplan[1]"
-            moduleSource.push(moduleCodeAndName);
         $$("input.typeahead").typeahead({
             minLength: 1,
             source: moduleSource,

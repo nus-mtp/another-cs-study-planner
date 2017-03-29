@@ -18,6 +18,25 @@ $def with (page)
 	</head>
 
 	<body>
+		<script type="text/javascript">
+			// Load list of module codes and names into the module search autocomplete
+			var moduleSource = [];
+		    $$(document).ready(function(){
+		        var moduleCodeAndName = "";
+		        $for module in all_modules:
+		            moduleCodeAndName = "$module[0]"+" - "+"$module[1]"
+		            moduleSource.push(moduleCodeAndName);
+		        $$("input.findModule").typeahead({
+		            minLength: 1,
+		            source: moduleSource,
+		            updater: function(selectedModule) {
+		                var selectedModuleCode = selectedModule.split(" ")[0];
+		                window.location = '/viewModule?code='+selectedModuleCode;
+		            }
+		        })
+		    });
+		</script>
+
 		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
 			$:page
 
@@ -27,7 +46,7 @@ $def with (page)
 
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
-				    <form class="navbar-form navbar-left">
+				    <form class="navbar-form navbar-left" on>
 				    	<a class="btn btn-lg btn-primary" href="/">
 				    		<span class="glyphicon glyphicon-home"></span>
 				    	</a>
