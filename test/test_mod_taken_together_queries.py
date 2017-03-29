@@ -80,6 +80,19 @@ class TestCode(object):
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
 
+        # Clean up database
+        model.delete_all_plans_of_student('dummyYr1A')
+        model.delete_module('AAA1111')
+        model.delete_module('AAA1112')
+        model.delete_student('dummyYr1A')
+
+
+    def test_empty_query_module_taken_together_specified_mod_specified_aysem(self):
+        '''
+            Tests querying the list of modules taken together
+            with specified module in the specified semester
+            for non-existent module
+        '''
         list_of_mod_taken_together = \
             model.get_mod_taken_together_with_mod_and_aysem('AAA1111', 'AY 17/18 Sem 1')
 
@@ -88,12 +101,6 @@ class TestCode(object):
         assert_equal(len(list_of_mod_taken_together), len(required_list))
         assert_equal(sorted(list_of_mod_taken_together), sorted(required_list))
         assert_true(self.is_count_in_non_ascending_order(list_of_mod_taken_together))
-
-        # Clean up database
-        model.delete_all_plans_of_student('dummyYr1A')
-        model.delete_module('AAA1111')
-        model.delete_module('AAA1112')
-        model.delete_student('dummyYr1A')
 
 
     def test_query_module_taken_together_entire_list(self):

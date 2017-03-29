@@ -26,8 +26,7 @@ class TestCode(object):
             Tests querying the list of modules taken before internship,
             in AY/Sem which no one is doing internship in.
         '''
-        list_of_modules_before_internship = model.get_mod_before_intern('AY 16/17 Sem 1')
-        # List is empty as we do not have data before 16/17 Sem 1
+        list_of_modules_before_internship = model.get_mod_before_intern('AY 15/16 Sem 2')
         required_list = []
 
         assert_equal(len(list_of_modules_before_internship), len(required_list))
