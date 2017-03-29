@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
     This module creates an application instance with a configured URL router.
 '''
@@ -25,6 +27,7 @@ URLS = (
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
     '/deleteModule', 'components.handlers.delete_module.DeleteMod',
     '/editModule', 'components.handlers.module_edit.EditModuleInfo',
+    '/editModulePrerequisites', 'components.handlers.module_edit_prerequisites.EditModulePrerequisites',
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
@@ -78,6 +81,7 @@ def notfound():
         message="The page you specified with the URL does not exist.")))
 
 APP.notfound = notfound
+
 
 if __name__ == '__main__':
     APP.run()
