@@ -1,11 +1,9 @@
 '''
-    test_edit_all_mountings_and_quotas_backend.py test the backend functions of Edit All Mountings and Quotas
+    test_edit_all_mountings_and_quotas_backend.py test the backend functions of
+    Edit All Mountings and Quotas
 '''
-from paste.fixture import TestApp
 from nose.tools import assert_equal
-from app import APP
 from components import model
-from components import session
 from components.handlers.edit_all_mountings_and_quotas import EditAll
 
 
@@ -27,23 +25,34 @@ class TestCode(object):
         self.DUMMY_MODULE_CODE_1 = 'BB1001'
         self.DUMMY_MODULE_CODE_2 = 'BB1002'
         self.DUMMY_MODULE_CODE_3 = 'BB1003'
-        model.add_module(self.DUMMY_MODULE_CODE_1, 'Dummy Module 1', "Dummy Module", 1, 'Active')
-        model.add_module(self.DUMMY_MODULE_CODE_2, 'Dummy Module 2', "Dummy Module", 2, 'Active')
-        model.add_module(self.DUMMY_MODULE_CODE_3, 'Dummy Module 3', "Dummy Module", 3, 'Active')
+        model.add_module(self.DUMMY_MODULE_CODE_1, 'Dummy Module 1',
+                         "Dummy Module", 1, 'Active')
+        model.add_module(self.DUMMY_MODULE_CODE_2, 'Dummy Module 2',
+                         "Dummy Module", 2, 'Active')
+        model.add_module(self.DUMMY_MODULE_CODE_3, 'Dummy Module 3',
+                         "Dummy Module", 3, 'Active')
 
         # Dummy mountings
         self.DUMMY_QUOTA_0 = None
         self.DUMMY_QUOTA_1 = 10
         self.DUMMY_QUOTA_2 = 20
         self.DUMMY_QUOTA_3 = 30
-        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_1, self.current_ay+' Sem 1', self.DUMMY_QUOTA_1)
-        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_1, self.next_ay+' Sem 1', self.DUMMY_QUOTA_1)
-        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_2, self.current_ay+' Sem 2', self.DUMMY_QUOTA_2)
-        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_2, self.next_ay+' Sem 2', self.DUMMY_QUOTA_2)
-        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_3, self.current_ay+' Sem 1', self.DUMMY_QUOTA_3)
-        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_3, self.next_ay+' Sem 1', self.DUMMY_QUOTA_3)
-        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_3, self.current_ay+' Sem 2', self.DUMMY_QUOTA_0)
-        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_3, self.next_ay+' Sem 2', self.DUMMY_QUOTA_0)
+        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_1,
+                                 self.current_ay+' Sem 1', self.DUMMY_QUOTA_1)
+        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_1,
+                                 self.next_ay+' Sem 1', self.DUMMY_QUOTA_1)
+        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_2,
+                                 self.current_ay+' Sem 2', self.DUMMY_QUOTA_2)
+        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_2,
+                                 self.next_ay+' Sem 2', self.DUMMY_QUOTA_2)
+        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_3,
+                                 self.current_ay+' Sem 1', self.DUMMY_QUOTA_3)
+        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_3,
+                                 self.next_ay+' Sem 1', self.DUMMY_QUOTA_3)
+        model.add_fixed_mounting(self.DUMMY_MODULE_CODE_3,
+                                 self.current_ay+' Sem 2', self.DUMMY_QUOTA_0)
+        model.add_tenta_mounting(self.DUMMY_MODULE_CODE_3,
+                                 self.next_ay+' Sem 2', self.DUMMY_QUOTA_0)
 
 
     def tearDown(self):
@@ -78,9 +87,9 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mounting)
         assert_equal(quota, test_quota)
@@ -99,9 +108,9 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mounting)
         assert_equal(quota, test_quota)
@@ -129,16 +138,16 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mounting_1)
         assert_equal(quota, test_quota_1)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mounting_2)
         assert_equal(quota, test_quota_2)
@@ -171,16 +180,16 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_1_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_1_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_1_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_1_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mod_1_mounting)
         assert_equal(quota, test_mod_1_quota)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mod_2_mounting)
         assert_equal(quota, test_mod_2_quota)
@@ -205,9 +214,9 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mounting)
         assert_equal(quota, test_quota)
@@ -226,9 +235,9 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mounting)
         assert_equal(quota, test_quota)
@@ -256,21 +265,22 @@ class TestCode(object):
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mounting_1)
         assert_equal(quota, test_quota_1)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_module_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_module_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mounting_2)
         assert_equal(quota, test_quota_2)
 
-        model.add_tenta_mounting(test_module_code, self.next_ay+" Sem 1", self.DUMMY_QUOTA_1)
+        model.add_tenta_mounting(test_module_code, self.next_ay+" Sem 1",
+                                 self.DUMMY_QUOTA_1)
         model.delete_tenta_mounting(test_module_code, self.next_ay+" Sem 2")
 
 
@@ -298,29 +308,29 @@ class TestCode(object):
 
         test_data[test_mod_2_code+'_isEdited'] = "True"
          #test_data[test_module_code+'_Sem1Mounting'] = test_mounting_1   #modified to false
-        test_data[test_mod_2_code+'_Sem1Quota'] = test_mod_2_quota_1       
+        test_data[test_mod_2_code+'_Sem1Quota'] = test_mod_2_quota_1
         #test_data[test_module_code+'_Sem2Mounting'] = test_mounting_2   #modified to false
         test_data[test_mod_2_code+'_Sem2Quota'] = test_mod_2_quota_2
 
         self.edit_all_handler.POST(test_data)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_1_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_1_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_1_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_1_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mod_1_mounting)
         assert_equal(quota, test_mod_1_quota)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code,
                                                              self.next_ay+" Sem 1")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code,
                                                        self.next_ay+" Sem 1")
         assert_equal(mounting, test_mod_2_mounting_1)
         assert_equal(quota, test_mod_2_quota_1)
 
-        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code, 
+        mounting = model.get_mounting_of_target_tenta_ay_sem(test_mod_2_code,
                                                              self.next_ay+" Sem 2")
-        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code, 
+        quota = model.get_quota_of_target_tenta_ay_sem(test_mod_2_code,
                                                        self.next_ay+" Sem 2")
         assert_equal(mounting, test_mod_2_mounting_2)
         assert_equal(quota, test_mod_2_quota_2)

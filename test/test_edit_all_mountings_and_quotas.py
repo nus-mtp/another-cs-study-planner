@@ -4,7 +4,6 @@
 from paste.fixture import TestApp
 from nose.tools import assert_equal
 from app import APP
-from components import model
 from components import session
 
 
@@ -13,7 +12,8 @@ class TestCode(object):
         This class runs the test cases to test Edit All Mountings and Quotas page
     '''
     SELECT_MODULE_LABEL = '<b>Select module(s) to edit:'
-    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">'
+    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" ' +\
+                          'class="typeahead" data-provide="typeahead">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
