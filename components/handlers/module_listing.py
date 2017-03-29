@@ -6,7 +6,7 @@
 
 from app import RENDER
 import web
-from components import model, session
+from components import model, session, check_string
 from components.handlers.outcome import Outcome
 
 
@@ -46,6 +46,10 @@ class Modules(object):
             data = web.input()
             action = data.action  # if action is not 'delete', will trigger AttributeError
             module_code = data.code
+
+            if not (check_string.check_code(module_code)):
+                return Outcome().POST("invalid_input")
+            
             outcome = model.delete_module(module_code)
             return Outcome().POST("delete_module", outcome, module_code)
 

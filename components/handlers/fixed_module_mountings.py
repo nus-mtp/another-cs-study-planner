@@ -97,5 +97,6 @@ class Fixed(object):
             This method is invoked when users click on the button
             to navigate to the fixed module mountings, that is
             present in other valid pages.
+            used by module mountingtentative
         '''
         raise web.seeother('/moduleMountingFixed')
