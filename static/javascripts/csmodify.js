@@ -31,20 +31,18 @@ $(function () {
     e.stopPropagation();
     openSidebar();
   });
+
   $('body').click(function(e) {
     if (e.target.id != 'sidebar') {
         closeSidebar();
     }
   });
 
-  if (window.location.href.includes("moduleEditPrerequisite")) {
-      console.log("Page accessed is edit-module-prerequisite page.");
-      unitTemplate = document.getElementById("prereq-unit-template");
-      unitTemplate.removeAttribute("id");
+  unitTemplate = document.getElementById("prereq-unit-template");
+  unitTemplate.removeAttribute("id");
 
-      addModuleTemplate = document.getElementById("module-template");
-      addModuleTemplate.removeAttribute("id");
-  }
+  addModuleTemplate = document.getElementById("module-template");
+  addModuleTemplate.removeAttribute("id");
 })
 
 /*
@@ -238,9 +236,28 @@ function deletePrereqUnit(btn) {
 }
 
 function saveChanges() {
-    window.alert("Your changes have been saved.");
     // Submit data to backend for updating the prerequisites for module.
     modulePrerequisites = convertToData();
+    moduleCode = document.getElementById("module-code").value;
+    console.log(moduleCode);
+
+    toSave = window.confirm("Are you sure you want to save your changes?");
+    if (toSave) {
+        $.ajax({
+            type: "POST",
+            url: "/moduleEditPrerequisites",
+            data: { 'prerequisites': modulePrerequisites }
+        }).success(function(isUpdated) {
+            if (isUpdated) {
+                window.alert("Your changes have been saved.");
+                window.close();
+            } else {
+                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
+            }
+        }).fail(function() {
+            window.alert("There was an error processing your request.");
+        })
+    }
 }
 
 function convertToData() {
