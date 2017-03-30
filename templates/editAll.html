@@ -27,6 +27,8 @@ $var hierarchy = [home, editAll]
                 showModuleInTable(selectedModuleCode, isModuleEdited);
             }
         })
+
+
     });
 
     //Show a module in the edit table
@@ -54,6 +56,14 @@ $var hierarchy = [home, editAll]
     function toggleQuotaState(id) {
         var state = document.getElementById(id).disabled;
         document.getElementById(id).disabled = !state;
+    }
+
+    //Prevent user from typing '-', '.', or 'e' in quota input
+    function checkQuotaKeypress() {
+        var e = window.event
+        if(e.keyCode == 189 || e.keyCode == 190 || e.keyCode == 69) {
+            e.preventDefault();
+        }
     }
 
     //Add red highlight to mounting and quota if mounting is changed
@@ -185,17 +195,17 @@ $var hierarchy = [home, editAll]
 
                             $if sem1Quota == '-':
                                 <td>
-                                    <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
+                                    <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem1Quota == '?':
                                 <td>
                                     <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                    id="$sem1QuotaInput" name="$sem1QuotaInput">
+                                    id="$sem1QuotaInput" name="$sem1QuotaInput" onpaste="event.preventDefault();" onkeydown="checkQuotaKeypress();">
                                 </td>
                             $else:
                                 <td>
-                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                    id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
+                                    <input class="number" type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
+                                    id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota" onkeydown="checkQuotaKeypress();" onpaste="event.preventDefault();">
                                 </td>
 
                             $if sem2Mounting == 1:
@@ -213,17 +223,17 @@ $var hierarchy = [home, editAll]
 
                             $if sem2Quota == '-':
                                 <td>
-                                    <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" disabled>
+                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem2Quota == '?':
                                 <td>
-                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                    id="$sem2QuotaInput" name="$sem2QuotaInput">
+                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                    id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" onpaste="event.preventDefault();">
                                 </td>
                             $else:
                                 <td>
-                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                    id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
+                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
+                                    id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" onpaste="event.preventDefault();">
                                 </td>
                             $if True:
                                 <td>
