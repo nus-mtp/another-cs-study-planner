@@ -14,7 +14,7 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePre
 <div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center">
-			<h1 class="text-center"><b>Edit Preclusions for <u>$moduleCode</u></b></h1>
+			<h1 class="text-center"><b>Edit Preclusions for <u id="module-code">$moduleCode</u></b></h1>
 			<h2>How to Edit Preclusions:</h2>
 			<p>Click on the <i class="glyphicon glyphicon-plus glyphicon-in-text"></i> button to add a module to the list of preclusions.</p>
 			<p>Click on the <i class="glyphicon glyphicon-remove glyphicon-in-text"></i> button to remove the module from the list of preclusions.</p>
@@ -49,7 +49,7 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePre
 		<div class="col-md-12 text-center">
 			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Add Module to Preclusions" onclick="addPreclusionModule()"><span class="glyphicon glyphicon-plus"></span></button>
 			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChangesPreclusion()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-			<a class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Revert All Changes" href="/editModulePreclusions?code=$moduleCode"><span class="glyphicon glyphicon-refresh"></span></a>
+			<a class="btn btn-lg btn-primary" id="revert-changes" data-toggle="tooltip" data-placement="top" title="Revert All Changes" href="/editModulePreclusions?code=$moduleCode"><span class="glyphicon glyphicon-refresh"></span></a>
 		</div>
 		<table style="display:none">
 			<tr id="preclusion-unit-template">
