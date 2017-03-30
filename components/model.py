@@ -352,6 +352,10 @@ def get_preclusion_as_string(module_code):
     return helper.get_preclusion_as_string(module_code)
 
 
+def get_preclusion_units(module_code):
+    return helper.get_preclusion_units(module_code)
+
+
 def convert_list_of_prereqs_to_string(prereq_list):
     return helper.convert_list_of_prereqs_to_string(prereq_list)
 

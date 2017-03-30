@@ -278,17 +278,36 @@ def get_prerequisite_sorted_list(module_code):
     return prereq_list
 
 
-def get_preclusion_as_string(module_code):
+def get_preclusion_list(module_code):
     '''
-        Returns a string of preclusions of specified module_code
+        Get the preclusions of the given module_code as a list of modules.
     '''
     preclusions = model.get_preclusion(module_code)
     preclude_list = convert_to_list(preclusions)
     processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
 
+    return processed_list
+
+
+def get_preclusion_as_string(module_code):
+    '''
+        Returns a string of preclusions of specified module_code
+    '''
+    processed_list = get_preclusion_list(module_code)
+
     preclude_string = ", ".join(processed_list)
 
     return preclude_string
+
+
+def get_preclusion_units(module_code):
+    '''
+        Retrieves all the preclusions of given module_code as a list
+        of modules.
+    '''
+    preclusion_list = get_preclusion_list(module_code)
+
+    return preclusion_list
 
 
 def convert_list_of_prereqs_to_string(prereq_list):
