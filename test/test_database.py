@@ -39,7 +39,9 @@ class TestCode(object):
         self.test_prereq2_code = "BB1112"
         self.test_prereq2_index = 1
         self.preclude_CRD_tested = False
+        self.preclude_delete_all_tested = False
         self.test_preclude_code = "CC1111"
+        self.test_preclude_code2 = "CC1112"
         self.starred_CRD_tested = False
         self.test_user = "testUser"
         self.test_salt = "salt"
@@ -70,6 +72,8 @@ class TestCode(object):
         self.prereq_delete_all_tested = True
         self.test_preclude_CRD()
         self.preclude_CRD_tested = True
+        self.test_preclude_delete_all()
+        self.preclude_delete_all_tested = True
         self.test_starred_CRD()
         self.starred_CRD_tested = True
 
@@ -370,6 +374,35 @@ class TestCode(object):
             # After deleting preclusion, it should not exist
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(len(preclude_info) == 0)
+            return
+
+
+    def test_preclude_delete_all(self):
+        '''
+            Tests deleting all preclusions of specific module.
+        '''
+        if not self.preclude_delete_all_tested:
+            model.add_module(self.test_preclude_code, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
+            model.add_module(self.test_preclude_code2, self.test_module_name, self.test_module_desc,
+                             self.test_module_mc, self.test_module_status)
+
+            model.add_preclusion(self.test_module_code, self.test_preclude_code)
+            model.add_preclusion(self.test_module_code, self.test_preclude_code2)
+
+            outcome = model.delete_all_preclusions(self.test_module_code)
+            assert_true(outcome)
+
+            preclude_info_1 = model.get_preclusion(self.test_preclude_code)
+            preclude_info_2 = model.get_preclusion(self.test_preclude_code2)
+            preclude_info_3 = model.get_preclusion(self.test_module_code)
+
+            model.delete_module(self.test_preclude_code)
+            model.delete_module(self.test_preclude_code2)
+
+            assert_true(len(preclude_info_1) == 0)
+            assert_true(len(preclude_info_2) == 0)
+            assert_true(len(preclude_info_3) == 0)
             return
 
 
