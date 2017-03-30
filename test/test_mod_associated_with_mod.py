@@ -3,7 +3,7 @@ test_mod_associated_with_mod.py
 Contains test cases for querying modules which are associated with other modules.
 '''
 
-from nose.tools import assert_true
+from nose.tools import assert_true, assert_equal
 from components import model
 
 # HOW TO RUN NOSE TESTS
@@ -172,6 +172,17 @@ class TestCode(object):
         assert_true(is_preclude_equal(preclude_string, required_preclude_string))
 
 
+    def test_query_module_association_no_preclusion_units(self):
+        '''
+            Tests querying the modules preclusions units, where there is
+            no preclusions.
+        '''
+        preclude_units = model.get_preclusion_units('CS2104')
+        required_preclude_units = []
+
+        assert_equal(sorted(preclude_units), sorted(required_preclude_units))
+
+
     def test_query_module_association_one_preclusion(self):
         '''
             Tests querying the modules preclusions as a string, where there is
@@ -181,6 +192,17 @@ class TestCode(object):
         required_preclude_string = "CS3247"
 
         assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+
+    def test_query_module_association_one_preclusion_units(self):
+        '''
+            Tests querying the modules preclusions units, where there is
+            only one preclusion.
+        '''
+        preclude_units = model.get_preclusion_units('CS4213')
+        required_preclude_units = ["CS3247"]
+
+        assert_equal(sorted(preclude_units), sorted(required_preclude_units))
 
 
     def test_query_module_association_many_preclusions(self):
@@ -197,6 +219,22 @@ class TestCode(object):
         required_preclude_string = "CS4350, CS3283, CS3284"
 
         assert_true(is_preclude_equal(preclude_string, required_preclude_string))
+
+
+    def test_query_module_association_many_preclusions_units(self):
+        '''
+            Tests querying the modules preclusions units, where there are
+            more than one preclusions.
+        '''
+        preclude_units = model.get_preclusion_units('CS4350')
+        required_preclude_units = ["CS4204", "CS4203"]
+
+        assert_equal(sorted(preclude_units), sorted(required_preclude_units))
+
+        preclude_units = model.get_preclusion_units('CS4203')
+        required_preclude_units = ["CS4350", "CS3283", "CS3284"]
+
+        assert_equal(sorted(preclude_units), sorted(required_preclude_units))
 
 
 # Static methods start here
