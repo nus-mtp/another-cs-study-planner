@@ -19,7 +19,7 @@ class Tentative(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 6 attributes 
+            Each subplan is a list of 6 attributes
             (code, name, sem 1 mounting, sem 2 mounting, sem 1 quota, sem 2 quota)
             For tentative mountings, each mounting has 3 possible values (-1 or 0 or 1)
             -1 = not mounted; 0 = unmounted; 1 = mounted
