@@ -66,40 +66,40 @@ $var hierarchy = [home, editAll]
         }
     }
 
-    //Add red highlight to mounting and quota if mounting is changed
+    //Add yellow highlight to mounting and quota if mounting is changed
     function checkMountingChange(element, oldMounting, oldQuota, mountingID, quotaID) {
         var oldMounting = (oldMounting == 1);
         var newMounting = element.checked;
 
         if (oldMounting != newMounting) {
-            addRedHighlight(mountingID);
-            addRedHighlight(quotaID);
+            addYellowHighlight(mountingID);
+            addYellowHighlight(quotaID);
         } else {
-            removeRedHighlight(mountingID);
-            removeRedHighlight(quotaID);
+            removeYellowHighlight(mountingID);
+            removeYellowHighlight(quotaID);
             if (oldMounting == 1) {
                 checkQuotaChange(document.getElementById(quotaID), oldQuota, quotaID)
             }
         }
     }
 
-    //Add red highlight to quota if quota is changed
+    //Add yellow highlight to quota if quota is changed
     function checkQuotaChange(element, oldQuota, quotaID) {
         var newQuota = element.value;
 
         if (oldQuota == '?') oldQuota = '';
         if (oldQuota != newQuota) {
-            addRedHighlight(quotaID);
+            addYellowHighlight(quotaID);
         } else {
-            removeRedHighlight(quotaID);
+            removeYellowHighlight(quotaID);
         }
     }
 
-    function addRedHighlight(id) {
-        document.getElementById(id).parentElement.style.backgroundColor = "#ffaea5";
+    function addYellowHighlight(id) {
+        document.getElementById(id).parentElement.style.backgroundColor = "#fffdcc";
     }
 
-    function removeRedHighlight(id) {
+    function removeYellowHighlight(id) {
         document.getElementById(id).parentElement.style.backgroundColor = "white";
     }
 
@@ -109,10 +109,10 @@ $var hierarchy = [home, editAll]
                                    sem1QuotaInput, sem2QuotaInput) {
         if (sem1Quota == '-' || sem1Quota == '?') sem1Quota = '';
         document.getElementById(sem1QuotaInput).value = sem1Quota;
-        removeRedHighlight(sem1QuotaInput);
+        removeYellowHighlight(sem1QuotaInput);
         if (sem2Quota == '-' || sem2Quota == '?') sem2Quota = '';
         document.getElementById(sem2QuotaInput).value = sem2Quota;
-        removeRedHighlight(sem2QuotaInput);
+        removeYellowHighlight(sem2QuotaInput);
 
         sem1Mounting = (sem1Mounting == 1);
         var sem1MountingNew = document.getElementById(sem1MountingOption).checked;
@@ -120,7 +120,7 @@ $var hierarchy = [home, editAll]
             toggleQuotaState(sem1QuotaInput);
         }
         document.getElementById(sem1MountingOption).checked = sem1Mounting;
-        removeRedHighlight(sem1MountingOption);
+        removeYellowHighlight(sem1MountingOption);
 
         sem2Mounting = (sem2Mounting == 1);
         var sem2MountingNew = document.getElementById(sem2MountingOption).checked;
@@ -128,7 +128,7 @@ $var hierarchy = [home, editAll]
             toggleQuotaState(sem2QuotaInput);
         }
         document.getElementById(sem2MountingOption).checked = sem2Mounting;
-        removeRedHighlight(sem2MountingOption);
+        removeYellowHighlight(sem2MountingOption);
     }
 </script>
 
@@ -245,6 +245,14 @@ $var hierarchy = [home, editAll]
                             </tr>
                     </tbody>
                 </table>
+                <div class="col-md-2 col-md-offset-10">
+                    <table style="float:right;">
+                        <tr>
+                            <td style="width:30px; background-color:#fffdcc; border:1px solid gray;"></td> 
+                            <td style="padding:2px 0px 0px 7px; vertical-align:middle; font-size: 14px;">= Modified</td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="col-md-6 col-md-offset-3 text-center">
                     <button type="submit" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Save changes" onclick="if(!confirm('Are you sure you want to save your changes?')){event.preventDefault();}">
                         <span class="glyphicon glyphicon-floppy-disk"></span>
