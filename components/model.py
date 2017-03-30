@@ -444,6 +444,14 @@ def validate_input(input_data, input_types, is_future=False,
 
 
 ######################################################################################
+# Functions that are related to the migration of data across mounting databases
+######################################################################################
+
+def migrate_to_next_aysem():
+    return database.migrate_to_next_aysem()
+
+
+######################################################################################
 # General helper functions that are used by other functions
 ######################################################################################
 

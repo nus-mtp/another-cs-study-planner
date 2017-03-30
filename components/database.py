@@ -22,6 +22,7 @@ DB_CURSOR = CONNECTION.cursor()
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
+INDEX_THIRD_ELEM = 2
 
 
 ######################################################################################
@@ -1256,3 +1257,110 @@ def clean_old_sessions(date_to_delete):
         CONNECTION.rollback()
         return False
     return True
+
+
+######################################################################################
+# Functions that are related to the migration of data across mounting databases
+######################################################################################
+
+def migrate_to_next_aysem():
+    '''
+        This function migrates the data across the mounting databases.
+
+        What is being done:
+        1) moduleMounted (fixed) data will all be migrated into moduleMountedPast table.
+        2) 1 AY of data in moduleMountTentative will be migrated into moduleMounted
+        3) If no data is left at moduleMountTentative, duplicate the data from the new
+           moduleMounted table.
+        4) Clean up all data in the moduleBackup table.
+    '''
+    migrate_fixed_to_past_mounting()
+    migrate_one_ay_from_tentative_to_fixed()
+    duplicate_data_into_tentative_if_needed()
+    clean_up_module_backup_table()
+
+    CONNECTION.commit()
+
+
+def migrate_fixed_to_past_mounting():
+    '''
+        This function migrates all the data in moduleMounted (fixed)
+        into moduleMountedPast table.
+    '''
+    sql_command_query = "SELECT * FROM moduleMounted"
+    DB_CURSOR.execute(sql_command_query)
+    fixed_data_to_transfer = model.convert_to_list(DB_CURSOR.fetchall())
+
+    insert_data_into_mounting("moduleMountedPast", fixed_data_to_transfer)
+
+    sql_command_clear = "DELETE FROM moduleMounted"
+    DB_CURSOR.execute(sql_command_clear)
+
+
+def migrate_one_ay_from_tentative_to_fixed():
+    '''
+        This function migrates 1 AY of data from moduleMountTentative
+        into moduleMounted table.
+    '''
+    all_tenta_ay_sems = model.convert_to_list(get_all_tenta_ay_sems())
+    earliest_tenta_ay_sem = all_tenta_ay_sems[INDEX_FIRST_ELEM][INDEX_FIRST_ELEM]
+    earliest_tenta_ay = earliest_tenta_ay_sem[:8]
+
+    sql_command_query = "SELECT * FROM moduleMountTentative WHERE " + \
+                        "acadYearAndSem LIKE '" + earliest_tenta_ay + "%' "
+    DB_CURSOR.execute(sql_command_query)
+    tenta_data_to_transfer = model.convert_to_list(DB_CURSOR.fetchall())
+
+    insert_data_into_mounting("moduleMounted", tenta_data_to_transfer)
+
+    sql_command_clear = "DELETE FROM moduleMountTentative WHERE " + \
+                        "acadYearAndSem LIKE '" + earliest_tenta_ay + "%' "
+    DB_CURSOR.execute(sql_command_clear)
+
+
+def duplicate_data_into_tentative_if_needed():
+    '''
+        This function duplicates the data from the new moduleMounted table
+        into the moduleMountTentative table if there is no data currently
+        left in the moduleMountTentative table.
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMountTentative"
+    DB_CURSOR.execute(sql_command)
+    number_module = DB_CURSOR.fetchone()[0]
+
+    if number_module == 0:
+        sql_command_query = "SELECT * FROM moduleMounted"
+        DB_CURSOR.execute(sql_command_query)
+        fixed_data_to_duplicate = model.convert_to_list(DB_CURSOR.fetchall())
+
+        insert_data_into_mounting("moduleMountTentative", fixed_data_to_duplicate,
+                                  True)
+
+
+def insert_data_into_mounting(to_table, list_data_to_transfer, to_increment_ay=False):
+    '''
+        This function inserts module data in given list_data_to_transfer
+        to the given to_table mounting stable.
+    '''
+    sql_command = "INSERT INTO " + to_table + " VALUES(%s, %s, %s)"
+
+    for module_data in list_data_to_transfer:
+        module_code = module_data[INDEX_FIRST_ELEM]
+        ay_sem = module_data[INDEX_SECOND_ELEM]
+        quota = module_data[INDEX_THIRD_ELEM]
+
+        if to_increment_ay:
+            next_ay = model.get_next_ay(ay_sem)
+            semester = ay_sem[-1] # get last character
+            ay_sem = next_ay + " Sem " + semester
+
+        DB_CURSOR.execute(sql_command, (module_code, ay_sem, quota))
+
+
+def clean_up_module_backup_table():
+    '''
+        Cleans up the entire moduleBackup table, so that it
+        is now empty.
+    '''
+    sql_command = "DELETE FROM moduleBackup"
+    DB_CURSOR.execute(sql_command)
