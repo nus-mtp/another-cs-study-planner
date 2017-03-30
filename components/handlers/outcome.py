@@ -63,7 +63,7 @@ class Outcome(object):
                     outcome_message = "Modules have been edited successfully!"
                 else:
                     outcome_message = "Error: Failed to edit modules."
-                redirect_page = "/moduleMountingTentative"
+                redirect_page = "/editAll"
 
             elif action == "restore_module":
                 if outcome is True:
