@@ -1284,11 +1284,14 @@ def migrate_to_next_aysem():
         3) If no data is left at moduleMountTentative, duplicate the data from the new
            moduleMounted table.
         4) Clean up all data in the moduleBackup table.
+        5) All modules in fixed mounting will have their statuses updated to "Active"
+           from "New"
     '''
     migrate_fixed_to_past_mounting()
     migrate_one_ay_from_tentative_to_fixed()
     duplicate_data_into_tentative_if_needed()
     clean_up_module_backup_table()
+    update_active_modules_after_migration()
 
     CONNECTION.commit()
 
@@ -1374,6 +1377,17 @@ def clean_up_module_backup_table():
         is now empty.
     '''
     sql_command = "DELETE FROM moduleBackup"
+    DB_CURSOR.execute(sql_command)
+
+
+def update_active_modules_after_migration():
+    '''
+        This function makes sure that all modules in fixed mounting
+        have their statuses updated to "Active" from "New"
+    '''
+    sql_command = "UPDATE module SET status='Active' WHERE " + \
+                  "status='New' AND code in (SELECT mm.moduleCode FROM " + \
+                  "moduleMounted mm WHERE mm.moduleCode = code)"
     DB_CURSOR.execute(sql_command)
 
 
