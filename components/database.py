@@ -87,7 +87,7 @@ def get_all_original_module_info():
         Get the original info of all modules from module backup
     '''
     sql_command = "SELECT * FROM moduleBackup"
-    DB_CURSOR.execute(sql_command, (code, ))
+    DB_CURSOR.execute(sql_command)
     return DB_CURSOR.fetchall()
 
 
