@@ -2,7 +2,6 @@
     database.py
     Contains functions that directly communicate with or manipulate the database
 '''
-import os
 import hashlib
 
 ## Prevent model.py from being imported twice
@@ -81,6 +80,15 @@ def is_existing_module(code):
     number_module = DB_CURSOR.fetchone()[0]
 
     return number_module > 0
+
+
+def get_all_original_module_info():
+    '''
+        Get the original info of all modules from module backup
+    '''
+    sql_command = "SELECT * FROM moduleBackup"
+    DB_CURSOR.execute(sql_command, (code, ))
+    return DB_CURSOR.fetchall()
 
 
 def get_original_module_info(code):
@@ -1395,5 +1403,23 @@ def reset_database():
     '''
         This function automatically clean and repopulate the database.
         This function is used in test case.
+
+        Note: There is some bug if we try to call python dbclean.py from here,
+        so we shall not do that.
     '''
-    os.system("python dbclean.py")
+    file_to_clean_database = open('utils/databaseClean.sql', 'r')
+    lines_to_clean_database = file_to_clean_database.readlines()[0]
+    sql_list = lines_to_clean_database.split(";\r")
+
+    for sql_drop_table_line in sql_list:
+        print sql_drop_table_line
+        if sql_drop_table_line == "":
+            continue
+        try:
+            DB_CURSOR.execute(sql_drop_table_line)
+            CONNECTION.commit()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+    file_to_clean_database.close()
+
+    components.database_adapter.repopulate_database(CONNECTION)

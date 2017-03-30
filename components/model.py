@@ -34,6 +34,10 @@ def is_existing_module(code):
     return database.is_existing_module(code)
 
 
+def get_all_original_module_info():
+    return database.get_all_original_module_info()
+
+
 def get_original_module_info(code):
     return database.get_original_module_info(code)
 
