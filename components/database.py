@@ -1144,7 +1144,7 @@ def add_preclusion(module_code, preclude_code):
     return True
 
 
-def delete_preclusion(module_code, prereq_code):
+def delete_preclusion(module_code, preclude_code):
     '''
         Delete a preclusion from the precludes table.
         Returns true if successful, false otherwise.
@@ -1152,8 +1152,8 @@ def delete_preclusion(module_code, prereq_code):
     sql_command = "DELETE FROM precludes WHERE moduleCode = %s " +\
                   "AND precludedByModuleCode = %s"
     try:
-        DB_CURSOR.execute(sql_command, (module_code, prereq_code))
-        DB_CURSOR.execute(sql_command, (prereq_code, module_code))
+        DB_CURSOR.execute(sql_command, (module_code, preclude_code))
+        DB_CURSOR.execute(sql_command, (preclude_code, module_code))
         CONNECTION.commit()
     except psycopg2.IntegrityError:
         CONNECTION.rollback()

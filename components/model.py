@@ -392,8 +392,8 @@ def add_preclusion(module_code, preclude_code):
     return database.add_preclusion(module_code, preclude_code)
 
 
-def delete_preclusion(module_code, prereq_code):
-    return database.delete_preclusion(module_code, prereq_code)
+def delete_preclusion(module_code, preclude_code):
+    return database.delete_preclusion(module_code, preclude_code)
 
 
 def delete_all_preclusions(module_code):
