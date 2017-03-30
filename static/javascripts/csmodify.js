@@ -10,6 +10,9 @@ var addUnitConnector = '<tr><td colspan="12">and</td></tr>';
 var addModuleTemplate;
 var addModuleTemplateConnector = '<td>or</td>';
 
+/* VARIABLES USED FOR THE INTERFACE FOR EDITING MODULE PRECLUSIONS */
+var preclusionUnitTemplate;
+
 /*
  * FUNCTIONS FOR SIDEBAR ANIMATIONS
  */
@@ -46,6 +49,11 @@ $(function () {
     addModuleTemplate = document.getElementById("module-template");
     if (addModuleTemplate != null) {
         addModuleTemplate.removeAttribute("id");
+    }
+
+    preclusionUnitTemplate = document.getElementById("preclusion-unit-template");
+    if (preclusionUnitTemplate != null) {
+        preclusionUnitTemplate.removeAttribute("id");
     }
 })
 
@@ -243,7 +251,6 @@ function saveChanges() {
     // Submit data to backend for updating the prerequisites for module.
     var modulePrerequisites = convertToData();
     var modulePrereqsJSON = JSON.stringify(modulePrerequisites);
-    console.log(modulePrereqsJSON);
 
     // Retrieve the module code to pass to the handler backend.
     moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
@@ -258,7 +265,6 @@ function saveChanges() {
                 'prerequisites': modulePrereqsJSON,
             }
         }).success(function(isUpdated) {
-            console.log(isUpdated);
             if (isUpdated == 'True') {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
@@ -301,6 +307,83 @@ function convertToData() {
     }
 
     return prerequisites;
+}
+
+/* FUNCTIONS USED FOR THE INTERFACE FOR EDITING MODULE PRECLUSIONS */
+function addPreclusionModule(btn) {
+    // Get the <tbody>, to add the <tr> elements to.
+    var tableBody = document.getElementsByTagName("tbody")[0];
+
+    // Creates the table row <tr>
+    var preclusionModuleUnit = preclusionUnitTemplate.cloneNode(true);
+    
+    // Add the row to the table body
+    tableBody.appendChild(preclusionModuleUnit);
+
+    // Re-initialize all tooltips to ensure that even newly added
+    // HTML elements receive the tooltip event listener.
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+function removePreclusionModule(btn) {
+    // Get the <tbody>, to add the <tr> elements to.
+    var tableBody = document.getElementsByTagName("tbody")[0];
+
+    // Gets the target row
+    var parentRow = btn.parentElement.parentElement;
+
+    // Remove target row from table body
+    tableBody.removeChild(parentRow);
+}
+
+function saveChangesPreclusion() {
+    // Submit data to backend for updating the preclusions for module.
+    var modulePreclusions = convertToDataPreclusion();
+    var modulePreclusionsJSON = JSON.stringify(modulePreclusions);
+
+    moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
+
+    toSave = window.confirm("Are you sure you want to save your changes?");
+    if (toSave) {
+        $.ajax({
+            type: "POST",
+            url: "/editModulePreclusions",
+            data: {
+                'code': moduleCode,
+                'preclusions': modulePreclusionsJSON,
+            }
+        }).success(function(isUpdated) {
+            if (isUpdated == 'True') {
+                window.alert("Your changes have been saved.");
+                if (window.opener != null) {
+                    window.close();
+                } else {
+                    window.location.href = ("/editModule?code=" + moduleCode);
+                }
+            } else {
+                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
+            }
+        }).fail(function() {
+            window.alert("There was an error processing your request.");
+        })
+    }
+}
+
+function convertToDataPreclusion() {
+    var preclusions = [];
+
+    // For iterating through all the preclusion modules
+    var rows = document.getElementsByTagName("tbody")[0].children;
+
+    for (i = 0; i < rows.length; i++) {
+        var moduleInput = rows[i].children[1].children[0];
+
+        if (moduleInput.value != "") {
+            preclusions.push(moduleInput.value);
+        }
+    }
+
+    return preclusions;
 }
 
 
