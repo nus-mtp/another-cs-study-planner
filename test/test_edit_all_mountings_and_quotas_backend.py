@@ -2,7 +2,7 @@
     test_edit_all_mountings_and_quotas_backend.py test the backend functions of
     Edit All Mountings and Quotas
 '''
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_false
 from components import model
 from components.handlers.edit_all_mountings_and_quotas import EditAll
 
@@ -338,3 +338,32 @@ class TestCode(object):
         model.delete_tenta_mounting(test_mod_1_code, self.next_ay+" Sem 2")
         model.add_tenta_mounting(test_mod_2_code, self.next_ay+" Sem 1", self.DUMMY_QUOTA_3)
         model.add_tenta_mounting(test_mod_2_code, self.next_ay+" Sem 2", self.DUMMY_QUOTA_0)
+
+
+    def test_invalid_quota(self):
+        '''
+            Test that backend validation can catch invalid quota
+        '''
+        # Quota is string (invalid)
+        test_module_code = self.DUMMY_MODULE_CODE_1
+        test_mounting = True
+        test_quota = 'aaa'
+
+        test_data = {}
+        test_data[test_module_code+'_isEdited'] = "True"
+        test_data[test_module_code+'_Sem1Mounting'] = test_mounting
+        test_data[test_module_code+'_Sem1Quota'] = test_quota
+
+        outcome = self.edit_all_handler.POST(test_data)
+        assert_false(outcome)
+
+        # Quota is negative number (invalid)
+        test_quota = -1
+
+        test_data = {}
+        test_data[test_module_code+'_isEdited'] = "True"
+        test_data[test_module_code+'_Sem1Mounting'] = test_mounting
+        test_data[test_module_code+'_Sem1Quota'] = test_quota
+
+        outcome = self.edit_all_handler.POST(test_data)
+        assert_false(outcome)
