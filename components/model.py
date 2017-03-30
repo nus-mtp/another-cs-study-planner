@@ -396,6 +396,10 @@ def delete_preclusion(module_code, prereq_code):
     return database.delete_preclusion(module_code, prereq_code)
 
 
+def delete_all_preclusions(module_code):
+    return database.delete_all_preclusions(module_code)
+
+
 ######################################################################################
 # Functions that are related to starred modules
 ######################################################################################

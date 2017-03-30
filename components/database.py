@@ -1161,6 +1161,25 @@ def delete_preclusion(module_code, prereq_code):
     return True
 
 
+def delete_all_preclusions(module_code, to_commit=True):
+    '''
+        Deletes all preclusions of the given module_code from the
+        precludes table.
+        Returns true if this operation is successful,
+        returns false otherwise.
+    '''
+    sql_command = "DELETE FROM precludes WHERE moduleCode = %s " + \
+                "OR precludedByModuleCode = %s"
+    try:
+        DB_CURSOR.execute(sql_command, (module_code, module_code))
+        if to_commit:
+            CONNECTION.commit()
+    except psycopg2.IntegrityError:
+        CONNECTION.rollback()
+        return False
+    return True
+
+
 ######################################################################################
 # Functions that are related to starred modules
 ######################################################################################
