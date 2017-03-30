@@ -400,6 +400,10 @@ def delete_all_preclusions(module_code):
     return database.delete_all_preclusions(module_code)
 
 
+def edit_preclusion(module_code, preclude_units):
+    return database.edit_preclusion(module_code, preclude_units)
+
+
 ######################################################################################
 # Functions that are related to starred modules
 ######################################################################################

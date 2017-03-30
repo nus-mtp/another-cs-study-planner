@@ -1120,7 +1120,7 @@ def edit_prerequisite(module_code, prereq_units):
     return True
 
 
-def add_preclusion(module_code, preclude_code):
+def add_preclusion(module_code, preclude_code, to_commit=True):
     '''
         Insert a preclusion into the precludes table.
         Returns true if successful, false if duplicate primary key detected or
@@ -1137,7 +1137,8 @@ def add_preclusion(module_code, preclude_code):
     try:
         DB_CURSOR.execute(sql_command, (module_code, preclude_code))
         DB_CURSOR.execute(sql_command, (preclude_code, module_code))
-        CONNECTION.commit()
+        if to_commit:
+            CONNECTION.commit()
     except psycopg2.IntegrityError:        # duplicate key error
         CONNECTION.rollback()
         return False
@@ -1177,6 +1178,41 @@ def delete_all_preclusions(module_code, to_commit=True):
     except psycopg2.IntegrityError:
         CONNECTION.rollback()
         return False
+    return True
+
+
+def edit_preclusion(module_code, preclude_units):
+    '''
+        Changes the preclusions of given module_code into a new
+        set of preclusions found in preclude_units.
+        Returns true if successful, false otherwise.
+    '''
+    outcome = delete_all_preclusions(module_code, False)
+    if not outcome:
+        CONNECTION.rollback()
+        return False
+
+    # Repopulate the preclusions
+    if len(preclude_units) != LENGTH_EMPTY:
+        module_list = {}
+
+        for precluded_module in preclude_units:
+            if module_list.has_key(precluded_module):
+                CONNECTION.rollback()
+                return False
+            else:
+                outcome = add_preclusion(module_code, precluded_module, False)
+                if not outcome:
+                    CONNECTION.rollback()
+                    return False
+                module_list[precluded_module] = True
+
+        try:
+            CONNECTION.commit()
+        except psycopg2.IntegrityError:
+            CONNECTION.rollback()
+            return False
+
     return True
 
 
