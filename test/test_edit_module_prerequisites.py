@@ -6,7 +6,6 @@ from paste.fixture import TestApp
 from nose.tools import assert_equal, raises
 from app import APP
 from components import session
-from components.handlers.module_edit_prerequisites import EditModulePrerequisites
 
 class TestCode(object):
     '''
@@ -90,7 +89,7 @@ class TestCode(object):
             Tests whether user will fail to access edit-module-prerequisites
             page if an invalid URL (invalid module code) is used.
         '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_PREREQ_SPECIFIC_INVALID_CODE)
+        self.test_app.get(self.URL_EDIT_MODULE_PREREQ_SPECIFIC_INVALID_CODE)
 
 
     def test_module_prereq_edit_revert_option_button(self):
