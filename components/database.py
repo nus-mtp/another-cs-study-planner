@@ -2,7 +2,7 @@
     database.py
     Contains functions that directly communicate with or manipulate the database
 '''
-
+import os
 import hashlib
 
 ## Prevent model.py from being imported twice
@@ -186,6 +186,17 @@ def remove_original_module_info(code):
 ######################################################################################
 # Functions that query mounting and/or quota information
 ######################################################################################
+
+def get_all_past_mounted_modules():
+    '''
+        Get the module code, name, AY/Sem and quota of all past mounted modules
+    '''
+    sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                  "FROM module m1, moduleMountedPast m2 WHERE m2.moduleCode = m1.code " +\
+                  "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
 
 def get_all_fixed_mounted_modules():
     '''
@@ -1364,3 +1375,11 @@ def clean_up_module_backup_table():
     '''
     sql_command = "DELETE FROM moduleBackup"
     DB_CURSOR.execute(sql_command)
+
+
+def reset_database():
+    '''
+        This function automatically clean and repopulate the database.
+        This function is used in test case.
+    '''
+    os.system("python dbclean.py")

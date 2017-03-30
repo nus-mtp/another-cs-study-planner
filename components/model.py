@@ -70,6 +70,10 @@ def remove_original_module_info(code):
 # Functions that query mounting and/or quota information
 ######################################################################################
 
+def get_all_past_mounted_modules():
+    return database.get_all_past_mounted_modules()
+
+
 def get_all_fixed_mounted_modules():
     return database.get_all_fixed_mounted_modules()
 
@@ -449,6 +453,10 @@ def validate_input(input_data, input_types, is_future=False,
 
 def migrate_to_next_aysem():
     return database.migrate_to_next_aysem()
+
+
+def reset_database():
+    return database.reset_database()
 
 
 ######################################################################################
