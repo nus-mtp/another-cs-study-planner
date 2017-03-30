@@ -132,7 +132,7 @@ class TestCode(object):
         test_data = {}
         test_data[test_module_code+'_isEdited'] = "True"
         test_data[test_module_code+'_Sem1Mounting'] = test_mounting_1
-        #test_data[test_module_code+'_Sem1Quota'] = test_quota_1   #modified to empty
+        # Because quota is empty, no quota value will be returned by the UI
         test_data[test_module_code+'_Sem2Mounting'] = test_mounting_2
         test_data[test_module_code+'_Sem2Quota'] = test_quota_2    #modified
 
@@ -209,7 +209,7 @@ class TestCode(object):
         # Unmount from Sem 1
         test_data = {}
         test_data[test_module_code+'_isEdited'] = "True"
-        #test_data[test_module_code+'_Sem1Mounting'] = test_mounting   #modified to false
+        # Because mounting is false (unchecked), no mounting value will be returned by the UI
         test_data[test_module_code+'_Sem1Quota'] = test_quota
 
         self.edit_all_handler.POST(test_data)
@@ -258,7 +258,7 @@ class TestCode(object):
 
         test_data = {}
         test_data[test_module_code+'_isEdited'] = "True"
-        #test_data[test_module_code+'_Sem1Mounting'] = test_mounting   #modified to false
+        # Because mounting is false (unchecked), no mounting value will be returned by the UI
         test_data[test_module_code+'_Sem1Quota'] = test_quota_1
         test_data[test_module_code+'_Sem2Mounting'] = test_mounting_2   #modified to true
         test_data[test_module_code+'_Sem2Quota'] = test_quota_2
@@ -307,9 +307,9 @@ class TestCode(object):
         test_mod_2_quota_2 = False   #quota will be false because unmounted
 
         test_data[test_mod_2_code+'_isEdited'] = "True"
-         #test_data[test_module_code+'_Sem1Mounting'] = test_mounting_1   #modified to false
+        # Because mounting is false (unchecked), no mounting value will be returned by the UI
         test_data[test_mod_2_code+'_Sem1Quota'] = test_mod_2_quota_1
-        #test_data[test_module_code+'_Sem2Mounting'] = test_mounting_2   #modified to false
+        # Because mounting is false (unchecked), no mounting value will be returned by the UI
         test_data[test_mod_2_code+'_Sem2Quota'] = test_mod_2_quota_2
 
         self.edit_all_handler.POST(test_data)
