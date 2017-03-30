@@ -28,6 +28,7 @@ URLS = (
     '/deleteModule', 'components.handlers.delete_module.DeleteMod',
     '/editModule', 'components.handlers.module_edit.EditModuleInfo',
     '/editModulePrerequisites', 'components.handlers.module_edit_prerequisites.EditModulePrerequisites',
+    '/editModulePreclusions', 'components.handlers.module_edit_preclusions.EditModulePreclusions',
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
