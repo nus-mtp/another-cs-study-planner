@@ -440,7 +440,7 @@ tr[id*='modified-details-child-row'] {
     vertical-align: middle;
 }
 
-#back-to-top-btn {
+.glyphicon-in-text, #back-to-top-btn {
     position: relative;
 }
 
