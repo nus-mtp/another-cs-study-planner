@@ -29,6 +29,7 @@ $var hierarchy = [home, moduleInfo]
                         <th>Name</th>
                         <th>Description</th>
                         <th>MCs</th>
+                        <th>Focus Area</th>
                         <th>Is New Module?</th>
                     </tr>
                 </thead>
@@ -39,6 +40,7 @@ $var hierarchy = [home, moduleInfo]
                     $ moduleDesc = moduleInfo[2] 
                     $ moduleMc = moduleInfo[3]
                     $ moduleStatus = moduleInfo[4]
+                    $ moduleFocus = moduleInfo[5]
                     <tr>
                         <td class="text-center">
                             <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
@@ -46,6 +48,10 @@ $var hierarchy = [home, moduleInfo]
                         <td style="width:15%">$moduleName</td>
                         <td>$moduleDesc</td>
                         <td class="text-center">$moduleMc</td>
+                        $if not moduleFocus:
+                            <td class="text-center">-</td>
+                        $else:
+                            <td class="text-center">$moduleFocus</td>
                         $if moduleStatus[0:3] == 'New':
                             <td class="text-center">Yes</td>
                         $else:

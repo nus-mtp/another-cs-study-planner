@@ -18,6 +18,10 @@ def get_all_modules():
     return database.get_all_modules()
 
 
+def get_all_modules_and_focus():
+    return database.get_all_modules_and_focus()
+
+
 def get_module(code):
     return database.get_module(code)
 
@@ -180,6 +184,22 @@ def is_aysem_in_system(ay_sem):
 
 def is_aysem_in_system_and_is_future(ay_sem):
     return helper.is_aysem_in_system_and_is_future(ay_sem)
+
+
+def get_current_ay_sem():
+    return helper.get_current_ay_sem()
+
+
+def get_ay_sem(year, month):
+    return helper.get_ay_sem(year, month)
+
+
+def get_current_date():
+    return helper.get_current_date()
+
+
+def get_formatted_academic_year(year_where_ay_starts):
+    return helper.get_formatted_academic_year(year_where_ay_starts)
 
 
 ######################################################################################
