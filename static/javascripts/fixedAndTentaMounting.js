@@ -1,3 +1,20 @@
+ $(document).ready(function() {
+    var table = $('#fixed-mounting-table').DataTable();
+    if (table) {
+        table.column(3).visible(false);
+        table.column(4).visible(false);
+        table.column(6).visible(false);
+        table.column(7).visible(false);
+    }
+    var table = $('#tentative-mounting-table').DataTable();
+    if (table) {
+        table.column(3).visible(false);
+        table.column(4).visible(false);
+        table.column(6).visible(false);
+        table.column(7).visible(false);
+    }
+ })
+
 // Before sorting quota column, replace quotas that are '-' or '?' with negative numbers
 function replaceNilQuotasWithNumbers(elementID){
     var table = $(elementID).DataTable();
@@ -18,4 +35,20 @@ function replaceNilQuotasWithNumbers(elementID){
             data[i][6] = -1;
         }
     }            
+}
+
+var quotaDisplay = false;
+function toggleQuotaDisplay(elementID){
+    var table = $(elementID).DataTable();
+    table.column(3).visible(!quotaDisplay);
+    table.column(6).visible(!quotaDisplay);
+    quotaDisplay = !quotaDisplay;
+}
+
+var numStudentsDisplay = false;
+function toggleNumStudentsDisplay(elementID){
+    var table = $(elementID).DataTable();
+    table.column(4).visible(!numStudentsDisplay);
+    table.column(7).visible(!numStudentsDisplay);
+    numStudentsDisplay = !numStudentsDisplay;
 }

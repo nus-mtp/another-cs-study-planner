@@ -194,9 +194,19 @@ td > a {
 
 .table-mounting-icon {
     margin-right: 10px;
+    z-index: 888px;
 }
 
+.toggle-columns-display {
+    position: relative;
+    margin-top: 10px;
+    top: 40px;
+    z-index: 999;
+}
 
+.toggle-columns-display-checkbox {
+    margin-right: 15px;
+}
 
 /*************************************************************************/
 /* ==================== STYLING FOR MODULE-VIEW PAGE =================== */

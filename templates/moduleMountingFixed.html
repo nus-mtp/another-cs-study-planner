@@ -8,6 +8,7 @@ $var hierarchy = [home, fixedMounting]
 
 <script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
 
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -23,6 +24,18 @@ $var hierarchy = [home, fixedMounting]
                         <input class="btn btn-primary" type="submit" value="Go To Module Mountings for Other AYs" data-toggle="tooltip" data-placement="bottom" title="See tentative module mountings for other AYs">
                     </form>
                 </div>
+                <div class="col-md-12 text-center toggle-columns-display">
+                    <form>
+                        <label class="checkbox-inline toggle-columns-display-checkbox">
+                          <input type="checkbox" onclick="toggleQuotaDisplay('#fixed-mounting-table');">
+                          Display Quota
+                        </label>
+                        <label class="checkbox-inline toggle-columns-display-checkbox">
+                          <input type="checkbox" onclick="toggleNumStudentsDisplay('#fixed-mounting-table');">
+                          Display Number of Students Taking
+                        </label>
+                    </form>
+                </div>
             </div>
             <br>
             <table class="table table-bordered table-hover text-center dataTable display" id="fixed-mounting-table">
@@ -31,10 +44,10 @@ $var hierarchy = [home, fixedMounting]
                         <th>Code</th>
                         <th>Name</th>
                         <th>Mounted In Sem 1</th>
-                        <th onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 1 Quota</th>
+                        <th class="quota-column" onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 1 Quota</th>
                         <th># of Students Taking (Sem 1)</th>
                         <th>Mounted In Sem 2</th>
-                        <th onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 2 Quota</th>
+                        <th class="quota-column" onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 2 Quota</th>
                         <th># of Students Taking (Sem 2)</th>
                     </tr>
                 </thead>
@@ -83,12 +96,13 @@ $var hierarchy = [home, fixedMounting]
                                 <span style="visibility:hidden;">1</span><!--for sorting purpose-->
                                 <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
                                 <span style="visibility:hidden;">2</span><!--for sorting purpose-->
-                                <a class="table-mounting-icon" ref="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
                                     title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>

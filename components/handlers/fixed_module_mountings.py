@@ -43,9 +43,7 @@ class Fixed(object):
             subplan[0] = code
             subplan[1] = name
             subplan[8] = status
-            # New modules will not be displayed in fixed mounting
-            if status.rstrip() == "Active":
-                self.full_mounting_plan.append(subplan)
+            self.full_mounting_plan.append(subplan)
 
 
     def populate_module_ay_sem_data(self):
@@ -111,7 +109,11 @@ class Fixed(object):
         self.populate_module_ay_sem_data()
         current_ay = model.get_current_ay()
 
-        full_mounting_plan = model.replace_empty_quota_with_symbols(self.full_mounting_plan)
+        full_mounting_plan = self.full_mounting_plan
+        # New modules will not be displayed in fixed mounting
+        full_mounting_plan = [subplan for subplan in full_mounting_plan 
+                              if subplan[8].rstrip() == "Active"]
+        full_mounting_plan = model.replace_empty_quota_with_symbols(full_mounting_plan)
         return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
 
 

@@ -26,6 +26,18 @@ $var hierarchy = [home, tentativeMounting]
                     </form>
                 </div>
             </div>
+            <div class="col-md-12 text-center toggle-columns-display">
+                <form>
+                    <label class="checkbox-inline toggle-columns-display-checkbox">
+                      <input type="checkbox" onclick="toggleQuotaDisplay('#tentative-mounting-table');">
+                      Display Quota
+                    </label>
+                    <label class="checkbox-inline toggle-columns-display-checkbox">
+                      <input type="checkbox" onclick="toggleNumStudentsDisplay('#tentative-mounting-table');">
+                      Display Number of Students Taking
+                    </label>
+                </form>
+            </div>
             <br>
             <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
                 <thead>
