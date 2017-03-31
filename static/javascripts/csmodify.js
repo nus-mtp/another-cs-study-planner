@@ -273,7 +273,7 @@ function saveChanges() {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
+                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequisites are valid.");
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -361,7 +361,7 @@ function saveChangesPreclusion() {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequistes are valid.");
+                window.alert("There are invalid modules in your preclusions. Please check if all the modules specified in the preclusions are valid.");
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
