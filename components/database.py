@@ -552,6 +552,17 @@ def get_oversub_mod():
     return list_of_oversub_with_info
 
 
+def get_student_stats_for_all_mods():
+    '''
+        For each module/AY-Sem that has at least 1 student taking,
+        get the number of students taking
+    '''
+    sql_command = "SELECT COUNT(*), moduleCode, acadYearAndSem FROM studentPlans " +\
+                  "GROUP BY moduleCode, acadYearAndSem ORDER BY moduleCode, acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
+
 ######################################################################################
 # Functions that query general student enrollment information
 ######################################################################################

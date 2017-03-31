@@ -32,8 +32,10 @@ $var hierarchy = [home, fixedMounting]
                         <th>Name</th>
                         <th>Mounted In Sem 1</th>
                         <th onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 1 Quota</th>
+                        <th># of Students Taking (Sem 1)</th>
                         <th>Mounted In Sem 2</th>
                         <th onclick="replaceNilQuotasWithNumbers('#fixed-mounting-table');">Sem 2 Quota</th>
+                        <th># of Students Taking (Sem 2)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +46,8 @@ $var hierarchy = [home, fixedMounting]
                         $ sem2Mounting = subplan[3]
                         $ sem1Quota = subplan[4]
                         $ sem2Quota = subplan[5]
+                        $ sem1NumStudents = subplan[6]
+                        $ sem2NumStudents = subplan[7]
 
                         <tr>
                             <td class="text-center">
@@ -70,6 +74,9 @@ $var hierarchy = [home, fixedMounting]
                             <td>
                                 $sem1Quota
                             </td>
+                            <td>
+                                $sem1NumStudents
+                            </td>
 
                         $if sem2Mounting == 1:
                             <td>
@@ -90,6 +97,9 @@ $var hierarchy = [home, fixedMounting]
                             <td>
                                 $sem2Quota
                             </td>
+                            <td>
+                                $sem2NumStudents
+                            </td>                        
                         </tr>
                 </tbody>
             </table>

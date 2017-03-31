@@ -12,10 +12,10 @@ function replaceNilQuotasWithNumbers(elementID){
             data[i][3] = -1;
         }
 
-        if (data[i][5] == '-'){
-            data[i][5] = -2;
-        } else if (data[i][5] == '?'){
-            data[i][5] = -1;
+        if (data[i][6] == '-'){
+            data[i][6] = -2;
+        } else if (data[i][6] == '?'){
+            data[i][6] = -1;
         }
     }            
 }

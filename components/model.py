@@ -206,6 +206,10 @@ def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
     return helper.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
 
+def get_student_stats_for_all_mods():
+    return database.get_student_stats_for_all_mods()
+
+
 ######################################################################################
 # Functions that query general student enrollment information
 ######################################################################################
