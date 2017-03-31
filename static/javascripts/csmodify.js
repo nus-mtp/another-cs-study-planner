@@ -84,8 +84,21 @@ $(function() {
      * where column # uses 0-based indexing
      * from left to right
     */
-    $('#module-listing-table').DataTable( {
-        "aaSorting": []
+    var table = $('#module-listing-table').DataTable( {
+        "aaSorting": [],
+    } );
+
+    // Apply the search
+    table.columns().every( function () {
+        var col = this;
+ 
+        $( 'input', this.header() ).on( 'keyup change', function () {
+            if ( col.search() !== this.value ) {
+                col
+                    .search( this.value )
+                    .draw();
+            }
+        } );
     } );
 
     $('#delete-module-table').DataTable( {
