@@ -3,7 +3,7 @@
     Acts as a facade for database.py and helper.py
 '''
 
-from components import database, helper
+from components import database, helper, check_string
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
@@ -453,3 +453,16 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+######################################################################################
+# validation functions from check_string
+######################################################################################
+
+def check_name(name):
+    return check_string(name)
+
+
+def check_mcs(mcs):
+    return check_mcs(mcs)
+
+def check_code(code):
+    return check_code(code)
