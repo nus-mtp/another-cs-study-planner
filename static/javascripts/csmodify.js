@@ -115,6 +115,23 @@ function check(input) {
 /*
  * FUNCTIONS USED FOR THE INTERFACE FOR EDITING MODULE PREREQUISITES
  */
+function attachListenersToInputs(length) {
+    $("input").on("input", function() {
+        $("input").each(function() {
+            var parentColumn = this.parentElement;
+            if (length == 1) {
+                parentColumn.style.backgroundColor = "#ffffff";
+            } else if (length == 2) {
+                parentColumn.style.backgroundColor = "#9bc2e4";
+            }
+
+            if (parentColumn.children.length != length) {
+                parentColumn.removeChild(parentColumn.lastChild);
+            }
+        });
+    });
+}
+
 function addModule(btn) {
     // Get the parent row, to add <td> elements to.
     var parentRow = btn.parentElement.parentElement;
@@ -248,6 +265,8 @@ function deletePrereqUnit(btn) {
 }
 
 function saveChangesPrerequisite() {
+    attachListenersToInputs(2);
+
     // Submit data to backend for updating the prerequisites for module.
     var modulePrerequisites = convertToDataPrerequisite();
     var modulePrereqsJSON = JSON.stringify(modulePrerequisites);
@@ -264,8 +283,9 @@ function saveChangesPrerequisite() {
                 'code': moduleCode,
                 'prerequisites': modulePrereqsJSON,
             }
-        }).success(function(isUpdated) {
-            if (isUpdated == 'True') {
+        }).success(function(data) {
+            var parsedData = JSON.parse(data);
+            if (parsedData[0] == true) {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
                     window.close();
@@ -273,7 +293,7 @@ function saveChangesPrerequisite() {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                window.alert("There are invalid modules in your prerequisites. Please check if all the modules specified in the prerequisites are valid.");
+                highlightErrorFieldsPreclusion(parsedData[1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -347,6 +367,8 @@ function removePreclusionModule(btn) {
 }
 
 function saveChangesPreclusion() {
+    attachListenersToInputs(1);
+
     // Submit data to backend for updating the preclusions for module.
     var modulePreclusions = convertToDataPreclusion();
     var modulePreclusionsJSON = JSON.stringify(modulePreclusions);
@@ -362,8 +384,9 @@ function saveChangesPreclusion() {
                 'code': moduleCode,
                 'preclusions': modulePreclusionsJSON,
             }
-        }).success(function(isUpdated) {
-            if (isUpdated == 'True') {
+        }).success(function(data) {
+            var parsedData = JSON.parse(data);
+            if (parsedData[0] == true) {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
                     window.close();
@@ -371,7 +394,7 @@ function saveChangesPreclusion() {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                window.alert("There are invalid modules in your preclusions. Please check if all the modules specified in the preclusions are valid.");
+                highlightErrorFieldsPreclusion(parsedData[1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -401,6 +424,62 @@ function revertChangesPreclusion() {
     if (toRevert) {
         var moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
         window.location.href = ('/editModulePreclusions?code=' + moduleCode);
+    }
+}
+
+function highlightErrorFieldsPrerequisite(data) {
+    var message_start = "<p><b>Message for ";
+    var message_end = "</b></p>";
+
+    var rows = document.getElementsByTagName("tbody")[0].children;
+
+    for (i = 0; i < rows.length; i+=2) {
+        // Reads the prerequisite modules for each unit
+        var columns = rows[i].children;
+
+        for (j = 1; j < columns.length; j+=2) {
+            // Reads off the module code in the input fields for each unit.
+            var targetColumn = columns[j];
+            var moduleCode = columns[j].children[0].value;
+
+            if (targetColumn.children.length != 2) {
+                // Removal of message in preparation of adding a new message (if necessary)
+                targetColumn.removeChild(targetColumn.lastChild);
+            }
+
+            if (moduleCode != "") {
+                var messageElement = document.createElement("p");
+                messageElement.innerHTML = (message_start + moduleCode + message_end);
+                targetColumn.appendChild(messageElement);
+                targetColumn.style.backgroundColor = "#d9534f";
+            }
+        }
+    }
+}
+
+function highlightErrorFieldsPreclusion(data) {
+    var modulesWithErrors = data;
+
+    var rows = document.getElementsByTagName("tbody")[0].children;
+    var message_start = "<p><b>";
+    var message_end = "</b></p>";
+
+    // Locates the element containing the module code,
+    // and attaches a message there.
+    for (i = 0; i < rows.length; i++) {
+        var targetRow = rows[i];
+        var moduleCodeColumn = targetRow.children[1];
+        var moduleCode = moduleCodeColumn.children[0].value;
+
+        for (k = 0; k < data.length; k++) {
+            if (modulesWithErrors[k][0] == moduleCode) {
+                var messageElement = document.createElement("p");
+                messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
+                moduleCodeColumn.appendChild(messageElement);
+                moduleCodeColumn.style.backgroundColor = "#d9534f";
+                break;
+            }
+        }
     }
 }
 
