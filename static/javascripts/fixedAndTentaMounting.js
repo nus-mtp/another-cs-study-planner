@@ -50,6 +50,7 @@ function toggleQuotaDisplay(elementID){
     table.column(3).visible(!quotaDisplay);
     table.column(6).visible(!quotaDisplay);
     quotaDisplay = !quotaDisplay;
+    $(elementID).width("100%");
 }
 
 var numStudentsDisplay = false;
@@ -58,4 +59,5 @@ function toggleNumStudentsDisplay(elementID){
     table.column(4).visible(!numStudentsDisplay);
     table.column(7).visible(!numStudentsDisplay);
     numStudentsDisplay = !numStudentsDisplay;
+    $(elementID).width("100%");
 }
