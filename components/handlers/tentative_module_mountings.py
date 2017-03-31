@@ -19,8 +19,9 @@ class Tentative(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 6 attributes 
-            (code, name, sem 1 mounting, sem 2 mounting, sem 1 quota, sem 2 quota)
+            Each subplan is a list of 8 attributes 
+            (code, name, sem 1 mounting, sem 2 mounting, sem 1 quota, sem 2 quota,
+            number of students taking in sem 1, number of students taking in sem 2,)
             For tentative mountings, each mounting has 3 possible values (-1 or 0 or 1)
             -1 = not mounted; 0 = unmounted; 1 = mounted
         '''
@@ -37,13 +38,13 @@ class Tentative(object):
         for info in module_infos:
             code = info[0]
             name = info[1]
-            subplan = ["", "", -1, -1, None, None]
+            subplan = ["", "", -1, -1, None, None, 0, 0]
             subplan[0] = code
             subplan[1] = name
             self.full_mounting_plan.append(subplan)
 
 
-    def populate_mounting_values(self, selected_ay):
+    def populate_module_ay_sem_data(self, selected_ay):
         '''
             Populate each subplan with sem 1 and sem 2 mounting values
         '''
@@ -73,7 +74,7 @@ class Tentative(object):
         # Generate full mounting plan for fixed mountings
         fixed_mounting_handler = Fixed()
         fixed_mounting_handler.populate_module_code_and_name()
-        fixed_mounting_handler.populate_mounting_values()
+        fixed_mounting_handler.populate_module_ay_sem_data()
         fixed_full_mounting_plan = fixed_mounting_handler.full_mounting_plan
 
         # Mark module that are unmounted
@@ -90,6 +91,26 @@ class Tentative(object):
             if fixed_sem_2_mounting == 1 and tenta_sem_2_mounting == -1:
                 tenta_full_mounting_plan[i][3] = 0
 
+        student_stats = model.get_student_stats_for_all_mods()
+
+        subplan_index = 0
+        curr_subplan = tenta_full_mounting_plan[subplan_index]
+        selected_ay = model.get_next_ay(model.get_current_ay())
+
+        for stat in student_stats:
+            code = stat[1]
+            curr_module_code = curr_subplan[0]
+            while code != curr_module_code:
+                subplan_index += 1
+                curr_subplan = tenta_full_mounting_plan[subplan_index]
+                curr_module_code = curr_subplan[0]
+            ay_sem = stat[2]
+            number_of_students = stat[0]
+            if ay_sem == selected_ay+" Sem 1":
+                curr_subplan[6] = number_of_students
+            elif ay_sem == selected_ay+" Sem 2":
+                curr_subplan[7] = number_of_students
+
         self.full_mounting_plan = tenta_full_mounting_plan
 
 
@@ -105,7 +126,7 @@ class Tentative(object):
         selected_ay = model.get_next_ay(model.get_current_ay())
 
         self.populate_module_code_and_name()
-        self.populate_mounting_values(selected_ay)
+        self.populate_module_ay_sem_data(selected_ay)
 
         full_mounting_plan = model.replace_empty_quota_with_symbols(self.full_mounting_plan)
         return RENDER.moduleMountingTentative(selected_ay, full_mounting_plan)

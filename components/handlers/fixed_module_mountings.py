@@ -39,7 +39,7 @@ class Fixed(object):
             code = info[0]
             name = info[1]
             status = info[4]
-            subplan = ["", "", -1, -1, -1, -1, 0, 0, ""]
+            subplan = ["", "", -1, -1, None, None, 0, 0, ""]
             subplan[0] = code
             subplan[1] = name
             subplan[8] = status
