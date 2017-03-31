@@ -1192,6 +1192,9 @@ def edit_preclusion(module_code, preclude_units):
         set of preclusions found in preclude_units.
         Returns true if successful, false otherwise.
     '''
+    prereq_units = model.get_prerequisite_units(module_code)
+    prereq_list = model.convert_2D_to_1D_list(prereq_units)
+
     outcome = delete_all_preclusions(module_code, False)
     if not outcome:
         CONNECTION.rollback()
@@ -1203,6 +1206,9 @@ def edit_preclusion(module_code, preclude_units):
 
         for precluded_module in preclude_units:
             if module_list.has_key(precluded_module):
+                CONNECTION.rollback()
+                return False
+            elif precluded_module in prereq_list:
                 CONNECTION.rollback()
                 return False
             else:
