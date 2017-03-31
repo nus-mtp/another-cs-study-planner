@@ -3,7 +3,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP
 from components import model, session
 
@@ -156,10 +156,10 @@ class TestCode(object):
 
         response = addModuleForm.submit()
 
-        response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE %
-                              self.TEST_ADD_MODULE_CODE_RELAXED.upper()))
+        response.mustcontain(self.OUTCOME_SUCCESS_MESSAGE %
+                             self.TEST_ADD_MODULE_CODE_RELAXED.upper())
         response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT %
-                              self.TEST_ADD_MODULE_CODE_RELAXED.upper())
+                             self.TEST_ADD_MODULE_CODE_RELAXED.upper())
 
         # For reusing data, delete it after it is successfully added.
         model.delete_module(self.TEST_ADD_MODULE_CODE_RELAXED)
@@ -216,23 +216,23 @@ class TestCode(object):
         response.mustcontain(self.ERR_MESSAGE2)
 
     def test_add_module_with_invalid_module_code(self):
-         '''
-             Tests that adding a module with invalid module code
-             should fail.
-         '''
-         root = self.test_app.get(self.URL_NORMAL)
+        '''
+            Tests that adding a module with invalid module code
+            should fail.
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
 
-         addModuleForm = root.forms__get()['addModForm']
-         addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
-         addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
-         addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-         addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
+        addModuleForm = root.forms__get()['addModForm']
+        addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
+        addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
+        addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
+        addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
 
-         response = addModuleForm.submit()
-         assert_equal(response.status, 200)
+        response = addModuleForm.submit()
+        assert_equal(response.status, 200)
 
-         response.mustcontain(self.OUTCOME)
-         response.mustcontain(self.ERR_MESSAGE)
+        response.mustcontain(self.OUTCOME)
+        response.mustcontain(self.ERR_MESSAGE)
 
 
     def test_add_module_with_invalid_module_name(self):
