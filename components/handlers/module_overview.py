@@ -120,8 +120,7 @@ class ViewMod(object):
 
         # Get module's name, description, MC and status
         module_info = model.get_module(module_code)
-        if not model.is_existing_module(module_code):
-            return Outcome().POST("back-to-listing", None, None)
+
         # Get mounting status, quota and number of students taking
         self.load_fixed_mounting_plan(module_code)
         self.load_tenta_mounting_plan(module_code)
