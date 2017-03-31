@@ -889,7 +889,7 @@ def get_all_mods_taken_together():
     return DB_CURSOR.fetchall()
 
 
-def get_modA_taken_prior_to_modB():
+def get_modA_taken_prior_to_modB(aysem):
     '''
         Retrieves the list of pairs of modules where there is at least 1 student
         who took module A prior to taking module B.
@@ -912,6 +912,7 @@ def get_modA_taken_prior_to_modB():
                   "WHERE sp2.moduleCode <> sp1.moduleCode " + \
                   "AND sp1.studentId = sp2.studentId " + \
                   "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp2.acadYearAndSem = %s" + \
                   "AND sp1.isTaken = True " + \
                   "AND m1.code = sp1.moduleCode " + \
                   "AND m2.code = sp2.moduleCode " + \
@@ -920,7 +921,7 @@ def get_modA_taken_prior_to_modB():
                   "m1.name, m2.name " + \
                   "ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    DB_CURSOR.execute(sql_command, (aysem,))
 
     return DB_CURSOR.fetchall()
 

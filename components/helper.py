@@ -439,23 +439,36 @@ def validate_input(input_data, input_types, is_future=False,
                                             '" is not recognised by the system')
                 raise web.notfound(error)
 
-        elif input_type == "moduleA" or input_type == "moduleB":
+        elif input_type == "moduleAandB":
             try:
-                if input_type == "moduleA":
-                    module_code = input_data.moduleA
-                else:
-                    module_code = input_data.moduleB
+                moduleA_code = input_data.moduleA
+                is_moduleA_specified = True
             except AttributeError:
-                error = RENDER.notfound("Module " + input_type[-1] +\
-                                        "'s code is not specified")
+                is_moduleA_specified = False
+            try:
+                moduleB_code = input_data.moduleB
+                is_moduleB_specified = True
+            except AttributeError:
+                is_moduleB_specified = False
+
+            if not is_moduleA_specified and not is_moduleB_specified:   
+                error = RENDER.notfound("1 out of 2 module codes is not specified")
                 raise web.notfound(error)
-            module_exist = model.is_existing_module(module_code.upper())
+
+            module_exist = model.is_existing_module(moduleA_code.upper())
             if not module_exist:
-                error = RENDER.notfound('Module code "' + module_code +\
+                error = RENDER.notfound('Module code "' + moduleA_code +\
                                         '" does not exist in our system')
                 raise web.notfound(error)
             else:
-                input_data.code = module_code.upper()
+                input_data.moduleA = moduleA_code.upper()
+            module_exist = model.is_existing_module(moduleB_code.upper())
+            if not module_exist:
+                error = RENDER.notfound('Module code "' + moduleB_code +\
+                                        '" does not exist in our system')
+                raise web.notfound(error)
+            else:
+                input_data.moduleB = moduleB_code.upper()
 
     return input_data
 

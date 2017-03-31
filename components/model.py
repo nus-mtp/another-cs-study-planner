@@ -322,8 +322,8 @@ def get_all_mods_taken_together():
     return database.get_all_mods_taken_together()
 
 
-def get_modA_taken_prior_to_modB():
-    return database.get_modA_taken_prior_to_modB()
+def get_modA_taken_prior_to_modB(aysem):
+    return database.get_modA_taken_prior_to_modB(aysem)
 
 
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B,

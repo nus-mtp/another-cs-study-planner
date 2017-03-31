@@ -25,12 +25,28 @@ $if modulePairs is not None:
 				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
 				<select style="display:inline-block;" name="aysem" required>
-				$for aySem in allAySems:
-					<option value="$aySem">$aySem</option>
+				$for aysem in allAySems:
+					<option value="$aysem">$aysem</option>
 				</select><br>
 				<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Go">
 			</form>
 		</div>
+        <div class="col-md-12 pagination-centered text-center">
+            <form id="ay-form" class="form-inline" action="/moduleTakenPriorToOthers" method="get">
+                <div class="form-group">
+                    <label for="ay-sem">Select AY-Sem:</label>
+                    <select class="form-control" name="aysem">
+                        <option value="" disabled selected>Please choose a target AY-Semester</option>
+                        $for aysem in allAySems:
+                        	<option value="$aysem">$aysem</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit"  value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    $if len(modulePairs) > 0:
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>

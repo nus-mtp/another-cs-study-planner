@@ -30,14 +30,17 @@ class TakePriorTo(object):
             if not session.validate_session():
                 raise web.seeother('/login')
             input_data = model.validate_input(web.input(), ["moduleA", "moduleB", "aysem"],
-                                              attr_required=False)
+                                              aysem_specific=False, attr_required=False)
 
+            target_ay_sem = None
             try:
-                module_A = input_data.moduleA
-                module_B = input_data.moduleB
                 target_ay_sem = input_data.aysem
+                module_A = input_data.moduleA
+                module_B = input_data.moduleB            
             except AttributeError:
-                module_pairs = model.get_modA_taken_prior_to_modB()
+                module_pairs = []
+                if target_ay_sem is not None:
+                    module_pairs = model.get_modA_taken_prior_to_modB(target_ay_sem)
 
                 # Get a list of all AY-Sems (for users to select)
                 all_ay_sems = model.get_all_ay_sems()
