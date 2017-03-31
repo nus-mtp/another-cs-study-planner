@@ -1088,6 +1088,8 @@ def edit_prerequisite(module_code, prereq_units):
         set of prerequisites found in prereq_units.
         Returns true if successful, false otherwise.
     '''
+    preclusion_list = model.get_preclusion_list(module_code)
+
     outcome = delete_all_prerequisite(module_code, False)
     if not outcome:
         CONNECTION.rollback()
@@ -1101,6 +1103,9 @@ def edit_prerequisite(module_code, prereq_units):
         for unit in prereq_units:
             for module in unit:
                 if module_list.has_key(module):
+                    CONNECTION.rollback()
+                    return False
+                elif module in preclusion_list:
                     CONNECTION.rollback()
                     return False
                 else:
