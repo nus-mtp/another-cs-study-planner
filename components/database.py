@@ -545,11 +545,16 @@ def get_oversub_mod():
         aysem_quota_tenta_list = get_tenta_mounting_and_quota(mod_code)
         aysem_quota_merged_list = aysem_quota_fixed_list + \
                                 aysem_quota_tenta_list
+        all_ay_sem_to_query = model.get_all_fixed_ay_sems() + model.get_all_tenta_ay_sems()
+        ay_sem_to_query_list = [ay_sem[0] for ay_sem in all_ay_sem_to_query]
 
         num_student_plan_aysem_list = get_number_students_planning(mod_code)
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
+            if ay_sem not in ay_sem_to_query_list:
+                continue
+
             real_quota = model.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
             # ensures that quota will be a number which is not None
