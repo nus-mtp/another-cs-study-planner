@@ -32,11 +32,18 @@ class TestCode(object):
         self.edit_preclude_duplicate_tested = False
         self.edit_preclude_non_existent_tested = False
         self.edit_preclude_already_in_prereq = False
+        self.edit_preclude_multiple_errors_tested = False
 
         self.test_preclude_code = "BB1111"
         self.test_preclude2_code = "BB1112"
         self.test_preclude3_code = "BB1113"
         self.test_invalid_module_code = "ZZ1597"
+
+        self.ERROR_MSG_MODULE_CANNOT_BE_ITSELF = "This module cannot be the same as target module"
+        self.ERROR_MSG_MODULE_DUPLICATED = "There cannot be more than one instance of this module"
+        self.ERROR_MSG_MODULE_DOESNT_EXIST = "This module does not exist"
+        self.ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ = \
+            "This module is a prerequisite of the target module"
 
 
     def setUp(self):
@@ -69,6 +76,8 @@ class TestCode(object):
         self.edit_preclude_non_existent_tested = True
         self.test_edit_preclude_already_in_prereq()
         self.edit_preclude_already_in_prereq = True
+        self.test_edit_preclude_multiple_errors()
+        self.edit_preclude_multiple_errors_tested = True
 
 
     def tearDown(self):
@@ -90,7 +99,7 @@ class TestCode(object):
             preclude_units_to_change_to = [self.test_preclude_code]
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
 
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(preclude_info is not None)
@@ -113,7 +122,7 @@ class TestCode(object):
             preclude_units_to_change_to = [self.test_preclude2_code]
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
 
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(preclude_info is not None)
@@ -135,7 +144,7 @@ class TestCode(object):
             preclude_units_to_change_to = []
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
 
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -154,7 +163,7 @@ class TestCode(object):
             preclude_units_to_change_to = []
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
 
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(preclude_info is not None)
@@ -172,7 +181,7 @@ class TestCode(object):
                                            self.test_preclude2_code, self.test_preclude3_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -199,7 +208,7 @@ class TestCode(object):
                                            self.test_preclude2_code, self.test_preclude3_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_true(outcome)
+            assert_true(outcome[0])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -227,7 +236,10 @@ class TestCode(object):
                                            self.test_preclude2_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_false(outcome)
+            assert_false(outcome[0])
+            error_list = outcome[1]
+            assert_equal(error_list[0],
+                         [self.test_preclude2_code, self.ERROR_MSG_MODULE_DUPLICATED])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -252,7 +264,10 @@ class TestCode(object):
                                            self.test_invalid_module_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_false(outcome)
+            assert_false(outcome[0])
+            error_list = outcome[1]
+            assert_equal(error_list[0],
+                         [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -272,7 +287,10 @@ class TestCode(object):
                                            self.test_preclude2_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_false(outcome)
+            assert_false(outcome[0])
+            error_list = outcome[1]
+            assert_equal(error_list[0],
+                         [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -299,7 +317,10 @@ class TestCode(object):
             preclude_units_to_change_to = [self.test_preclude_code]
 
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
-            assert_false(outcome)
+            assert_false(outcome[0])
+            error_list = outcome[1]
+            assert_equal(error_list[0],
+                         [self.test_preclude_code, self.ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ])
 
             preclude_info = model.get_preclusion(self.test_module_code)
 
@@ -309,3 +330,34 @@ class TestCode(object):
             model.delete_all_prerequisites(self.test_module_code)
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
+
+
+    def test_edit_preclude_multiple_errors(self):
+        '''
+            Tests editing preclusion on a module to precludes with multiple
+            errors.
+            Note: this test case should fail to edit.
+        '''
+        if not self.edit_preclude_multiple_errors_tested:
+            model.add_preclusion(self.test_module_code, self.test_preclude_code)
+
+            preclude_units_to_change_to = [self.test_module_code,
+                                           self.test_invalid_module_code]
+
+            outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
+            assert_false(outcome[0])
+            error_list = outcome[1]
+            assert_equal(error_list[0],
+                         [self.test_module_code, self.ERROR_MSG_MODULE_CANNOT_BE_ITSELF])
+            assert_equal(error_list[1],
+                         [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
+
+            preclude_info = model.get_preclusion(self.test_module_code)
+
+            assert_true(preclude_info is not None)
+            assert_equal(self.test_preclude_code, preclude_info[0][0])
+
+            model.delete_all_preclusions(self.test_module_code)
+
+            preclude_info = model.get_preclusion(self.test_module_code)
+            assert_true(len(preclude_info) == 0)
