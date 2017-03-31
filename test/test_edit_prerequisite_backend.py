@@ -31,6 +31,7 @@ class TestCode(object):
         self.prereq_to_multiple_prereq_tested = False
         self.edit_prereq_duplicate_tested = False
         self.edit_prereq_non_existent_tested = False
+        self.edit_prereq_already_in_preclusion = False
 
         self.test_prereq_code = "BB1111"
         self.test_prereq_index = 0
@@ -69,6 +70,8 @@ class TestCode(object):
         self.edit_prereq_duplicate_tested = True
         self.test_edit_prereq_non_existent_modules()
         self.edit_prereq_non_existent_tested = True
+        self.test_edit_prereq_already_in_preclusion()
+        self.edit_prereq_already_in_preclusion = True
 
 
     def tearDown(self):
@@ -323,3 +326,27 @@ class TestCode(object):
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
             return
+
+
+    def test_edit_prereq_already_in_preclusion(self):
+        '''
+            Tests editing prerequisite on a module to prereqs which
+            are also preclusions of that module.
+            Note: this test case should fail to edit.
+        '''
+        if not self.edit_prereq_non_existent_tested:
+            model.add_preclusion(self.test_module_code, self.test_prereq_code)
+
+            prereq_units_to_change_to = [[self.test_prereq_code]]
+
+            outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
+            assert_false(outcome)
+
+            prereq_info = model.get_prerequisite(self.test_module_code)
+
+            assert_true(prereq_info is not None)
+            assert_true(len(prereq_info) == 0)
+
+            model.delete_all_preclusion(self.test_module_code)
+            preclude_info = model.get_preclusion(self.test_module_code)
+            assert_true(len(preclude_info) == 0)
