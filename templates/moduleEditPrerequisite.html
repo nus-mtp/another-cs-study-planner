@@ -61,8 +61,9 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePre
 		<br>
 		<div class="col-md-12 text-center">
 			<button class="btn btn-lg btn-primary" id="add-prereq-unit" data-toggle="tooltip" data-placement="top" title="Add Prerequisite Unit" onclick="addPrereqUnit()"><span class="glyphicon glyphicon-plus"></span></button>
-			<button class="btn btn-lg btn-primary" id="save-changes" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChanges()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-			<a class="btn btn-lg btn-primary" id="revert-changes" data-toggle="tooltip" data-placement="top" title="Revert All Changes" href="/editModulePrerequisites?code=$moduleCode"><span class="glyphicon glyphicon-refresh"></span></a>
+			<button class="btn btn-lg btn-primary" id="save-changes" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChangesPrerequisite()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+			<!--a class="btn btn-lg btn-primary" id="revert-changes" data-toggle="tooltip" data-placement="top" title="Revert All Changes" href="/editModulePrerequisites?code=$moduleCode"><span class="glyphicon glyphicon-refresh"></span></a-->
+			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Revert All Changes" onclick="revertChangesPrerequisite()"><span class="glyphicon glyphicon-refresh"></span></button>
 		</div>
 		<table style="display:none">
 			<tr id="prereq-unit-template" class="unit">
