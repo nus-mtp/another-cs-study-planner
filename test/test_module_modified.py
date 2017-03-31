@@ -41,8 +41,8 @@ class TestCode(object):
 
     MOUNTING_CHANGES_TABLE_MOUNTING_CHANGE = '<th>Change in Mounting</th>'
 
-    QUOTA_CHANGES_TABLE_OLD_QUOTA = '<th>Old Quota</th>'
-    QUOTA_CHANGES_TABLE_NEW_QUOTA = '<th>New Quota</th>'
+    QUOTA_CHANGES_TABLE_OLD_QUOTA = 'Old Quota</th>'
+    QUOTA_CHANGES_TABLE_NEW_QUOTA = 'New Quota</th>'
     QUOTA_CHANGES_TABLE_QUOTA_CHANGE = '<th>Change in Quota</th>'
 
     DETAIL_CHANGES_TABLE_DETAIL_CHANGE = '<th>Change in Details</th>'
