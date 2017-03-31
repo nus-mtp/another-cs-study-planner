@@ -29,7 +29,7 @@ class EditAll(object):
 
         tenta_mounting_handler = Tentative()
         tenta_mounting_handler.populate_module_code_and_name()
-        tenta_mounting_handler.populate_mounting_values(selected_ay)
+        tenta_mounting_handler.populate_module_ay_sem_data(selected_ay)
         full_mounting_plan = tenta_mounting_handler.full_mounting_plan
         full_mounting_plan = model.replace_empty_quota_with_symbols(full_mounting_plan)
 

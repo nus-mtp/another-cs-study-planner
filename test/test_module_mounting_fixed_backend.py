@@ -40,7 +40,7 @@ class TestCode(object):
         model.add_fixed_mounting('BB1003', self.current_ay+' Sem 2', 40)
 
         self.fixed_mounting_handler.populate_module_code_and_name()
-        self.fixed_mounting_handler.populate_mounting_values()
+        self.fixed_mounting_handler.populate_module_ay_sem_data()
 
         assert_true(len(self.fixed_mounting_handler.full_mounting_plan) > 0)
 

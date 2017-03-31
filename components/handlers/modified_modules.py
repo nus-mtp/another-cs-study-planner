@@ -26,7 +26,7 @@ class Modified(object):
         fixed_mounting_handler = Fixed()
         current_ay = model.get_current_ay()
         fixed_mounting_handler.populate_module_code_and_name()
-        fixed_mounting_handler.populate_mounting_values()
+        fixed_mounting_handler.populate_module_ay_sem_data()
         fixed_full_mounting_plan = fixed_mounting_handler.full_mounting_plan
 
         modified_modules = []
@@ -39,7 +39,7 @@ class Modified(object):
             # Generate tentative mounting plan
             tenta_mounting_handler = Tentative()
             tenta_mounting_handler.populate_module_code_and_name()
-            tenta_mounting_handler.populate_mounting_values(target_ay)
+            tenta_mounting_handler.populate_module_ay_sem_data(target_ay)
             tenta_full_mounting_plan = tenta_mounting_handler.full_mounting_plan
 
             # Compare the fixed and tentative mounting of each module for each semester
