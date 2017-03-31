@@ -23,12 +23,15 @@ class TestCode(object):
                                      'data-toggle="tooltip" data-placement="bottom" ' +\
                                      'title="See tentative module mountings for other AYs">'
 
-    TABLE_HEADER_CODE = '<th>Code</th>'
-    TABLE_HEADER_NAME = '<th>Name</th>'
-    TABLE_HEADER_DESCRIPTION = '<th>Description</th>'
-    TABLE_HEADER_MC = '<th>MCs</th>'
-    TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
+    TABLE_HEADER_CODE = '<th>Code'
+    TABLE_HEADER_NAME = '<th>Name'
+    TABLE_HEADER_DESCRIPTION = '<th>Description'
+    TABLE_HEADER_MC = '<th>MCs'
+    TABLE_HEADER_STATUS = '<th>Is New Module?'
 
+    ADVANCED_SEARCH_TEXT = 'Advanced Search &nbsp; <span id="chevron" '+\
+                           'class="glyphicon glyphicon-chevron-down"></span>'
+    ADVANCED_SEARCH_INPUT = '<input hidden type="text" class="filter" placeholder="Code" size="10">'
     global_var = None
 
     def __init__(self):
@@ -151,3 +154,14 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_DESCRIPTION)
         root.mustcontain(self.TABLE_HEADER_MC)
         root.mustcontain(self.TABLE_HEADER_STATUS)
+
+
+    def test_modules_listing_advanced_search(self):
+        '''
+            Tests if advanced search options exists
+        '''
+        root = self.test_app.get('/modules')
+
+        # Checks the existence of input fields and button for advanced search
+        root.mustcontain(self.ADVANCED_SEARCH_TEXT)
+        root.mustcontain(self.ADVANCED_SEARCH_INPUT)
