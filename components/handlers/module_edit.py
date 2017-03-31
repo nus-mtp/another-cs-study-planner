@@ -6,7 +6,7 @@
 
 from app import RENDER
 import web
-from components import model, check_string
+from components import model
 from components.handlers.outcome import Outcome
 from components.handlers.module_view_in_ay_sem import IndividualModule
 
@@ -48,13 +48,13 @@ class EditModuleInfo(object):
 
             #validate inputs
 
-            if not check_string.check_name(module_name):
-                return check_string.outcome_invalid()
+            if not model.check_name(module_name):
+                return model.outcome_invalid()
         except AttributeError:
             return Outcome().POST("edit_module", False, module_code)
 
         # Validate that MC is a number and is between 0 and 12
-        if(not check_string.check_mcs(module_mc)):
+        if(not model.check_mcs(module_mc)):
             return Outcome().POST("edit_module", False, module_code)
 
         old_module_info = model.get_module(module_code)
