@@ -569,6 +569,6 @@ def convert_2D_to_1D_list(table):
 
     for row in table:
         for item in row:
-            list.append(item)
+            new_list.append(item)
 
     return new_list
