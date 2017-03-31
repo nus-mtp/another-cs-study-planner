@@ -24,11 +24,6 @@ class EditModulePreclusions(object):
             input_data = model.validate_input(web.input(), ["code"])
             module_code = input_data.code
 
-            module_info = model.get_module(module_code)
-            if module_info is None:
-                raise web.notfound(RENDER.notfound("Module " +\
-                 module_code + " does not exist in the system."))
-
             preclusions = model.get_preclusion_units(module_code)
             return RENDER.moduleEditPreclusion(module_code, preclusions)
 
