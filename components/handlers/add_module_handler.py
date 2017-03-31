@@ -25,15 +25,18 @@ class AddModule(object):
             Handles the submitting of the add module form
         '''
         #get module values from form
-        data = web.input()
-        module_code = data.code.upper()
-        module_name = data.name
-        module_desc = data.description
-        module_mc = data.mc
+        try:
+            data = web.input()
+            module_code = data.code.upper()
+            module_name = data.name
+            module_desc = data.description
+            module_mc = data.mc
+            #string is valid
+            if not (check_string.check_code(module_code) and check_string.check_name(module_name)
+                    and check_string.check_mcs(str(module_mc))):
+                return check_string.outcome_invalid()
 
-        if not (check_string.check_code(module_code) and check_string.check_name(module_name)
-                and check_string.check_mcs(str(module_mc))):
-            return check_string.outcome_invalid()
-
-        outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
-        return Outcome().POST("add_module", outcome, module_code)
+            outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
+            return Outcome().POST("add_module", outcome, module_code)
+        except AttributeError:
+            return Outcome().Post("add_module", False, None)
