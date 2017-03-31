@@ -215,11 +215,6 @@ class TestCode(object):
 
         response = addModuleForm.submit()
 
-
-    # The below test cases are commented out as back-end validations are
-    # not implemented yet.
-    #
-    # @raises(Exception)
     def test_add_module_with_invalid_module_code(self):
          '''
              Tests that adding a module with invalid module code
