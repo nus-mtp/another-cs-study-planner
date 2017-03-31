@@ -247,15 +247,15 @@ function deletePrereqUnit(btn) {
     }
 }
 
-function saveChanges() {
+function saveChangesPrerequisite() {
     // Submit data to backend for updating the prerequisites for module.
-    var modulePrerequisites = convertToData();
+    var modulePrerequisites = convertToDataPrerequisite();
     var modulePrereqsJSON = JSON.stringify(modulePrerequisites);
 
     // Retrieve the module code to pass to the handler backend.
-    moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
+    var moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
 
-    toSave = window.confirm("Are you sure you want to save your changes?");
+    var toSave = window.confirm("Are you sure you want to save your changes?");
     if (toSave) {
         $.ajax({
             type: "POST",
@@ -281,7 +281,7 @@ function saveChanges() {
     }
 }
 
-function convertToData() {
+function convertToDataPrerequisite() {
     var prerequisites = [];
     // For iterating through units comprising of
     // [[Module-columns],[AND-column]]
@@ -309,7 +309,17 @@ function convertToData() {
     return prerequisites;
 }
 
-/* FUNCTIONS USED FOR THE INTERFACE FOR EDITING MODULE PRECLUSIONS */
+function revertChangesPrerequisite() {
+    var toRevert = window.confirm("Are you sure you want to revert your changes?");
+    if (toRevert) {
+        var moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
+        window.location.href = ('/editModulePrerequisites?code=' + moduleCode);
+    }
+}
+
+/*
+ * FUNCTIONS USED FOR THE INTERFACE FOR EDITING MODULE PRECLUSIONS
+ */
 function addPreclusionModule(btn) {
     // Get the <tbody>, to add the <tr> elements to.
     var tableBody = document.getElementsByTagName("tbody")[0];
@@ -341,9 +351,9 @@ function saveChangesPreclusion() {
     var modulePreclusions = convertToDataPreclusion();
     var modulePreclusionsJSON = JSON.stringify(modulePreclusions);
 
-    moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
+    var moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
 
-    toSave = window.confirm("Are you sure you want to save your changes?");
+    var toSave = window.confirm("Are you sure you want to save your changes?");
     if (toSave) {
         $.ajax({
             type: "POST",
@@ -384,6 +394,14 @@ function convertToDataPreclusion() {
     }
 
     return preclusions;
+}
+
+function revertChangesPreclusion() {
+    var toRevert = window.confirm("Are you sure you want to revert your changes?");
+    if (toRevert) {
+        var moduleCode = document.getElementsByTagName("h1")[0].children[0].children[0].textContent;
+        window.location.href = ('/editModulePreclusions?code=' + moduleCode);
+    }
 }
 
 
