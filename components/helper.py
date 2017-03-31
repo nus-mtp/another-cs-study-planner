@@ -440,3 +440,27 @@ def replace_null_with_dash(table):
                 row[col] = '-'
 
     return table
+
+
+def replace_empty_quota_with_symbols(mounting_plan):
+    '''
+        Replace all quota values with '-' (if not mounted)
+        or '?' (if mounted)
+    '''
+    mounting_plan = model.convert_to_list(mounting_plan)
+    for subplan in mounting_plan:
+        sem1_quota = subplan[4]
+        if sem1_quota is None:
+            sem1_mounting = subplan[2]
+            if sem1_mounting == 1:
+                subplan[4] = '?'
+            else:
+                subplan[4] = '-'
+        sem2_quota = subplan[5]
+        if sem2_quota is None:
+            sem2_mounting = subplan[3]
+            if sem2_mounting == 1:
+                subplan[5] = '?'
+            else:
+                subplan[5] = '-'
+    return mounting_plan
