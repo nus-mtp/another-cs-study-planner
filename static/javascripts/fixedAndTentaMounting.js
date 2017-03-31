@@ -15,24 +15,31 @@
     }
  })
 
-// Before sorting quota column, replace quotas that are '-' or '?' with negative numbers
+// Before sorting quota column, replace quotas that are '-' or '?' or 'Unmounted' with negative numbers
 function replaceNilQuotasWithNumbers(elementID){
     var table = $(elementID).DataTable();
     var data = table
         .rows()
         .data();
     
+    column1Index = 3
+    column2Index = 6
+    if (elementID == '#modified-modules-quota-table') {
+        column1Index = 2
+        column2Index = 3
+    }
+
     for (i=0; i<data.length; i++){
-        if (data[i][3] == '-'){
-            data[i][3] = -2;
-        } else if (data[i][3] == '?'){
-            data[i][3] = -1;
+        if (data[i][column1Index].substring(0,1) == '-' || data[i][column1Index].substring(0,1) == 'U'){
+            data[i][column1Index] = -2;
+        } else if (data[i][column1Index].substring(0,1) == '?'){
+            data[i][column1Index] = -1;
         }
 
-        if (data[i][6] == '-'){
-            data[i][6] = -2;
-        } else if (data[i][6] == '?'){
-            data[i][6] = -1;
+        if (data[i][column2Index].substring(0,1) == '-' || data[i][column2Index].substring(0,1) == 'U'){
+            data[i][column2Index] = -2;
+        } else if (data[i][column2Index].substring(0,1) == '?'){
+            data[i][column2Index] = -1;
         }
     }            
 }

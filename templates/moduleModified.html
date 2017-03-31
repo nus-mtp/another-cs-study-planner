@@ -18,6 +18,8 @@ $if modify_type is not None:
 $else:
     $var hierarchy = [home, modifiedModulePage]
 
+<script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -90,8 +92,8 @@ $else:
                             <tr>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Old Quota</th>
-                                <th>New Quota</th>
+                                <th onclick="replaceNilQuotasWithNumbers('#specific-modified-module');">Old Quota</th>
+                                <th onclick="replaceNilQuotasWithNumbers('#specific-modified-module');">New Quota</th>
                                 <th>Change in Quota</th>
                                 <th data-sortable="false">Restore</th>
                             </tr>
@@ -375,8 +377,8 @@ $else:
                                 <tr>
                                     <th>Code</th>
                                     <th>Name</th>
-                                    <th>Old Quota</th>
-                                    <th>New Quota</th>
+                                    <th onclick="replaceNilQuotasWithNumbers('#modified-modules-quota-table');">Old Quota</th>
+                                    <th onclick="replaceNilQuotasWithNumbers('#modified-modules-quota-table');">New Quota</th>
                                     <th>Change in Quota</th>
                                     <th data-sortable="false">Restore</th>
                                 </tr>
