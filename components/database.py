@@ -1309,12 +1309,14 @@ def migrate_to_next_aysem():
         4) Clean up all data in the moduleBackup table.
         5) All modules in fixed mounting will have their statuses updated to "Active"
            from "New"
+        6) Increment all students' year of study by 1.
     '''
     migrate_fixed_to_past_mounting()
     migrate_one_ay_from_tentative_to_fixed()
     duplicate_data_into_tentative_if_needed()
     clean_up_module_backup_table()
     update_active_modules_after_migration()
+    increment_student_year_by_one()
 
     CONNECTION.commit()
 
@@ -1411,6 +1413,14 @@ def update_active_modules_after_migration():
     sql_command = "UPDATE module SET status='Active' WHERE " + \
                   "status='New' AND code in (SELECT mm.moduleCode FROM " + \
                   "moduleMounted mm WHERE mm.moduleCode = code)"
+    DB_CURSOR.execute(sql_command)
+
+
+def increment_student_year_by_one():
+    '''
+        This function increases all the students' year by 1.
+    '''
+    sql_command = "UPDATE student SET year = year + 1"
     DB_CURSOR.execute(sql_command)
 
 
