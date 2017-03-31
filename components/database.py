@@ -1214,13 +1214,17 @@ def edit_preclusion(module_code, preclude_units):
         set of preclusions found in preclude_units.
         Returns true if successful, false otherwise.
     '''
+    is_successful = True
+    error_list = list()
+
     prereq_units = model.get_prerequisite_units(module_code)
     prereq_list = model.convert_2D_to_1D_list(prereq_units)
 
     outcome = delete_all_preclusions(module_code, False)
     if not outcome:
         CONNECTION.rollback()
-        return False
+        is_successful = False
+        return [is_successful, error_list] # Error from deleting
 
     # Repopulate the preclusions
     if len(preclude_units) != LENGTH_EMPTY:
@@ -1228,25 +1232,38 @@ def edit_preclusion(module_code, preclude_units):
 
         for precluded_module in preclude_units:
             if module_list.has_key(precluded_module):
-                CONNECTION.rollback()
-                return False
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_DUPLICATED]
+                error_list.append(error_code_and_msg)
             elif precluded_module in prereq_list:
-                CONNECTION.rollback()
-                return False
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ]
+                error_list.append(error_code_and_msg)
+            elif precluded_module == module_code:
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_CANNOT_BE_ITSELF]
+                error_list.append(error_code_and_msg)
             else:
                 outcome = add_preclusion(module_code, precluded_module, False)
                 if not outcome:
                     CONNECTION.rollback()
-                    return False
-                module_list[precluded_module] = True
+                    is_successful = False
+                    error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_DOESNT_EXIST]
+                    error_list.append(error_code_and_msg)
+                else:
+                    module_list[precluded_module] = True
 
-        try:
-            CONNECTION.commit()
-        except psycopg2.IntegrityError:
+        if is_successful:
+            try:
+                CONNECTION.commit()
+            except psycopg2.IntegrityError:
+                CONNECTION.rollback()
+                is_successful = False
+                return [is_successful, error_list] # Error from deleting
+        else:
             CONNECTION.rollback()
-            return False
 
-    return True
+    return [is_successful, error_list]
 
 
 ######################################################################################
