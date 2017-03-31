@@ -27,7 +27,10 @@ class EditModuleInfo(object):
         if module_info is None:
             return RENDER.notfound("Module " + module_code + " does not exist in the system.")
 
-        return RENDER.moduleEdit(module_info)
+        preclusions = model.get_preclusion_as_string(module_code)
+        prerequisites = model.get_prerequisite_as_string(module_code)
+
+        return RENDER.moduleEdit(module_info, preclusions, prerequisites)
 
 
     def POST(self, *test_data):
