@@ -352,6 +352,10 @@ def get_preclusion_as_string(module_code):
     return helper.get_preclusion_as_string(module_code)
 
 
+def get_preclusion_list(module_code):
+    return helper.get_preclusion_list(module_code)
+
+
 def get_preclusion_units(module_code):
     return helper.get_preclusion_units(module_code)
 
