@@ -154,7 +154,6 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
         response = addModuleForm.submit()
-        print(response.status)
 
         response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE %
                               self.TEST_ADD_MODULE_CODE_RELAXED.upper()))
