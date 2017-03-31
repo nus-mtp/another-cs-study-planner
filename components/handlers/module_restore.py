@@ -5,7 +5,7 @@
 
 
 import web
-from components import model, check_string
+from components import model
 from components.handlers.outcome import Outcome
 
 
