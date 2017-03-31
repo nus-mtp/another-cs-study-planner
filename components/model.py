@@ -481,3 +481,7 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+
+
+def convert_2D_to_1D_list(table):
+    return helper.convert_2D_to_1D_list(table)
