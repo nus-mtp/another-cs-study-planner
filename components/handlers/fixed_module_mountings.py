@@ -41,7 +41,9 @@ class Fixed(object):
             subplan[0] = code
             subplan[1] = name
             subplan[4] = status
-            self.full_mounting_plan.append(subplan)
+            # New modules will not be displayed in fixed mounting
+            if status.rstrip() == "Active":
+                self.full_mounting_plan.append(subplan)
 
 
     def populate_mounting_values(self):
@@ -83,10 +85,6 @@ class Fixed(object):
         current_ay = model.get_current_ay()
 
         full_mounting_plan = self.full_mounting_plan
-        # New modules will not be displayed in fixed mounting
-        full_mounting_plan = [subplan for subplan in full_mounting_plan
-                              if subplan[4].rstrip() == "Active"]
-
         return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
 
 
