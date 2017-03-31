@@ -17,61 +17,61 @@ $code:
 $ title_string = 'View Info for ' + moduleCode
 
 <script type="text/javascript">
-	var sem_1_quota = [];
+    var sem_1_quota = [];
 $for subplan in tentaMountingPlan[-2::-2]:
-	$ aySem = subplan[0]
-	$ quota = subplan[2]
-	$if quota is None or quota == "-":
-		$ quota = 0
-	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+    $ aySem = subplan[0]
+    $ quota = subplan[2]
+    $if quota is None or quota == "-":
+        $ quota = 0
+    sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
 $for subplan in fixedMountingPlan[0::2]:
-	$ aySem = subplan[0]
-	$ quota = subplan[2]
-	$if quota is None or quota == "-":
-		$ quota = 0
-	sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+    $ aySem = subplan[0]
+    $ quota = subplan[2]
+    $if quota is None or quota == "-":
+        $ quota = 0
+    sem_1_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
 
-	var sem_1_demand = [];
+    var sem_1_demand = [];
 $for subplan in tentaMountingPlan[-2::-2]:
-	$ aySem = subplan[0]
-	$ numberTaking = getNumStudents(aySem)
-	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+    $ aySem = subplan[0]
+    $ numberTaking = getNumStudents(aySem)
+    sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
 $for subplan in fixedMountingPlan[0::2]:
-	$ aySem = subplan[0]
-	$ numberTaking = getNumStudents(aySem)
-	sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+    $ aySem = subplan[0]
+    $ numberTaking = getNumStudents(aySem)
+    sem_1_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
 
-	var sem_2_quota = [];
+    var sem_2_quota = [];
 $for subplan in tentaMountingPlan[-1::-2]:
-	$ aySem = subplan[0]
-	$ quota = subplan[2]
-	$if quota is None or quota == "-":
-		$ quota = 0
-	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+    $ aySem = subplan[0]
+    $ quota = subplan[2]
+    $if quota is None or quota == "-":
+        $ quota = 0
+    sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
 $for subplan in fixedMountingPlan[1::2]:
-	$ aySem = subplan[0]
-	$ quota = subplan[2]
-	$if quota is None or quota == "-":
-		$ quota = 0
-	sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
+    $ aySem = subplan[0]
+    $ quota = subplan[2]
+    $if quota is None or quota == "-":
+        $ quota = 0
+    sem_2_quota.push({y: $quota, label: "$aySem[9:]"+"\'s Quota"});
 
-	var sem_2_demand = [];
+    var sem_2_demand = [];
 $for subplan in tentaMountingPlan[-1::-2]:
-	$ aySem = subplan[0]
-	$ numberTaking = getNumStudents(aySem)
-	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+    $ aySem = subplan[0]
+    $ numberTaking = getNumStudents(aySem)
+    sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
 $for subplan in fixedMountingPlan[1::2]:
-	$ aySem = subplan[0]
-	$ numberTaking = getNumStudents(aySem)
-	sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
+    $ aySem = subplan[0]
+    $ numberTaking = getNumStudents(aySem)
+    sem_2_demand.push({y: $numberTaking, label: "$aySem[9:]"+"\'s Demand"});
 
-	var filler = [];
+    var filler = [];
 $for subplan in tentaMountingPlan[-1::-2]:
-	$ aySem = subplan[0]
-	filler.push({y: 0, label: "$aySem[0:8]"});
+    $ aySem = subplan[0]
+    filler.push({y: 0, label: "$aySem[0:8]"});
 $for subplan in fixedMountingPlan[1::2]:
-	$ aySem = subplan[0]
-	filler.push({y: 0, label: "$aySem[0:8]"});
+    $ aySem = subplan[0]
+    filler.push({y: 0, label: "$aySem[0:8]"});
 </script>
 <script type="text/javascript" src="static/javascripts/viewModule.js"></script>
 
@@ -82,16 +82,16 @@ $ viewModule = ['#', moduleCode]
 $var hierarchy = [home, moduleInfo, viewModule]
 
 <div class="container container-block">
-	<div class="row">
-		<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
             <div class="row">
                 <!--title-->
                 <h1 class="text-center"><b>Module Info Overview</b></h1>
                 <hr>
             </div>
-			<div class="row">
+            <div class="row">
                 <!--module info-->
-				<div class="col-md-12 module-header">
+                <div class="col-md-12 module-header">
                     <div class="row">
                         <div class="page-header">
                             <h1><b>$moduleCode</b>
@@ -160,60 +160,64 @@ $var hierarchy = [home, moduleInfo, viewModule]
                             <h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
                         $else:
                             <table class="table table-bordered table-hover text-center" id="mountingAndQuota">
-							<thead>
-								<tr>
-									<th style="width:25%;">AY/Sem</th>
-									<th>Mounted</th>
-									<th>Quota</th>
-									<th>Students Planning to Take</th>
-									<th style="width:25%;">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-							$for entry in fixedMountingPlan:
-								<tr>
-									<td>
-										$entry[0]
-									</td>
-								$if entry[1] == 1:
-									<td>
-										<span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
-									</td>
-								$elif entry[1] == 0:
-									<td>
-										<span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
-									</td>
-								$elif entry[1] == -1:
-									<td>
-										<span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
-									</td>
-								$ numberTaking = getNumStudents(entry[0])
-								$if True:
-									$if entry[2] == None:
-										<td>
-											?
-										</td>
-										<td>
-											$numberTaking
-										</td>
-									$else:
-										<td>
-											$entry[2]
-										</td>
-										<td>
-											$numberTaking
-										</td>
-								$if True:
-									<td>
-										<form action="/individualModuleInfo" method="get">
-											<input type="hidden" name="code" value="$moduleCode">
-											<input type="hidden" name="aysem" value="$entry[0]">
-											<input class="btn btn-primary" type="submit" value="View">
-										</form>
-									</td>								
-								</tr>
-							</tbody>
-						</table>
+                            <thead>
+                                <tr>
+                                    <th style="width:25%;">AY/Sem</th>
+                                    <th>Mounted</th>
+                                    <th>Quota</th>
+                                    <th>Students Planning to Take</th>
+                                    <th style="width:25%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            $for entry in fixedMountingPlan:
+                                $ aysem = entry[0]
+                                $ mountingStatus = entry[1]
+                                $ quota = entry[2]
+                                <tr>
+                                    <td>$aysem</td>
+                                $if mountingStatus == 1:
+                                    <td>
+                                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                    </td>
+                                $elif mountingStatus == 0:
+                                    <td>
+                                        <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
+                                    </td>
+                                $elif mountingStatus == -1:
+                                    <td>
+                                        <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                    </td>
+                                $ numberTaking = getNumStudents(aysem)
+                                $if True:
+                                    $if quota == None:
+                                        <td>
+                                            ?
+                                        </td>
+                                    $else:
+                                        <td>
+                                            $quota
+                                        </td>                                        
+                                    $if (quota == None and numberTaking > 0) or (quota != None and numberTaking > quota):
+                                        <td style="background-color:#ffe68c;">
+                                            $numberTaking&nbsp;
+                                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
+                                        </td>
+                                    $else:
+                                        <td>
+                                            $numberTaking
+                                        </td>
+                                $if True:
+                                    <td>
+                                        <form action="/individualModuleInfo" method="get">
+                                            <input type="hidden" name="code" value="$moduleCode">
+                                            <input type="hidden" name="aysem" value="$entry[0]">
+                                            <input class="btn btn-primary" type="submit" value="View">
+                                        </form>
+                                    </td>                               
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="row">
                         <h4 id="infoTentaHeader"><b>Information for Future AYs (Tentative):</b></h4>
@@ -230,34 +234,41 @@ $var hierarchy = [home, moduleInfo, viewModule]
                             </thead>
                             <tbody>
                             $for entry in tentaMountingPlan:
+                                $ aysem = entry[0]
+                                $ mountingStatus = entry[1]
+                                $ quota = entry[2]                                
                                 <tr>
                                     <td>
-                                        $entry[0]
-                                    $if entry[1] == 1:
+                                        $aysem
+                                    </td>
+                                    $if mountingStatus == 1:
                                         <td>
                                             <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
                                         </td>
-                                    $elif entry[1] == 0:
+                                    $elif mountingStatus == 0:
                                         <td>
                                             <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Unmounted"></span>
                                         </td>
-                                    $elif entry[1] == -1:
+                                    $elif mountingStatus == -1:
                                         <td>
                                             <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
                                         </td>
-                                    $ numberTaking = getNumStudents(entry[0])
+                                    $ numberTaking = getNumStudents(aysem)
                                     $if True:
-                                        $if entry[2] == None:
+                                        $if quota == None:
                                             <td>
                                                 ?
                                             </td>
-                                            <td>
-                                                $numberTaking
-                                            </td>
                                         $else:
                                             <td>
-                                                $entry[2]
+                                                $quota
+                                            </td>                                        
+                                        $if (quota == None and numberTaking > 0) or (quota != None and numberTaking > quota):
+                                            <td style="background-color:#ffe68c;">
+                                                $numberTaking&nbsp;
+                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
                                             </td>
+                                        $else:
                                             <td>
                                                 $numberTaking
                                             </td>
@@ -281,8 +292,8 @@ $var hierarchy = [home, moduleInfo, viewModule]
                     <h3 class="text-center">Module's Quota/Demand for each AY-Sem</h3>
                     <div class="row" id="quota-demand-chart"></div>
                     <div class="row" style="height: 30px;">
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
