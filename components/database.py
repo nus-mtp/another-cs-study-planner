@@ -806,6 +806,8 @@ def get_mod_taken_together_with(code):
         Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
+    current_ay = model.get_current_ay()
+    earliest_ay_sem_to_accept = current_ay + " Sem 1"
 
     sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name" + \
                   ", sp1.acadYearAndSem, COUNT(*) " + \
@@ -813,6 +815,7 @@ def get_mod_taken_together_with(code):
                   "WHERE sp1.moduleCode = %s AND " + \
                   "sp2.moduleCode <> sp1.moduleCode AND " + \
                   "sp1.studentId = sp2.studentId AND " + \
+                  "sp1.acadYearAndSem >= '" + earliest_ay_sem_to_accept + "' AND " + \
                   "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
                   "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
@@ -869,12 +872,15 @@ def get_all_mods_taken_together():
         Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
+    current_ay = model.get_current_ay()
+    earliest_ay_sem_to_accept = current_ay + " Sem 1"
 
     sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name," + \
                   " sp1.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                   "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
                   "sp1.studentId = sp2.studentId AND " + \
+                  "sp1.acadYearAndSem >= '" + earliest_ay_sem_to_accept + "' AND " + \
                   "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
                   "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
