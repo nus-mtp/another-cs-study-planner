@@ -15,7 +15,7 @@ def check_code(code_str):
         bool: if the code string matches the correct pattern
     '''
     pattern = re.compile('^[A-Za-z]{2,3}[0-9]{4}[A-Za-z]{0,2}$')
-    return bool(pattern.match(code_str))
+    return bool(pattern.match(str(code_str)))
 
 def check_name(name_str):
     '''
@@ -26,7 +26,7 @@ def check_name(name_str):
         bool: if the name is a valid name
     '''
     pattern = re.compile('^[a-zA-Z0-9\s-]*$')
-    return bool(pattern.match(name_str))
+    return bool(pattern.match(str(name_str)))
 
 def check_mcs(mc_str):
     '''
@@ -36,8 +36,8 @@ def check_mcs(mc_str):
         Return:
         bool: if the mc is from 0 to 12 inclusive
     '''
-    pattern = re.compile('^[0-9][12]{0,1}$')
-    return bool(pattern.match(mc_str))
+    pattern = re.compile('^[0-9][0-2]{0,1}$')
+    return bool(pattern.match(str(mc_str)))
 
 def outcome_invalid():
     '''
