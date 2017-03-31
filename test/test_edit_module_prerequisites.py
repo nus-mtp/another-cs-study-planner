@@ -34,16 +34,15 @@ class TestCode(object):
     EDIT_MODULE_PREREQUISITES_SAVE_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                             'id="save-changes" ' +\
                                             'data-toggle="tooltip" data-placement="top" ' +\
-                                            'title="Save Changes" onclick="saveChanges()">' +\
+                                            'title="Save Changes" onclick="saveChangesPrerequisite()">' +\
                                             '<span class="glyphicon glyphicon-floppy-disk">' +\
                                             '</span></button>'
-    EDIT_MODULE_PREREQUISITES_REVERT_BUTTON = '<a class="btn btn-lg btn-primary" ' +\
-                                              'id="revert-changes" ' +\
+    EDIT_MODULE_PREREQUISITES_REVERT_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                               'data-toggle="tooltip" data-placement="top" ' +\
                                               'title="Revert All Changes" ' +\
-                                              'href="/editModulePrerequisites?code=BT5110">' +\
+                                              'onclick="revertChangesPrerequisite()">' +\
                                               '<span class="glyphicon glyphicon-refresh">' +\
-                                              '</span></a>'
+                                              '</span></button>'
 
 
     def __init__(self):
@@ -90,20 +89,3 @@ class TestCode(object):
             page if an invalid URL (invalid module code) is used.
         '''
         self.test_app.get(self.URL_EDIT_MODULE_PREREQ_SPECIFIC_INVALID_CODE)
-
-
-    def test_module_prereq_edit_revert_option_button(self):
-        '''
-            Tests whether the revert-changes button works.
-        '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_PREREQ_SPECIFIC_VALID)
-        response = root.click(linkid="revert-changes")
-
-        assert_equal(response.status, 200)
-
-        response.mustcontain(self.EDIT_MODULE_TITLE)
-        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_FORM)
-        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_TABLE_INTERFACE)
-        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_ADD_UNIT_BUTTON)
-        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_SAVE_BUTTON)
-        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_REVERT_BUTTON)

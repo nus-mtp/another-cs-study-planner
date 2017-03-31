@@ -35,13 +35,12 @@ class TestCode(object):
                                           'onclick="saveChangesPreclusion()">' +\
                                           '<span class="glyphicon glyphicon-floppy-disk">' +\
                                           '</span></button>'
-    EDIT_MODULE_PRECLUSIONS_REVERT_BUTTON = '<a class="btn btn-lg btn-primary" ' +\
-                                            'id="revert-changes" ' +\
+    EDIT_MODULE_PRECLUSIONS_REVERT_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                             'data-toggle="tooltip" data-placement="top" ' +\
                                             'title="Revert All Changes" ' +\
-                                            'href="/editModulePreclusions?code=BT5110">' +\
+                                            'onclick="revertChangesPreclusion()">' +\
                                             '<span class="glyphicon glyphicon-refresh">' +\
-                                            '</span></a>'
+                                            '</span></button>'
 
 
     def __init__(self):
@@ -88,20 +87,3 @@ class TestCode(object):
             page if an invalid URL (invalid module code) is used.
         '''
         self.test_app.get(self.URL_EDIT_MODULE_PRECLUSION_SPECIFIC_INVALID_CODE)
-
-
-    def test_module_prereq_edit_revert_option_button(self):
-        '''
-            Tests whether the revert-changes button works.
-        '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_PRECLUSION_SPECIFIC_VALID)
-        response = root.click(linkid="revert-changes")
-
-        assert_equal(response.status, 200)
-
-        response.mustcontain(self.EDIT_MODULE_TITLE)
-        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_FORM)
-        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_TABLE_INTERFACE)
-        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_ADD_UNIT_BUTTON)
-        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_SAVE_BUTTON)
-        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_REVERT_BUTTON)
