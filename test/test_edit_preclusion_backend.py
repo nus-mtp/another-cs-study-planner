@@ -306,6 +306,6 @@ class TestCode(object):
             assert_true(preclude_info is not None)
             assert_true(len(preclude_info) == 0)
 
-            delete_all_prerequisites(self.test_module_code)
+            model.delete_all_prerequisites(self.test_module_code)
             prereq_info = model.get_prerequisite(self.test_module_code)
             assert_true(len(prereq_info) == 0)
