@@ -54,11 +54,7 @@ class EditModuleInfo(object):
             return Outcome().POST("edit_module", False, module_code)
 
         # Validate that MC is a number and is between 0 and 12
-        try:
-            module_mc = int(module_mc)
-        except ValueError:
-            return Outcome().POST("edit_module", False, module_code)
-        if module_mc < 0 or module_mc > 12:
+        if(not check_string.check_mcs(module_mc)):
             return Outcome().POST("edit_module", False, module_code)
 
         old_module_info = model.get_module(module_code)
