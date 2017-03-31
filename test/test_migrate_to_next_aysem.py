@@ -16,6 +16,7 @@ class TestCode(object):
         self.initial_past_data = model.get_all_past_mounted_modules()
         self.initial_fixed_data = model.get_all_fixed_mounted_modules()
         self.initial_tenta_data = model.get_all_tenta_mounted_modules()
+        self.initial_student_year_data = model.get_num_students_by_yr_study()
 
 
     def setUp(self):
@@ -103,3 +104,20 @@ class TestCode(object):
             module_code = data[0]
             module_status = model.get_module(module_code)[4]
             assert_equal(module_status.strip(), "Active")
+
+
+    def test_student_year_incremented_by_one(self):
+        '''
+            Tests if all the students' year of study is incremented by 1.
+        '''
+        current_student_year_data = model.get_num_students_by_yr_study()
+        for year_number_pair in current_student_year_data:
+            year = year_number_pair[0]
+            number_of_students = year_number_pair[1]
+
+            if year == 1:
+                assert_equal(number_of_students, 0)
+            else:
+                incremented_year_with_number_pair = (year-1, number_of_students)
+                assert_true(incremented_year_with_number_pair in \
+                            self.initial_student_year_data)
