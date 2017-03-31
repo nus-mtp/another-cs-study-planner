@@ -6,8 +6,7 @@
 
 from app import RENDER
 import web
-from components import model, session, check_string
-from components.handlers.outcome import Outcome
+from components import model, session
 
 
 class Modules(object):
