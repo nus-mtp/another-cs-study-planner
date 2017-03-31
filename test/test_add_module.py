@@ -233,7 +233,6 @@ class TestCode(object):
          response.mustcontain(self.OUTCOME)
          response.mustcontain(self.ERR_MESSAGE)
 
-
     # @raises(Exception)
     # def test_add_module_with_invalid_module_name(self):
     #     '''
