@@ -121,6 +121,10 @@ td > a {
 /* ======================= STYLING FOR HOME PAGE ======================= */
 /*************************************************************************/
 
+#welcome-message {
+    vertical-align: text-bottom;
+}
+
 #accordion .panel-heading {
     padding: 0;
 }
@@ -139,6 +143,7 @@ td > a {
     font-family: 'Glyphicons Halflings';
     margin-right :1em;
 }
+
 #accordion .panel-title > a.accordion-toggle.collapsed > b::after, #accordion a.collapsed[data-toggle="collapse"] > b::after  {
     content:"\e114";
 }
