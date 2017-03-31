@@ -8,6 +8,8 @@ $ tentativeMounting = ['#', title_string]
 
 $var hierarchy = [home, tentativeMounting]
 
+<script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -30,8 +32,10 @@ $var hierarchy = [home, tentativeMounting]
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th data-sortable="false">Mounted In Sem 1</th>
-                        <th data-sortable="false">Mounted In Sem 2</th>
+                        <th>Mounted In Sem 1</th>
+                        <th onclick="replaceNilQuotasWithNumbers('#tentative-mounting-table');">Sem 1 Quota</th>
+                        <th>Mounted In Sem 2</th>
+                        <th onclick="replaceNilQuotasWithNumbers('#tentative-mounting-table');">Sem 2 Quota</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -40,6 +44,9 @@ $var hierarchy = [home, tentativeMounting]
                         $ moduleName = subplan[1]
                         $ sem1Mounting = subplan[2]
                         $ sem2Mounting = subplan[3]
+                        $ sem1Quota = subplan[4]
+                        $ sem2Quota = subplan[5]
+
                         <tr>
                             <td class="text-center">
                                 <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
@@ -47,46 +54,61 @@ $var hierarchy = [home, tentativeMounting]
                             <td>$moduleName</td>
                         $if sem1Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">1</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">2</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">3</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
                                     title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
+                        $if True:
+                            <td>
+                                $sem1Quota
+                            </td>
+
                         $if sem2Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">1</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">2</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">3</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
                                     title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
+                        $if True:
+                            <td>
+                                $sem2Quota
+                            </td>                        
                         </tr>
                 </tbody>
             </table>

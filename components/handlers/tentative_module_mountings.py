@@ -107,7 +107,8 @@ class Tentative(object):
         self.populate_module_code_and_name()
         self.populate_mounting_values(selected_ay)
 
-        return RENDER.moduleMountingTentative(selected_ay, self.full_mounting_plan)
+        full_mounting_plan = model.replace_empty_quota_with_symbols(self.full_mounting_plan)
+        return RENDER.moduleMountingTentative(selected_ay, full_mounting_plan)
 
 
     def POST(self):

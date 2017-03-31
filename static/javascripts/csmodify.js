@@ -101,7 +101,11 @@ $(function() {
     } );
 
     $('#tentative-mounting-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "columnDefs": [
+            { type: 'num-html', targets: 3 },
+            { type: 'num-html', targets: 5 }
+        ]
     } );
 
     $('#student-year-table').DataTable( {
