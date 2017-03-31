@@ -23,6 +23,11 @@ DB_CURSOR = CONNECTION.cursor()
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
 LENGTH_EMPTY = 0
+ERROR_MSG_MODULE_CANNOT_BE_ITSELF = "This module cannot be the same as target module"
+ERROR_MSG_MODULE_DUPLICATED = "There cannot be more than one instance of this module"
+ERROR_MSG_MODULE_DOESNT_EXIST = "This module does not exist"
+ERROR_MSG_MODULE_PREREQ_ALREADY_PRECLUSION = "This module is a preclusion of the target module"
+ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ = "This module is a prerequisite of the target module"
 
 
 ######################################################################################
@@ -1088,10 +1093,16 @@ def edit_prerequisite(module_code, prereq_units):
         set of prerequisites found in prereq_units.
         Returns true if successful, false otherwise.
     '''
+    is_successful = True
+    error_list = list()
+
+    preclusion_list = model.get_preclusion_list(module_code)
+
     outcome = delete_all_prerequisite(module_code, False)
     if not outcome:
         CONNECTION.rollback()
-        return False
+        is_successful = False
+        return [is_successful, error_list] # Error from deleting
 
     # Repopulate the prereqs
     if len(prereq_units) != LENGTH_EMPTY:
@@ -1101,23 +1112,39 @@ def edit_prerequisite(module_code, prereq_units):
         for unit in prereq_units:
             for module in unit:
                 if module_list.has_key(module):
-                    CONNECTION.rollback()
-                    return False
+                    is_successful = False
+                    error_code_and_msg = [module, ERROR_MSG_MODULE_DUPLICATED]
+                    error_list.append(error_code_and_msg)
+                elif module in preclusion_list:
+                    is_successful = False
+                    error_code_and_msg = [module, ERROR_MSG_MODULE_PREREQ_ALREADY_PRECLUSION]
+                    error_list.append(error_code_and_msg)
+                elif module == module_code:
+                    is_successful = False
+                    error_code_and_msg = [module, ERROR_MSG_MODULE_CANNOT_BE_ITSELF]
+                    error_list.append(error_code_and_msg)
                 else:
                     outcome = add_prerequisite(module_code, module, index, False)
                     if not outcome:
                         CONNECTION.rollback()
-                        return False
-                    module_list[module] = True
+                        is_successful = False
+                        error_code_and_msg = [module, ERROR_MSG_MODULE_DOESNT_EXIST]
+                        error_list.append(error_code_and_msg)
+                    else:
+                        module_list[module] = True
             index += 1
 
-        try:
-            CONNECTION.commit()
-        except psycopg2.IntegrityError:
+        if is_successful:
+            try:
+                CONNECTION.commit()
+            except psycopg2.IntegrityError:
+                CONNECTION.rollback()
+                is_successful = False
+                return [is_successful, error_list] # Error from deleting
+        else:
             CONNECTION.rollback()
-            return False
 
-    return True
+    return [is_successful, error_list]
 
 
 def add_preclusion(module_code, preclude_code, to_commit=True):
@@ -1187,10 +1214,17 @@ def edit_preclusion(module_code, preclude_units):
         set of preclusions found in preclude_units.
         Returns true if successful, false otherwise.
     '''
+    is_successful = True
+    error_list = list()
+
+    prereq_units = model.get_prerequisite_units(module_code)
+    prereq_list = model.convert_2D_to_1D_list(prereq_units)
+
     outcome = delete_all_preclusions(module_code, False)
     if not outcome:
         CONNECTION.rollback()
-        return False
+        is_successful = False
+        return [is_successful, error_list] # Error from deleting
 
     # Repopulate the preclusions
     if len(preclude_units) != LENGTH_EMPTY:
@@ -1198,22 +1232,38 @@ def edit_preclusion(module_code, preclude_units):
 
         for precluded_module in preclude_units:
             if module_list.has_key(precluded_module):
-                CONNECTION.rollback()
-                return False
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_DUPLICATED]
+                error_list.append(error_code_and_msg)
+            elif precluded_module in prereq_list:
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ]
+                error_list.append(error_code_and_msg)
+            elif precluded_module == module_code:
+                is_successful = False
+                error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_CANNOT_BE_ITSELF]
+                error_list.append(error_code_and_msg)
             else:
                 outcome = add_preclusion(module_code, precluded_module, False)
                 if not outcome:
                     CONNECTION.rollback()
-                    return False
-                module_list[precluded_module] = True
+                    is_successful = False
+                    error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_DOESNT_EXIST]
+                    error_list.append(error_code_and_msg)
+                else:
+                    module_list[precluded_module] = True
 
-        try:
-            CONNECTION.commit()
-        except psycopg2.IntegrityError:
+        if is_successful:
+            try:
+                CONNECTION.commit()
+            except psycopg2.IntegrityError:
+                CONNECTION.rollback()
+                is_successful = False
+                return [is_successful, error_list] # Error from deleting
+        else:
             CONNECTION.rollback()
-            return False
 
-    return True
+    return [is_successful, error_list]
 
 
 ######################################################################################

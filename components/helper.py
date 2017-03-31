@@ -557,3 +557,18 @@ def replace_null_with_dash(table):
                 row[col] = '-'
 
     return table
+
+
+def convert_2D_to_1D_list(table):
+    '''
+        Converts a list of lists into a list, where
+        all elements in the 2D table is converted into
+        a 1D list.
+    '''
+    new_list = list()
+
+    for row in table:
+        for item in row:
+            new_list.append(item)
+
+    return new_list
