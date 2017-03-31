@@ -4,7 +4,7 @@
 
 from app import RENDER
 import web
-from components import model, session, check_string
+from components import model, session
 from components.handlers.outcome import Outcome
 
 class AddModule(object):
@@ -32,11 +32,11 @@ class AddModule(object):
             module_desc = data.description
             module_mc = data.mc
             #string is valid
-            if not (check_string.check_code(module_code) and check_string.check_name(module_name)
-                    and check_string.check_mcs(str(module_mc))):
-                return check_string.outcome_invalid()
+            if not (model.check_code(module_code) and model.check_name(module_name)
+                    and model.check_mcs(module_mc)):
+                return model.outcome_invalid()
 
             outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
             return Outcome().POST("add_module", outcome, module_code)
         except AttributeError:
-            return Outcome().Post("add_module", False, None)
+            return Outcome().POST("add_module", False, None)
