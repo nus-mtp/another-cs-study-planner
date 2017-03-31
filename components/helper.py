@@ -447,20 +447,26 @@ def replace_empty_quota_with_symbols(mounting_plan):
         Replace all quota values with '-' (if not mounted)
         or '?' (if mounted)
     '''
+    SEM1_MOUNTING_INDEX = 2
+    SEM2_MOUNTING_INDEX = 3
+    SEM1_QUOTA_INDEX = 4
+    SEM2_QUOTA_INDEX = 5
+
     mounting_plan = model.convert_to_list(mounting_plan)
-    for subplan in mounting_plan:
-        sem1_quota = subplan[4]
-        if sem1_quota is None:
-            sem1_mounting = subplan[2]
+    for i in range(len(mounting_plan)):
+        subplan = mounting_plan[i]
+        sem1_quota = subplan[SEM1_QUOTA_INDEX]
+        if sem1_quota is None or sem1_quota == -1:
+            sem1_mounting = subplan[SEM1_MOUNTING_INDEX]
             if sem1_mounting == 1:
-                subplan[4] = '?'
+                mounting_plan[i][SEM1_QUOTA_INDEX] = '?'
             else:
-                subplan[4] = '-'
-        sem2_quota = subplan[5]
-        if sem2_quota is None:
-            sem2_mounting = subplan[3]
+                mounting_plan[i][SEM1_QUOTA_INDEX] = '-'
+        sem2_quota = subplan[SEM2_QUOTA_INDEX]
+        if sem2_quota is None or sem2_quota == -1:
+            sem2_mounting = subplan[SEM2_MOUNTING_INDEX]
             if sem2_mounting == 1:
-                subplan[5] = '?'
+                mounting_plan[i][SEM2_QUOTA_INDEX] = '?'
             else:
-                subplan[5] = '-'
+                mounting_plan[i][SEM2_QUOTA_INDEX] = '-'
     return mounting_plan

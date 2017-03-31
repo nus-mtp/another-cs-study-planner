@@ -93,7 +93,11 @@ $(function() {
     } );
 
     $('#fixed-mounting-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "columnDefs": [
+            { type: 'num-html', targets: 3 },
+            { type: 'num-html', targets: 5 }
+        ]
     } );
 
     $('#tentative-mounting-table').DataTable( {
