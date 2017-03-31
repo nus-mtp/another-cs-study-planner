@@ -33,9 +33,13 @@ class EditModulePrerequisites(object):
             Handles the submission of updated module prerequisites
             for a target module.
         '''
-        module_code = web.input().get('code')
-        prerequisites = json.loads(web.input().get('prerequisites'))
+        isSucessfullyUpdated = False
 
-        isSucessfullyUpdated = model.edit_prerequisite(module_code, prerequisites)
+        input_data = model.validate_input(web.input(), ["code"], show_404=False)
+
+        if input_data:
+            module_code = input_data.code
+            prerequisites = json.loads(input_data.prerequisites)
+            isSucessfullyUpdated = model.edit_prerequisite(module_code, prerequisites)
 
         return isSucessfullyUpdated
