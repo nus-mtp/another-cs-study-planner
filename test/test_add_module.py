@@ -195,7 +195,7 @@ class TestCode(object):
         addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
-        response = addModuleForm.submit()
+        addModuleForm.submit()
 
 
     @raises(Exception)
