@@ -29,7 +29,10 @@ class Outcome(object):
                     outcome_message = "Module " + module_code + " has been added successfully!"
                     redirect_page = "/viewModule?code="+module_code
                 else:
-                    outcome_message = "Error: failed to add module"
+                    if module_code is None:
+                        outcome_message = "Error: failed to add module"
+                    else:
+                        outcome_message = "Error: failed to add " + module_code
                     redirect_page = "/modules"
             elif action == "edit_module":
                 if outcome is True:

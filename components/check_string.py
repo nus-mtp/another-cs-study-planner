@@ -17,6 +17,7 @@ def check_code(code_str):
     pattern = re.compile('^[A-Za-z]{2,3}[0-9]{4}[A-Za-z]{0,2}$')
     return bool(pattern.match(code_str))
 
+
 def check_name(name_str):
     '''
         Args:
@@ -38,6 +39,7 @@ def check_mcs(mc_str):
     '''
     pattern = re.compile('^[0-9][0-2]{0,1}$')
     return bool(pattern.match(str(mc_str)))
+
 
 def outcome_invalid():
     '''
