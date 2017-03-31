@@ -39,14 +39,20 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule]
                             <div class="form-group">
                                 <label for="preclusion">Preclusion</label>
                                 <br>
-                                <p>$:preclusions</p>
+                                $if preclusions == "":
+                                    <p>Nil</p>
+                                $else:
+                                    <p>$:preclusions</p>
                                 <a class="btn btn-primary" id="edit-preclusion" href="/editModulePreclusions?code=$moduleCode" target="_blank">Edit Preclusions</a>
                                 <br>
                                 <br>
                             </div>
                             <div class="form-group">
                                 <label for=" prerequisite"> Prerequisite</label>
-                                <p>$:prerequisites</p>
+                                $if prerequisites is "":
+                                    <p>Nil</p>
+                                $else:
+                                    <p>$:prerequisites</p>
                                 <a class="btn btn-primary" id="edit-prerequisite" href="/editModulePrerequisites?code=$moduleCode" target="_blank">Edit Prerequisites</a>
                                 <br>
                                 <br>
