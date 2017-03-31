@@ -178,7 +178,7 @@ class TestCode(object):
         addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
-        response = addModuleForm.submit()
+        addModuleForm.submit()
 
 
     @raises(Exception)
@@ -212,7 +212,7 @@ class TestCode(object):
         addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
         addModuleForm.__setitem__('mc', None)
 
-        response = addModuleForm.submit()
+        addModuleForm.submit()
 
     def test_add_module_with_invalid_module_code(self):
          '''
