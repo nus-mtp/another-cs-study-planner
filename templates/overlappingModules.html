@@ -19,9 +19,12 @@ $var hierarchy = [home, overlapModules]
                     <div class="form-group">
                         <label for="ay-sem">Select AY-Semester:&nbsp;</label>
                         <select id="aysem-dropdown-select" class="form-control" name="aysem">
-                            <option value="" disabled selected>Please choose a target AY-Semester</option>
+                            <option value="" disabled hidden>Please choose a target AY-Semester</option>
                             $for aysem in all_ay_sems:
-                                <option value="$aysem">$aysem</option>
+                                $if aysem == target_ay_sem:
+                                    <option value="$aysem" selected>$aysem</option>
+                                $else:
+                                    <option value="$aysem">$aysem</option>
                         </select>
                     </div>
                     <div class="form-group aysem-dropdown">

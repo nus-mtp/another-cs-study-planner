@@ -26,7 +26,10 @@ $if pageType == "all_pairs":
                     <select id="aysem-dropdown-select" class="form-control" name="aysem">
                         <option value="" disabled selected>Please choose a target AY-Semester</option>
                         $for aysem in allAySems:
-                        	<option value="$aysem">$aysem</option>
+                            $if targetAySem == aysem:
+                                <option value="$aysem" selected>$aysem</option>
+                            $else:
+                                <option value="$aysem">$aysem</option>
                     </select>
                 </div>
                 <div class="form-group aysem-dropdown">
