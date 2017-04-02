@@ -130,7 +130,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                     <div class="dropdown-item text-center">
                                         <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
                                             <input type="hidden" name="code" value="$moduleCode">
-                                            <button type="button" id="view-mods-overlapping" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">View Modules Overlapping With This Module</button>
+                                            <button type="button" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">View Modules Overlapping With This Module</button>
                                         </form>
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
                         <div id="edit-specific-info-modal" class="modal-content text-center">
                             <span class="closeModal" onclick="closeModal();">&times;</span>
                             <h2>Edit Specific Info</h2>
-                            <form id="ay-form" class="form-inline aysem-dropdown" action="/editMounting" method="get">
+                            <form id="edit-specific-info-modal-form" class="form-inline aysem-dropdown" action="/editMounting" method="get">
                                 <p>Please select the AY-Semester that you wish to edit:<br>
                                 <i style="font-size:12px;">(Note: Only semesters in Future AYs can be edited)</i></p>
                                 <br>
@@ -163,7 +163,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
                         <div id="overlapping-mods-modal" class="modal-content text-center">
                             <span class="closeModal" onclick="closeModal();">&times;</span>
                             <h2>View Overlapping Modules</h2>
-                            <form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingWithModule" method="get">
+                            <form id="overlapping-mods-modal-form" class="form-inline aysem-dropdown" action="/overlappingWithModule" method="get">
                                 <p>Please select the AY-Semester(s) that you wish to view:</p>
                                 <br>
                                 <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
@@ -185,7 +185,7 @@ $var hierarchy = [home, moduleInfo, viewModule]
                         <div id="students-taking-modal" class="modal-content text-center">
                             <span class="closeModal" onclick="closeModal();">&times;</span>
                             <h2>View Students Taking This Module</h2>
-                            <form id="ay-form" class="form-inline aysem-dropdown" action="/studentsAffectedByModule" method="get">
+                            <form id="students-taking-modal-form" class="form-inline aysem-dropdown" action="/studentsAffectedByModule" method="get">
                                 <p>Please select the AY-Semester that you wish to view:</p>
                                 <br>
                                 <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">

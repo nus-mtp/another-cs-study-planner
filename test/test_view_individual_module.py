@@ -49,31 +49,23 @@ class TestCode(object):
                                      ' name="edit-mounting-button" '+\
                                      'action="/editMounting" method="get" '+\
                                      'class="no-padding-margin">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<input class="dropdown-btn-custom"'+\
-                                            ' type="submit" value="Edit'+\
-                                            ' Specific Module Info" data-toggle="tooltip"'+\
-                                            ' data-placement="right" '+\
-                                            'title="Edit the module\'s mounting and quota">'
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<button type="button" id="edit-specific-info" class="dropdown-btn-custom no-padding-margin" ' +\
+                                            'data-toggle="tooltip" data-placement="right" title="Edit the module\'s mounting and quota">' +\
+                                            'Edit Specific Module Info</button>'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
                              'name="view-students-planning-to-take-module"'+\
                              ' action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<input type="submit" class="dropdown-btn-custom"'+\
-                                    ' value="View Students '+\
-                                    'Planning To Take This Module" data-toggle="tooltip"'+\
-                                    ' data-placement="right" '+\
-                                    'title="Show list of students who are '+\
-                                    'planning to take this module">'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<button type="button" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" '+\
+                                    'title="Show list of students who have taken, are currently taking, or are planning to take this '+\
+                                    'module">View Students Taking This Module</button>'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
                                    'name="view-overlapping-with-module"'+\
                                    ' action="/overlappingWithModule" method="get" '+\
                                    'class="no-padding-margin">'
-    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
-                                          'value="View Modules Overlapping With This Module" '+\
-                                          'data-toggle="tooltip"'+\
-                                          ' data-placement="right" title="Show '+\
-                                          'modules that are also'+\
-                                          ' offered in this AY-Semester">'
+    FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<button type="button" class="dropdown-btn-custom" '+\
+                                          'data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with '+\
+                                          'this module">View Modules Overlapping With This Module</button>'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'
@@ -214,44 +206,12 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_CLASS_QUOTA_BLANK)
 
 
-
     def test_goto_edit_general_info(self):
         '''
             Tests if user can access the 'Edit General Module Info' option
         '''
         root = self.test_app.get(self.URL_CONTAIN_CODE_AY_QUOTA)
         edit_form = root.forms__get()["edit-module-button"]
-
-        response = edit_form.submit()
-        assert_equal(response.status, 200)
-
-
-    def test_goto_edit_specific_info(self):
-        '''
-            Tests if user can access the 'Edit Specific Module Info' option
-        '''
-        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
-        edit_form = root.forms__get()["edit-mounting-button"]
-
-        response = edit_form.submit()
-        assert_equal(response.status, 200)
-
-    def test_goto_affected_students_page(self):
-        '''
-            Tests if user can access students affected by module page
-        '''
-        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
-        edit_form = root.forms__get()["view-students-planning-to-take-module"]
-
-        response = edit_form.submit()
-        assert_equal(response.status, 200)
-
-    def test_goto_overlapping_with_module(self):
-        '''
-            Tests if user can access overlapping with module
-        '''
-        root = self.test_app.get(self.URL_CONTAIN_FUTURE_AY)
-        edit_form = root.forms__get()["view-overlapping-with-module"]
 
         response = edit_form.submit()
         assert_equal(response.status, 200)

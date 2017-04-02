@@ -69,7 +69,10 @@ $for area in focus_area_acronyms:
                                     </form>
                                 </div>
                                 <div class="dropdown-item text-center">
-                                    <button type="button" id="edit-specific-info" class="dropdown-btn-custom no-padding-margin" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">Edit Specific Module Info</button>
+                                    <form id="edit-mounting-button" name="edit-mounting-button" action="/editMounting" method="get" class="no-padding-margin">
+                                        <input type="hidden" name="code" value="$moduleCode">
+                                        <button type="button" id="edit-specific-info" class="dropdown-btn-custom no-padding-margin" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">Edit Specific Module Info</button>
+                                    </form>
                                 </div>
                                 <div role="separator" class="dropdown-divider"></div>
                                 <div class="dropdown-item text-center">
@@ -98,7 +101,7 @@ $for area in focus_area_acronyms:
                     <div id="edit-specific-info-modal" class="modal-content text-center">
                         <span class="closeModal" onclick="closeModal();">&times;</span>
                         <h2>Edit Specific Info</h2>
-                        <form id="ay-form" class="form-inline aysem-dropdown" action="/editMounting" method="get">
+                        <form id="edit-specific-info-modal-form" class="form-inline aysem-dropdown" action="/editMounting" method="get">
                             <p>Please select the AY-Semester that you wish to edit:<br>
                             <i style="font-size:12px;">(Note: Only semesters in Future AYs can be edited)</i></p>
                             <br>
@@ -124,7 +127,7 @@ $for area in focus_area_acronyms:
                     <div id="overlapping-mods-modal" class="modal-content text-center">
                         <span class="closeModal" onclick="closeModal();">&times;</span>
                         <h2>View Overlapping Modules</h2>
-                        <form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingWithModule" method="get">
+                        <form id="overlapping-mods-modal-form" class="form-inline aysem-dropdown" action="/overlappingWithModule" method="get">
                             <p>Please select the AY-Semester(s) that you wish to view:</p>
                             <br>
                             <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
@@ -146,7 +149,7 @@ $for area in focus_area_acronyms:
                     <div id="students-taking-modal" class="modal-content text-center">
                         <span class="closeModal" onclick="closeModal();">&times;</span>
                         <h2>View Students Taking This Module</h2>
-                        <form id="ay-form" class="form-inline aysem-dropdown" action="/studentsAffectedByModule" method="get">
+                        <form id="students-taking-modal-form" class="form-inline aysem-dropdown" action="/studentsAffectedByModule" method="get">
                             <p>Please select the AY-Semester that you wish to view:</p>
                             <br>
                             <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
