@@ -97,7 +97,7 @@ window.onload = function () {
   var modal = document.getElementById('myModal');
   // Get the button that opens the modal
   var edit_specific_info_btn = document.getElementById("edit-specific-info");
-  var overlapping_mods_btn = document.getElementById("view-mods-overlapping");
+  var overlapping_mods_btn = document.getElementById("view-overlapping-with-module");
 
   // When the user clicks the button, open the modal 
   edit_specific_info_btn.onclick = function() {
