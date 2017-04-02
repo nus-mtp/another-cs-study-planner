@@ -181,7 +181,12 @@ $(function() {
             { "targets": [0, 3], "width": "8%" },
             { "targets": [1, 4], "width": "20%" },
             { "targets": 6, "width": "20%" }
-        ]
+        ],
+        "initComplete": function(settings, json) {
+            $('#modules-taken-prior-table').show();
+            $('.loading-div').hide();
+            $('#modules-taken-prior-table').DataTable().columns.adjust().draw();
+        }
     } );
 
     $('#modules-taken-prior-intern-table').DataTable( {

@@ -257,6 +257,10 @@ td > a {
 /* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
 /*******************************************************************************************/
 
+#modules-taken-prior-table {
+    display: none;
+}
+
 .modules-taken-prior-search-form{
     text-align: center; 
     width: 50%; 
@@ -610,4 +614,13 @@ tr[id*='modified-details-child-row'] {
 
 .unmounted-warning {
     color: #c91c48;
+}
+
+.datatable {
+    width: 100%;
+}
+
+.loading-div img{
+    height: 100px;
+    width: auto;
 }
