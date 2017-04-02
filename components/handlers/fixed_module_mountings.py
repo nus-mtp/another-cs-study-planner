@@ -97,12 +97,12 @@ class Fixed(object):
         self.full_mounting_plan = full_mounting_plan
 
 
-    def GET(self, to_render=True):
+    def GET(self, to_render=True, logged_in=False):
         '''
             Renders the fixed mounting page if users requested
             for the page through the GET method.
         '''
-        if not session.validate_session():
+        if not session.validate_session() and not logged_in:
             raise web.seeother('/login')
 
         self.populate_module_code_and_name()

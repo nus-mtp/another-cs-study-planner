@@ -50,6 +50,12 @@ class TestCode(object):
                                   'Mounted In Sem 1</th>'
     TABLE_HEADER_MOUNTING_SEM_2 = '<th>' +\
                                   'Mounted In Sem 2</th>'
+    TABLE_INLINE_CHECKBOXES = '<label class="checkbox-inline toggle-columns-display-checkbox">'
+    TABLE_QUOTA_SEM_1 = 'Sem 1 Quota</th>'
+    TABLE_QUOTA_SEM_2 = 'Sem 2 Quota</th>'
+    TABLE_NUM_STUDENTS_SEM_1 = '<th># of Students Taking (Sem 1)</th>'
+    TABLE_NUM_STUDENTS_SEM_2 = '<th># of Students Taking (Sem 2)</th>'
+
     TABLE_MOUNTING_SYMBOL_MOUNTED = '<span class="glyphicon glyphicon-ok" ' +\
                                     'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
                                     'title="Mounted<br>(Click to go to module AY-Sem view)"></span>'
@@ -156,9 +162,14 @@ class TestCode(object):
         # This is hardcoded for now, but should reflect current AY at any time
         root.mustcontain('<h1 class="text-center"><b>Module Mountings for <u>AY' +\
             ' 16/17</u></b></h1>')
+        root.mustcontain(self.TABLE_INLINE_CHECKBOXES)
         root.mustcontain(self.TABLE_HEADER_CODE)
         root.mustcontain(self.TABLE_HEADER_NAME)
         root.mustcontain(self.TABLE_HEADER_MOUNTING_SEM_1)
         root.mustcontain(self.TABLE_HEADER_MOUNTING_SEM_2)
         root.mustcontain(self.TABLE_MOUNTING_SYMBOL_MOUNTED)
         root.mustcontain(self.TABLE_MOUNTING_SYMBOL_NOT_MOUNTED)
+        root.mustcontain(self.TABLE_QUOTA_SEM_1)
+        root.mustcontain(self.TABLE_QUOTA_SEM_2)
+        root.mustcontain(self.TABLE_NUM_STUDENTS_SEM_1)
+        root.mustcontain(self.TABLE_NUM_STUDENTS_SEM_2)

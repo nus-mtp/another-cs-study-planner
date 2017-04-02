@@ -23,9 +23,11 @@ class TestCode(object):
     TABLE_COLUMN_MODULE_1_NAME = '<th>Name of Module 1</th>'
     TABLE_COLUMN_MODULE_2 = '<th>Module 2</th>'
     TABLE_COLUMN_MODULE_2_NAME = '<th>Name of Module 2</th>'
-    TABLE_COLUMN_AY_SEM = '<th>For AY-Sem</th>'
     TABLE_COLUMN_NUM_STUDENTS = '<th>Number of Students</th>'
 
+    FORM = '<form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingModules" method="get">'
+    SELECT_LABEL = '<label for="ay-sem">Select AY-Semester:'
+    SELECT_ELEMENT = '<select id="aysem-dropdown-select" class="form-control" name="aysem">'
 
     def __init__(self):
         self.middleware = None
@@ -69,5 +71,7 @@ class TestCode(object):
         page.mustcontain(self.TABLE_COLUMN_MODULE_1_NAME)
         page.mustcontain(self.TABLE_COLUMN_MODULE_2)
         page.mustcontain(self.TABLE_COLUMN_MODULE_2_NAME)
-        page.mustcontain(self.TABLE_COLUMN_AY_SEM)
         page.mustcontain(self.TABLE_COLUMN_NUM_STUDENTS)
+        page.mustcontain(self.FORM)
+        page.mustcontain(self.SELECT_LABEL)
+        page.mustcontain(self.SELECT_ELEMENT)

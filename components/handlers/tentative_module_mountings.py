@@ -114,12 +114,12 @@ class Tentative(object):
         self.full_mounting_plan = tenta_full_mounting_plan
 
 
-    def GET(self, to_render=True):
+    def GET(self, to_render=True, logged_in=False):
         '''
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
-        if not session.validate_session():
+        if not session.validate_session() and not logged_in:
             raise web.seeother('/login')
 
         # Currently, tentative mounting will be shown for the next AY

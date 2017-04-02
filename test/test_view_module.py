@@ -70,6 +70,10 @@ class TestCode(object):
     CONTENT_STAR_BUTTON = '<span class="glyphicon glyphicon-star-empty">'
     CONTENT_UNSTAR_BUTTON = '<span class="glyphicon glyphicon-star">'
 
+    OVERSUB_ORANGE_ICON = '<span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" ' +\
+                          'data-placement="bottom" data-html="true" title="Oversubscribed!<br>(Demand > Supply)"'
+    OVERSUB_RED_ICON = '<span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" ' +\
+                       'data-placement="bottom" data-html="true" title="Oversubscribed!<br>(Unmounted but still has demand)"'
 
     def __init__(self):
         self.middleware = None
@@ -236,3 +240,13 @@ class TestCode(object):
         redirected = response.follow()
         assert_equal(redirected.status, 200)
         redirected.mustcontain(self.CONTENT_STAR_BUTTON)
+
+
+    def test_oversubscribed_icons(self):
+        '''
+            Tests the display of the oversubscribed warning icons 
+            that appear in Module Overview
+        '''
+        root = self.test_app.get('/viewModule?code=CS2309')
+        root.mustcontain(self.OVERSUB_ORANGE_ICON)
+        root.mustcontain(self.OVERSUB_RED_ICON)

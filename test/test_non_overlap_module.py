@@ -33,9 +33,9 @@ class TestCode(object):
            'data-placement="bottom" title="By default, these pairs are shown for the '+\
            'current AY-Semester." class="glyphicon glyphicon-info-sign" title="By '+\
            'default, these pairs are shown for the current AY-Semester."></span></p>'
-    FORM = '<form id="ay-form" class="form-inline" action="/nonOverlappingModules" method="post">'
-    SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
-    SELECT_ELEMENT = '<select class="form-control" name="aysem">'
+    FORM = '<form id="ay-form" class="form-inline aysem-dropdown" action="/nonOverlappingModules" method="post">'
+    SELECT_LABEL = '<label for="ay-sem">Select AY-Semester:'
+    SELECT_ELEMENT = '<select id="aysem-dropdown-select" class="form-control" name="aysem">'
     TABLE_HEADER_MODULE_CODE_ONE = '<th>Module 1</th>'
     TABLE_HEADER_MODULE_NAME_ONE = '<th>Name of Module 1</th>'
     TABLE_HEADER_MODULE_CODE_TWO = '<th>Module 2</th>'
