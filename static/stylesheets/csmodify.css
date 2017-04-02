@@ -328,6 +328,11 @@ td > a {
     margin-left: 35%;
 }
 
+.prior-to-form-module-A + ul{
+    margin-left: 33%;
+    margin-top: 15px;
+}
+
 .prior-to-form-module-B {
     margin: 10px 5px 15px 5px;
     width: 280px;
