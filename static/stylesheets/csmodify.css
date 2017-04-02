@@ -603,3 +603,11 @@ tr[id*='modified-details-child-row'] {
 .form-control {
     height: auto;
 }
+
+.oversub-warning {
+    color: #e88b00;
+}
+
+.unmounted-warning {
+    color: #c91c48;
+}

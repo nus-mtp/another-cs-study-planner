@@ -122,8 +122,12 @@ $for area in focus_area_acronyms:
                     <br>
                     <h4><b>Number of Students Taking:&nbsp;&nbsp;&nbsp;</b>
                         $numStudents&nbsp;
-                    $if (quota == None and numStudents > 0) or (quota != None and numStudents > quota):
-                        <span class="glyphicon glyphicon-info-sign" style="color:#e88b00;" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
+                    $if ((quota is None and numStudents > 0) or (quota is not None and numStudents > quota)):
+                        <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" 
+                        title="Oversubscribed!"></span>
+                    $elif (quota == '-' and numStudents > 0):
+                        <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" 
+                        title="Not mounted but still has demand"></span>
                     </h4>
                     <hr>
                 </div>

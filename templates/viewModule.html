@@ -190,24 +190,23 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                     </td>
                                 $ numberTaking = getNumStudents(aysem)
                                 $if True:
-                                    $if quota == None:
+                                    $if quota is None:
                                         <td>
                                             ?
                                         </td>
                                     $else:
                                         <td>
                                             $quota
-                                        </td>                                        
-                                    $if (quota == None and numberTaking > 0) or (quota != None and numberTaking > quota):
-                                        <td style="background-color:#ffe68c;">
-                                            $numberTaking&nbsp;
-                                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
-                                        </td>
-                                    $else:
-                                        <td>
-                                            $numberTaking
-                                        </td>
-                                $if True:
+                                        </td>          
+                                    <td>
+                                        $numberTaking&nbsp;    
+                                    $if ((quota is None and numberTaking > 0) or (quota is not None and numberTaking > quota)):
+                                        <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" 
+                                        title="Oversubscribed!"></span>
+                                    $elif (quota == '-' and numberTaking > 0):
+                                        <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" 
+                                        title="Not mounted but still has demand"></span>
+                                    </td>
                                     <td>
                                         <form action="/individualModuleInfo" method="get">
                                             <input type="hidden" name="code" value="$moduleCode">
@@ -255,23 +254,23 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                         </td>
                                     $ numberTaking = getNumStudents(aysem)
                                     $if True:
-                                        $if quota == None:
+                                        $if quota is None:
                                             <td>
                                                 ?
                                             </td>
                                         $else:
                                             <td>
                                                 $quota
-                                            </td>                                        
-                                        $if (quota == None and numberTaking > 0) or (quota != None and numberTaking > quota):
-                                            <td style="background-color:#ffe68c;">
-                                                $numberTaking&nbsp;
-                                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
                                             </td>
-                                        $else:
-                                            <td>
-                                                $numberTaking
-                                            </td>
+                                        <td>
+                                            $numberTaking&nbsp;    
+                                        $if ((quota is None and numberTaking > 0) or (quota is not None and numberTaking > quota)):
+                                            <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" 
+                                            title="Oversubscribed!"></span>
+                                        $elif (quota == '-' and numberTaking > 0):
+                                            <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" 
+                                            title="Not mounted but still has demand"></span>
+                                        </td>
                                     $if True:
                                         <td>
                                             <form style="display:inline-block" action="/individualModuleInfo" method="get">

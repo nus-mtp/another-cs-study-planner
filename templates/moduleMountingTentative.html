@@ -98,8 +98,10 @@ $var hierarchy = [home, tentativeMounting]
                             </td>
                             <td>
                                 $sem1NumStudents
-                                $if ((sem1Quota == '-' or sem1Quota == '?') and sem1NumStudents > 0) or ((sem1Quota != '-' and sem1Quota != '?') and sem1NumStudents > sem1Quota):
-                                    <span class="glyphicon glyphicon-info-sign" style="color:#e88b00;" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>        
+                                $if ((sem1Quota == '?') and sem1NumStudents > 0) or ((sem1Quota != '-' and sem1Quota != '?') and sem1NumStudents > sem1Quota):
+                                    <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span> 
+                                $elif (sem1Quota == '-' and sem1NumStudents > 0):
+                                    <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" title="Not mounted but still has demand"></span> 
                             </td>
 
                         $if sem2Mounting == 1:
@@ -132,8 +134,10 @@ $var hierarchy = [home, tentativeMounting]
                             </td>  
                             <td>
                                 $sem2NumStudents
-                                $if ((sem2Quota == '-' or sem2Quota == '?') and sem2NumStudents > 0) or ((sem2Quota != '-' and sem2Quota != '?') and sem2NumStudents > sem2Quota):
-                                    <span class="glyphicon glyphicon-info-sign" style="color:#e88b00;" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span>
+                                $if ((sem2Quota == '?') and sem2NumStudents > 0) or ((sem2Quota != '-' and sem2Quota != '?') and sem2NumStudents > sem2Quota):
+                                    <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" title="Oversubscribed!"></span> 
+                                $elif (sem2Quota == '-' and sem2NumStudents > 0):
+                                    <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" title="Not mounted but still has demand"></span> 
                             </td>                                             
                         </tr>
                 </tbody>
