@@ -72,12 +72,39 @@ class EditAll(object):
                         sem1_quota = None
                 except KeyError:  # quota = '-'
                     sem1_quota = None
+                if sem1_quota is not None:
+                    try:
+                        sem1_quota = int(sem1_quota)
+                        if sem1_quota < 0:
+                            if test_data:
+                                return False
+                            else:
+                                return Outcome().POST("edit_all_mountings_and_quotas", False, None)
+                    except ValueError:  # quota is not an integer
+                        if test_data:
+                            return False
+                        else:
+                            return Outcome().POST("edit_all_mountings_and_quotas", False, None)
+
                 try:
                     sem2_quota = input_data[module_code+"_Sem2Quota"]
                     if sem2_quota == "":  # quota = '?'
                         sem2_quota = None
                 except KeyError:  # quota = '-'
                     sem2_quota = None
+                if sem2_quota is not None:
+                    try:
+                        sem2_quota = int(sem2_quota)
+                        if sem2_quota < 0:
+                            if test_data:
+                                return False
+                            else:
+                                return Outcome().POST("edit_all_mountings_and_quotas", False, None)
+                    except ValueError:  # quota is not an integer
+                        if test_data:
+                            return False
+                        else:
+                            return Outcome().POST("edit_all_mountings_and_quotas", False, None)
 
                 target_aysem = target_ay+" Sem 1"
                 outcome = None

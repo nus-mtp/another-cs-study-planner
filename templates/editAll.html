@@ -9,8 +9,6 @@ $ editAll = ['#', title_string]
 $var hierarchy = [home, editAll]
 
 <script type="text/javascript">
-    var selectedModuleCount = 0;
-
     $$(document).ready(function(){
         //Load the list of modules into the 'Select module to edit' input
         $$("input.typeahead").typeahead({
@@ -23,99 +21,8 @@ $var hierarchy = [home, editAll]
             }
         })
     });
-
-    //Show a module in the edit table
-    function showModuleInTable(selectedModuleCode, isModuleEdited) {
-        selectedModuleCount++;
-        var moduleRow = selectedModuleCode + "_row";
-        document.getElementById(moduleRow).style.display = "table-row";
-        document.getElementById(isModuleEdited).value = "True";
-        if (selectedModuleCount > 0) {
-            document.getElementById("edit-all-table-no-modules").style.display = "none";
-        }
-    }
-
-    //Remove a module from the edit table
-    function removeModuleFromTable(moduleRow, isModuleEdited) {
-        selectedModuleCount--;
-        document.getElementById(moduleRow).style.display = "none";
-        document.getElementById(isModuleEdited).value = "False";
-        if (selectedModuleCount <= 0) {
-            document.getElementById("edit-all-table-no-modules").style.display = "table-row";
-        }
-    }
-
-    //Disable quota input when mounting is unchecked, enable quota input when checked
-    function toggleQuotaState(id) {
-        var state = document.getElementById(id).disabled;
-        document.getElementById(id).disabled = !state;
-    }
-
-    //Add red highlight to mounting and quota if mounting is changed
-    function checkMountingChange(element, oldMounting, oldQuota, mountingID, quotaID) {
-        var oldMounting = (oldMounting == 1);
-        var newMounting = element.checked;
-
-        if (oldMounting != newMounting) {
-            addRedHighlight(mountingID);
-            addRedHighlight(quotaID);
-        } else {
-            removeRedHighlight(mountingID);
-            removeRedHighlight(quotaID);
-            if (oldMounting == 1) {
-                checkQuotaChange(document.getElementById(quotaID), oldQuota, quotaID)
-            }
-        }
-    }
-
-    //Add red highlight to quota if quota is changed
-    function checkQuotaChange(element, oldQuota, quotaID) {
-        var newQuota = element.value;
-
-        if (oldQuota == '?') oldQuota = '';
-        if (oldQuota != newQuota) {
-            addRedHighlight(quotaID);
-        } else {
-            removeRedHighlight(quotaID);
-        }
-    }
-
-    function addRedHighlight(id) {
-        document.getElementById(id).parentElement.style.backgroundColor = "#ffaea5";
-    }
-
-    function removeRedHighlight(id) {
-        document.getElementById(id).parentElement.style.backgroundColor = "white";
-    }
-
-    //Reset the mounting and quota of a module to when page first load
-    function resetMountingAndQuota(sem1Mounting, sem2Mounting, sem1Quota, sem2Quota,
-                                   sem1MountingOption, sem2MountingOption,
-                                   sem1QuotaInput, sem2QuotaInput) {
-        if (sem1Quota == '-' || sem1Quota == '?') sem1Quota = '';
-        document.getElementById(sem1QuotaInput).value = sem1Quota;
-        removeRedHighlight(sem1QuotaInput);
-        if (sem2Quota == '-' || sem2Quota == '?') sem2Quota = '';
-        document.getElementById(sem2QuotaInput).value = sem2Quota;
-        removeRedHighlight(sem2QuotaInput);
-
-        sem1Mounting = (sem1Mounting == 1);
-        var sem1MountingNew = document.getElementById(sem1MountingOption).checked;
-        if (sem1MountingNew != sem1Mounting) {
-            toggleQuotaState(sem1QuotaInput);
-        }
-        document.getElementById(sem1MountingOption).checked = sem1Mounting;
-        removeRedHighlight(sem1MountingOption);
-
-        sem2Mounting = (sem2Mounting == 1);
-        var sem2MountingNew = document.getElementById(sem2MountingOption).checked;
-        if (sem2MountingNew != sem2Mounting) {
-            toggleQuotaState(sem2QuotaInput);
-        }
-        document.getElementById(sem2MountingOption).checked = sem2Mounting;
-        removeRedHighlight(sem2MountingOption);
-    }
 </script>
+<script type="text/javascript" src="static/javascripts/editAll.js"></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -128,7 +35,7 @@ $var hierarchy = [home, editAll]
                 <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">
             </div>
             <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
-                <table class="table table-bordered table-hover text-center" id="edit-all-table">
+                <table class="table table-bordered text-center" id="edit-all-table">
                     <thead id="edit-all-table-header">
                         <tr>
                             <th>Code</th>
@@ -180,17 +87,18 @@ $var hierarchy = [home, editAll]
 
                             $if sem1Quota == '-':
                                 <td>
-                                    <input type="number" min="0" id="$sem1QuotaInput" id="$sem1QuotaInput" name="$sem1QuotaInput" disabled>
+                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem1Quota == '?':
                                 <td>
-                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                    id="$sem1QuotaInput" name="$sem1QuotaInput">
+                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" >
                                 </td>
                             $else:
                                 <td>
-                                    <input type="number" min="0" onchange="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" 
-                                    id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota">
+                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
 
                             $if sem2Mounting == 1:
@@ -208,17 +116,18 @@ $var hierarchy = [home, editAll]
 
                             $if sem2Quota == '-':
                                 <td>
-                                    <input type="text" id="$sem2QuotaInput" name="$sem2QuotaInput" disabled>
+                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem2Quota == '?':
                                 <td>
-                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                    id="$sem2QuotaInput" name="$sem2QuotaInput">
+                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
                             $else:
                                 <td>
-                                    <input type="text" onchange="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" 
-                                    id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota">
+                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
                             $if True:
                                 <td>
@@ -228,14 +137,21 @@ $var hierarchy = [home, editAll]
                                 </td>
                                 <input type="hidden" id="$isModuleEdited" name="$isModuleEdited" value="False">      
                             </tr>
-                        </form>
                     </tbody>
                 </table>
+                <div class="col-md-2 col-md-offset-10">
+                    <table style="float:right;">
+                        <tr>
+                            <td style="width:30px; background-color:#fffdcc; border:1px solid gray;"></td> 
+                            <td style="padding:2px 0px 0px 7px; vertical-align:middle; font-size: 14px;">= Modified</td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="col-md-6 col-md-offset-3 text-center">
                     <button type="submit" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Save changes" onclick="if(!confirm('Are you sure you want to save your changes?')){event.preventDefault();}">
                         <span class="glyphicon glyphicon-floppy-disk"></span>
                     </button>
-                    <button type="button" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Reset table" onclick="if(!confirm('Are you sure you want to reset the table and discard all your changes?')){event.preventDefault();} else {window.location='/editAll';}">
+                    <button type="button" id="edit-all-reset-button" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Reset table" onclick="if(!confirm('Are you sure you want to reset the table and discard all your changes?')){event.preventDefault();} else {location.href='/editAll';}">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>

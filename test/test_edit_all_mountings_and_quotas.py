@@ -4,7 +4,6 @@
 from paste.fixture import TestApp
 from nose.tools import assert_equal
 from app import APP
-from components import model
 from components import session
 
 
@@ -12,8 +11,11 @@ class TestCode(object):
     '''
         This class runs the test cases to test Edit All Mountings and Quotas page
     '''
+    PAGE_URL = '/editAll'
+
     SELECT_MODULE_LABEL = '<b>Select module(s) to edit:'
-    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">'
+    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" ' +\
+                          'class="typeahead" data-provide="typeahead">'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
@@ -22,11 +24,16 @@ class TestCode(object):
     TABLE_HEADER_MOUNTED_IN_SEM2 = '<th>Mounted In Sem 2</th>'
     TABLE_HEADER_SEM2_QUOTA = '<th>Sem 2 Quota</th>'
     TABLE_HEADER_REMOVE = '<th>Remove</th>'
+    TABLE_NO_MODULES = 'No modules selected'
 
     BUTTON_SAVE_CHANGES = '<button type="submit" class="btn btn-primary edit-all-bottom-button" ' +\
                           'data-toggle="tooltip" data-placement="bottom" title="Save changes" '
-    BUTTON_RESET_TABLE = '<button type="button" class="btn btn-primary edit-all-bottom-button" ' +\
+    BUTTON_RESET_TABLE = '<button type="button" id="edit-all-reset-button" class="btn btn-primary edit-all-bottom-button" ' +\
                          'data-toggle="tooltip" data-placement="bottom" title="Reset table" '
+
+    OUTCOME_TITLE = '<title>Validating...</title>'
+    OUTCOME_SUCCESS_MESSAGE = 'Modules have been edited successfully!'
+    OUTCOME_FAILURE_MESSAGE = 'Error: Failed to edit modules'
 
 
     def __init__(self):
@@ -54,7 +61,7 @@ class TestCode(object):
         '''
             Tests if user can access the page without request errors.
         '''
-        root = self.test_app.get('/editAll')
+        root = self.test_app.get(self.PAGE_URL)
 
         # checks if HTTP response code is 200 (= OK)
         assert_equal(root.status, 200)
@@ -64,7 +71,7 @@ class TestCode(object):
         '''
             Tests if a table displaying modules to be edited exist
         '''
-        root = self.test_app.get('/editAll')
+        root = self.test_app.get(self.PAGE_URL)
 
         # Checks the existence of the handler for viewing fixed mounting plan
         root.mustcontain(self.SELECT_MODULE_LABEL)
@@ -78,3 +85,42 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_REMOVE)
         root.mustcontain(self.BUTTON_SAVE_CHANGES)
         root.mustcontain(self.BUTTON_RESET_TABLE)
+
+
+    def test_submit_edit_all_form(self):
+        '''
+            Tests that the Edit All form can be submitted and the correct outcome message is shown
+        '''
+        root = self.test_app.get(self.PAGE_URL)
+
+        editAllForm = root.forms__get()['edit-all-form']
+        editAllForm.__setitem__('BT5110_isEdited', "True")
+        editAllForm.__setitem__('BT5110_Sem1Quota', 60)  # valid quota
+
+        response = editAllForm.submit()
+        assert_equal(response.status, 200)
+
+        response.mustcontain(self.OUTCOME_TITLE)
+        response.mustcontain(self.OUTCOME_SUCCESS_MESSAGE)
+
+        root = self.test_app.get(self.PAGE_URL)
+
+        editAllForm = root.forms__get()['edit-all-form']
+        editAllForm.__setitem__('BT5110_isEdited', "True")
+        editAllForm.__setitem__('BT5110_Sem1Quota', "aaa")  # invalid quota
+
+        response = editAllForm.submit()
+        assert_equal(response.status, 200)
+
+        response.mustcontain(self.OUTCOME_TITLE)
+        response.mustcontain(self.OUTCOME_FAILURE_MESSAGE)
+
+
+    def test_reset_edit_all(self):
+        '''
+            Tests that the Edit All table can be reset
+        '''
+        root = self.test_app.get(self.PAGE_URL)
+
+        response = root.clickbutton(buttonid='edit-all-reset-button')
+        response.mustcontain(self.TABLE_NO_MODULES)
