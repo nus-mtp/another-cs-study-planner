@@ -1,4 +1,4 @@
-$def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
+$def with (pageType, modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
 
 $var title:View Modules Taken Prior to Others
 $ home = ['/', 'Home']
@@ -10,7 +10,7 @@ $else:
 	$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
 	$var hierarchy = [home, modulesPriorOthers]
 
-$if modulePairs is not None:
+$if pageType == "all_pairs":
 	<div class="container-fluid">
 		<h1 class="text-center"><b>Modules Taken Prior to Other Modules</b></h1>
 		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
@@ -31,7 +31,7 @@ $if modulePairs is not None:
 				<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Go">
 			</form>
 		</div>
-        <div class="col-md-12 pagination-centered text-center">
+        <div class="row pagination-centered text-center">
             <form id="ay-form" class="form-inline" action="/moduleTakenPriorToOthers" method="get">
                 <div class="form-group">
                     <label for="ay-sem">Select AY-Sem:</label>
@@ -46,7 +46,10 @@ $if modulePairs is not None:
                 </div>
             </form>
         </div>
-    $if len(modulePairs) > 0:
+    $if modulePairs is not None:
+    	<div class="row prior-table-aysem-title">
+    		<h3 >Showing results for Module B taken in <b><u>$targetAySem</u></b></h3>
+    	</div>
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>
@@ -78,7 +81,7 @@ $if modulePairs is not None:
 		</table>
 	</div>
 
-$else:
+$elif pageType == "specific_pair":
 	<div class="container-fluid">
 		<h3 style="margin-bottom: 20px;">Students who took 
 			<b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> 

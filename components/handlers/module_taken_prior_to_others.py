@@ -38,15 +38,15 @@ class TakePriorTo(object):
                 module_A = input_data.moduleA
                 module_B = input_data.moduleB            
             except AttributeError:
-                module_pairs = []
+                module_pairs = None
                 if target_ay_sem is not None:
                     module_pairs = model.get_modA_taken_prior_to_modB(target_ay_sem)
 
                 # Get a list of all AY-Sems (for users to select)
                 all_ay_sems = model.get_all_ay_sems()
 
-                return RENDER.modulesTakenPriorToOthers(module_pairs, all_ay_sems, None, None,
-                                                        None, None, None, None)
+                return RENDER.modulesTakenPriorToOthers("all_pairs", module_pairs, all_ay_sems, None, None,
+                                                        None, None, target_ay_sem, None)
 
 
         student_counts = \
@@ -65,7 +65,7 @@ class TakePriorTo(object):
         if is_testing:
             return [student_counts, student_prior_count, module_B_students]
         else:
-            return RENDER.modulesTakenPriorToOthers(None, None, student_counts,
+            return RENDER.modulesTakenPriorToOthers("specific_pair", None, None, student_counts,
                                                     student_prior_count, module_A.upper(),
                                                     module_B.upper(), target_ay_sem,
                                                     module_B_students)
