@@ -5,7 +5,10 @@ $ home = ['/', 'Home']
 $ oversubscribedModules = ['#', 'Oversubscribed Modules']
 
 $var hierarchy = [home, oversubscribedModules]
-<div class="container-fluid">
+<script "type=text/javascript">
+</script>
+
+<div class="container-fluid" onload="myFunction()">
 	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
 	<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
 	<br>
@@ -13,7 +16,7 @@ $var hierarchy = [home, oversubscribedModules]
         <img src="static/images/loading.gif">
         <h3>Loading data, please wait...</h3>
     </div>
-    <div class="col-sm-12">
+    <div class="col-md-12">
 		<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
 			<thead>
 				<tr>

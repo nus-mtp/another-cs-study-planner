@@ -105,6 +105,9 @@ $(function() {
             $('.toggle-columns-display').show();
             $('.loading-div').hide();
             $('#fixed-mounting-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
 
@@ -119,6 +122,9 @@ $(function() {
             $('.toggle-columns-display').show();
             $('.loading-div').hide();
             $('#tentative-mounting-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
 
@@ -182,13 +188,16 @@ $(function() {
     $('#oversubscribed-modules-table').DataTable( {
         "order": [[ 4, "desc" ]],
         "columnDefs": [
-            { "targets": 0, "width": "15%" },
-            { "targets": 1, "width": "35%" }
+            { "targets": 0, "width": "16%" },
+            { "targets": 1, "width": "36%" }
         ],
         "initComplete": function(settings, json) {
             $('#oversubscribed-modules-table').show();
             $('.loading-div').hide();
             $('#oversubscribed-modules-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
 
@@ -203,6 +212,9 @@ $(function() {
             $('#modules-taken-prior-table').show();
             $('.loading-div').hide();
             $('#modules-taken-prior-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
 
@@ -220,6 +232,9 @@ $(function() {
             $('#common-module-table').show();
             $('.loading-div').hide();
             $('#common-module-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
 
@@ -230,6 +245,9 @@ $(function() {
             $('#non-overlap-table').show();
             $('.loading-div').hide();
             $('#non-overlap-table').DataTable().columns.adjust().draw();
+            setTimeout(function() {
+                $('.dataTable').width("100%");
+            }, 200);
         }
     } );
      
@@ -243,3 +261,6 @@ $(function() {
     } );
 } );
 
+window.onresize = function() {
+    $('.dataTable').width("100%");
+}
