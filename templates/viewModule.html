@@ -121,6 +121,13 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                     </div>
                                     <div role="separator" class="dropdown-divider"></div>
                                     <div class="dropdown-item text-center">
+                                        <form id="view-students-planning-to-take-module" name="view-students-planning-to-take-module" action="/studentsAffectedByModule" method="get" class="no-padding-margin">
+                                            <input type="hidden" name="code" value="$moduleCode">
+                                            <input type="hidden" name="aysem" value="$aySem">
+                                            <button type="button" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">View Students Planning To Take This Module</button>
+                                        </form>
+                                    </div>
+                                    <div class="dropdown-item text-center">
                                         <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
                                             <input type="hidden" name="code" value="$moduleCode">
                                             <button type="button" id="view-mods-overlapping" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">View Modules Overlapping With This Module</button>
@@ -162,6 +169,28 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                 <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
                                 <select class="form-inline form-control" name="aysem">
                                     <option value="" selected>All Semesters</option>
+                                    $for aysem in allAySems:
+                                        $if targetAySem == aysem:
+                                            <option value="$aysem" selected>$aysem</option>
+                                        $else:
+                                            <option value="$aysem">$aysem</option>
+                                </select>
+                                <input class="form-inline form-control" type="submit">
+                            </form>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                        <div id="students-taking-modal" class="modal-content text-center">
+                            <span class="closeModal" onclick="closeModal();">&times;</span>
+                            <h2>View Students Taking This Module</h2>
+                            <form id="ay-form" class="form-inline aysem-dropdown" action="/studentsAffectedByModule" method="get">
+                                <p>Please select the AY-Semester that you wish to view:</p>
+                                <br>
+                                <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
+                                <select class="form-inline form-control" name="aysem">
+                                    <option value="" selected disabled>Choose an AY-Semester</option>
                                     $for aysem in allAySems:
                                         $if targetAySem == aysem:
                                             <option value="$aysem" selected>$aysem</option>

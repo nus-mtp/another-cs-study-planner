@@ -98,17 +98,26 @@ window.onload = function () {
   // Get the button that opens the modal
   var edit_specific_info_btn = document.getElementById("edit-specific-info");
   var overlapping_mods_btn = document.getElementById("view-overlapping-with-module");
+  var students_taking_btn = document.getElementById("view-students-planning-to-take-module");
 
   // When the user clicks the button, open the modal 
   edit_specific_info_btn.onclick = function() {
-      modal.style.display = "block";
-      document.getElementById("edit-specific-info-modal").style.display = "block";
-      document.getElementById("overlapping-mods-modal").style.display = "none";
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "block";
+    document.getElementById("overlapping-mods-modal").style.display = "none";
+    document.getElementById("students-taking-modal").style.display = "none";
   }
   overlapping_mods_btn.onclick = function() {
-      modal.style.display = "block";
-      document.getElementById("edit-specific-info-modal").style.display = "none";
-      document.getElementById("overlapping-mods-modal").style.display = "block";
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "none";
+    document.getElementById("overlapping-mods-modal").style.display = "block";
+    document.getElementById("students-taking-modal").style.display = "none";
+  }
+  students_taking_btn.onclick = function() {
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "none";
+    document.getElementById("overlapping-mods-modal").style.display = "none";
+    document.getElementById("students-taking-modal").style.display = "block";
   }
 
   // When the user clicks anywhere outside of the modal, close it
