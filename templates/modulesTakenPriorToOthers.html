@@ -10,42 +10,77 @@ $else:
 	$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
 	$var hierarchy = [home, modulesPriorOthers]
 
+<script>
+$$(document).ready(function() {
+	// Get the modal
+	var modal = document.getElementById('myModal');
+	// Get the button that opens the modal
+	var btn = document.getElementById('openModal');
+	// Get the cross icon that closes the modal
+	var cross = document.getElementsByClassName("closeModal")[0];
+
+	// When the user clicks the button, open the modal 
+	btn.onclick = function() {
+	    modal.style.display = "block";
+	}
+	// When the user clicks on <span> (x), close the modal
+	cross.onclick = function() {
+	    modal.style.display = "none";
+	}
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	    }
+	}
+})
+</script>
+
 $if pageType == "all_pairs":
 	<div class="container-fluid">
 		<h1 class="text-center"><b>Modules Taken Prior to Other Modules</b></h1>
 		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</b></p>
 		<br>
-		<div class="modules-taken-prior-search-form">
-			<form action="/moduleTakenPriorToOthers" method="GET">
-				<p>Tell me the number of students who have taken</p>
-				<input type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
-				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
-				<p>before taking</p>
-				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
-				oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
-				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
-				<select style="display:inline-block;" name="aysem" required>
-				$for aysem in allAySems:
-					<option value="$aysem">$aysem</option>
-				</select><br>
-				<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Go">
-			</form>
-		</div>
+		<!--<div class="modules-taken-prior-search-form">
+		</div>-->
         <div class="row pagination-centered text-center">
-            <form id="ay-form" class="form-inline" action="/moduleTakenPriorToOthers" method="get">
+            <form id="ay-form" class="form-inline ay-sem-dropdown" action="/moduleTakenPriorToOthers" method="get">
                 <div class="form-group">
-                    <label for="ay-sem">Select AY-Sem:</label>
-                    <select class="form-control" name="aysem">
+                    <label for="ay-sem">Select AY-Semester:&nbsp;</label>
+                    <select class="form-control ay-sem-dropdown-select" name="aysem">
                         <option value="" disabled selected>Please choose a target AY-Semester</option>
                         $for aysem in allAySems:
                         	<option value="$aysem">$aysem</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <input type="submit"  value="Submit" class="btn btn-primary">
+                <div class="form-group ay-sem-dropdown">
+                    <input type="submit" value="Submit" class="btn btn-primary">
                 </div>
             </form>
         </div>
+        <div class="row pagination-centered text-center">
+        	<p style="font-size: 18px;"><b>or</b></p>
+        	<button id="openModal" class="btn btn-primary">Search for a specific pair of modules</button>
+        </div>
+		<div id="myModal" class="modal">
+			<div class="modal-content text-center">
+				<span class="closeModal">&times;</span>
+				<form class="form-group" action="/moduleTakenPriorToOthers" method="GET">
+					<p><b>Tell me the number of students who have taken</b></p>
+					<input class="form-control prior-to-form-module-A" type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
+					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<p><b>before taking</b></p>
+					<input class="form-control prior-to-form-module-B" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
+					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<p style="display:inline-block;"><b>&nbsp;in&nbsp;</b></p>
+					<select class="form-control prior-to-form-module-B" name="aysem" required>
+					$for aysem in allAySems:
+						<option value="$aysem">$aysem</option>
+					</select><br>
+					<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
     $if modulePairs is not None:
     	<div class="row prior-table-aysem-title">
     		<h3 >Showing results for Module B taken in <b><u>$targetAySem</u></b></h3>

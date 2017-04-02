@@ -309,6 +309,94 @@ td > a {
     margin: 12px 0px 10px 0px;
 }
 
+.ay-sem-dropdown label {
+    font-size: 15px;
+}
+.ay-sem-dropdown input {
+    height: 30px;
+    margin-left: 2px;
+    padding-top: 5px;
+}
+.ay-sem-dropdown-select {
+    width: 280px;
+}
+
+.prior-to-form-module-A {
+    margin: 15px 5px 20px 5px;
+    width: 30%;
+    margin-left: 35%;
+}
+
+.prior-to-form-module-B {
+    margin: 10px 5px 15px 5px;
+    width: 30%;
+    display: inline-block;
+}
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    top: 100px;
+    padding: 10px 20px 10px;
+    border: 1px solid #888;
+    width: 60%;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top: 0px; opacity: 0} 
+    to {top: 100; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {top: 0px; opacity: 0}
+    to {top: 100; opacity: 1}
+}
+
+.modal-content form {
+    margin-top: 25px;
+}
+
+#openModal {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.closeModal {
+    position: relative;
+    top: -5px;
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeModal:hover,
+.closeModal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
@@ -504,4 +592,12 @@ tr[id*='modified-details-child-row'] {
 #find-module + .dropdown-menu { 
     width: 450px;
     margin-left: 50px;
+}
+
+.form-control {
+    height: auto;
+}
+
+.form-inline .form-control {
+    min-width: 50px;
 }
