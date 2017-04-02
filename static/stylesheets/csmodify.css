@@ -31,7 +31,7 @@ span[id*='id-display'] {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 10; /* Stay on top */
     top: 0;
     left: 0;
     background-color: #2d6a9f;
@@ -194,7 +194,7 @@ td > a {
 
 .table-mounting-icon {
     margin-right: 10px;
-    z-index: 888px;
+    z-index: 2;
 }
 
 .toggle-columns-display {
@@ -202,7 +202,7 @@ td > a {
     position: relative;
     margin-top: 10px;
     top: 40px;
-    z-index: 999;
+    z-index: 3;
 }
 
 .toggle-columns-display-checkbox {
