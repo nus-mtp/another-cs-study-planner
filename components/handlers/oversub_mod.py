@@ -39,7 +39,7 @@ class OversubModule(object):
             sem2_quota = subplan[5]
             sem1_num_students = subplan[6]
             sem2_num_students = subplan[7]
-            
+
             if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
                 or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
                 list_of_oversub_mod.append((module_code, module_name, current_ay+" Sem 1", 

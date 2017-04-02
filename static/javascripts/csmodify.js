@@ -189,7 +189,8 @@ $(function() {
         "order": [[ 4, "desc" ]],
         "columnDefs": [
             { "targets": 0, "width": "16%" },
-            { "targets": 1, "width": "36%" }
+            { "targets": 1, "width": "36%" },
+            { "targets": 3, "type": 'num-html'}
         ],
         "initComplete": function(settings, json) {
             $('#oversubscribed-modules-table').show();

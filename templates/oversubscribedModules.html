@@ -5,8 +5,8 @@ $ home = ['/', 'Home']
 $ oversubscribedModules = ['#', 'Oversubscribed Modules']
 
 $var hierarchy = [home, oversubscribedModules]
-<script "type=text/javascript">
-</script>
+
+<script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
 
 <div class="container-fluid" onload="myFunction()">
 	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
@@ -23,7 +23,7 @@ $var hierarchy = [home, oversubscribedModules]
 					<th>Code</th>
 					<th>Name</th>
 					<th>AY-Semester</th>
-					<th>Class Quota</th>
+					<th onclick="replaceNilQuotasWithNumbers('#oversubscribed-modules-table');">Class Quota</th>
 					<th>Number of Students Taking Module</th>
 				</tr>
 			</thead>
@@ -43,7 +43,15 @@ $var hierarchy = [home, oversubscribedModules]
 							<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
 							<td>$module[1]</td>
 							<td>$module[2]</td>
-							<td>$module[3]</td>
+							<td>
+								$ quota = module[3]
+								$if quota == "-":
+									<span data-toggle="tooltip" data-placement="bottom" title="Not Mounted">&mdash;</span>
+								$elif quota == "?":
+									<span data-toggle="tooltip" data-placement="bottom" title="Unspecified">?</span>
+								$else:
+									$quota
+							</td>
 							<td>$module[4]</td>
 						</tr>
 			</tbody>
