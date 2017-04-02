@@ -860,7 +860,7 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
     return DB_CURSOR.fetchall()
 
 
-def get_all_mods_taken_together():
+def get_all_mods_taken_together(aysem=None):
     '''
         Retrieves the list of all modules taken together in the same semester.
 
@@ -878,13 +878,18 @@ def get_all_mods_taken_together():
                   " sp1.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                   "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
-                  "sp1.studentId = sp2.studentId AND " + \
-                  "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
-                  "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
-                  "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
-                  "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
+                  "sp1.studentId = sp2.studentId AND "
+    if aysem is not None:
+        sql_command += "sp1.acadYearAndSem = %s AND "
+    sql_command += "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
+                   "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
+                   "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    if aysem is not None:
+        DB_CURSOR.execute(sql_command, (aysem,))
+    else:
+        DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
 

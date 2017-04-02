@@ -318,8 +318,8 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
     return database.get_mod_taken_together_with_mod_and_aysem(code, aysem)
 
 
-def get_all_mods_taken_together():
-    return database.get_all_mods_taken_together()
+def get_all_mods_taken_together(aysem=None):
+    return database.get_all_mods_taken_together(aysem=aysem)
 
 
 def get_modA_taken_prior_to_modB(aysem):
