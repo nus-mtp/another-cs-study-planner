@@ -1,4 +1,4 @@
-$def with (moduleInfo, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, isStarred, prereq, preclude)
+$def with (moduleInfo, allAySems, allFutureAysems, targetAySem, fixedMountingPlan, tentaMountingPlan, numberOfStudentsPlanning, isStarred, prereq, preclude)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -71,7 +71,7 @@ $for subplan in tentaMountingPlan[-1::-2]:
     filler.push({y: 0, label: "$aySem[0:8]"});
 $for subplan in fixedMountingPlan[1::2]:
     $ aySem = subplan[0]
-    filler.push({y: 0, label: "$aySem[0:8]"});
+    filler.push({y: 0, label: "$aySem[0:8]"})
 </script>
 <script type="text/javascript" src="static/javascripts/viewModule.js"></script>
 
@@ -118,18 +118,62 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                     </div>
                                     
                                     <div class="dropdown-item text-center">
-                                        <button type="button" class="dropdown-btn-custom no-padding-margin" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota" onclick="scrollToTenta('infoTentaHeader', 750);">Edit Specific Module Info</button>
+                                        <button type="button" id="edit-specific-info" class="dropdown-btn-custom no-padding-margin" data-toggle="tooltip" data-placement="right" title="Edit the module's mounting and quota">Edit Specific Module Info</button>
                                     </div>
                                     <div role="separator" class="dropdown-divider"></div>
                                     <div class="dropdown-item text-center">
                                         <form id="view-overlapping-with-module" name="view-overlapping-with-module" action="/overlappingWithModule" method="get" class="no-padding-margin">
                                             <input type="hidden" name="code" value="$moduleCode">
-                                            <input type="submit" class="dropdown-btn-custom" value="View Modules Overlapping With This Module" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">
+                                            <button type="button" id="view-mods-overlapping" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with this module">View Modules Overlapping With This Module</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-lg btn-primary" onclick="window.location='/modules';">Back to Module List</button>
+                        </div>
+                    </div>
+                    <div id="myModal" class="modal">
+                        <div id="edit-specific-info-modal" class="modal-content text-center">
+                            <span class="closeModal" onclick="closeModal();">&times;</span>
+                            <h2>Edit Specific Info</h2>
+                            <form id="ay-form" class="form-inline aysem-dropdown" action="/editMounting" method="get">
+                                <p>Please select the AY-Semester that you wish to edit:</p>
+                                <br>
+                                <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
+                                <select class="form-inline form-control" name="aysem">
+                                    <option value="" disabled selected>Choose an AY-Semester</option>
+                                    $for aysem in allFutureAysems:
+                                        $if targetAySem == aysem:
+                                            <option value="$aysem" selected>$aysem</option>
+                                        $else:
+                                            <option value="$aysem">$aysem</option>
+                                </select>
+                                <input class="form-inline form-control" type="submit">
+                            </form>
+                            <br>
+                            <br>
+                        </div>
+                        <div id="overlapping-mods-modal" class="modal-content text-center">
+                            <span class="closeModal" onclick="closeModal();">&times;</span>
+                            <h2>View Overlapping Modules</h2>
+                            <form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingWithModule" method="get">
+                                <p>Please select the AY-Semester for the overlapping modules:</p>
+                                <br>
+                                <input class="form-inline form-control" type="hidden" name="code" value="$moduleCode">
+                                <select class="form-inline form-control" name="aysem">
+                                    <option value="" selected>All Semesters</option>
+                                    $for aysem in allAySems:
+                                        $if targetAySem == aysem:
+                                            <option value="$aysem" selected>$aysem</option>
+                                        $else:
+                                            <option value="$aysem">$aysem</option>
+                                </select>
+                                <input class="form-inline form-control" type="submit">
+                            </form>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
                         </div>
                     </div>
                     <div class="row">
@@ -220,7 +264,6 @@ $var hierarchy = [home, moduleInfo, viewModule]
                     </div>
                     <div class="row">
                         <h4 id="infoTentaHeader"><b>Information for Future AYs (Tentative):</b></h4>
-                        <h4 id="editSpecificInfoWarning" style="font-color:red; display:none;">Please click on the future AY-Semester that you want to edit</h4>
                         <table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
                             <thead>
                                 <tr>

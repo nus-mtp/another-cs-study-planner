@@ -252,6 +252,13 @@ td > a {
     height: 350px;
 }
 
+#edit-specific-info-modal {
+    display: none;
+}
+
+#overlapping-mods-modal {
+    display: none;
+}
 
 /*************************************************************************/
 /* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
@@ -312,7 +319,7 @@ td > a {
 }
 
 .dropdown-btn-custom{
-    width: 100%;
+    width: 300px;
     align-self: flex-end;
     background-color: white;
     border: 0px;
@@ -390,6 +397,9 @@ td > a {
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s
+}
+.modal-content h2 {
+    margin-left: 20px;
 }
 
 /* Add Animation */

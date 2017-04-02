@@ -21,15 +21,7 @@ class ViewMod(object):
         '''
         self.fixed_mounting_plan = None
         self.tenta_mounting_plan = None
-        self.number_of_future_ays = 1    # By right, this value should be set by the superadmin
-
-
-    def get_next_ay(self, ay):
-        '''
-            Return the AY that comes after the given AY
-        '''
-        ay = ay.split(' ')[1].split('/')
-        return 'AY ' + str(int(ay[0])+1) + '/' + str(int(ay[1])+1)
+        self.number_of_future_ays = model.get_number_of_ay_in_system()-1
 
 
     def load_fixed_mounting_plan(self, module_code):
@@ -66,7 +58,7 @@ class ViewMod(object):
         tenta_ay_sems = []
         ay = model.get_current_ay()
         for i in range(self.number_of_future_ays):
-            ay = self.get_next_ay(ay)
+            ay = model.get_next_ay(ay)
             tenta_ay_sems.append(ay+" Sem 1")
             tenta_ay_sems.append(ay+" Sem 2")
         tenta_mounting_plan = []
@@ -132,7 +124,12 @@ class ViewMod(object):
         # Check if module is starred
         is_starred = model.is_module_starred(module_code, web.cookies().get('user'))
 
+        all_ay_sems = model.get_all_ay_sems()
+        all_future_ay_sems = model.get_all_future_ay_sems()
+        target_ay_sem = None
+
         #get html of overlapping modules template
-        return RENDER.viewModule(module_info, self.fixed_mounting_plan,
-                                 self.tenta_mounting_plan, number_of_student_planning,
-                                 is_starred, prereq_string, preclude_string)
+        return RENDER.viewModule(module_info, all_ay_sems, all_future_ay_sems, target_ay_sem,
+                                 self.fixed_mounting_plan, self.tenta_mounting_plan,
+                                 number_of_student_planning, is_starred,
+                                 prereq_string, preclude_string)

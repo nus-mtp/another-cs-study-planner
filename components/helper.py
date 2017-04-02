@@ -385,6 +385,8 @@ def validate_input(input_data, input_types, is_future=False,
         elif input_type == "aysem":
             try:
                 ay_sem = input_data.aysem
+                if ay_sem == "":
+                    raise AttributeError
             except AttributeError:
                 if aysem_specific:
                     if show_404:
