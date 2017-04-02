@@ -309,16 +309,17 @@ td > a {
     margin: 12px 0px 10px 0px;
 }
 
-.ay-sem-dropdown label {
+.aysem-dropdown label {
     font-size: 15px;
 }
-.ay-sem-dropdown input {
+.aysem-dropdown input {
     height: 30px;
     margin-left: 2px;
     padding-top: 5px;
 }
-.ay-sem-dropdown-select {
+#aysem-dropdown-select {
     width: 280px;
+    height: auto;
 }
 
 .prior-to-form-module-A {
@@ -329,7 +330,7 @@ td > a {
 
 .prior-to-form-module-B {
     margin: 10px 5px 15px 5px;
-    width: 30%;
+    width: 280px;
     display: inline-block;
 }
 
@@ -355,6 +356,7 @@ td > a {
     padding: 10px 20px 10px;
     border: 1px solid #888;
     width: 60%;
+    height: 50%;
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
@@ -596,8 +598,4 @@ tr[id*='modified-details-child-row'] {
 
 .form-control {
     height: auto;
-}
-
-.form-inline .form-control {
-    min-width: 50px;
 }

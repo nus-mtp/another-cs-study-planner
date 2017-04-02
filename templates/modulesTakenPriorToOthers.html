@@ -44,16 +44,16 @@ $if pageType == "all_pairs":
 		<!--<div class="modules-taken-prior-search-form">
 		</div>-->
         <div class="row pagination-centered text-center">
-            <form id="ay-form" class="form-inline ay-sem-dropdown" action="/moduleTakenPriorToOthers" method="get">
+            <form id="ay-form" class="form-inline aysem-dropdown" action="/moduleTakenPriorToOthers" method="get">
                 <div class="form-group">
                     <label for="ay-sem">Select AY-Semester:&nbsp;</label>
-                    <select class="form-control ay-sem-dropdown-select" name="aysem">
+                    <select id="aysem-dropdown-select" class="form-control" name="aysem">
                         <option value="" disabled selected>Please choose a target AY-Semester</option>
                         $for aysem in allAySems:
                         	<option value="$aysem">$aysem</option>
                     </select>
                 </div>
-                <div class="form-group ay-sem-dropdown">
+                <div class="form-group aysem-dropdown">
                     <input type="submit" value="Submit" class="btn btn-primary">
                 </div>
             </form>

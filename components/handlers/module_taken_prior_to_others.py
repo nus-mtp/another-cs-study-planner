@@ -29,7 +29,7 @@ class TakePriorTo(object):
         else:
             if not session.validate_session():
                 raise web.seeother('/login')
-            input_data = model.validate_input(web.input(), ["moduleA", "moduleB", "aysem"],
+            input_data = model.validate_input(web.input(), ["moduleAandB", "aysem"],
                                               aysem_specific=False, attr_required=False)
 
             target_ay_sem = None

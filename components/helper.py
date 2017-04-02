@@ -451,9 +451,12 @@ def validate_input(input_data, input_types, is_future=False,
             except AttributeError:
                 is_moduleB_specified = False
 
-            if not is_moduleA_specified and not is_moduleB_specified:   
+            if (is_moduleA_specified and not is_moduleB_specified) or \
+               (not is_moduleA_specified and is_moduleB_specified):   
                 error = RENDER.notfound("1 out of 2 module codes is not specified")
                 raise web.notfound(error)
+            elif not is_moduleA_specified and not is_moduleB_specified:
+                continue
 
             module_exist = model.is_existing_module(moduleA_code.upper())
             if not module_exist:
