@@ -264,6 +264,11 @@ td > a {
     display: none;
 }
 
+.module-view-aysemInfoTable>tbody>tr>td{
+    vertical-align: middle;
+    height: 45px;
+}
+
 /*************************************************************************/
 /* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
 /*************************************************************************/

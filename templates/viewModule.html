@@ -232,14 +232,13 @@ $var hierarchy = [home, moduleInfo, viewModule]
                         $if moduleStatus[0:3] == "New":
                             <h4 style="margin-top: 20px; margin-bottom: 40px;"><i>N.A.&nbsp;&nbsp;(This is a new module)</i></h4>
                         $else:
-                            <table class="table table-bordered table-hover text-center" id="mountingAndQuota">
+                            <table class="table table-bordered table-hover text-center module-view-aysemInfoTable">
                             <thead>
                                 <tr>
                                     <th style="width:25%;">AY/Sem</th>
                                     <th>Mounted</th>
                                     <th>Quota</th>
                                     <th style="width:30%;">Number of Students Taking</th>
-                                    <th style="width:25%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,7 +247,11 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                 $ mountingStatus = entry[1]
                                 $ quota = entry[2]
                                 <tr>
-                                    <td>$aysem</td>
+                                    <td>
+                                        <a href="/individualModuleInfo?code=$moduleCode&aysem=$aysem">
+                                            <span data-toggle="tooltip" data-placement="bottom" title="Click to go to $aysem View">$aysem</span>
+                                        </a>
+                                    </td>
                                 $if mountingStatus == 1:
                                     <td>
                                         <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
@@ -279,13 +282,6 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                     $elif (quota == '-' and numberTaking > 0):
                                         <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                         title="Oversubscribed!<br>(Unmounted but still has demand)"></span> 
-                                    </td>
-                                    <td>
-                                        <form action="/individualModuleInfo" method="get">
-                                            <input type="hidden" name="code" value="$moduleCode">
-                                            <input type="hidden" name="aysem" value="$entry[0]">
-                                            <input class="btn btn-primary" type="submit" value="View">
-                                        </form>
                                     </td>                               
                                 </tr>
                             </tbody>
@@ -293,14 +289,13 @@ $var hierarchy = [home, moduleInfo, viewModule]
                     </div>
                     <div class="row">
                         <h4 id="infoTentaHeader"><b>Information for Future AYs (Tentative):</b></h4>
-                        <table class="table table-bordered table-hover" style="text-align:center" id="mountingAndQuota">
+                        <table class="table table-bordered table-hover module-view-aysemInfoTable" style="text-align:center">
                             <thead>
                                 <tr>
                                     <th style="width:25%;">AY/Sem</th>
                                     <th>Mounted</th>
                                     <th>Quota</th>
                                     <th style="width:30%;">Number of Students Planning to Take</th>
-                                    <th style="width:25%;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -310,7 +305,9 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                 $ quota = entry[2]                                
                                 <tr>
                                     <td>
-                                        $aysem
+                                        <a href="/individualModuleInfo?code=$moduleCode&aysem=$aysem">
+                                            <span data-toggle="tooltip" data-placement="bottom" title="Click to go to $aysem View">$aysem</span>
+                                        </a>
                                     </td>
                                     $if mountingStatus == 1:
                                         <td>
@@ -343,20 +340,6 @@ $var hierarchy = [home, moduleInfo, viewModule]
                                             <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                             title="Oversubscribed!<br>(Unmounted but still has demand)"></span> 
                                         </td>
-                                    $if True:
-                                        <td>
-                                            <form style="display:inline-block" action="/individualModuleInfo" method="get">
-                                                <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="aysem" value="$entry[0]">
-                                                <input class="btn btn-primary" type="submit" value="View">
-                                            </form>
-                                            <form style="display:inline-block" action="/editMounting" method="get">
-                                                <input type="hidden" name="code" value="$moduleCode">
-                                                <input type="hidden" name="aysem" value="$entry[0]">
-                                                <input class="btn btn-primary" type="submit" value="Edit">
-                                            </form>
-                                        </td>
-                                    </tr>
                             </tbody>
                         </table>
                     </div>
