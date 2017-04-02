@@ -99,7 +99,13 @@ $(function() {
             { type: 'num-html', width: "12%", targets: 4 },
             { type: 'num-html', width: "12%", targets: 6 },
             { type: 'num-html', width: "12%", targets: 7 }
-        ]
+        ],
+        "initComplete": function(settings, json) {
+            $('#fixed-mounting-table').show();
+            $('.toggle-columns-display').show();
+            $('.loading-div').hide();
+            $('#fixed-mounting-table').DataTable().columns.adjust().draw();
+        }
     } );
 
     $('#tentative-mounting-table').DataTable( {
@@ -107,7 +113,13 @@ $(function() {
         "columnDefs": [
             { type: 'num-html', targets: 3 },
             { type: 'num-html', targets: 5 }
-        ]
+        ],
+        "initComplete": function(settings, json) {
+            $('#tentative-mounting-table').show();
+            $('.toggle-columns-display').show();
+            $('.loading-div').hide();
+            $('#tentative-mounting-table').DataTable().columns.adjust().draw();
+        }
     } );
 
     $('#student-year-table').DataTable( {
@@ -172,7 +184,12 @@ $(function() {
         "columnDefs": [
             { "targets": 0, "width": "15%" },
             { "targets": 1, "width": "35%" }
-        ]
+        ],
+        "initComplete": function(settings, json) {
+            $('#oversubscribed-modules-table').show();
+            $('.loading-div').hide();
+            $('#oversubscribed-modules-table').DataTable().columns.adjust().draw();
+        }
     } );
 
     $('#modules-taken-prior-table').DataTable( {
@@ -198,12 +215,22 @@ $(function() {
     } );
      
     $('#common-module-table').DataTable( {
-        "aaSorting": []
+        "aaSorting": [],
+        "initComplete": function(settings, json) {
+            $('#common-module-table').show();
+            $('.loading-div').hide();
+            $('#common-module-table').DataTable().columns.adjust().draw();
+        }
     } );
 
     $('#non-overlap-table').DataTable( {
         "aaSorting": [],
-        "deferRender": true
+        "deferRender": true,
+        "initComplete": function(settings, json) {
+            $('#non-overlap-table').show();
+            $('.loading-div').hide();
+            $('#non-overlap-table').DataTable().columns.adjust().draw();
+        }
     } );
      
     $('#students-taking-module-table').DataTable({

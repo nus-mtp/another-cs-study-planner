@@ -198,6 +198,7 @@ td > a {
 }
 
 .toggle-columns-display {
+    display: none;
     position: relative;
     margin-top: 10px;
     top: 40px;
@@ -207,6 +208,15 @@ td > a {
 .toggle-columns-display-checkbox {
     margin-right: 15px;
 }
+
+#fixed-mounting-table {
+    display: none;
+}
+
+#tentative-mounting-table {
+    display: none;
+}
+
 
 /*************************************************************************/
 /* ==================== STYLING FOR MODULE-VIEW PAGE =================== */
@@ -250,6 +260,18 @@ td > a {
 .modules-taken-together{
     margin: 20px 0px;
     float: right;
+}
+
+#oversubscribed-modules-table {
+    display: none;
+}
+
+#common-module-table {
+    display: none;
+}
+
+#non-overlap-table {
+    display: none;
 }
 
 
