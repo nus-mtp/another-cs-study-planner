@@ -24,66 +24,88 @@ class OversubModule(object):
         if not session.validate_session():
             raise web.seeother('/login')
 
+        input_data = model.validate_input(web.input(), ["aysem"],
+                                          aysem_specific=False, attr_required=False)
+        try:
+            target_ay_sem = input_data.aysem
+        except AttributeError:
+            target_ay_sem = model.get_current_ay_sem()
+
+        all_ay_sems = model.get_all_ay_sems()
+
         #list_of_oversub_mod = model.get_oversub_mod()
         list_of_oversub_mod = []
 
-        fixed_mounting_handler = Fixed()
-        fixed_mounting_handler.GET(to_render=False)
-        full_mounting_plan = fixed_mounting_handler.full_mounting_plan
-
         current_ay = model.get_current_ay()
-        for subplan in full_mounting_plan:
-            module_code = subplan[0]
-            module_name = subplan[1]
-            sem1_quota = subplan[4]
-            sem2_quota = subplan[5]
-            sem1_num_students = subplan[6]
-            sem2_num_students = subplan[7]
+        if target_ay_sem[0:8] == current_ay:
 
-            if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
-                or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
-                if sem1_quota == '?' or sem1_quota == '-':
-                    oversub_amount = sem1_num_students
-                else:
-                    oversub_amount = sem1_num_students - sem1_quota
-                list_of_oversub_mod.append((module_code, module_name, current_ay+" Sem 1", 
-                                            sem1_quota, sem1_num_students, oversub_amount))
-            if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
-                or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
-                if sem2_quota == '?' or sem2_quota == '-':
-                    oversub_amount = sem2_num_students
-                else:
-                    oversub_amount = sem2_num_students - sem2_quota
-                list_of_oversub_mod.append((module_code, module_name, current_ay+" Sem 2", 
-                                            sem2_quota, sem2_num_students, oversub_amount))
+            fixed_mounting_handler = Fixed()
+            fixed_mounting_handler.GET(to_render=False)
+            full_mounting_plan = fixed_mounting_handler.full_mounting_plan
 
-        tenta_mounting_handler = Tentative()
-        tenta_mounting_handler.GET(to_render=False)
-        full_mounting_plan = tenta_mounting_handler.full_mounting_plan
+            if target_ay_sem[9:15] == "Sem 1":
+                for subplan in full_mounting_plan:
+                    module_code = subplan[0]
+                    module_name = subplan[1]
+                    sem1_quota = subplan[4]
+                    sem1_num_students = subplan[6]
+                    if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
+                        or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
+                        if sem1_quota == '?' or sem1_quota == '-':
+                            oversub_amount = sem1_num_students
+                        else:
+                            oversub_amount = sem1_num_students - sem1_quota
+                        list_of_oversub_mod.append((module_code, module_name, target_ay_sem, 
+                                                    sem1_quota, sem1_num_students, oversub_amount))
 
-        next_ay = model.get_next_ay(current_ay)
-        for subplan in full_mounting_plan:
-            module_code = subplan[0]
-            module_name = subplan[1]
-            sem1_quota = subplan[4]
-            sem2_quota = subplan[5]
-            sem1_num_students = subplan[6]
-            sem2_num_students = subplan[7]
-            if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
-                or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
-                if sem1_quota == '?' or sem1_quota == '-':
-                    oversub_amount = sem1_num_students
-                else:
-                    oversub_amount = sem1_num_students - sem1_quota
-                list_of_oversub_mod.append((module_code, module_name, next_ay+" Sem 1", 
-                                            sem1_quota, sem1_num_students, oversub_amount))
-            if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
-                or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
-                if sem2_quota == '?' or sem2_quota == '-':
-                    oversub_amount = sem2_num_students
-                else:
-                    oversub_amount = sem2_num_students - sem2_quota
-                list_of_oversub_mod.append((module_code, module_name, next_ay+" Sem 2", 
-                                            sem2_quota, sem2_num_students, oversub_amount))
+            else:
+                for subplan in full_mounting_plan:
+                    module_code = subplan[0]
+                    module_name = subplan[1]
+                    sem2_quota = subplan[5]
+                    sem2_num_students = subplan[7]
+                    if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
+                        or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
+                        if sem2_quota == '?' or sem2_quota == '-':
+                            oversub_amount = sem2_num_students
+                        else:
+                            oversub_amount = sem2_num_students - sem2_quota
+                        list_of_oversub_mod.append((module_code, module_name, target_ay_sem, 
+                                                    sem2_quota, sem2_num_students, oversub_amount))
 
-        return RENDER.oversubscribedModules(list_of_oversub_mod)
+        else:
+            tenta_mounting_handler = Tentative()
+            tenta_mounting_handler.GET(to_render=False)
+            full_mounting_plan = tenta_mounting_handler.full_mounting_plan
+
+            if target_ay_sem[9:15] == "Sem 1":
+                for subplan in full_mounting_plan:
+                    module_code = subplan[0]
+                    module_name = subplan[1]
+                    sem1_quota = subplan[4]
+                    sem1_num_students = subplan[6]
+                    if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
+                        or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
+                        if sem1_quota == '?' or sem1_quota == '-':
+                            oversub_amount = sem1_num_students
+                        else:
+                            oversub_amount = sem1_num_students - sem1_quota
+                        list_of_oversub_mod.append((module_code, module_name, target_ay_sem, 
+                                                    sem1_quota, sem1_num_students, oversub_amount))
+
+            else:
+                for subplan in full_mounting_plan:
+                    module_code = subplan[0]
+                    module_name = subplan[1]
+                    sem2_quota = subplan[5]
+                    sem2_num_students = subplan[7]
+                    if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
+                        or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
+                        if sem2_quota == '?' or sem2_quota == '-':
+                            oversub_amount = sem2_num_students
+                        else:
+                            oversub_amount = sem2_num_students - sem2_quota
+                        list_of_oversub_mod.append((module_code, module_name, target_ay_sem, 
+                                                    sem2_quota, sem2_num_students, oversub_amount))
+
+        return RENDER.oversubscribedModules(list_of_oversub_mod, all_ay_sems, target_ay_sem)

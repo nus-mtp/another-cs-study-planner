@@ -1,4 +1,4 @@
-$def with (list_of_oversub_mod)
+$def with (list_of_oversub_mod, all_ay_sems, target_ay_sem)
 
 $var title:View Oversubscribed Modules
 $ home = ['/', 'Home']
@@ -9,9 +9,29 @@ $var hierarchy = [home, oversubscribedModules]
 <script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
 
 <div class="container-fluid" onload="myFunction()">
-	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
+	<h1 class="text-center"><b>Oversubscribed Modules in $target_ay_sem</b></h1>
 	<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
 	<br>
+    <div class="row"><!--request form-->
+        <div class="col-md-12 pagination-centered text-center">
+            <form id="ay-form" class="form-inline aysem-dropdown" action="/oversubscribedModules" method="get">
+                <div class="form-group">
+                    <label for="ay-sem">Select AY-Semester:&nbsp;</label>
+                    <select id="aysem-dropdown-select" class="form-control" name="aysem">
+                        <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
+                        $for aysem in all_ay_sems:
+                            $if target_ay_sem == aysem:
+                                <option value="$aysem" selected>$aysem</option>
+                            $else:
+                                <option value="$aysem">$aysem</option>
+                    </select>
+                </div>
+                <div class="form-group aysem-dropdown">
+                    <input type="submit"  value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row loading-div text-center">
         <img src="static/images/loading.gif">
         <h3>Loading data, please wait...</h3>
