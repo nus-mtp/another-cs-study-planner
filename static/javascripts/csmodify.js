@@ -188,9 +188,10 @@ $(function() {
     $('#oversubscribed-modules-table').DataTable( {
         "order": [[ 4, "desc" ]],
         "columnDefs": [
-            { "targets": 0, "width": "16%" },
-            { "targets": 1, "width": "36%" },
-            { "targets": 3, "type": 'num-html'}
+            { "targets": 0, "width": "8%" },
+            { "targets": 3, "type": 'num-html', "width": "12%" },
+            { "targets": 4, "width": "12%" },
+            { "targets": 5, "width": "12%" }
         ],
         "initComplete": function(settings, json) {
             $('#oversubscribed-modules-table').show();

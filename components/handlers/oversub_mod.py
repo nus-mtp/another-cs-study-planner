@@ -42,12 +42,20 @@ class OversubModule(object):
 
             if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
                 or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
+                if sem1_quota == '?' or sem1_quota == '-':
+                    oversub_amount = sem1_num_students
+                else:
+                    oversub_amount = sem1_num_students - sem1_quota
                 list_of_oversub_mod.append((module_code, module_name, current_ay+" Sem 1", 
-                                            sem1_quota, sem1_num_students))
+                                            sem1_quota, sem1_num_students, oversub_amount))
             if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
                 or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
+                if sem2_quota == '?' or sem2_quota == '-':
+                    oversub_amount = sem2_num_students
+                else:
+                    oversub_amount = sem2_num_students - sem2_quota
                 list_of_oversub_mod.append((module_code, module_name, current_ay+" Sem 2", 
-                                            sem2_quota, sem2_num_students))
+                                            sem2_quota, sem2_num_students, oversub_amount))
 
         tenta_mounting_handler = Tentative()
         tenta_mounting_handler.GET(to_render=False)
@@ -63,11 +71,19 @@ class OversubModule(object):
             sem2_num_students = subplan[7]
             if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
                 or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
+                if sem1_quota == '?' or sem1_quota == '-':
+                    oversub_amount = sem1_num_students
+                else:
+                    oversub_amount = sem1_num_students - sem1_quota
                 list_of_oversub_mod.append((module_code, module_name, next_ay+" Sem 1", 
-                                            sem1_quota, sem1_num_students))
+                                            sem1_quota, sem1_num_students, oversub_amount))
             if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
                 or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
+                if sem2_quota == '?' or sem2_quota == '-':
+                    oversub_amount = sem2_num_students
+                else:
+                    oversub_amount = sem2_num_students - sem2_quota
                 list_of_oversub_mod.append((module_code, module_name, next_ay+" Sem 2", 
-                                            sem2_quota, sem2_num_students))
+                                            sem2_quota, sem2_num_students, oversub_amount))
 
         return RENDER.oversubscribedModules(list_of_oversub_mod)
