@@ -114,7 +114,7 @@ class Tentative(object):
         self.full_mounting_plan = tenta_full_mounting_plan
 
 
-    def GET(self):
+    def GET(self, to_render=True):
         '''
             Renders the tentative mounting page if users requested
             for the page through the GET method.
@@ -129,7 +129,11 @@ class Tentative(object):
         self.populate_module_ay_sem_data(selected_ay)
 
         full_mounting_plan = model.replace_empty_quota_with_symbols(self.full_mounting_plan)
-        return RENDER.moduleMountingTentative(selected_ay, full_mounting_plan)
+
+        if to_render:
+            return RENDER.moduleMountingTentative(selected_ay, full_mounting_plan)
+        else:
+            self.full_mounting_plan = full_mounting_plan
 
 
     def POST(self):

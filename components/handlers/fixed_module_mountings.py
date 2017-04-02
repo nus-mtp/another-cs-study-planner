@@ -97,7 +97,7 @@ class Fixed(object):
         self.full_mounting_plan = full_mounting_plan
 
 
-    def GET(self):
+    def GET(self, to_render=True):
         '''
             Renders the fixed mounting page if users requested
             for the page through the GET method.
@@ -114,7 +114,10 @@ class Fixed(object):
         full_mounting_plan = [subplan for subplan in full_mounting_plan 
                               if subplan[8].rstrip() == "Active"]
         full_mounting_plan = model.replace_empty_quota_with_symbols(full_mounting_plan)
-        return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
+        if to_render:
+            return RENDER.moduleMountingFixed(current_ay, full_mounting_plan)
+        else:
+            self.full_mounting_plan = full_mounting_plan
 
 
     def POST(self):
