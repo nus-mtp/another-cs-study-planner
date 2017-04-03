@@ -135,7 +135,7 @@ $var hierarchy = [home, editAll]
                                 </td>
                             $else:
                                 <td>
-                                    <input type="number" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
                             $if True:
