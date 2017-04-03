@@ -52,7 +52,8 @@ class OversubModule(object):
                     module_name = subplan[1]
                     sem1_quota = subplan[4]
                     sem1_num_students = subplan[6]
-                    if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
+                    if ((sem1_quota != '?' and sem1_quota != '-') \
+                        and sem1_num_students > sem1_quota) \
                         or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
                         if sem1_quota == '?' or sem1_quota == '-':
                             oversub_amount = sem1_num_students
@@ -67,7 +68,8 @@ class OversubModule(object):
                     module_name = subplan[1]
                     sem2_quota = subplan[5]
                     sem2_num_students = subplan[7]
-                    if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
+                    if ((sem2_quota != '?' and sem2_quota != '-') \
+                        and sem2_num_students > sem2_quota) \
                         or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
                         if sem2_quota == '?' or sem2_quota == '-':
                             oversub_amount = sem2_num_students
@@ -87,7 +89,8 @@ class OversubModule(object):
                     module_name = subplan[1]
                     sem1_quota = subplan[4]
                     sem1_num_students = subplan[6]
-                    if ((sem1_quota != '?' and sem1_quota != '-') and sem1_num_students > sem1_quota) \
+                    if ((sem1_quota != '?' and sem1_quota != '-') \
+                        and sem1_num_students > sem1_quota) \
                         or ((sem1_quota == '?' or sem1_quota == '-') and sem1_num_students > 0):
                         if sem1_quota == '?' or sem1_quota == '-':
                             oversub_amount = sem1_num_students
@@ -102,7 +105,8 @@ class OversubModule(object):
                     module_name = subplan[1]
                     sem2_quota = subplan[5]
                     sem2_num_students = subplan[7]
-                    if ((sem2_quota != '?' and sem2_quota != '-') and sem2_num_students > sem2_quota) \
+                    if ((sem2_quota != '?' and sem2_quota != '-') \
+                        and sem2_num_students > sem2_quota) \
                         or ((sem2_quota == '?' or sem2_quota == '-') and sem2_num_students > 0):
                         if sem2_quota == '?' or sem2_quota == '-':
                             oversub_amount = sem2_num_students

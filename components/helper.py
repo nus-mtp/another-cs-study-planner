@@ -357,7 +357,7 @@ def validate_input(input_data, input_types, is_future=False,
             Set to False if don't want to return 404 page (function will return False instead)
     '''
     from app import RENDER
-    
+
     if attr_required is False and len(input_data) == 0:
         return input_data
 
@@ -454,7 +454,7 @@ def validate_input(input_data, input_types, is_future=False,
                 is_moduleB_specified = False
 
             if (is_moduleA_specified and not is_moduleB_specified) or \
-               (not is_moduleA_specified and is_moduleB_specified):   
+               (not is_moduleA_specified and is_moduleB_specified):
                 error = RENDER.notfound("1 out of 2 module codes is not specified")
                 raise web.notfound(error)
             elif not is_moduleA_specified and not is_moduleB_specified:

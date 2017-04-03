@@ -25,7 +25,8 @@ class TestCode(object):
     TABLE_COLUMN_MODULE_2_NAME = '<th>Name of Module 2</th>'
     TABLE_COLUMN_NUM_STUDENTS = '<th>Number of Students</th>'
 
-    FORM = '<form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingModules" method="get">'
+    FORM = '<form id="ay-form" class="form-inline aysem-dropdown" ' +\
+           'action="/overlappingModules" method="get">'
     SELECT_LABEL = '<label for="ay-sem">Select AY-Semester:'
     SELECT_ELEMENT = '<select id="aysem-dropdown-select" class="form-control" name="aysem">'
 

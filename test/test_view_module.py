@@ -59,8 +59,9 @@ class TestCode(object):
                               ' action="/overlappingWithModule" method="get" '+\
                               'class="no-padding-margin">'
     FORM_OVERLAPPING_MODULE_BUTTON = '<button type="button" class="dropdown-btn-custom" '+\
-                                     'data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with '+\
-                                     'this module">View Modules Overlapping With This Module</button>'
+                                     'data-toggle="tooltip" data-placement="right" '+\
+                                     'title="Show modules that are also taken with this '+\
+                                     'module">View Modules Overlapping With This Module</button>'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
                    'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
                    'aria-expanded="false">More Actions <span class="caret"></span></button>'
@@ -68,10 +69,12 @@ class TestCode(object):
     CONTENT_STAR_BUTTON = '<span class="glyphicon glyphicon-star-empty">'
     CONTENT_UNSTAR_BUTTON = '<span class="glyphicon glyphicon-star">'
 
-    OVERSUB_ORANGE_ICON = '<span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" ' +\
-                          'data-placement="bottom" data-html="true" title="Oversubscribed!<br>(Demand > Supply)"'
-    OVERSUB_RED_ICON = '<span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" ' +\
-                       'data-placement="bottom" data-html="true" title="Oversubscribed!<br>(Unmounted but still has demand)"'
+    OVERSUB_ORANGE_ICON = '<span class="glyphicon glyphicon-info-sign oversub-warning" ' +\
+                          'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
+                          'title="Oversubscribed!<br>(Demand > Supply)"'
+    OVERSUB_RED_ICON = '<span class="glyphicon glyphicon-info-sign unmounted-warning" ' +\
+                       'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
+                       'title="Oversubscribed!<br>(Unmounted but still has demand)"'
 
     def __init__(self):
         self.middleware = None
@@ -242,7 +245,7 @@ class TestCode(object):
 
     def test_oversubscribed_icons(self):
         '''
-            Tests the display of the oversubscribed warning icons 
+            Tests the display of the oversubscribed warning icons
             that appear in Module Overview
         '''
         root = self.test_app.get('/viewModule?code=CS2309')

@@ -49,23 +49,29 @@ class TestCode(object):
                                      ' name="edit-mounting-button" '+\
                                      'action="/editMounting" method="get" '+\
                                      'class="no-padding-margin">'
-    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<button type="button" id="edit-specific-info" class="dropdown-btn-custom no-padding-margin" ' +\
-                                            'data-toggle="tooltip" data-placement="right" title="Edit the module\'s mounting and quota">' +\
+    FORM_EDIT_SPECIFIC_MODULE_INFO_BUTTON = '<button type="button" id="edit-specific-info" ' +\
+                                            'class="dropdown-btn-custom no-padding-margin" ' +\
+                                            'data-toggle="tooltip" data-placement="right" ' +\
+                                            'title="Edit the module\'s mounting and quota">' +\
                                             'Edit Specific Module Info</button>'
     FORM_STUDENTS_AFFECTED = '<form id="view-students-planning-to-take-module" '+\
                              'name="view-students-planning-to-take-module"'+\
                              ' action="/studentsAffectedByModule" '+\
                              'method="get" class="no-padding-margin">'
-    FORM_STUDENTS_AFFECTED_BUTTON = '<button type="button" class="dropdown-btn-custom" data-toggle="tooltip" data-placement="right" '+\
-                                    'title="Show list of students who have taken, are currently taking, or are planning to take this '+\
-                                    'module">View Students Taking This Module</button>'
+    FORM_STUDENTS_AFFECTED_BUTTON = '<button type="button" class="dropdown-btn-custom" '+\
+                                    'data-toggle="tooltip" data-placement="right" '+\
+                                    'title="Show list of students who have taken, are currently ' +\
+                                    'taking, or are planning to take this module">View Students ' +\
+                                    'Taking This Module</button>'
     FORM_OVERLAPPING_WITH_MODULE = '<form id="view-overlapping-with-module" '+\
                                    'name="view-overlapping-with-module"'+\
                                    ' action="/overlappingWithModule" method="get" '+\
                                    'class="no-padding-margin">'
     FORM_OVERLAPPING_WITH_MODULE_BUTTON = '<button type="button" class="dropdown-btn-custom" '+\
-                                          'data-toggle="tooltip" data-placement="right" title="Show modules that are also taken with '+\
-                                          'this module">View Modules Overlapping With This Module</button>'
+                                          'data-toggle="tooltip" data-placement="right" '+\
+                                          'title="Show modules that are also taken with this ' +\
+                                          'module">View Modules Overlapping With This Module' +\
+                                          '</button>'
 
     CONTENT_SUMMARY = '<h1 class="text-center"><b>Module Info for <u>AY 16/17 ' +\
                       'Sem 1</u></b></h1>'

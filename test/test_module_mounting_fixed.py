@@ -57,14 +57,17 @@ class TestCode(object):
     TABLE_NUM_STUDENTS_SEM_2 = '<th># of Students Taking (Sem 2)</th>'
 
     TABLE_MOUNTING_SYMBOL_MOUNTED = '<span class="glyphicon glyphicon-ok" ' +\
-                                    'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
-                                    'title="Mounted<br>(Click to go to module AY-Sem view)"></span>'
+                                    'data-toggle="tooltip" data-placement="bottom" ' +\
+                                    'data-html="true" title="Mounted<br>(Click to go to module ' +\
+                                    'AY-Sem view)"></span>'
     TABLE_MOUNTING_SYMBOL_UNMOUNTED = '<span class="glyphicon glyphicon-remove" ' +\
-                                      'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
-                                    'title="Unmounted<br>(Click to go to module AY-Sem view)"></span>'
+                                      'data-toggle="tooltip" data-placement="bottom" ' +\
+                                      'data-html="true" title="Unmounted<br>(Click to go to ' +\
+                                      'module AY-Sem view)"></span>'
     TABLE_MOUNTING_SYMBOL_NOT_MOUNTED = '<span class="glyphicon glyphicon-minus" ' +\
-                                        'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
-                                        'title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>'
+                                        'data-toggle="tooltip" data-placement="bottom" ' +\
+                                        'data-html="true" title="Not Mounted<br>(Click to go to ' +\
+                                        'module AY-Sem view)"></span>'
 
 
     def __init__(self):

@@ -36,7 +36,7 @@ class TakePriorTo(object):
             try:
                 target_ay_sem = input_data.aysem
                 module_A = input_data.moduleA
-                module_B = input_data.moduleB            
+                module_B = input_data.moduleB
             except AttributeError:
                 module_pairs = None
                 if target_ay_sem is not None:
@@ -45,8 +45,8 @@ class TakePriorTo(object):
                 # Get a list of all AY-Sems (for users to select)
                 all_ay_sems = model.get_all_ay_sems()
 
-                return RENDER.modulesTakenPriorToOthers("all_pairs", module_pairs, all_ay_sems, None, None,
-                                                        None, None, target_ay_sem, None)
+                return RENDER.modulesTakenPriorToOthers("all_pairs", module_pairs, all_ay_sems,
+                                                        None, None, None, None, target_ay_sem, None)
 
 
         student_counts = \

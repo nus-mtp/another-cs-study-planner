@@ -28,8 +28,9 @@ class TestCode(object):
 
     BUTTON_SAVE_CHANGES = '<button type="submit" class="btn btn-primary edit-all-bottom-button" ' +\
                           'data-toggle="tooltip" data-placement="bottom" title="Save changes" '
-    BUTTON_RESET_TABLE = '<button type="button" id="edit-all-reset-button" class="btn btn-primary edit-all-bottom-button" ' +\
-                         'data-toggle="tooltip" data-placement="bottom" title="Reset table" '
+    BUTTON_RESET_TABLE = '<button type="button" id="edit-all-reset-button" ' +\
+                         'class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" ' +\
+                         'data-placement="bottom" title="Reset table" '
 
     OUTCOME_TITLE = '<title>Validating...</title>'
     OUTCOME_SUCCESS_MESSAGE = 'Modules have been edited successfully!'

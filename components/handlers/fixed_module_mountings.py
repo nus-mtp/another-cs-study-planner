@@ -111,7 +111,7 @@ class Fixed(object):
 
         full_mounting_plan = self.full_mounting_plan
         # New modules will not be displayed in fixed mounting
-        full_mounting_plan = [subplan for subplan in full_mounting_plan 
+        full_mounting_plan = [subplan for subplan in full_mounting_plan
                               if subplan[8].rstrip() == "Active"]
         full_mounting_plan = model.replace_empty_quota_with_symbols(full_mounting_plan)
         if to_render:
