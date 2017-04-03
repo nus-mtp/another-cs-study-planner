@@ -1,5 +1,5 @@
 '''
-    test_modules_before_others_ui.py tests the page views for
+    test_modules_taken_before_others.py tests the page views for
     viewing modules taken before a specified module
 
     Firstly, we specify a target URL for conducting UI testing.
@@ -18,7 +18,7 @@ from components import session
 
 class TestCode(object):
     '''
-        tests the ui elemetents of modules taken before another module
+        tests the ui elements of modules taken before another module
     '''
     URL_NORMAL = '/moduleTakenPriorToOthers'
     CONTENT_TITLE = '<h1 class="text-center"><b>Modules Taken Prior'+\
@@ -43,13 +43,12 @@ class TestCode(object):
                      '10px;" type="submit" value="Go">'
 
     FORM_NAME = 'module-filter-form'
-    REDIRECT_PAGE = '<h3 style="margin-bottom: 20px;">Students who took <b><a '+\
-                    'href="/viewModule?code=CS1010"'+\
-                    ' target="_blank" data-toggle="tooltip" title="View general info for'+\
-                    ' CO1020>CS1020</a></b> prior to taking <b><a '+\
-                    'href="/viewModule?code=$moduleB" '+\
-                    'target="_blank" data-toggle="tooltip" title="View general '+\
-                    'info for CS1020">CS1020</a></b> in <u>AY 16/17 Sem 2</u></h3>'
+    REDIRECT_PAGE = '<h3 style="margin-bottom: 20px;">Students who took'+\
+                    ' <b><a href="/viewModule?code=CS1010" target="_blank"'+\
+                    ' data-toggle="tooltip" title="View general info for '+\
+                    'CS1010">CS1010</a></b> prior to taking <b><a href="/viewModule?code=CS2010"'+\
+                    ' target="_blank" data-toggle="tooltip" title="View general info for '+\
+                    'CS2010">CS2010</a></b> in <u>AY 16/17 Sem 2</u></h3>'
 
     def __init__(self):
         self.middleware = None
@@ -93,7 +92,8 @@ class TestCode(object):
 
     def test_modules_taken_before_others_submit(self):
         '''
-            tests taht the submit button will cause a redirect
+            tests that the submit button will cause a redirect to the
+            correct page
         '''
         root = self.test_app.get(self.URL_NORMAL)
 
@@ -105,7 +105,7 @@ class TestCode(object):
         response = form.submit()
         #check response is 200 OK
         assert_equal(response.status, 200)
-        response.mustcontain()
+        response.mustcontain(self.REDIRECT_PAGE)
 
     @raises(Exception)
     def test_modules_taken_before_others_submit_invalid(self):
