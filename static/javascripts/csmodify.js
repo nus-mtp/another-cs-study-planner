@@ -114,8 +114,10 @@ $(function() {
     $('#tentative-mounting-table').DataTable( {
         "aaSorting": [],
         "columnDefs": [
-            { type: 'num-html', targets: 3 },
-            { type: 'num-html', targets: 5 }
+            { type: 'num-html', width: "12%", targets: 3 },
+            { type: 'num-html', width: "12%", targets: 4 },
+            { type: 'num-html', width: "12%", targets: 6 },
+            { type: 'num-html', width: "12%", targets: 7 }
         ],
         "initComplete": function(settings, json) {
             $('#tentative-mounting-table').show();
