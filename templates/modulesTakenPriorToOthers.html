@@ -65,11 +65,7 @@ $if modulePairs is not None:
 
 $else:
 	<div class="container-fluid">
-		<h3 style="margin-bottom: 20px;">Students who took 
-			<b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> 
-			prior to taking 
-			<b><a href="/viewModule?code=$moduleB" target="_blank" data-toggle="tooltip" title="View general info for $moduleB">$moduleB</a></b> 
-			in <u>$targetAySem</u></h3>
+		<h3 style="margin-bottom: 20px;">Students who took <b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> prior to taking <b><a href="/viewModule?code=$moduleB" target="_blank" data-toggle="tooltip" title="View general info for $moduleB">$moduleB</a></b> in <u>$targetAySem</u></h3>
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>
