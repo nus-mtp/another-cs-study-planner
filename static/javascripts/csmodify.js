@@ -92,10 +92,18 @@ $(function() {
     table.columns().every( function () {
         var col = this;
  
-        $( 'input', this.header() ).on( 'keyup change', function () {
-            if ( col.search() !== this.value ) {
+        $('input', this.header()).on('keyup change', function () {
+            if (col.search() !== this.value) {
                 col
-                    .search( this.value )
+                    .search(this.value)
+                    .draw();
+            }
+        } );
+
+        $('#toggleButton').on('click', function () {
+            if (col.search() !== this.value) {
+                col
+                    .search(this.value)
                     .draw();
             }
         } );
