@@ -628,12 +628,17 @@ tr[id*='modified-details-child-row'] {
     background-color: #eceeef;
 }
 
+#magnifying-glass {
+    margin-left: 35px;
+    font-size: 17px;
+    margin-top: 10px;
+}
 
 #find-module {
     width: 450px;
     height: 36px;
     font-size: 16px;
-    margin-left: 50px;
+    margin-left: 5px;
     margin-top: 3px;
     padding-left: 7px;
     border-radius: 5px;
@@ -641,7 +646,7 @@ tr[id*='modified-details-child-row'] {
 
 #find-module + .dropdown-menu { 
     width: 450px;
-    margin-left: 50px;
+    margin-left: 5px;
 }
 
 .form-control {
