@@ -13,9 +13,10 @@ class TestCode(object):
     '''
     PAGE_URL = '/editAll'
 
-    SELECT_MODULE_LABEL = '<b>Select module(s) to edit:'
-    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" ' +\
-                          'class="typeahead" data-provide="typeahead">'
+    SELECT_MODULE_LABEL = 'Select module(s) to edit:'
+    SELECT_MODULE_INPUT = '<input type="text" id="select-mod-to-edit" class="typeahead" ' +\
+                          'data-provide="typeahead"' +\
+                          ' placeholder="Enter module code or name here"'
 
     TABLE_HEADER_CODE = '<th>Code</th>'
     TABLE_HEADER_NAME = '<th>Name</th>'
@@ -28,7 +29,8 @@ class TestCode(object):
 
     BUTTON_SAVE_CHANGES = '<button type="submit" class="btn btn-primary edit-all-bottom-button" ' +\
                           'data-toggle="tooltip" data-placement="bottom" title="Save changes" '
-    BUTTON_RESET_TABLE = '<button type="button" id="edit-all-reset-button" class="btn btn-primary edit-all-bottom-button" ' +\
+    BUTTON_RESET_TABLE = '<button type="button" id="edit-all-reset-button" ' +\
+                         'class="btn btn-primary edit-all-bottom-button" ' +\
                          'data-toggle="tooltip" data-placement="bottom" title="Reset table" '
 
     OUTCOME_TITLE = '<title>Validating...</title>'
