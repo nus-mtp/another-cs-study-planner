@@ -62,7 +62,8 @@ class ModuleSpecificSize(object):
             higher_range_class_size = input_data.higherClassSize
         except AttributeError:
             # Loading the page without sufficient data (first time load page)
-            return RENDER.moduleSpecificSize(self.all_ay_sems, None, None, None, None)
+            current_aysem = model.get_current_ay_sem()
+            return RENDER.moduleSpecificSize(self.all_ay_sems, None, current_aysem, None, None)
 
         if not self.is_valid_range(lower_range_class_size, higher_range_class_size):
             return Outcome().POST("mods-specific-size-range", False, None)

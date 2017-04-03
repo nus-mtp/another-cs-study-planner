@@ -14,8 +14,16 @@ class NonOverlappingModules(object):
         This class contains the implementations of the GET
         requests.
     '''
-    CURRENT_SEM = 'AY 16/17 Sem 1'
-    AVAILABLE_AY_SEM = model.get_all_ay_sems()
+    def __init__(self):
+        self.CURRENT_SEM = model.get_current_ay_sem()
+        self.AVAILABLE_AY_SEM = model.get_all_ay_sems()
+
+
+    def validateAYSem(self, aysem):
+        '''
+            check if entered aysem is correct
+        '''
+        return aysem in self.AVAILABLE_AY_SEM
 
 
     def GET(self):
@@ -35,11 +43,14 @@ class NonOverlappingModules(object):
             ay_sem_of_interest = ay_sem
         except AttributeError:
             ay_sem_of_interest = self.CURRENT_SEM
+            if not self.validateAYSem(ay_sem_of_interest):
+                ay_sem_of_interest = "AY 16/17 Sem 1"
 
         lst_of_independ_mods = model.get_mods_no_one_take(ay_sem_of_interest)
 
         return RENDER.nonOverlappingModules(lst_of_independ_mods,
                                             self.AVAILABLE_AY_SEM, ay_sem_of_interest)
+
 
 
     def POST(self):

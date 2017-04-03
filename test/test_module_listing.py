@@ -28,7 +28,6 @@ class TestCode(object):
     TABLE_HEADER_DESCRIPTION = '<th>Description</th>'
     TABLE_HEADER_MC = '<th>MCs</th>'
     TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
-    TABLE_HEADER_ACTIONS = '<th data-sortable="false">Actions</th>'
 
     global_var = None
 
@@ -152,4 +151,3 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_DESCRIPTION)
         root.mustcontain(self.TABLE_HEADER_MC)
         root.mustcontain(self.TABLE_HEADER_STATUS)
-        root.mustcontain(self.TABLE_HEADER_ACTIONS)

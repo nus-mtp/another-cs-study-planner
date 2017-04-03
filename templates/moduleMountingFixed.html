@@ -29,37 +29,45 @@ $var hierarchy = [home, fixedMounting]
                         <th>Name</th>
                         <th data-sortable="false">Mounted In Sem 1</th>
                         <th data-sortable="false">Mounted In Sem 2</th>
-                        <th data-sortable="false">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     $for subplan in fullMountingPlan:
-
+                        $ moduleCode = subplan[0]
+                        $ moduleName = subplan[1]
+                        $ sem1Mounting = subplan[2]
+                        $ sem2Mounting = subplan[3]
                         <tr>
-                            <td>$subplan[0]</td>
-                            <td>$subplan[1]</td>
-                        $if subplan[2] == 1:
-                            <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                            <td class="text-center">
+                                <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
                             </td>
-                        $elif subplan[2] == -1:
+                            <td>$moduleName</td>
+                        $if sem1Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
                             </td>
-                        $if subplan[3] == 1:
+                        $elif sem1Mounting == -1:
                             <td>
-                                <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" title="Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+1" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
                             </td>
-                        $elif subplan[3] == -1:
+                        $if sem2Mounting == 1:
                             <td>
-                                <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" title="Not Mounted"></span>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                             </td>
-                        $if True:
+                        $elif sem2Mounting == -1:
                             <td>
-                                <form action="/viewModule" method="get">
-                                    <input type="hidden" name="code" value="$subplan[0]">
-                                    <input class="btn btn-primary" type="submit" value="View Module"/>
-                                </form>
+                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$currentAY+Sem+2" target="_blank">
+                                    <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                    title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
+                                </a>
                             </td>
                         </tr>
                 </tbody>

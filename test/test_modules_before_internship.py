@@ -28,7 +28,7 @@ class TestCode(object):
     URL_MODS_BEFORE_INTERNSHIP_SPECIFIC = '/moduleTakenPriorToInternship?aysem=AY%2016/17%20Sem%202'
     URL_MODS_BEFORE_INTERNSHIP_INVALID = '/moduleTakenPriorToInternship?aysem=AY%2016/18%20Sem%202'
     CURRENT_SEM = 'AY 16/17 Sem 1'
-    DEFAULT_TITLE = 'Modules Taken Prior to Internship for AY 16/17 Sem 1'
+    DEFAULT_TITLE = 'Modules Taken Prior to Internship for'
     TEXT = '<p class="text-center">Shows all modules taken by students prior to taking ' +\
            'internship for a particular semester, and how many students took them. ' +\
            '<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" ' +\
