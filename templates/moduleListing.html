@@ -5,6 +5,7 @@ $ home = ['/', 'Home']
 $ moduleInfo = ['#', 'Module Information']
 $var hierarchy = [home, moduleInfo]
 
+<script type="text/javascript" src="static/javascripts/moduleListing.js"></script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -26,31 +27,6 @@ $var hierarchy = [home, moduleInfo]
                 data-toggle="tooltip" data-placement="left" title="Toggle filters">
                 Advanced Search &nbsp; <span id="chevron" class="glyphicon glyphicon-chevron-down"></span>
             </button>
-            <script>
-                <!--Stops list from sorting when filter input field clicked.-->
-                $$(document).ready(function(){
-                    $$("input").click(function(event){
-                        event.stopPropagation();
-                    });
-                });
-
-                <!--Toggle the filters and change appropriate UI when button is clicked-->
-                function toggleFilters() {
-                    var elements = document.getElementsByClassName("filter")
-                    if (elements[0].hasAttribute("hidden")) {
-                        document.getElementById("chevron").className="glyphicon glyphicon-chevron-up"
-                        for(var i=0; i < elements.length; i++) {
-                            elements[i].removeAttribute("hidden");
-                        }
-                    } else {
-                        document.getElementById("chevron").className="glyphicon glyphicon-chevron-down"
-                        for(var i=0; i < elements.length; i++) {
-                            elements[i].setAttribute("hidden", true);
-                            elements[i].value = "";
-                        }
-                    }
-                }
-            </script>
             <br>
             <br>
             <br>
