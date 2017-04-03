@@ -48,7 +48,8 @@ URLS = (
     '/moduleSpecificSize', 'components.handlers.module_specific_size.ModuleSpecificSize',
     '/starModule', 'components.handlers.star_modules.StarModule',
     '/starredModules', 'components.handlers.star_modules.StarredModulesList',
-    '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship'
+    '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship',
+    '/migrateDatabase', 'components.handlers.database_migrate.DatabaseMigrate'
 )
 
 
