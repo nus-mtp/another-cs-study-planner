@@ -99,7 +99,7 @@ class EditAll(object):
                 if sem1_quota is not None:
                     try:
                         sem1_quota = int(sem1_quota)
-                        if sem1_quota < 0:
+                        if sem1_quota < 0 or sem1_quota > 999:
                             if test_data:
                                 return False
                             else:
@@ -119,7 +119,7 @@ class EditAll(object):
                 if sem2_quota is not None:
                     try:
                         sem2_quota = int(sem2_quota)
-                        if sem2_quota < 0:
+                        if sem2_quota < 0 or sem2_quota > 999:
                             if test_data:
                                 return False
                             else:

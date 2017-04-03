@@ -35,6 +35,12 @@ function checkQuotaKeypress() {
     }
 }
 
+//Prevent user from entering a quota that is more than 999
+function maxLengthCheck(object) {
+if (object.value.length > object.maxLength)
+    object.value = object.value.slice(0, object.maxLength)
+}
+
 //Add yellow highlight to mounting and quota if mounting is changed
 function checkMountingChange(element, oldMounting, oldQuota, mountingID, quotaID) {
     var oldMounting = (oldMounting == 1);
