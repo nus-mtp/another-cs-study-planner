@@ -5,7 +5,7 @@
 
 from app import RENDER
 import web
-from components import session
+from components import model, session
 
 
 class Index(object):
@@ -20,4 +20,15 @@ class Index(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            return RENDER.index()
+            current_ay_with_current_date = model.get_current_ay_sem()[0:8]
+            current_database_ay = model.get_all_fixed_ay_sems()[0][0][0:8]
+
+            to_migrate_db = False
+
+            if current_ay_with_current_date != current_database_ay:
+                to_migrate_db = True
+
+            # [NOTE] for debugging purposes, remove comment out this line when done.
+            # to_migrate_db = True
+
+            return RENDER.index(need_migration=to_migrate_db)
