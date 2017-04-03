@@ -110,11 +110,11 @@ class TestCode(object):
     @raises(Exception)
     def test_modules_taken_before_others_submit_invalid(self):
         '''
-            tests taht the submit button will cause an exception
+            tests that the submit button will cause an exception
         '''
         root = self.test_app.get(self.URL_NORMAL)
         form = root.forms__get()[self.FORM_NAME]
         form.__setitem__("aysem", "AY 16/17 Sem 3")
         form.__setitem__("moduleA", "CS1010")
         form.__setitem__("moduleB", "CS2010")
-        response = form.submit()
+        form.submit()
