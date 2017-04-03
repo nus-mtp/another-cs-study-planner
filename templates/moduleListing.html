@@ -22,12 +22,19 @@ $var hierarchy = [home, moduleInfo]
                 </div>
             </div>
             <br>
-            <button style="float: right;" class="btn btn-primary" onclick="toggleFilters()" data-toggle="tooltip" data-placement="left" title="Toggle filters">
             <button style="float: right;" class="btn btn-info" onclick="toggleFilters()" 
                 data-toggle="tooltip" data-placement="left" title="Toggle filters">
                 Advanced Search &nbsp; <span id="chevron" class="glyphicon glyphicon-chevron-down"></span>
             </button>
             <script>
+                <!--Stops list from sorting when filter input field clicked.-->
+                $$(document).ready(function(){
+                    $$("input").click(function(event){
+                        event.stopPropagation();
+                    });
+                });
+
+                <!--Toggle the filters and change appropriate UI when button is clicked-->
                 function toggleFilters() {
                     var elements = document.getElementsByClassName("filter")
                     if (elements[0].hasAttribute("hidden")) {
