@@ -44,6 +44,7 @@ CREATE TABLE takesFocusArea (
 nusnetId VARCHAR(9) PRIMARY KEY,
 focusArea1 VARCHAR(64),
 focusArea2 VARCHAR(64),
+FOREIGN KEY (nusnetId) REFERENCES student(nusnetId),
 FOREIGN KEY (focusArea1) REFERENCES focusArea(name),
 FOREIGN KEY (focusArea2) REFERENCES focusArea(name)
 );
@@ -106,4 +107,12 @@ staffID VARCHAR(9) PRIMARY KEY,
 sessionSalt VARCHAR(32),
 date TIMESTAMPTZ DEFAULT now(),
 FOREIGN KEY (staffID) REFERENCES admin(staffID)
+);
+
+CREATE TABLE moduleMountedPast(
+moduleCode VARCHAR(10),
+acadYearAndSem VARCHAR(14),
+quota INT,
+PRIMARY KEY (moduleCode, acadYearAndSem),
+FOREIGN KEY (moduleCode) REFERENCES module(code)
 );

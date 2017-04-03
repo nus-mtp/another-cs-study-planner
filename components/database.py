@@ -2,7 +2,6 @@
     database.py
     Contains functions that directly communicate with or manipulate the database
 '''
-
 import hashlib
 
 ## Prevent model.py from being imported twice
@@ -22,6 +21,8 @@ DB_CURSOR = CONNECTION.cursor()
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
+INDEX_THIRD_ELEM = 2
+
 LENGTH_EMPTY = 0
 ERROR_MSG_MODULE_CANNOT_BE_ITSELF = "This module cannot be the same as target module"
 ERROR_MSG_MODULE_DUPLICATED = "There cannot be more than one instance of this module"
@@ -86,6 +87,15 @@ def is_existing_module(code):
     number_module = DB_CURSOR.fetchone()[0]
 
     return number_module > 0
+
+
+def get_all_original_module_info():
+    '''
+        Get the original info of all modules from module backup
+    '''
+    sql_command = "SELECT * FROM moduleBackup"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 def get_original_module_info(code):
@@ -191,6 +201,17 @@ def remove_original_module_info(code):
 ######################################################################################
 # Functions that query mounting and/or quota information
 ######################################################################################
+
+def get_all_past_mounted_modules():
+    '''
+        Get the module code, name, AY/Sem and quota of all past mounted modules
+    '''
+    sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                  "FROM module m1, moduleMountedPast m2 WHERE m2.moduleCode = m1.code " +\
+                  "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
+
 
 def get_all_fixed_mounted_modules():
     '''
@@ -531,11 +552,16 @@ def get_oversub_mod():
         aysem_quota_tenta_list = get_tenta_mounting_and_quota(mod_code)
         aysem_quota_merged_list = aysem_quota_fixed_list + \
                                 aysem_quota_tenta_list
+        all_ay_sem_to_query = model.get_all_fixed_ay_sems() + model.get_all_tenta_ay_sems()
+        ay_sem_to_query_list = [ay_sem[0] for ay_sem in all_ay_sem_to_query]
 
         num_student_plan_aysem_list = get_number_students_planning(mod_code)
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
+            if ay_sem not in ay_sem_to_query_list:
+                continue
+
             real_quota = model.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
             # ensures that quota will be a number which is not None
@@ -787,6 +813,8 @@ def get_mod_taken_together_with(code):
         Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
+    current_ay = model.get_current_ay()
+    earliest_ay_sem_to_accept = current_ay + " Sem 1"
 
     sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name" + \
                   ", sp1.acadYearAndSem, COUNT(*) " + \
@@ -794,6 +822,7 @@ def get_mod_taken_together_with(code):
                   "WHERE sp1.moduleCode = %s AND " + \
                   "sp2.moduleCode <> sp1.moduleCode AND " + \
                   "sp1.studentId = sp2.studentId AND " + \
+                  "sp1.acadYearAndSem >= '" + earliest_ay_sem_to_accept + "' AND " + \
                   "sp1.acadYearAndSem = sp2.acadYearAndSem " + \
                   "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
@@ -850,12 +879,15 @@ def get_all_mods_taken_together():
         Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
+    current_ay = model.get_current_ay()
+    earliest_ay_sem_to_accept = current_ay + " Sem 1"
 
     sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name," + \
                   " sp1.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                   "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
                   "sp1.studentId = sp2.studentId AND " + \
+                  "sp1.acadYearAndSem >= '" + earliest_ay_sem_to_accept + "' AND " + \
                   "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
                   "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
@@ -883,11 +915,15 @@ def get_modA_taken_prior_to_modB():
         module B's code, module B's name, AY-Sem that module B is taken in,
         and the number of students who took module A and B in the specified AY-Sems.
     '''
+    current_ay = model.get_current_ay()
+    earliest_ay_sem_to_accept = current_ay + " Sem 1"
+
     sql_command = "SELECT sp1.moduleCode, m1.name, sp1.acadYearAndSem, " +\
                   "sp2.moduleCode, m2.name, sp2.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                   "WHERE sp2.moduleCode <> sp1.moduleCode " + \
                   "AND sp1.studentId = sp2.studentId " + \
+                  "AND sp2.acadYearAndSem >= '" + earliest_ay_sem_to_accept + "' " + \
                   "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
                   "AND sp1.isTaken = True " + \
                   "AND m1.code = sp1.moduleCode " + \
@@ -1419,3 +1455,160 @@ def clean_old_sessions(date_to_delete):
         CONNECTION.rollback()
         return False
     return True
+
+
+######################################################################################
+# Functions that are related to the migration of data across mounting databases
+######################################################################################
+
+def migrate_to_next_aysem():
+    '''
+        This function migrates the data across the mounting databases.
+
+        What is being done:
+        1) moduleMounted (fixed) data will all be migrated into moduleMountedPast table.
+        2) 1 AY of data in moduleMountTentative will be migrated into moduleMounted
+        3) If no data is left at moduleMountTentative, duplicate the data from the new
+           moduleMounted table.
+        4) Clean up all data in the moduleBackup table.
+        5) All modules in fixed mounting will have their statuses updated to "Active"
+           from "New"
+        6) Increment all students' year of study by 1.
+    '''
+    migrate_fixed_to_past_mounting()
+    migrate_one_ay_from_tentative_to_fixed()
+    duplicate_data_into_tentative_if_needed()
+    clean_up_module_backup_table()
+    update_active_modules_after_migration()
+    increment_student_year_by_one()
+
+    CONNECTION.commit()
+
+
+def migrate_fixed_to_past_mounting():
+    '''
+        This function migrates all the data in moduleMounted (fixed)
+        into moduleMountedPast table.
+    '''
+    sql_command_query = "SELECT * FROM moduleMounted"
+    DB_CURSOR.execute(sql_command_query)
+    fixed_data_to_transfer = model.convert_to_list(DB_CURSOR.fetchall())
+
+    insert_data_into_mounting("moduleMountedPast", fixed_data_to_transfer)
+
+    sql_command_clear = "DELETE FROM moduleMounted"
+    DB_CURSOR.execute(sql_command_clear)
+
+
+def migrate_one_ay_from_tentative_to_fixed():
+    '''
+        This function migrates 1 AY of data from moduleMountTentative
+        into moduleMounted table.
+    '''
+    all_tenta_ay_sems = model.convert_to_list(get_all_tenta_ay_sems())
+    earliest_tenta_ay_sem = all_tenta_ay_sems[INDEX_FIRST_ELEM][INDEX_FIRST_ELEM]
+    earliest_tenta_ay = earliest_tenta_ay_sem[:8]
+
+    sql_command_query = "SELECT * FROM moduleMountTentative WHERE " + \
+                        "acadYearAndSem LIKE '" + earliest_tenta_ay + "%' "
+    DB_CURSOR.execute(sql_command_query)
+    tenta_data_to_transfer = model.convert_to_list(DB_CURSOR.fetchall())
+
+    insert_data_into_mounting("moduleMounted", tenta_data_to_transfer)
+
+    sql_command_clear = "DELETE FROM moduleMountTentative WHERE " + \
+                        "acadYearAndSem LIKE '" + earliest_tenta_ay + "%' "
+    DB_CURSOR.execute(sql_command_clear)
+
+
+def duplicate_data_into_tentative_if_needed():
+    '''
+        This function duplicates the data from the new moduleMounted table
+        into the moduleMountTentative table if there is no data currently
+        left in the moduleMountTentative table.
+    '''
+    sql_command = "SELECT COUNT(*) FROM moduleMountTentative"
+    DB_CURSOR.execute(sql_command)
+    number_module = DB_CURSOR.fetchone()[0]
+
+    if number_module == 0:
+        sql_command_query = "SELECT * FROM moduleMounted"
+        DB_CURSOR.execute(sql_command_query)
+        fixed_data_to_duplicate = model.convert_to_list(DB_CURSOR.fetchall())
+
+        insert_data_into_mounting("moduleMountTentative", fixed_data_to_duplicate,
+                                  True)
+
+
+def insert_data_into_mounting(to_table, list_data_to_transfer, to_increment_ay=False):
+    '''
+        This function inserts module data in given list_data_to_transfer
+        to the given to_table mounting stable.
+    '''
+    sql_command = "INSERT INTO " + to_table + " VALUES(%s, %s, %s)"
+
+    for module_data in list_data_to_transfer:
+        module_code = module_data[INDEX_FIRST_ELEM]
+        ay_sem = module_data[INDEX_SECOND_ELEM]
+        quota = module_data[INDEX_THIRD_ELEM]
+
+        if to_increment_ay:
+            next_ay = model.get_next_ay(ay_sem)
+            semester = ay_sem[-1] # get last character
+            ay_sem = next_ay + " Sem " + semester
+
+        DB_CURSOR.execute(sql_command, (module_code, ay_sem, quota))
+
+
+def clean_up_module_backup_table():
+    '''
+        Cleans up the entire moduleBackup table, so that it
+        is now empty.
+    '''
+    sql_command = "DELETE FROM moduleBackup"
+    DB_CURSOR.execute(sql_command)
+
+
+def update_active_modules_after_migration():
+    '''
+        This function makes sure that all modules in fixed mounting
+        have their statuses updated to "Active" from "New"
+    '''
+    sql_command = "UPDATE module SET status='Active' WHERE " + \
+                  "status='New' AND code in (SELECT mm.moduleCode FROM " + \
+                  "moduleMounted mm WHERE mm.moduleCode = code)"
+    DB_CURSOR.execute(sql_command)
+
+
+def increment_student_year_by_one():
+    '''
+        This function increases all the students' year by 1.
+    '''
+    sql_command = "UPDATE student SET year = year + 1"
+    DB_CURSOR.execute(sql_command)
+
+
+def reset_database():
+    '''
+        This function automatically clean and repopulate the database.
+        This function is used in test case.
+
+        Note: There is some bug if we try to call python dbclean.py from here,
+        so we shall not do that.
+    '''
+    file_to_clean_database = open('utils/databaseClean.sql', 'r')
+    lines_to_clean_database = file_to_clean_database.readlines()[0]
+    sql_list = lines_to_clean_database.split(";\r")
+
+    for sql_drop_table_line in sql_list:
+        print sql_drop_table_line
+        if sql_drop_table_line == "":
+            continue
+        try:
+            DB_CURSOR.execute(sql_drop_table_line)
+            CONNECTION.commit()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+    file_to_clean_database.close()
+
+    components.database_adapter.repopulate_database(CONNECTION)
