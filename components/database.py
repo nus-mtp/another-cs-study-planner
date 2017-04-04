@@ -1246,7 +1246,6 @@ def edit_preclusion(module_code, preclude_units):
             else:
                 outcome = add_preclusion(module_code, precluded_module, False)
                 if not outcome:
-                    CONNECTION.rollback()
                     is_successful = False
                     error_code_and_msg = [precluded_module, ERROR_MSG_MODULE_DOESNT_EXIST]
                     error_list.append(error_code_and_msg)
