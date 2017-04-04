@@ -253,6 +253,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0], [self.test_prereq2_code, self.ERROR_MSG_MODULE_DUPLICATED])
 
             prereq_info = model.get_prerequisite(self.test_module_code)
@@ -276,6 +277,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0], [self.test_prereq2_code, self.ERROR_MSG_MODULE_DUPLICATED])
 
             prereq_info = model.get_prerequisite(self.test_module_code)
@@ -306,6 +308,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
@@ -331,6 +334,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
@@ -361,6 +365,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_prereq_code, self.ERROR_MSG_MODULE_PREREQ_ALREADY_PRECLUSION])
 
@@ -390,6 +395,7 @@ class TestCode(object):
             outcome = model.edit_prerequisite(self.test_module_code, prereq_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 2)
             assert_equal(error_list[0],
                          [self.test_module_code, self.ERROR_MSG_MODULE_CANNOT_BE_ITSELF])
             assert_equal(error_list[1],
