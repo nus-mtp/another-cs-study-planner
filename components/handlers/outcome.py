@@ -58,6 +58,13 @@ class Outcome(object):
                         redirect_page = "individualModuleInfo?code="+module_code+"&aysem="+\
                                         ay_sem.replace(' ', '+').replace('/', '%2F')
 
+            elif action == "edit_all_mountings_and_quotas":
+                if outcome is True:
+                    outcome_message = "Modules have been edited successfully!"
+                else:
+                    outcome_message = "Error: Failed to edit modules."
+                redirect_page = "/editAll"
+
             elif action == "restore_module":
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been restored successfully!"
@@ -77,11 +84,13 @@ class Outcome(object):
                         if outcome == "has_mounting":
                             outcome_message += "Module " + module_code + " has " +\
                                                "mountings that refer to it. " +\
-                                               "Please remove all mountings before deleting the module."
+                                               "Please remove all mountings before deleting " +\
+                                               "the module."
                             redirect_page = "/viewModule?code=" + module_code
                         elif outcome == "is_starred":
                             outcome_message += "Module " + module_code + " is a starred module. " +\
-                                               "Please unstar the module before deleting the module."
+                                               "Please unstar the module before deleting " +\
+                                               "the module."
                             redirect_page = "/viewModule?code=" + module_code
 
             elif action == "create_user":

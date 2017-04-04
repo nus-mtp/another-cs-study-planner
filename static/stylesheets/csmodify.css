@@ -415,6 +415,40 @@ tr[id*='modified-details-child-row'] {
 #module-view-stats-footer {
     margin-bottom: 30px;
 }
+
+/*******************************************************************************************/
+/* ==================== STYLING FOR EDIT-ALL-MOUNTINGS-AND-QUOTAS PAGE =================== */
+/*******************************************************************************************/
+#select-mod-to-edit-div {
+    margin-top: 25px;
+    margin-bottom: 40px;
+    font-size: 18px;
+}
+
+#select-mod-to-edit {
+    width: 400px;
+    height: 33px;
+}
+
+.typeahead.dropdown-menu { 
+    width: 400px;
+}
+
+#edit-all-table tr {
+    display: none;
+}
+
+#edit-all-table-header tr {
+    display: table-row;
+}
+
+.edit-all-bottom-button {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+    margin-left: 5px;
+}
+
 /********************************************************************************/
 /* ==================== General =================== */
 /********************************************************************************/

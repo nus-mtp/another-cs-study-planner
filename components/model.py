@@ -122,6 +122,10 @@ def delete_fixed_mounting(code, ay_sem):
     return database.delete_fixed_mounting(code, ay_sem)
 
 
+def delete_all_fixed_mountings(code):
+    return database.delete_all_fixed_mountings(code)
+
+
 def add_tenta_mounting(code, ay_sem, quota):
     return database.add_tenta_mounting(code, ay_sem, quota)
 
@@ -132,6 +136,10 @@ def update_quota(code, ay_sem, quota):
 
 def delete_tenta_mounting(code, ay_sem):
     return database.delete_tenta_mounting(code, ay_sem)
+
+
+def delete_all_tenta_mountings(code):
+    return database.delete_all_tenta_mountings(code)
 
 
 ######################################################################################
