@@ -23,7 +23,8 @@ class TestCode(object):
         '''
             Migrate the database.
         '''
-        model.migrate_to_next_aysem()
+        outcome = model.migrate_to_next_aysem()
+        assert_true(outcome)
 
 
     def tearDown(self):
