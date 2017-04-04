@@ -4,8 +4,12 @@
 
 
 import web
-from components import model
-
+from sys import modules
+try:
+    from components import model
+except ImportError:
+    model = modules['components.model']
+from components import database
 
 '''
     These mappings define to which class the application will direct
@@ -52,7 +56,7 @@ URLS = (
 '''
     Retrieve a list of all modules, to be used for autocompleting module search
 '''
-all_modules = model.get_all_modules()
+all_modules = database.get_all_modules()
 
 '''
     This defines the directory where the application should access
