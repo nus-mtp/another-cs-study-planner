@@ -1041,7 +1041,14 @@ def add_prerequisite(module_code, prereq_code, index, to_commit=True):
     '''
         Insert a prerequisite into the prerequisite table.
         Returns true if successful, false if duplicate primary key detected
+        or if module_code = prereq_code or invalid module code given
     '''
+    if module_code == prereq_code:
+        return False
+
+    if not is_existing_module(module_code) or not is_existing_module(prereq_code):
+        return False
+
     sql_command = "INSERT INTO prerequisite VALUES (%s,%s,%s)"
     try:
         DB_CURSOR.execute(sql_command, (module_code, prereq_code, index))
@@ -1126,7 +1133,6 @@ def edit_prerequisite(module_code, prereq_units):
                 else:
                     outcome = add_prerequisite(module_code, module, index, False)
                     if not outcome:
-                        CONNECTION.rollback()
                         is_successful = False
                         error_code_and_msg = [module, ERROR_MSG_MODULE_DOESNT_EXIST]
                         error_list.append(error_code_and_msg)
