@@ -1576,7 +1576,7 @@ def update_active_modules_after_migration():
     '''
     sql_command = "UPDATE module SET status='Active' WHERE " + \
                   "status='New' AND code in (SELECT mm.moduleCode FROM " + \
-                  "moduleMounted mm WHERE mm.moduleCode = code)"
+                  "moduleMounted mm)"
     DB_CURSOR.execute(sql_command)
 
 
