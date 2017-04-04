@@ -287,11 +287,7 @@ function saveChangesPrerequisite() {
             var parsedData = JSON.parse(data);
             if (parsedData[0] == true) {
                 window.alert("Your changes have been saved.");
-                if (window.opener != null) {
-                    window.close();
-                } else {
-                    window.location.href = ("/editModule?code=" + moduleCode);
-                }
+                window.location.href = ("/editModule?code=" + moduleCode);
             } else {
                 highlightErrorFieldsPrerequisite(parsedData[1]);
             }
@@ -388,11 +384,7 @@ function saveChangesPreclusion() {
             var parsedData = JSON.parse(data);
             if (parsedData[0] == true) {
                 window.alert("Your changes have been saved.");
-                if (window.opener != null) {
-                    window.close();
-                } else {
-                    window.location.href = ("/editModule?code=" + moduleCode);
-                }
+                window.location.href = ("/editModule?code=" + moduleCode);
             } else {
                 highlightErrorFieldsPreclusion(parsedData[1]);
             }
