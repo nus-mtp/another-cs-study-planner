@@ -24,7 +24,9 @@ function openSidebar() {
 
 /* Set the width of the side navigation to 0 */
 function closeSidebar() {
-    document.getElementById("sidebar").style.width = "0";
+    if (document.getElementById("sidebar") != null) {
+        document.getElementById("sidebar").style.width = "0";
+    }
 }
 
 $(function () {
@@ -104,11 +106,22 @@ $(function() {
  * FUNCTIONS FOR CUSTOM VALIDATION MESSAGES FOR LOGIN
  * AND REGISTRATION FORMS
  */
-function check(input) {
-    if (input.validity.patternMismatch) {
+function checkUsername(input) {
+    if (input.validity.patternMismatch == true) {
         input.setCustomValidity("User ID should be alphanumeric and within 9 characters.");
-    } else if (input.validity.valueMissing) {
+    } else if (input.validity.valueMissing == true) {
         input.setCustomValidity("Please fill in your User ID.");
+    } else {
+        input.setCustomValidity("");
+    }
+}
+
+function checkPassword(input) {
+    console.log(input.validity.valueMissing);
+    if (input.validity.valueMissing == true) {
+        input.setCustomValidity("Please enter a password.");
+    } else {
+        input.setCustomValidity("");
     }
 }
 
