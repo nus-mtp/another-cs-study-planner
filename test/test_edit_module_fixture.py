@@ -27,6 +27,7 @@ class TestCode(object):
     EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
                                  'For <b>AY 17/18 Sem 1</b></h1>'
     TESTING_MODULE = 'BT5110'
+    ALERT_MSG = "alert('Error: Failed to edit module.');"
 
     ERR_MSG = 'Invalid input for module name/code/MCs/description'
 
@@ -146,7 +147,20 @@ class TestCode(object):
         response = edit_module_mounting_form.submit()
 
         assert_equal(response.status, 200)
-        response.mustcontain("alert('Error: Failed to edit module.');")
+        response.mustcontain(self.ALERT_MSG)
+
+    def test_module_edit_submit_invalid_quota_upperbond(self):
+        '''
+            Tests whether submitting the edit-module form with invalid
+            inputs will fail.
+        '''
+        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_VALID)
+        edit_module_mounting_form = root.forms__get()["edit-mounting-form"]
+        edit_module_mounting_form.__setitem__("quota", 1000)
+        response = edit_module_mounting_form.submit()
+
+        assert_equal(response.status, 200)
+        response.mustcontain(self.ALERT_MSG)
 
     def test_module_edit_submit_invalid_name(self):
         '''

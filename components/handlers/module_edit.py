@@ -143,7 +143,7 @@ class EditMountingInfo(object):
         if quota is not None:
             try:
                 quota = int(quota)
-                if quota < 0:
+                if quota < 0 or quota > 999:
                     outcome = False
             except ValueError:  # quota is not None or int
                 outcome = False
