@@ -63,6 +63,7 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePre
 			<button class="btn btn-lg btn-primary" id="add-prereq-unit" data-toggle="tooltip" data-placement="top" title="Add Prerequisite Unit" onclick="addPrereqUnit()"><span class="glyphicon glyphicon-plus"></span></button>
 			<button class="btn btn-lg btn-primary" id="save-changes" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChangesPrerequisite()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Revert All Changes" onclick="revertChangesPrerequisite()"><span class="glyphicon glyphicon-refresh"></span></button>
+			<a class="btn btn-lg btn-primary" id="prerequisite-back-button" href="/editModule?code=$moduleCode" data-toggle="tooltip" data-placement="top" title="Go Back to Editing $moduleCode"><span class="glyphicon glyphicon-arrow-left"></span></a>
 		</div>
 		<table style="display:none">
 			<tr id="prereq-unit-template" class="unit">
