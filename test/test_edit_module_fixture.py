@@ -39,6 +39,7 @@ class TestCode(object):
     EDIT_PRECLUSION_CORRECT_DIRECT = 'Edit Preclusions'
 
     TESTING_MODULE = 'BT5110'
+    ALERT_MSG = "alert('Error: Failed to edit module.');"
 
     ERR_MSG = 'Invalid input for module name/code/MCs/description'
 
@@ -189,6 +190,20 @@ class TestCode(object):
         button_response = response.click(linkid="edit-prerequisite")
         assert_equal(button_response.status, 200)
         button_response.mustcontain(self.EDIT_PREREQ_CORRECT_DIRECT)
+
+
+    def test_module_edit_submit_invalid_quota_upperbound(self):
+        '''
+            Tests whether submitting the edit-module form with invalid
+            inputs will fail.
+        '''
+        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_VALID)
+        edit_module_mounting_form = root.forms__get()["edit-mounting-form"]
+        edit_module_mounting_form.__setitem__("quota", 1000)
+        response = edit_module_mounting_form.submit()
+
+        assert_equal(response.status, 200)
+        response.mustcontain(self.ALERT_MSG)
 
 
     def test_module_edit_submit_invalid_name(self):

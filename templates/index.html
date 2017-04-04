@@ -1,3 +1,5 @@
+$def with (need_migration=False)
+
 $var title:Home
 $ home = ['#', 'Home']
 $var hierarchy = [home]
@@ -7,8 +9,18 @@ $var hierarchy = [home]
         <div class="col-md-12 text-center">
             <h1><b>Welcome to</b> <img id="welcome-message" src="static/images/csmodify.png"></h1>
         </div>
+        $if need_migration:
+            <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-danger">
+                    <p>
+                        <span class="glyphicon glyphicon-alert"></span> <b>It seems that the current Academic Year has ended.</b>
+                        <br>
+                        <br>
+                        Click <a href="/migrateDatabase">here</a> if you want to perform a database migration to match the new Academic Year.
+                    </p>
+                </div>
+            </div>
         <div class="col-md-8 col-md-offset-2">
-            <br>
             <br>
             <div class="panel-group" id="accordion">
                 <div class="panel panel-default">

@@ -8,6 +8,7 @@ tr > th {
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
+
 /* ========== STYLING FOR NAVBAR ========== */
 span[id*='id-display'] {
     font-size: 18px;
@@ -359,10 +360,12 @@ td > a {
 .aysem-dropdown label {
     font-size: 15px;
 }
+
 .aysem-dropdown input {
     margin-left: 2px;
     padding-top: 5px;
 }
+
 #aysem-dropdown-select {
     width: 280px;
     height: 33px;
@@ -384,7 +387,6 @@ td > a {
     width: 280px;
     display: inline-block;
 }
-
 
 .modal {
     display: none; /* Hidden by default */

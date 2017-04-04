@@ -49,6 +49,7 @@ URLS = (
     '/starModule', 'components.handlers.star_modules.StarModule',
     '/starredModules', 'components.handlers.star_modules.StarredModulesList',
     '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship',
+    '/migrateDatabase', 'components.handlers.database_migrate.DatabaseMigrate',
     '/editAll', 'components.handlers.edit_all_mountings_and_quotas.EditAll'
 )
 

@@ -34,6 +34,10 @@ def is_existing_module(code):
     return database.is_existing_module(code)
 
 
+def get_all_original_module_info():
+    return database.get_all_original_module_info()
+
+
 def get_original_module_info(code):
     return database.get_original_module_info(code)
 
@@ -69,6 +73,10 @@ def remove_original_module_info(code):
 ######################################################################################
 # Functions that query mounting and/or quota information
 ######################################################################################
+
+def get_all_past_mounted_modules():
+    return database.get_all_past_mounted_modules()
+
 
 def get_all_fixed_mounted_modules():
     return database.get_all_fixed_mounted_modules()
@@ -481,6 +489,18 @@ def validate_input(input_data, input_types, is_future=False,
     return helper.validate_input(input_data, input_types, is_future=is_future,
                                  aysem_specific=aysem_specific, attr_required=attr_required,
                                  show_404=show_404)
+
+
+######################################################################################
+# Functions that are related to the migration of data across mounting databases
+######################################################################################
+
+def migrate_to_next_aysem():
+    return database.migrate_to_next_aysem()
+
+
+def reset_database():
+    return database.reset_database()
 
 
 ######################################################################################
