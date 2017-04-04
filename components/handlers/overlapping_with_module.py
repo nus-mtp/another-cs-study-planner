@@ -22,11 +22,12 @@ class OverlappingWithModule(object):
         code = data_input.code
         try:
             aysem = data_input.aysem
-            #need to change to overlapping for one sem
-            lst_of_mods = model.get_mod_taken_together_with_mod_and_aysem(code, aysem)
-            return RENDER.overlappingWithModule(code, aysem, lst_of_mods, True)
+            if aysem == "":
+                raise web.seeother('/overlappingWithModule?code='+code)
+            else:
+                lst_of_mods = model.get_mod_taken_together_with_mod_and_aysem(code, aysem)
+                return RENDER.overlappingWithModule(code, aysem, lst_of_mods, True)
         except AttributeError:
             aysem = 'All Semesters'
-            #need to change to overlapping for one sem
             lst_of_mods = model.get_mod_taken_together_with(code)
             return RENDER.overlappingWithModule(code, aysem, lst_of_mods, False)

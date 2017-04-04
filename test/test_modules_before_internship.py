@@ -34,10 +34,10 @@ class TestCode(object):
            '<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" ' +\
            'data-placement="bottom" title="By default, this shows all data before ' +\
            'students take internship in the current AY-Sem."></span></p>'
-    FORM = '<form id="ay-form" class="form-inline" ' +\
+    FORM = '<form id="ay-form" class="form-inline aysem-dropdown" ' +\
            'action="/moduleTakenPriorToInternship" method="post">'
-    SELECT_LABEL = '<label for="ay-sem">Select AY-Sem:</label>'
-    SELECT_ELEMENT = '<select class="form-control" name="aysem">'
+    SELECT_LABEL = '<label for="ay-sem">Select AY-Semester:'
+    SELECT_ELEMENT = '<select id="aysem-dropdown-select" class="form-control" name="aysem">'
     TABLE_HEADER_MODULE_CODE = '<th>Code</th>'
     TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_NUM_STUDENTS = '<th>Number of Students</th>'

@@ -96,7 +96,7 @@ class TestCode(object):
             Retrieve fixed mounting data from database and generate full mounting plan
         '''
         self.fixed_mounting_handler.populate_module_code_and_name()
-        self.fixed_mounting_handler.populate_mounting_values()
+        self.fixed_mounting_handler.populate_module_ay_sem_data()
         assert_true(len(self.fixed_mounting_handler.full_mounting_plan) > 0)
 
 
@@ -105,7 +105,7 @@ class TestCode(object):
             Retrieve tentative mounting data from database and generate full mounting plan
         '''
         self.tentative_mounting_handler.populate_module_code_and_name()
-        self.tentative_mounting_handler.populate_mounting_values(self.next_ay)
+        self.tentative_mounting_handler.populate_module_ay_sem_data(self.next_ay)
         assert_true(len(self.tentative_mounting_handler.full_mounting_plan) > 0)
 
 

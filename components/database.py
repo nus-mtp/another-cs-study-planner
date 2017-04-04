@@ -8,9 +8,9 @@ import hashlib
 ## Prevent model.py from being imported twice
 from sys import modules
 try:
-    from components import model
+    from components import helper
 except ImportError:
-    model = modules['components.model']
+    helper = modules['components.helper']
 
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
@@ -323,15 +323,15 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
 
-    if model.is_aysem_in_list(given_aysem, fixed_sems):
+    if helper.is_aysem_in_list(given_aysem, fixed_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    elif model.is_aysem_in_list(given_aysem, tenta_sems):
+    elif helper.is_aysem_in_list(given_aysem, tenta_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
     else: # No such aysem found
         return list()
 
     required_list = DB_CURSOR.fetchall()
-    processed_list = model.convert_to_list(required_list)
+    processed_list = helper.convert_to_list(required_list)
 
     return processed_list
 
@@ -360,6 +360,15 @@ def delete_fixed_mounting(code, ay_sem):
     '''
     sql_command = "DELETE FROM modulemounted WHERE moduleCode=%s AND acadYearAndSem=%s"
     DB_CURSOR.execute(sql_command, (code, ay_sem))
+    CONNECTION.commit()
+
+
+def delete_all_fixed_mountings(code):
+    '''
+        Delete all fixed mountings of a module
+    '''
+    sql_command = "DELETE FROM modulemounted WHERE moduleCode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
     CONNECTION.commit()
 
 
@@ -404,6 +413,15 @@ def delete_tenta_mounting(code, ay_sem):
         CONNECTION.rollback()
         return False
     return True
+
+
+def delete_all_tenta_mountings(code):
+    '''
+        Delete all tentative mountings of a module
+    '''
+    sql_command = "DELETE FROM moduleMountTentative WHERE moduleCode=%s"
+    DB_CURSOR.execute(sql_command, (code,))
+    CONNECTION.commit()
 
 
 ######################################################################################
@@ -506,7 +524,7 @@ def get_list_students_take_module(code, aysem):
     for student in list_of_students_taking_with_no_focus_areas:
         current_list_of_students.append([student[0], student[1], "-", "-"])
 
-    return model.replace_null_with_dash(current_list_of_students)
+    return helper.replace_null_with_dash(current_list_of_students)
 
 
 def get_oversub_mod():
@@ -530,7 +548,7 @@ def get_oversub_mod():
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
-            real_quota = model.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+            real_quota = helper.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
             # ensures that quota will be a number which is not None
             if real_quota is None:
@@ -546,6 +564,17 @@ def get_oversub_mod():
                 list_of_oversub_with_info.append(oversub_info)
 
     return list_of_oversub_with_info
+
+
+def get_student_stats_for_all_mods():
+    '''
+        For each module/AY-Sem that has at least 1 student taking,
+        get the number of students taking
+    '''
+    sql_command = "SELECT COUNT(*), moduleCode, acadYearAndSem FROM studentPlans " +\
+                  "GROUP BY moduleCode, acadYearAndSem ORDER BY moduleCode, acadYearAndSem"
+    DB_CURSOR.execute(sql_command)
+    return DB_CURSOR.fetchall()
 
 
 ######################################################################################
@@ -573,7 +602,7 @@ def get_num_students_by_yr_study():
     DB_CURSOR.execute(sql_command)
 
     table_with_non_zero_students = DB_CURSOR.fetchall()
-    final_table = model.append_missing_year_of_study(table_with_non_zero_students)
+    final_table = helper.append_missing_year_of_study(table_with_non_zero_students)
 
     # Sort the table based on year
     final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
@@ -831,7 +860,7 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
     return DB_CURSOR.fetchall()
 
 
-def get_all_mods_taken_together():
+def get_all_mods_taken_together(aysem=None):
     '''
         Retrieves the list of all modules taken together in the same semester.
 
@@ -849,18 +878,23 @@ def get_all_mods_taken_together():
                   " sp1.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
                   "WHERE sp1.moduleCode < sp2.moduleCode AND " + \
-                  "sp1.studentId = sp2.studentId AND " + \
-                  "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
-                  "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
-                  "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
-                  "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
+                  "sp1.studentId = sp2.studentId AND "
+    if aysem is not None:
+        sql_command += "sp1.acadYearAndSem = %s AND "
+    sql_command += "sp1.acadYearAndSem = sp2.acadYearAndSem AND " + \
+                   "m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
+                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
+                   "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    if aysem is not None:
+        DB_CURSOR.execute(sql_command, (aysem,))
+    else:
+        DB_CURSOR.execute(sql_command)
 
     return DB_CURSOR.fetchall()
 
 
-def get_modA_taken_prior_to_modB():
+def get_modA_taken_prior_to_modB(aysem):
     '''
         Retrieves the list of pairs of modules where there is at least 1 student
         who took module A prior to taking module B.
@@ -883,6 +917,7 @@ def get_modA_taken_prior_to_modB():
                   "WHERE sp2.moduleCode <> sp1.moduleCode " + \
                   "AND sp1.studentId = sp2.studentId " + \
                   "AND sp1.acadYearAndSem < sp2.acadYearAndSem " + \
+                  "AND sp2.acadYearAndSem = %s" + \
                   "AND sp1.isTaken = True " + \
                   "AND m1.code = sp1.moduleCode " + \
                   "AND m2.code = sp2.moduleCode " + \
@@ -891,7 +926,7 @@ def get_modA_taken_prior_to_modB():
                   "m1.name, m2.name " + \
                   "ORDER BY COUNT(*) DESC"
 
-    DB_CURSOR.execute(sql_command)
+    DB_CURSOR.execute(sql_command, (aysem,))
 
     return DB_CURSOR.fetchall()
 
@@ -993,9 +1028,9 @@ def get_mods_no_one_take(aysem):
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
 
-    if model.is_aysem_in_list(aysem, fixed_sems):
+    if helper.is_aysem_in_list(aysem, fixed_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    elif model.is_aysem_in_list(aysem, tenta_sems):
+    elif helper.is_aysem_in_list(aysem, tenta_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
     else: # No such aysem found
         return list()

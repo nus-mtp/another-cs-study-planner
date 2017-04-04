@@ -8,6 +8,8 @@ $ tentativeMounting = ['#', title_string]
 
 $var hierarchy = [home, tentativeMounting]
 
+<script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -24,14 +26,36 @@ $var hierarchy = [home, tentativeMounting]
                     </form>
                 </div>
             </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-8 text-center toggle-columns-display">
+                <form>
+                    <label class="checkbox-inline toggle-columns-display-checkbox">
+                      <input type="checkbox" onclick="toggleQuotaDisplay('#tentative-mounting-table');">
+                      Display Quota
+                    </label>
+                    <label class="checkbox-inline toggle-columns-display-checkbox">
+                      <input type="checkbox" onclick="toggleNumStudentsDisplay('#tentative-mounting-table');">
+                      Display Number of Students Taking
+                    </label>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
             <br>
+            <div class="row loading-div text-center">
+                <img src="static/images/loading.gif">
+                <h3>Loading data, please wait...</h3>
+            </div>
             <table class="table table-bordered table-hover text-center display dataTable" id="tentative-mounting-table">
                 <thead>
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th data-sortable="false">Mounted In Sem 1</th>
-                        <th data-sortable="false">Mounted In Sem 2</th>
+                        <th>Mounted In Sem 1</th>
+                        <th onclick="replaceNilQuotasWithNumbers('#tentative-mounting-table');">Sem 1 Quota</th>
+                        <th># of Students Taking (Sem 1)</th>
+                        <th>Mounted In Sem 2</th>
+                        <th onclick="replaceNilQuotasWithNumbers('#tentative-mounting-table');">Sem 2 Quota</th>
+                        <th># of Students Taking (Sem 2)</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -40,6 +64,11 @@ $var hierarchy = [home, tentativeMounting]
                         $ moduleName = subplan[1]
                         $ sem1Mounting = subplan[2]
                         $ sem2Mounting = subplan[3]
+                        $ sem1Quota = subplan[4]
+                        $ sem2Quota = subplan[5]
+                        $ sem1NumStudents = subplan[6]
+                        $ sem2NumStudents = subplan[7]
+
                         <tr>
                             <td class="text-center">
                                 <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
@@ -47,46 +76,79 @@ $var hierarchy = [home, tentativeMounting]
                             <td>$moduleName</td>
                         $if sem1Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">1</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem1Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">2</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem1Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
+                                <span style="visibility:hidden;">3</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+1" target="_blank">
                                     <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
                                     title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
+                        $if True:
+                            <td>
+                                $sem1Quota
+                            </td>
+                            <td>
+                                $sem1NumStudents
+                                $if ((sem1Quota == '?') and sem1NumStudents > 0) or ((sem1Quota != '-' and sem1Quota != '?') and sem1NumStudents > sem1Quota):
+                                    <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Oversubscribed!<br>(Demand > Supply)"></span>  
+                                $elif (sem1Quota == '-' and sem1NumStudents > 0):
+                                    <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Oversubscribed!<br>(Unmounted but still has demand)"></span> 
+                            </td>
+
                         $if sem2Mounting == 1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">1</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem2Mounting == 0:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">2</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" data-html="true" 
                                     title="Unmounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
                         $elif sem2Mounting == -1:
                             <td>
-                                <a href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
+                                <span style="visibility:hidden;">3</span><!--for sorting purpose-->
+                                <a class="table-mounting-icon" href="/individualModuleInfo?code=$moduleCode&aysem=$selectedAY+Sem+2" target="_blank">
                                     <span class="glyphicon glyphicon-minus" data-toggle="tooltip" data-placement="bottom" data-html="true"
                                     title="Not Mounted<br>(Click to go to module AY-Sem view)"></span>
                                 </a>
                             </td>
+                        $if True:
+                            <td>
+                                $sem2Quota
+                            </td>  
+                            <td>
+                                $sem2NumStudents
+                                $if ((sem2Quota == '?') and sem2NumStudents > 0) or ((sem2Quota != '-' and sem2Quota != '?') and sem2NumStudents > sem2Quota):
+                                    <span class="glyphicon glyphicon-info-sign oversub-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Oversubscribed!<br>(Demand > Supply)"></span> 
+                                $elif (sem2Quota == '-' and sem2NumStudents > 0):
+                                    <span class="glyphicon glyphicon-info-sign unmounted-warning" data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                                    title="Oversubscribed!<br>(Unmounted but still has demand)"></span> 
+                            </td>                                             
                         </tr>
                 </tbody>
             </table>

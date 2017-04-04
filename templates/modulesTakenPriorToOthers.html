@@ -1,4 +1,4 @@
-$def with (modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
+$def with (pageType, modulePairs, allAySems, studentCounts, studentPriorCount, moduleA, moduleB, targetAySem, studentsInModuleB)
 
 $var title:View Modules Taken Prior to Others
 $ home = ['/', 'Home']
@@ -10,25 +10,65 @@ $else:
 	$ modulesPriorOthers = ['#', 'Modules Taken Prior to Other Modules']
 	$var hierarchy = [home, modulesPriorOthers]
 
-$if modulePairs is not None:
+<script type="text/javascript" src="static/javascripts/modulesTakenPriorToOthers.js"></script>
+
+$if pageType == "all_pairs":
 	<div class="container-fluid">
 		<h1 class="text-center"><b>Modules Taken Prior to Other Modules</b></h1>
 		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</p>
 		<br>
-		<div class="modules-taken-prior-search-form">
-			<form action="/moduleTakenPriorToOthers" id="module-filter-form" method="GET">
-				<p>Tell me the number of students who have taken</p>
-				<input type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
-				<p>before taking</p>
-				<input style="display:inline-block;" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
-				<p style="display:inline-block;">&nbsp;in&nbsp;</p>
-				<select style="display:inline-block;" name="aysem" required>
-				$for aySem in allAySems:
-					<option value="$aySem">$aySem</option>
-				</select><br>
-				<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Go">
-			</form>
+
+		<!--<div class="modules-taken-prior-search-form">
+		</div>-->
+        <div class="row pagination-centered text-center">
+            <form id="ay-form" class="form-inline aysem-dropdown" action="/moduleTakenPriorToOthers" method="get">
+                <div class="form-group">
+                    <label for="ay-sem">Select AY-Semester:&nbsp;</label>
+                    <select id="aysem-dropdown-select" class="form-control" name="aysem">
+                        <option value="" disabled selected>Please choose a target AY-Semester</option>
+                        $for aysem in allAySems:
+                            $if targetAySem == aysem:
+                                <option value="$aysem" selected>$aysem</option>
+                            $else:
+                                <option value="$aysem">$aysem</option>
+                    </select>
+                </div>
+                <div class="form-group aysem-dropdown">
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+        <div class="row pagination-centered text-center">
+        	<p style="font-size: 18px;"><b>or</b></p>
+        	<button id="openModal" class="btn btn-primary">Search for a specific pair of modules</button>
+        </div>
+		<div id="myModal" class="modal">
+			<div class="modal-content text-center">
+				<span class="closeModal">&times;</span>
+				<form class="form-group" action="/moduleTakenPriorToOthers" method="GET">
+					<p><b>Tell me the number of students who have taken</b></p>
+					<input class="form-control prior-to-form-module-A" data-provide="typeahead" autocomplete="off" type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
+					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<p><b>before taking</b></p>
+					<input class="form-control prior-to-form-module-B" data-provide="typeahead" autocomplete="off" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
+					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<p style="display:inline-block;"><b>&nbsp;in&nbsp;</b></p>
+					<select class="form-control prior-to-form-module-B" name="aysem" required>
+					$for aysem in allAySems:
+						<option value="$aysem">$aysem</option>
+					</select><br>
+					<input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Submit">
+				</form>
+			</div>
 		</div>
+    $if modulePairs is not None:
+    	<div class="row prior-table-aysem-title">
+    		<h3 >Showing results for Module B taken in <b><u>$targetAySem</u></b></h3>
+    	</div>
+    	<div class="row loading-div text-center">
+    		<img src="static/images/loading.gif">
+    		<h3>Loading data, please wait...</h3>
+    	</div>
 		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
 			<thead>
 				<tr>
@@ -46,27 +86,23 @@ $if modulePairs is not None:
 				</tr>
 			</thead>
 			<tbody>
-				$if len(modulePairs) == 0 or modulePairs == None:
-					<tr><td colspan=5>No data found</td></tr>
-				$else:
-					$for modulePair in modulePairs:
-						<tr>
-							<td><a href="/viewModule?code=$modulePair[0]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[0]">$modulePair[0]</a></td>
-							<td>$modulePair[1]</td>
-							<td>$modulePair[2]</td>
-							<td><a href="/viewModule?code=$modulePair[3]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[3]">$modulePair[3]</a></td>
-							<td>$modulePair[4]</td>
-							<td>$modulePair[5]</td>
-							<td>$modulePair[6]</td>
-						</tr>
+				$for modulePair in modulePairs:
+					<tr>
+						<td><a href="/viewModule?code=$modulePair[0]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[0]">$modulePair[0]</a></td>
+						<td>$modulePair[1]</td>
+						<td>$modulePair[2]</td>
+						<td><a href="/viewModule?code=$modulePair[3]" target="_blank" data-toggle="tooltip" title="View general info for $modulePair[3]">$modulePair[3]</a></td>
+						<td>$modulePair[4]</td>
+						<td>$modulePair[5]</td>
+						<td>$modulePair[6]</td>
+					</tr>
 			</tbody>
 		</table>
 	</div>
 
-$else:
+$elif pageType == "specific_pair":
 	<div class="container-fluid">
-		<h3 style="margin-bottom: 20px;">Students who took <b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> prior to taking <b><a href="/viewModule?code=$moduleB" target="_blank" data-toggle="tooltip" title="View general info for $moduleB">$moduleB</a></b> in <u>$targetAySem</u></h3>
-		<table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table">
+		<h3 style="margin-bottom: 20px;">Students who took <b><a href="/viewModule?code=$moduleA" target="_blank" data-toggle="tooltip" title="View general info for $moduleA">$moduleA</a></b> prior to taking <b><a href="/viewModule?code=$moduleB" target="_blank" data-toggle="tooltip" title="View general info for $moduleB">$moduleB</a></b> in <u>$targetAySem</u></h3><table class="table display dataTable table-bordered table-hover text-center" id="modules-taken-prior-table-specific">
 			<thead>
 				<tr>
 					<th>$moduleA Taken In</th>

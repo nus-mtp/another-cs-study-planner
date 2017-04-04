@@ -3,7 +3,7 @@
     Acts as a facade for database.py and helper.py
 '''
 
-from components import database, helper
+from components import database, helper, check_string
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
@@ -122,6 +122,10 @@ def delete_fixed_mounting(code, ay_sem):
     return database.delete_fixed_mounting(code, ay_sem)
 
 
+def delete_all_fixed_mountings(code):
+    return database.delete_all_fixed_mountings(code)
+
+
 def add_tenta_mounting(code, ay_sem, quota):
     return database.add_tenta_mounting(code, ay_sem, quota)
 
@@ -132,6 +136,10 @@ def update_quota(code, ay_sem, quota):
 
 def delete_tenta_mounting(code, ay_sem):
     return database.delete_tenta_mounting(code, ay_sem)
+
+
+def delete_all_tenta_mountings(code):
+    return database.delete_all_tenta_mountings(code)
 
 
 ######################################################################################
@@ -216,6 +224,10 @@ def get_oversub_mod():
 
 def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
     return helper.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+
+
+def get_student_stats_for_all_mods():
+    return database.get_student_stats_for_all_mods()
 
 
 ######################################################################################
@@ -306,12 +318,12 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
     return database.get_mod_taken_together_with_mod_and_aysem(code, aysem)
 
 
-def get_all_mods_taken_together():
-    return database.get_all_mods_taken_together()
+def get_all_mods_taken_together(aysem=None):
+    return database.get_all_mods_taken_together(aysem=aysem)
 
 
-def get_modA_taken_prior_to_modB():
-    return database.get_modA_taken_prior_to_modB()
+def get_modA_taken_prior_to_modB(aysem):
+    return database.get_modA_taken_prior_to_modB(aysem)
 
 
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B,
@@ -453,3 +465,26 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+
+def replace_empty_quota_with_symbols(mounting_plan):
+    return helper.replace_empty_quota_with_symbols(mounting_plan)
+
+
+######################################################################################
+# validation functions from check_string
+######################################################################################
+
+def check_name(name):
+    return check_string.check_name(name)
+
+
+def check_mcs(mcs):
+    return check_string.check_mcs(mcs)
+
+
+def check_code(code):
+    return check_string.check_code(code)
+
+
+def outcome_invalid():
+    return check_string.outcome_invalid()
