@@ -34,7 +34,8 @@ class TestCode(object):
     EDIT_MODULE_PREREQUISITES_SAVE_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                             'id="save-changes" ' +\
                                             'data-toggle="tooltip" data-placement="top" ' +\
-                                            'title="Save Changes" onclick="saveChangesPrerequisite()">' +\
+                                            'title="Save Changes" ' +\
+                                            'onclick="saveChangesPrerequisite()">' +\
                                             '<span class="glyphicon glyphicon-floppy-disk">' +\
                                             '</span></button>'
     EDIT_MODULE_PREREQUISITES_REVERT_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
