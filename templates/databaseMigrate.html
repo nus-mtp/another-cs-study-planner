@@ -44,16 +44,24 @@ $var hierarchy = [home, db_migrate]
                         You will not be able to access the old data directly through the application, but they will remain stored in the database.
                     </li>
                     <br>
-                    <li>Data for the current 'Tentative Module Mountings' will be duplicated only for the next AY.</li>
+                    <li>
+                        Data for the current 'Tentative Module Mountings' will be duplicated only for the next AY.
+                        <br>
+                        This duplicate data will then be set as the new 'Tentative Module Mountings'.
+                    </li>
                     <br>
                     <li>The current 'Tentative Module Mountings' will become the new 'Fixed Module Mountings'.
                         <br>
-                        <b>This means that you cannot change any data for the previously-tentative mounting plans, once the migration has taken effect.</b>
+                        <b>This means that you can no longer change any data for the previously-tentative mounting plans, once the migration has taken effect.</b>
                     </li>
                     <br>
-                    <li>The earlier duplicate data will be set as the new 'Tentative Module Mountings'.</li>
+                    <li>
+                        Any previously-added new modules, when mounted before the migration, will now have their statuses changed from <u>'New'</u> to <u>'Active'</u>.
+                        <br>
+                        <b>This means that these newly-added modules cannot be deleted from the system through the application anymore.</b>
+                    </li>
                     <br>
-                    <li>All functions present in this application will use the <u>new</u> 'Fixed Module Mountings' as the frame of reference.</li>
+                    <li>All functions present in this application will refer to the <u>new</u> module mountings after the migration.</li>
                 </ol>
                 <hr>
                 <h3>Example</h3>
@@ -66,12 +74,12 @@ $var hierarchy = [home, db_migrate]
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td>Fixed Module Mountings for:</td>
+                                    <td>AY for Fixed Module Mountings:</td>
                                     <td><strike>$:currentAY</strike> &#8594; <b>$:nextAY</b></td>
                                     <td>This data <u>cannot</u> be modified.</td>
                                 </tr>
                                 <tr>
-                                    <td>Tentative Module Mountings for:</td>
+                                    <td>AY for Tentative Module Mountings:</td>
                                     <td><strike>$:nextAY</strike> &#8594; <b>$:futureAY</b></td>
                                     <td>
                                         This data is duplicated from $:nextAY's data,
