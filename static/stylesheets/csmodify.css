@@ -669,7 +669,7 @@ tr[id*='modified-details-child-row'] {
 #magnifying-glass {
     margin-left: 35px;
     font-size: 17px;
-    margin-top: 10px;
+    position: relative;
 }
 
 #find-module {
