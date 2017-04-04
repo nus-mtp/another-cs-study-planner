@@ -297,7 +297,6 @@ function saveChangesPrerequisite() {
             }
         }).success(function(data) {
             var parsedData = JSON.parse(data);
-            console.log(data)
             if (parsedData[0][0] == true) {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
