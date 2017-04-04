@@ -333,7 +333,7 @@ function convertToDataPrerequisite() {
             var moduleCode = columns[j].children[0].value;
 
             if (moduleCode != "") {
-                modulesInUnit.push(columns[j].children[0].value);
+                modulesInUnit.push(columns[j].children[0].value.toUpperCase());
             }
         }
 
@@ -431,7 +431,7 @@ function convertToDataPreclusion() {
         var moduleInput = rows[i].children[1].children[0];
 
         if (moduleInput.value != "") {
-            preclusions.push(moduleInput.value);
+            preclusions.push(moduleInput.value.toUpperCase());
         }
     }
 
