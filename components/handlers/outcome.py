@@ -126,5 +126,7 @@ class Outcome(object):
             elif action == "back-to-listing":
                 outcome_message = "The module you want to view has been deleted by another user!"
                 redirect_page = "/"
+            else:
+                outcome_message = "unknown error has occured with action " + action
 
             return RENDER.outcome(outcome_message, redirect_page)
