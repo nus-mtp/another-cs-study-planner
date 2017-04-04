@@ -117,7 +117,6 @@ function checkUsername(input) {
 }
 
 function checkPassword(input) {
-    console.log(input.validity.valueMissing);
     if (input.validity.valueMissing == true) {
         input.setCustomValidity("Please enter a password.");
     } else {
@@ -298,11 +297,19 @@ function saveChangesPrerequisite() {
             }
         }).success(function(data) {
             var parsedData = JSON.parse(data);
-            if (parsedData[0] == true) {
+            console.log(data)
+            if (parsedData[0][0] == true) {
                 window.alert("Your changes have been saved.");
-                window.location.href = ("/editModule?code=" + moduleCode);
+                if (window.opener != null) {
+                    var new_prerequisites = parsedData[1];
+                    new_prerequisites = '<p id="prereq-display">' + new_prerequisites + ' <b>(saved)</b></p>';
+                    window.opener.document.getElementById("prereq-display").innerHTML = new_prerequisites;
+                    window.close();
+                } else {
+                    window.location.href = ("/editModule?code=" + moduleCode);
+                }
             } else {
-                highlightErrorFieldsPrerequisite(parsedData[1]);
+                highlightErrorFieldsPrerequisite(parsedData[0][1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -395,11 +402,18 @@ function saveChangesPreclusion() {
             }
         }).success(function(data) {
             var parsedData = JSON.parse(data);
-            if (parsedData[0] == true) {
+            if (parsedData[0][0] == true) {
                 window.alert("Your changes have been saved.");
-                window.location.href = ("/editModule?code=" + moduleCode);
+                if (window.opener != null) {
+                    var new_preclusions = parsedData[1];
+                    new_preclusions = '<p id="preclusion-display">' + new_preclusions + ' <b>(saved)</b></p>';
+                    window.opener.document.getElementById("preclusion-display").innerHTML = new_preclusions;
+                    window.close();
+                } else {
+                    window.location.href = ("/editModule?code=" + moduleCode);
+                }
             } else {
-                highlightErrorFieldsPreclusion(parsedData[1]);
+                highlightErrorFieldsPreclusion(parsedData[0][1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -434,7 +448,6 @@ function revertChangesPreclusion() {
 
 function highlightErrorFieldsPrerequisite(data) {
     var modulesWithErrors = data;
-    console.log(data)
 
     var rows = document.getElementsByTagName("tbody")[0].children;
     var message_start = "<p><b>";
@@ -469,7 +482,6 @@ function highlightErrorFieldsPrerequisite(data) {
 
 function highlightErrorFieldsPreclusion(data) {
     var modulesWithErrors = data;
-    console.log(data);
 
     var rows = document.getElementsByTagName("tbody")[0].children;
     var message_start = "<p><b>";
