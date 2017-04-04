@@ -293,7 +293,7 @@ function saveChangesPrerequisite() {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                highlightErrorFieldsPreclusion(parsedData[1]);
+                highlightErrorFieldsPrerequisite(parsedData[1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -428,10 +428,12 @@ function revertChangesPreclusion() {
 }
 
 function highlightErrorFieldsPrerequisite(data) {
-    var message_start = "<p><b>Message for ";
-    var message_end = "</b></p>";
+    var modulesWithErrors = data;
+    console.log(data)
 
     var rows = document.getElementsByTagName("tbody")[0].children;
+    var message_start = "<p><b>";
+    var message_end = "</b></p>";
 
     for (i = 0; i < rows.length; i+=2) {
         // Reads the prerequisite modules for each unit
@@ -447,11 +449,14 @@ function highlightErrorFieldsPrerequisite(data) {
                 targetColumn.removeChild(targetColumn.lastChild);
             }
 
-            if (moduleCode != "") {
-                var messageElement = document.createElement("p");
-                messageElement.innerHTML = (message_start + moduleCode + message_end);
-                targetColumn.appendChild(messageElement);
-                targetColumn.style.backgroundColor = "#d9534f";
+            for (k = 0; k < modulesWithErrors.length; k++) {
+                if (modulesWithErrors[k][0] == moduleCode) {
+                    var messageElement = document.createElement("p");
+                    messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
+                    targetColumn.appendChild(messageElement);
+                    targetColumn.style.backgroundColor = "#d9534f";
+                    break;
+                }
             }
         }
     }
@@ -459,6 +464,7 @@ function highlightErrorFieldsPrerequisite(data) {
 
 function highlightErrorFieldsPreclusion(data) {
     var modulesWithErrors = data;
+    console.log(data);
 
     var rows = document.getElementsByTagName("tbody")[0].children;
     var message_start = "<p><b>";
