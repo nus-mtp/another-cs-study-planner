@@ -92,37 +92,43 @@ window.onload = function () {
     });
 
 	chart.render();
+
+  // Get the modal
+  var modal = document.getElementById('myModal');
+  // Get the button that opens the modal
+  var edit_specific_info_btn = document.getElementById("edit-specific-info");
+  var overlapping_mods_btn = document.getElementById("view-overlapping-with-module");
+  var students_taking_btn = document.getElementById("view-students-planning-to-take-module");
+
+  // When the user clicks the button, open the modal 
+  edit_specific_info_btn.onclick = function() {
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "block";
+    document.getElementById("overlapping-mods-modal").style.display = "none";
+    document.getElementById("students-taking-modal").style.display = "none";
+  }
+  overlapping_mods_btn.onclick = function() {
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "none";
+    document.getElementById("overlapping-mods-modal").style.display = "block";
+    document.getElementById("students-taking-modal").style.display = "none";
+  }
+  students_taking_btn.onclick = function() {
+    modal.style.display = "block";
+    document.getElementById("edit-specific-info-modal").style.display = "none";
+    document.getElementById("overlapping-mods-modal").style.display = "none";
+    document.getElementById("students-taking-modal").style.display = "block";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
 }
 
-function scrollToTenta(element, duration) {
-	document.getElementById('editSpecificInfoWarning').style.display = "block";
-	document.getElementById('editSpecificInfoWarning').style.color = "red";
-
-	var startingY = window.pageYOffset;
-	var elementY = getPosY(element);
-	var diff = elementY - startingY;  
-	var start;
-
-	// Bootstrap our animation - it will get called right before next frame shall be rendered.
-	window.requestAnimationFrame(function step(timestamp) {
-		if (!start) start = timestamp
-		// Elapsed miliseconds since start of scrolling.
-		var time = timestamp - start
-		// Get percent of completion in range [0, 1].
-		var percent = Math.min(time / duration, 1)
-
-		window.scrollTo(0, startingY + diff * percent)
-
-		// Proceed with animation as long as we wanted it to.
-		if (time < duration) {
-			window.requestAnimationFrame(step)
-		}
-	});
-}
-
-function getPosY(element) {
-	var bodyRect = document.body.getBoundingClientRect(),
-    elemRect = document.getElementById(element).getBoundingClientRect(),
-    offset = elemRect.top - bodyRect.top;
-    return offset
+// When the user clicks on <span> (x), close the modal
+function closeModal() {
+    document.getElementById('myModal').style.display = "none";
 }

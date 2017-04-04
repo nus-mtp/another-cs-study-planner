@@ -1,4 +1,4 @@
-$def with (lst_of_mods)
+$def with (lst_of_mods, all_ay_sems, target_ay_sem)
 
 $ page_title = "Modules Taken Together In The Same Semester"
 
@@ -11,9 +11,31 @@ $var hierarchy = [home, overlapModules]
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="text-center"><b>Overlapping Modules</b></h1>
+            <h1 class="text-center"><b>Overlapping Modules in $target_ay_sem</b></h1>
             <p class="text-center">Shows all pairs of modules, that are taken by students in the same semester.</p>
             <br>
+            <div class="row pagination-centered text-center">
+                <form id="ay-form" class="form-inline aysem-dropdown" action="/overlappingModules" method="get">
+                    <div class="form-group">
+                        <label for="ay-sem">Select AY-Semester:&nbsp;</label>
+                        <select id="aysem-dropdown-select" class="form-control" name="aysem">
+                            <option value="" disabled hidden>Please choose a target AY-Semester</option>
+                            $for aysem in all_ay_sems:
+                                $if aysem == target_ay_sem:
+                                    <option value="$aysem" selected>$aysem</option>
+                                $else:
+                                    <option value="$aysem">$aysem</option>
+                        </select>
+                    </div>
+                    <div class="form-group aysem-dropdown">
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            <div class="row loading-div text-center">
+                <img src="static/images/loading.gif">
+                <h3>Loading data, please wait...</h3>
+            </div>
             <table id="common-module-table" class="table table-bordered table-hover display dataTable text-center">
                 <thead>
                     <tr>
@@ -21,7 +43,6 @@ $var hierarchy = [home, overlapModules]
                         <th>Name of Module 1</th>
                         <th>Module 2</th>
                         <th>Name of Module 2</th>
-                        <th>For AY-Sem</th>
                         <th>Number of Students</th>
                     </tr>
                 </thead>
@@ -34,7 +55,6 @@ $var hierarchy = [home, overlapModules]
                             <td>$row[1]</td>
                             <td><a href="$:address2" target="_blank" data-toggle="tooltip" title="View general info for $row[2]">$row[2]</a></td>
                             <td>$row[3]</td>
-                            <td>$row[4]</td>
                             <td>$row[5]</td>
                         </tr>
                 </tbody>

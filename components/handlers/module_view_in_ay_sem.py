@@ -194,8 +194,11 @@ class IndividualModule(object):
         self.load_focus_areas()
         self.load_student_enrollments(module_code, ay_sem)
 
-        return RENDER.individualModuleInfo(module_info, is_future_ay,
-                                           ay_sem, self.mounting_status,
+        all_ay_sems = model.get_all_ay_sems()
+        all_future_ay_sems = model.get_all_future_ay_sems()
+
+        return RENDER.individualModuleInfo(module_info, all_ay_sems, all_future_ay_sems,
+                                           is_future_ay, ay_sem, self.mounting_status,
                                            self.quota, student_count, is_starred,
                                            self.focus_areas, self.focus_area_acronyms,
                                            self.student_year_counts, self.focus_area_counts)

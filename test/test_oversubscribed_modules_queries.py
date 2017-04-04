@@ -3,6 +3,7 @@ test_oversubscribed_modules_queries.py
 Contains test cases for oversubscribed modules query related functions.
 '''
 from components import model
+from components.handlers.oversub_mod import OversubModule
 
 # HOW TO RUN NOSE TESTS
 # 1. Make sure you are in cs-modify main directory
@@ -29,6 +30,32 @@ class TestCode(object):
         list_of_oversub_mod = model.get_oversub_mod()
         oversubscribed_module = ('AAA1111', 'Test Module',
                                  'AY 17/18 Sem 1', '?', 1)
+
+        # Clean up the database
+        model.delete_all_plans_of_student('dummyYr1A')
+        model.delete_module("AAA1111")
+        model.delete_student('dummyYr1A')
+
+        # Test for presence of oversubscribed module
+        assert oversubscribed_module in list_of_oversub_mod
+
+
+    def test_query_oversubscribed_modules_reworked(self):
+        '''
+            Tests querying the list of oversubscribed modules.
+            (This test uses the reworked function)
+        '''
+        # To simulate an oversubscribed module, add a module with 0 quota,
+        # then add a student who wants to take the module.
+        oversub_handler = OversubModule()
+
+        model.add_student('dummyYr1A', 1)
+        model.add_module('AAA1111', 'Test Module', 'Description', 4, 'Active')
+        model.add_student_plan('dummyYr1A', False, 'AAA1111', 'AY 17/18 Sem 1')
+
+        list_of_oversub_mod = oversub_handler.GET("AY 17/18 Sem 1")
+        oversubscribed_module = ('AAA1111', 'Test Module',
+                                 'AY 17/18 Sem 1', '-', 1, 1)
 
         # Clean up the database
         model.delete_all_plans_of_student('dummyYr1A')

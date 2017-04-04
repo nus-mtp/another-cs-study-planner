@@ -4,7 +4,7 @@
 
 
 import web
-
+from components import database
 
 '''
     These mappings define to which class the application will direct
@@ -48,6 +48,10 @@ URLS = (
     '/editAll', 'components.handlers.edit_all_mountings_and_quotas.EditAll'
 )
 
+'''
+    Retrieve a list of all modules, to be used for autocompleting module search
+'''
+all_modules = database.get_all_modules()
 
 '''
     This defines the directory where the application should access
@@ -57,7 +61,8 @@ URLS = (
     'templates' directory and use the 'base.html' as the base template
     for all other pages.
 '''
-RENDER = web.template.render('templates', base='base', globals={'web':web})
+RENDER = web.template.render('templates', base='base',
+                             globals={'web':web, 'all_modules':all_modules})
 
 '''
     This creates the application instance with the defined

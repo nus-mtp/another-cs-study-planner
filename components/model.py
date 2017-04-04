@@ -226,6 +226,10 @@ def get_quota_in_aysem(ay_sem, aysem_quota_merged_list):
     return helper.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
 
+def get_student_stats_for_all_mods():
+    return database.get_student_stats_for_all_mods()
+
+
 ######################################################################################
 # Functions that query general student enrollment information
 ######################################################################################
@@ -314,12 +318,12 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
     return database.get_mod_taken_together_with_mod_and_aysem(code, aysem)
 
 
-def get_all_mods_taken_together():
-    return database.get_all_mods_taken_together()
+def get_all_mods_taken_together(aysem=None):
+    return database.get_all_mods_taken_together(aysem=aysem)
 
 
-def get_modA_taken_prior_to_modB():
-    return database.get_modA_taken_prior_to_modB()
+def get_modA_taken_prior_to_modB(aysem):
+    return database.get_modA_taken_prior_to_modB(aysem)
 
 
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B,
@@ -461,6 +465,11 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+
+def replace_empty_quota_with_symbols(mounting_plan):
+    return helper.replace_empty_quota_with_symbols(mounting_plan)
+
+
 ######################################################################################
 # validation functions from check_string
 ######################################################################################

@@ -15,10 +15,30 @@ $def with (page)
 		<script type="text/javascript" src="static/javascripts/jquery.easing.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/jquery.canvasjs.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/bootstrap3-typeahead.min.js"></script>
+		<script type="text/javascript" src="static/javascripts/num-html.js"></script>
 		<script type="text/javascript" src="static/javascripts/csmodify.js"></script>
 	</head>
 
 	<body>
+		<script type="text/javascript">
+			// Load list of module codes and names into the module search autocomplete
+			var moduleSource = [];
+		    $$(document).ready(function(){
+		        var moduleCodeAndName = "";
+		        $for module in all_modules:
+		            moduleCodeAndName = "$module[0]"+" - "+"$module[1]"
+		            moduleSource.push(moduleCodeAndName);
+		        $$("input.findModule").typeahead({
+		            minLength: 1,
+		            source: moduleSource,
+		            updater: function(selectedModule) {
+		                var selectedModuleCode = selectedModule.split(" ")[0];
+		                window.location = '/viewModule?code='+selectedModuleCode;
+		            }
+		        })
+		    });
+		</script>
+
 		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
 			$:page
 
@@ -28,13 +48,16 @@ $def with (page)
 
 			<nav class="navbar navbar-default">
 				<div class="container-fluid">
-				    <form class="navbar-form navbar-left">
+				    <form class="navbar-form navbar-left" onsubmit="event.preventDefault();">
 				    	<a class="btn btn-lg btn-primary" href="/">
 				    		<span class="glyphicon glyphicon-home"></span>
 				    	</a>
 					    <button type="button" class="btn btn-lg btn-primary" id="sidebar-button">
 					   		<span class="glyphicon glyphicon-menu-hamburger"></span>
 					   	</button>
+			            <span id="magnifying-glass" class="glyphicon glyphicon-search"></span>
+			            <input type="text" id="find-module" class="findModule" data-provide="typeahead" 
+			            autocomplete="off" placeholder="&nbsp;Search for a module...">
 					</form>
 					<div class="navbar-form navbar-right">
 						<span class="well" id="id-well">
@@ -59,8 +82,8 @@ $def with (page)
 					<!--li><a href="#">Sort/Filter Modules</a></li>
 					<li><a href="#">Recently Removed Modules</a></li-->
 					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
-					<li><a id="sidebar" href="/moduleMountingFixed">View Module Mountings for Current AY</a></li>
-					<li><a id="sidebar" href="/moduleMountingTentative">View Module Mountings for Other AYs</a></li>
+					<li><a id="sidebar" href="/moduleMountingFixed">Module Mountings for Current AY</a></li>
+					<li><a id="sidebar" href="/moduleMountingTentative">Module Mountings for Other AYs</a></li>
 					<!--li><a href="#">View Past Module Demand</a></li-->
 				</ul>
 				<h3 id="sidebar"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Change Curriculum</h3>
@@ -74,14 +97,11 @@ $def with (page)
 				<h3 id="sidebar"><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;&nbsp;Module Relations</h3>
 				<ul id="sidebar">
 					<li><a id="sidebar" href="/overlappingModules">Overlapping Modules</a></li>
+					<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
 					<li><a class="inner-list-header" id="sidebar">Modules Taken Prior To:</a></li>
 					<ul id="sidebar">
 						<li><a id="sidebar" href="/moduleTakenPriorToOthers">Other Modules</a></li>
 						<li><a id="sidebar" href="/moduleTakenPriorToInternship">Internship</a></li>
-					</ul>
-					<li><a class="inner-list-header" id="sidebar">Module Info by Semester</a></li>
-					<ul id="sidebar">
-						<li><a id="sidebar" href="/nonOverlappingModules">Non-Overlapping Modules</a></li>
 					</ul>
 				</ul>
 				<h3 id="sidebar"><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;Student Statistics</h3>
