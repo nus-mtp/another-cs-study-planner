@@ -30,9 +30,9 @@ class Outcome(object):
                     redirect_page = "/viewModule?code="+module_code
                 else:
                     if module_code is None:
-                        outcome_message = "Error: module already exist!"
+                        outcome_message = "Error: failed to add module!"
                     else:
-                        outcome_message = "Error: failed to add " + module_code
+                        outcome_message = "Error: " + module_code + " is an existing module!"
                     redirect_page = "/modules"
             elif action == "edit_module":
                 if outcome is True:
