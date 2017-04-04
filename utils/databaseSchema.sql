@@ -44,6 +44,7 @@ CREATE TABLE takesFocusArea (
 nusnetId VARCHAR(9) PRIMARY KEY,
 focusArea1 VARCHAR(64),
 focusArea2 VARCHAR(64),
+FOREIGN KEY (nusnetId) REFERENCES student(nusnetId),
 FOREIGN KEY (focusArea1) REFERENCES focusArea(name),
 FOREIGN KEY (focusArea2) REFERENCES focusArea(name)
 );

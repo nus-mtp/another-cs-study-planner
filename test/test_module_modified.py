@@ -2,7 +2,7 @@
     test_modules_modified.py tests the application's Modified Modules page.
 '''
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal, raises, assert_false
 from app import APP
 from components import session
 
@@ -41,8 +41,8 @@ class TestCode(object):
 
     MOUNTING_CHANGES_TABLE_MOUNTING_CHANGE = '<th>Change in Mounting</th>'
 
-    QUOTA_CHANGES_TABLE_OLD_QUOTA = '<th>Old Quota</th>'
-    QUOTA_CHANGES_TABLE_NEW_QUOTA = '<th>New Quota</th>'
+    QUOTA_CHANGES_TABLE_OLD_QUOTA = 'Old Quota</th>'
+    QUOTA_CHANGES_TABLE_NEW_QUOTA = 'New Quota</th>'
     QUOTA_CHANGES_TABLE_QUOTA_CHANGE = '<th>Change in Quota</th>'
 
     DETAIL_CHANGES_TABLE_DETAIL_CHANGE = '<th>Change in Details</th>'
@@ -62,6 +62,8 @@ class TestCode(object):
     DETAIL_CHANGES_TARGET_MODULE_MC_HEADER = '<div class="panel-heading">' +\
                                              '<b>MCs</b></div>'
     DETAIL_CHANGES_TARGET_MODULE_PANEL_BODY = '<div class="panel-body">'
+
+    RESTORE_BUTTON_GLYPHICON = '<span class="glyphicon glyphicon-refresh"></span>'
 
     def __init__(self):
         '''
@@ -175,6 +177,7 @@ class TestCode(object):
         root.mustcontain(self.QUOTA_CHANGES_TABLE_OLD_QUOTA)
         root.mustcontain(self.QUOTA_CHANGES_TABLE_NEW_QUOTA)
         root.mustcontain(self.QUOTA_CHANGES_TABLE_QUOTA_CHANGE)
+        root.mustcontain(self.RESTORE_BUTTON_GLYPHICON)
 
 
     def test_view_target_module_details_change_valid_response(self):
@@ -226,4 +229,8 @@ class TestCode(object):
         root = self.test_app.get(self.URL_INVALID_CHANGE_TYPE)
         assert_equal(root.status, 200)
         root.mustcontain("Modified Mounting of <b>MM1009</b>")
+
         assert '<td>' not in root.body
+
+        #Should not contain the restore button (since table is empty)
+        assert_false(self.RESTORE_BUTTON_GLYPHICON in root)

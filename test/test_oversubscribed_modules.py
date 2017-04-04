@@ -31,8 +31,9 @@ class TestCode(object):
     TABLE_HEADER_MODULE_CODE = '<th>Code</th>'
     TABLE_HEADER_MODULE_NAME = '<th>Name</th>'
     TABLE_HEADER_MODULE_AY_SEM = '<th>AY-Semester</th>'
-    TABLE_HEADER_MODULE_QUOTA = '<th>Class Quota</th>'
+    TABLE_HEADER_MODULE_QUOTA = 'Class Quota</th>'
     TABLE_HEADER_MODULE_DEMAND = '<th>Number of Students Taking Module</th>'
+    TABLE_HEADER_MODULE_OVERSUB_AMOUNT = '<th>Oversubscribed Amount</th>'
 
 
     def __init__(self):
@@ -78,3 +79,4 @@ class TestCode(object):
         root.mustcontain(self.TABLE_HEADER_MODULE_AY_SEM)
         root.mustcontain(self.TABLE_HEADER_MODULE_QUOTA)
         root.mustcontain(self.TABLE_HEADER_MODULE_DEMAND)
+        root.mustcontain(self.TABLE_HEADER_MODULE_OVERSUB_AMOUNT)

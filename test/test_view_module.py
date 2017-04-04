@@ -51,18 +51,17 @@ class TestCode(object):
     CONTENT_INFO_TENTA = "Information for Future AYs (Tentative)"
     CONTENT_TABLE_MOUNT_FLAG = "<th>Mounted</th>"
     CONTENT_TABLE_QUOTA = "<th>Quota</th>"
-    CONTENT_TABLE_STUDENT_DEMAND = "<th>Students Planning to Take</th>"
+    CONTENT_TABLE_STUDENT_DEMAND = "Number of Students Planning to Take</th>"
 
 
     FORM_OVERLAPPING_MODULE = '<form id="view-overlapping-with-module"'+\
                               ' name="view-overlapping-with-module"'+\
                               ' action="/overlappingWithModule" method="get" '+\
                               'class="no-padding-margin">'
-    FORM_OVERLAPPING_MODULE_BUTTON = '<input type="submit" class="dropdown-btn-custom" '+\
-                                     'value="View Modules'+\
-                                     ' Overlapping With This Module" data-toggle="tooltip"'+\
-                                     ' data-placement="right"'+\
-                                     ' title="Show modules that are also taken with this module">'
+    FORM_OVERLAPPING_MODULE_BUTTON = '<button type="button" class="dropdown-btn-custom" '+\
+                                     'data-toggle="tooltip" data-placement="right" '+\
+                                     'title="Show modules that are also taken with this '+\
+                                     'module">View Modules Overlapping With This Module</button>'
     DROPDOWN_BTN = '<button type="button" class="btn btn-primary btn-lg dropdown-toggle '+\
                    'dropdown-btn-custom-main" data-toggle="dropdown" aria-haspopup="true" '+\
                    'aria-expanded="false">More Actions <span class="caret"></span></button>'
@@ -70,6 +69,12 @@ class TestCode(object):
     CONTENT_STAR_BUTTON = '<span class="glyphicon glyphicon-star-empty">'
     CONTENT_UNSTAR_BUTTON = '<span class="glyphicon glyphicon-star">'
 
+    OVERSUB_ORANGE_ICON = '<span class="glyphicon glyphicon-info-sign oversub-warning" ' +\
+                          'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
+                          'title="Oversubscribed!<br>(Demand > Supply)"'
+    OVERSUB_RED_ICON = '<span class="glyphicon glyphicon-info-sign unmounted-warning" ' +\
+                       'data-toggle="tooltip" data-placement="bottom" data-html="true" ' +\
+                       'title="Oversubscribed!<br>(Unmounted but still has demand)"'
 
     def __init__(self):
         self.middleware = None
@@ -236,3 +241,13 @@ class TestCode(object):
         redirected = response.follow()
         assert_equal(redirected.status, 200)
         redirected.mustcontain(self.CONTENT_STAR_BUTTON)
+
+
+    def test_oversubscribed_icons(self):
+        '''
+            Tests the display of the oversubscribed warning icons
+            that appear in Module Overview
+        '''
+        root = self.test_app.get('/viewModule?code=CS2309')
+        root.mustcontain(self.OVERSUB_ORANGE_ICON)
+        root.mustcontain(self.OVERSUB_RED_ICON)
