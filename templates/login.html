@@ -14,9 +14,11 @@ $var title:Login to CSModify
             <h2 class="text-center"><span class="glyphicon glyphicon-user"></span> User Login</h2>
             <br>
             $if loggedIn == True:
-                <h2>You have already logged in.</h2>
-                <br>
-                <a href="/"><button class="btn btn-primary">Enter</button></a>
+                <div class="text-center">
+                    <p class="text-center">You have already logged in.</p>
+                    <br>
+                    <a class="btn btn-primary" href="/">Enter</a>
+                </div>
             $else:
                 <form id="loginForm" action="/login" method="post">
                     <div class="form-group">

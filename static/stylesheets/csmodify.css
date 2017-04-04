@@ -1,9 +1,5 @@
 /* ========== GENERAL CSS RULES ========== */
 
-body {
-	overflow-x: hidden;
-}
-
 tr > th {
 	text-align: center;
 }
@@ -12,6 +8,7 @@ tr > th {
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
+
 /* ========== STYLING FOR NAVBAR ========== */
 span[id*='id-display'] {
     font-size: 18px;
@@ -79,6 +76,7 @@ span[id*='id-display'] {
     line-height: normal;
     padding: 0;
 }
+
 .navbar-btn{
     height: 50px;
 }
@@ -124,6 +122,10 @@ td > a {
 /* ======================= STYLING FOR HOME PAGE ======================= */
 /*************************************************************************/
 
+#welcome-message {
+    vertical-align: text-bottom;
+}
+
 #accordion .panel-heading {
     padding: 0;
 }
@@ -142,6 +144,7 @@ td > a {
     font-family: 'Glyphicons Halflings';
     margin-right :1em;
 }
+
 #accordion .panel-title > a.accordion-toggle.collapsed > b::after, #accordion a.collapsed[data-toggle="collapse"] > b::after  {
     content:"\e114";
 }
@@ -169,6 +172,7 @@ td > a {
 #notfound-error-msg {
     color: red;
 }
+
 
 /*************************************************************************/
 /* ================== STYLING FOR MODULE-LISTING PAGE ================== */
@@ -354,10 +358,12 @@ td > a {
 .aysem-dropdown label {
     font-size: 15px;
 }
+
 .aysem-dropdown input {
     margin-left: 2px;
     padding-top: 5px;
 }
+
 #aysem-dropdown-select {
     width: 280px;
     height: 33px;
@@ -379,7 +385,6 @@ td > a {
     width: 280px;
     display: inline-block;
 }
-
 
 .modal {
     display: none; /* Hidden by default */
@@ -451,6 +456,7 @@ td > a {
 /*************************************************************************/
 /* ================ STYLING FOR MODIFIED-MODULES PAGE ================== */
 /*************************************************************************/
+
 .detail-change-text {
     background-color: #f2f2f2;
 }
@@ -463,6 +469,7 @@ tr[id*='modified-details-child-row'] {
 /*******************************************************************************************/
 /* ==================== STYLING FOR STUDENT ENROLLMENT PAGE ============================== */
 /*******************************************************************************************/
+
 #enrollment-student-year-header {
     margin-bottom: 20px;
 }
@@ -512,6 +519,7 @@ tr[id*='modified-details-child-row'] {
 .enrollment-chart-button-container {
     margin-right: 5px;
 }
+
 
 /********************************************************************************/
 /* ==================== STYLING FOR MODULE-VIEW-AY-SEM PAGE =================== */
@@ -578,9 +586,38 @@ tr[id*='modified-details-child-row'] {
     margin-bottom: 30px;
 }
 
+
+/********************************************************************************/
+/* =============== STYLING FOR EDIT-MODULE-PREREQUISITE INTERFACE ============= */
+/********************************************************************************/
+
+.table#edit-prereq-interface > tbody > tr > td {
+    border: none;
+}
+
+.table#edit-prereq-interface > tbody > tr > td.edit-options {
+    min-width: 150px;
+    width: 150px;
+}
+
+.table#edit-prereq-interface > tbody > tr.unit {
+    background-color: #9bc2e4;
+}
+
+.glyphicon {
+    position: inherit;
+    vertical-align: middle;
+}
+
+.glyphicon-in-text, #back-to-top-btn {
+    position: relative;
+}
+
+
 /*******************************************************************************************/
 /* ==================== STYLING FOR EDIT-ALL-MOUNTINGS-AND-QUOTAS PAGE =================== */
 /*******************************************************************************************/
+
 #select-mod-to-edit-div {
     margin-top: 25px;
     margin-bottom: 40px;
@@ -611,15 +648,16 @@ tr[id*='modified-details-child-row'] {
     margin-left: 5px;
 }
 
+
 /********************************************************************************/
-/* ==================== General =================== */
+/* ================================== General ================================= */
 /********************************************************************************/
+
 .tooltip-inner {
     max-width: 250px;
     /* If max-width does not work, try using width instead */
     width: 250px; 
 }
-
 
 .dropdown-divider {
     height: 1px;

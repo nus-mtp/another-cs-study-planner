@@ -132,6 +132,14 @@ class Outcome(object):
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/moduleTakenPriorToInternship"
 
+            elif action == "migrate-database":
+                if outcome is True:
+                    outcome_message = "The database has been successfully migrated to the new AY."
+                else:
+                    outcome_message = "The database migration could not be performed. " +\
+                                      "Please contact the system administrator."
+                redirect_page = "/"
+
             elif action == "back-to-listing":
                 outcome_message = "The module you want to view has been deleted by another user!"
                 redirect_page = "/"

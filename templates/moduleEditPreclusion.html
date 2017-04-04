@@ -1,0 +1,65 @@
+$def with (moduleCode, preclusions)
+
+$ title_string = 'Edit Preclusions for ' + moduleCode
+$var title:$title_string
+
+$ home = ['#', 'Home']
+$ moduleInformation = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ editModule = ['/editModule?code=' + moduleCode, 'Edit: ' + moduleCode]
+$ editModulePreclusions = ['#', 'Edit Preclusions for: ' + moduleCode]
+
+$var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePreclusions]
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1 class="text-center"><b>Edit Preclusions for <u id="module-code">$moduleCode</u></b></h1>
+			<h2>How to Edit Preclusions:</h2>
+			<p>Click on the <i class="glyphicon glyphicon-plus glyphicon-in-text"></i> button to add a module to the list of preclusions.</p>
+			<p>Click on the <i class="glyphicon glyphicon-remove glyphicon-in-text"></i> button to remove the module from the list of preclusions.</p>
+			<hr>
+		</div>
+		<div class="col-md-12">
+			<form id="preclusions-form" action="#" method="post">
+				<div class="form-group">
+					<table class="table table-hover text-center">
+						<thead>
+							<tr>
+								<td><b>Options</b></td>
+								<td><b>Module</b></td>
+							</tr>
+						</thead>
+						<tbody>
+							$for module in preclusions:
+								<tr>
+									<td>
+										<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Remove this module" onclick="removePreclusionModule(this)"><span class="glyphicon glyphicon-remove"></span></button>
+									</td>
+									<td>
+										<input type="text" value="$module" maxlength="9" size="9">
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</form>
+		</div>
+		<br>
+		<div class="col-md-12 text-center">
+			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Add Module to Preclusions" onclick="addPreclusionModule()"><span class="glyphicon glyphicon-plus"></span></button>
+			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChangesPreclusion()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Revert All Changes" onclick="revertChangesPreclusion()"><span class="glyphicon glyphicon-refresh"></span></button>
+		</div>
+		<table style="display:none">
+			<tr id="preclusion-unit-template">
+				<td>
+					<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Remove this module" onclick="removePreclusionModule(this)"><span class="glyphicon glyphicon-remove"></span></button>
+				</td>
+				<td>
+					<input type="text" value="" maxlength="9" size="9">
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

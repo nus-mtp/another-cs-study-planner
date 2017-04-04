@@ -69,8 +69,7 @@ class TestCode(object):
                                     'class="btn btn-primary"'
 
     HEADER_ALREADY_LOGGED_IN = 'You have already logged in.'
-    BUTTON_ALREADY_LOGGED_IN = '<a href="/"><button class="btn btn-primary">' +\
-                               'Enter</button></a>'
+    BUTTON_ALREADY_LOGGED_IN = '<a class="btn btn-primary" href="/">Enter</a>'
 
     SCRIPT_ACCOUNT_CREATE_SUCCESSFUL = "alert('Your account has been " +\
                                        "created successfully. Please proceed to " +\
@@ -169,7 +168,7 @@ class TestCode(object):
 
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page contains home page's title
-        redirected.mustcontain("Welcome to CSModify")
+        redirected.mustcontain("Welcome to")
 
 
     def test_blank_username_login_submission_response(self):
@@ -252,7 +251,7 @@ class TestCode(object):
 
         # Presence of these elements indicates that the request direction is correct.
         # Checks if page contains home page's title
-        redirected.mustcontain("Welcome to CSModify")
+        redirected.mustcontain("Welcome to")
 
         login_page = redirected.goto(self.URL_DEFAULT_LOGIN, method="get")
         assert_equal(login_page.status, 200)

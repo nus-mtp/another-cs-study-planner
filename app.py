@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
     This module creates an application instance with a configured URL router.
 '''
@@ -25,6 +27,8 @@ URLS = (
     '/flagAsActive/(.*)', 'components.handlers.module_listing.FlagAsActive',
     '/deleteModule', 'components.handlers.delete_module.DeleteMod',
     '/editModule', 'components.handlers.module_edit.EditModuleInfo',
+    '/editModulePrerequisites', 'components.handlers.module_edit_prerequisites.EditModulePrerequisites',
+    '/editModulePreclusions', 'components.handlers.module_edit_preclusions.EditModulePreclusions',
     '/editMounting', 'components.handlers.module_edit.EditMountingInfo',
     '/individualModuleInfo', 'components.handlers.module_view_in_ay_sem.IndividualModule',
     '/oversubscribedModules', 'components.handlers.oversub_mod.OversubModule',
@@ -45,6 +49,7 @@ URLS = (
     '/starModule', 'components.handlers.star_modules.StarModule',
     '/starredModules', 'components.handlers.star_modules.StarredModulesList',
     '/moduleTakenPriorToInternship', 'components.handlers.modules_taken_prior_to_internship.TakePriorInternship',
+    '/migrateDatabase', 'components.handlers.database_migrate.DatabaseMigrate',
     '/editAll', 'components.handlers.edit_all_mountings_and_quotas.EditAll'
 )
 
@@ -84,6 +89,7 @@ def notfound():
         message="The page you specified with the URL does not exist.")))
 
 APP.notfound = notfound
+
 
 if __name__ == '__main__':
     APP.run()

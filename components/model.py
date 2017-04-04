@@ -34,6 +34,10 @@ def is_existing_module(code):
     return database.is_existing_module(code)
 
 
+def get_all_original_module_info():
+    return database.get_all_original_module_info()
+
+
 def get_original_module_info(code):
     return database.get_original_module_info(code)
 
@@ -69,6 +73,10 @@ def remove_original_module_info(code):
 ######################################################################################
 # Functions that query mounting and/or quota information
 ######################################################################################
+
+def get_all_past_mounted_modules():
+    return database.get_all_past_mounted_modules()
+
 
 def get_all_fixed_mounted_modules():
     return database.get_all_fixed_mounted_modules()
@@ -352,12 +360,24 @@ def get_prerequisite_as_string(module_code):
     return helper.get_prerequisite_as_string(module_code)
 
 
+def get_prerequisite_units(module_code):
+    return helper.get_prerequisite_units(module_code)
+
+
 def get_preclusion(module_code):
     return database.get_preclusion(module_code)
 
 
 def get_preclusion_as_string(module_code):
     return helper.get_preclusion_as_string(module_code)
+
+
+def get_preclusion_list(module_code):
+    return helper.get_preclusion_list(module_code)
+
+
+def get_preclusion_units(module_code):
+    return helper.get_preclusion_units(module_code)
 
 
 def convert_list_of_prereqs_to_string(prereq_list):
@@ -384,12 +404,28 @@ def delete_prerequisite(module_code, prereq_code):
     return database.delete_prerequisite(module_code, prereq_code)
 
 
+def delete_all_prerequisite(module_code):
+    return database.delete_all_prerequisite(module_code)
+
+
+def edit_prerequisite(module_code, prereq_units):
+    return database.edit_prerequisite(module_code, prereq_units)
+
+
 def add_preclusion(module_code, preclude_code):
     return database.add_preclusion(module_code, preclude_code)
 
 
-def delete_preclusion(module_code, prereq_code):
-    return database.delete_preclusion(module_code, prereq_code)
+def delete_preclusion(module_code, preclude_code):
+    return database.delete_preclusion(module_code, preclude_code)
+
+
+def delete_all_preclusions(module_code):
+    return database.delete_all_preclusions(module_code)
+
+
+def edit_preclusion(module_code, preclude_units):
+    return database.edit_preclusion(module_code, preclude_units)
 
 
 ######################################################################################
@@ -456,6 +492,18 @@ def validate_input(input_data, input_types, is_future=False,
 
 
 ######################################################################################
+# Functions that are related to the migration of data across mounting databases
+######################################################################################
+
+def migrate_to_next_aysem():
+    return database.migrate_to_next_aysem()
+
+
+def reset_database():
+    return database.reset_database()
+
+
+######################################################################################
 # General helper functions that are used by other functions
 ######################################################################################
 
@@ -465,6 +513,11 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+
+
+def convert_2D_to_1D_list(table):
+    return helper.convert_2D_to_1D_list(table)
+
 
 def replace_empty_quota_with_symbols(mounting_plan):
     return helper.replace_empty_quota_with_symbols(mounting_plan)

@@ -1,4 +1,4 @@
-$def with (moduleInfo)
+$def with (moduleInfo, preclusions, prerequisites)
 
 $ moduleCode = moduleInfo[0]
 $ moduleName = moduleInfo[1]
@@ -34,18 +34,30 @@ $var hierarchy = [home, moduleInformation, viewModule, editModule]
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$moduleDescription</textarea>
+                                <textarea type="text" name="desc" class="form-control" rows="6" id="description" placeholder="description">$:moduleDescription</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="preclusion">Preclusion</label>
-                                <p>-- edit function is not available yet.</p>
-                                <!--textarea class="form-control" id="preclusion" placeholder="e.g. CS1010"></textarea-->
+                                <br>
+                                $if preclusions == "":
+                                    <p>Nil</p>
+                                $else:
+                                    <p>$:preclusions</p>
+                                <a class="btn btn-primary" id="edit-preclusion" href="/editModulePreclusions?code=$moduleCode" target="_blank">Edit Preclusions</a>
+                                <br>
+                                <br>
                             </div>
                             <div class="form-group">
                                 <label for=" prerequisite"> Prerequisite</label>
-                                <p>-- edit function is not available yet.</p>
-                                <!--textarea class="form-control" id=" prerequisite" placeholder="e.g. CS1010"></textarea-->
+                                $if prerequisites is "":
+                                    <p>Nil</p>
+                                $else:
+                                    <p>$:prerequisites</p>
+                                <a class="btn btn-primary" id="edit-prerequisite" href="/editModulePrerequisites?code=$moduleCode" target="_blank">Edit Prerequisites</a>
+                                <br>
+                                <br>
                             </div>
+                            <br>
                             <button type="button" class="btn btn-primary" onclick="if(!confirm('Are you sure you want to cancel editing?')){event.preventDefault();}else{window.location='/viewModule?code=$moduleInfo[0]';}">Cancel</button>
                             <input class="btn btn-primary" type="submit" value="Submit">
                         </form>

@@ -1,0 +1,119 @@
+$def with (currentAY, nextAY, futureAY)
+
+$var title:Migrate Database for New AY
+$ home = ['/', 'Home']
+$ db_migrate = ['#', 'Migrate Database for New AY']
+$var hierarchy = [home, db_migrate]
+
+<script type="text/javascript">
+    $$(document).ready(function() {
+        var proceedBtn = document.getElementById("db-migrate-btn");
+
+        $$("#db-migration-acknowledgement").click(function() {
+            if (this.checked) {
+                proceedBtn.style.display = "";
+            } else {
+                proceedBtn.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="text-center"><b>Migration of Database for New Academic Year</b></h1>
+            <p>Please read the disclaimer below before you proceed with this operation.</p>
+            <hr>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                <h1 class="panel-title text-center"><b>Disclaimer</b></h1>
+            </div>
+            <div class="panel-body">
+                <h3><span class="glyphicon glyphicon-alert"></span> Important Note</h3>
+                <p>Before you proceed with the database migration, please note that this operation is <b>IRREVERSIBLE</b>.</p>
+                <hr>
+                <h3>Changes That Will Be Applied</h3>
+                <p>By performing the database migration, the following changes will be applied (in the following order):</p>
+                <ol>
+                    <li>
+                        The current 'Fixed Module Mountings' will be moved to an archive.
+                        <br>
+                        You will not be able to access the old data directly through the application, but they will remain stored in the database.
+                    </li>
+                    <br>
+                    <li>
+                        Data for the current 'Tentative Module Mountings' will be duplicated only for the next AY.
+                        <br>
+                        This duplicate data will then be set as the new 'Tentative Module Mountings'.
+                    </li>
+                    <br>
+                    <li>The current 'Tentative Module Mountings' will become the new 'Fixed Module Mountings'.
+                        <br>
+                        <b>This means that you can no longer change any data for the previously-tentative mounting plans, once the migration has taken effect.</b>
+                    </li>
+                    <br>
+                    <li>
+                        Any previously-added new modules, when mounted before the migration, will now have their statuses changed from <u>'New'</u> to <u>'Active'</u>.
+                        <br>
+                        <b>This means that these newly-added modules cannot be deleted from the system through the application anymore.</b>
+                    </li>
+                    <br>
+                    <li>All functions present in this application will refer to the <u>new</u> module mountings after the migration.</li>
+                </ol>
+                <hr>
+                <h3>Example</h3>
+                <p>To help you understand how these changes will work, we illustrate these <u>in the current context</u>.</p>
+                <br>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 well">
+                        <p>Currently, <b>$:currentAY</b> has ended. By performing the database migration, the following changes will be applied:</p>
+                        <br>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>AY for Fixed Module Mountings:</td>
+                                    <td><strike>$:currentAY</strike> &#8594; <b>$:nextAY</b></td>
+                                    <td>This data <u>cannot</u> be modified.</td>
+                                </tr>
+                                <tr>
+                                    <td>AY for Tentative Module Mountings:</td>
+                                    <td><strike>$:nextAY</strike> &#8594; <b>$:futureAY</b></td>
+                                    <td>
+                                        This data is duplicated from $:nextAY's data,
+                                        <br>
+                                        and can be modified.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Moved to archive:</td>
+                                    <td>Module Mountings for <b>$:currentAY</b></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <h3><span class="glyphicon glyphicon-alert"></span> Confirmation</h3>
+                <p>Should you still wish to proceed with the database migration, please check the checkbox below.</p>
+                <div class="checkbox">
+                    <label>
+                        <input id="db-migration-acknowledgement" type="checkbox"> I have read the disclaimer, and I wish to proceed with the database migration.
+                    </label>
+                </div>
+            </div>
+        </div>
+        </div>
+        <br>
+        <div class="text-center">
+            <form id="db-migrate-form" action="/migrateDatabase" onsubmit="if(!window.confirm('This operation is IRREVERSIBLE. Proceed anyway?')){event.preventDefault();}" method="post">
+                <a class="btn btn-lg btn-primary" id="db-migrate-go-back" href="/">Go Back</a>
+                <button class="btn btn-lg btn-danger" id="db-migrate-btn" type="submit" style="display: none;">Proceed with Database Migration</button>
+            </form>
+        </div>
+        <br>
+    </div>
+</div>

@@ -229,6 +229,7 @@ class TestCode(object):
         root = self.test_app.get(self.URL_INVALID_CHANGE_TYPE)
         assert_equal(root.status, 200)
         root.mustcontain("Modified Mounting of <b>MM1009</b>")
+        assert '<td>' not in root.body
 
         #Should not contain the restore button (since table is empty)
         assert_false(self.RESTORE_BUTTON_GLYPHICON in root)

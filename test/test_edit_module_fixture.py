@@ -26,6 +26,15 @@ class TestCode(object):
                         ' For <b>BT5110</b></h1>'
     EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
                                  'For <b>AY 17/18 Sem 1</b></h1>'
+    EDIT_MODULE_PRECLUSIONS_BUTTON = '<a class="btn btn-primary" id="edit-preclusion" ' +\
+                                     'href="/editModulePreclusions?code=BT5110" ' +\
+                                     'target="_blank">Edit Preclusions</a>'
+    EDIT_MODULE_PRECLUSIONS_HREF = '/editModulePreclusions?code=BT5110'
+    EDIT_MODULE_PREREQUISITES_BUTTON = '<a class="btn btn-primary" id="edit-prerequisite" ' +\
+                                       'href="/editModulePrerequisites?code=BT5110" ' +\
+                                       'target="_blank">Edit Prerequisites</a>'
+    EDIT_MODULE_PREREQUISITES_HREF = '/editModulePrerequisites?code=BT5110'
+
     TESTING_MODULE = 'BT5110'
     ALERT_MSG = "alert('Error: Failed to edit module.');"
 
@@ -65,6 +74,8 @@ class TestCode(object):
         assert_equal(response.status, 200)
 
         response.mustcontain(self.EDIT_MODULE_TITLE)
+        response.mustcontain(self.EDIT_MODULE_PRECLUSIONS_BUTTON)
+        response.mustcontain(self.EDIT_MODULE_PREREQUISITES_BUTTON)
 
 
     def test_access_module_edit_from_individual_module_view(self):
@@ -108,7 +119,7 @@ class TestCode(object):
             Tests whether user will fail to access edit-module
             page if an invalid URL (invalid AY-Semester) is used.
         '''
-        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)\
+        root = self.test_app.get(self.URL_EDIT_MODULE_SPECIFIC_INVALID_AY_SEM)
 
 
     def test_module_edit_submit_response(self):
@@ -147,7 +158,34 @@ class TestCode(object):
         response = edit_module_mounting_form.submit()
 
         assert_equal(response.status, 200)
-        response.mustcontain(self.ALERT_MSG)
+        response.mustcontain("alert('Error: Failed to edit module.');")
+
+
+    def test_module_edit_goto_edit_preclusions(self):
+        '''
+            Tests whether accessing interface for editing
+            module preclusions is successful.
+        '''
+        root = self.test_app.get(self.URL_MODULE_VIEW)
+        submit_button = root.forms__get()[self.EDIT_MODULE_SPECIFIC_BUTTON_FORM_NAME]
+        response = submit_button.submit()
+
+        button_response = response.click(linkid="edit-preclusion")
+        assert_equal(button_response.status, 200)
+
+
+    def test_module_edit_goto_edit_prerequisites(self):
+        '''
+            Tests whether accessing interface for editing
+            module prerequisites is successful.
+        '''
+        root = self.test_app.get(self.URL_MODULE_VIEW)
+        submit_button = root.forms__get()[self.EDIT_MODULE_SPECIFIC_BUTTON_FORM_NAME]
+        response = submit_button.submit()
+
+        button_response = response.click(linkid="edit-prerequisite")
+        assert_equal(button_response.status, 200)
+
 
     def test_module_edit_submit_invalid_quota_upperbond(self):
         '''
@@ -161,6 +199,7 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
         response.mustcontain(self.ALERT_MSG)
+
 
     def test_module_edit_submit_invalid_name(self):
         '''

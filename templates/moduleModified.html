@@ -458,10 +458,10 @@ $else:
                                         $ isNameModified = module[1][0]
                                         $ isDescModified = module[1][1]
                                         $ isMcModified = module[1][2]
-                                        <tr id="$moduleCode" data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
+                                        <tr>
                                             <td><a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a></td>
                                             <td>$moduleName</td>
-                                            <td data-toggle="collapse" data-target="#modified-details-child-row-$moduleCode">
+                                            <td class="details-control">
                                         $if isNameModified is True:
                                             $ originalName = module[0][1]
                                             $ modifiedName = module[0][4]
@@ -469,7 +469,12 @@ $else:
                                             <br>
                                             <br>
                                         $if isDescModified is True:
-                                            Description Changed: <a href="javascript:void(0)">Click to show</a>
+                                            Description Changed: <a id="$moduleCode" href="javascript:void(0)">Click to show/hide</a>
+                                            $ originalDesc = module[0][2]
+                                            $ modifiedDesc = module[0][5]
+                                            <!-- This 2 'commented-out' p elements are needed for rendering these info in the child rows. -->
+                                            <!--p>$:originalDesc</p-->
+                                            <!--p>$:modifiedDesc</p-->
                                             <br>
                                             <br>
                                         $if isMcModified is True:
@@ -484,26 +489,6 @@ $else:
                                                     <input type="hidden" name="restoreType" value="moduleDetails">
                                                     <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Restore Details"><span class="glyphicon glyphicon-refresh"></span></button>
                                                 </form>
-                                            </td>
-                                        </tr>
-                                        $if isDescModified is True:
-                                            <tr class="collapse" id="modified-details-child-row-$moduleCode">
-                                            $ originalDesc = module[0][2]
-                                            $ modifiedDesc = module[0][5]
-                                            <td colspan=4>
-                                                <div class="row">
-                                                    <div class="col-md-5 text-justify">
-                                                        <b>From</b><br>
-                                                        <i>"$originalDesc"</i>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <h3>&#8594;</h3>
-                                                    </div>
-                                                    <div class="col-md-5 text-justify">
-                                                        <b>To</b><br>
-                                                        <i>"$modifiedDesc"</i><br><br>
-                                                    </div>
-                                                </div>
                                             </td>
                                         </tr>
                             </tbody>

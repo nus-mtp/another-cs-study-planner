@@ -3,7 +3,7 @@
     Contains functions that process and/or manipulate data that are OUTSIDE the database
 '''
 
-## Prevent model.py from being imported twice
+## Prevent database.py from being imported twice
 from sys import modules
 try:
     from components import database
@@ -217,28 +217,96 @@ def get_prerequisite_as_string(module_code):
     '''
         Returns a string of pre-requisites of specified module_code
     '''
-    prerequisites = database.get_prerequisite(module_code)
-    prereq_list = convert_to_list(prerequisites)
-
-    # sort list of lists based on index (which is the first elem of each row)
-    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+    prereq_list = get_prerequisite_sorted_list(module_code)
 
     prereq_string = convert_list_of_prereqs_to_string(prereq_list)
 
     return prereq_string
 
 
-def get_preclusion_as_string(module_code):
+def get_prerequisite_units(module_code):
     '''
-        Returns a string of preclusions of specified module_code
+        Retrieves all the prerequisite of given module_code as a list
+        of lists. The list will be a list of units having the "and" relationship.
+        Each unit is a list of modules having the "or" relationship.
+
+        Example: ("CS1010" or "CS1231") and "MA1100" will return
+        [["CS1010", "CS1231"], ["MA1100"]]
+    '''
+    prereq_list = get_prerequisite_sorted_list(module_code)
+
+    if len(prereq_list) == LENGTH_EMPTY:
+        return list()
+    else:
+        final_list = list()
+        first_unit = prereq_list[INDEX_FIRST_ELEM]
+        previous_index = first_unit[INDEX_FIRST_ELEM]
+        module_to_add = first_unit[INDEX_SECOND_ELEM]
+
+        current_list_of_module = [module_to_add]
+
+        for index in range(INDEX_SECOND_ELEM, len(prereq_list)):
+            current_index = prereq_list[index][INDEX_FIRST_ELEM]
+            current_module = prereq_list[index][INDEX_SECOND_ELEM]
+
+            if current_index == previous_index:
+                current_list_of_module.append(current_module)
+            else:
+                final_list.append(current_list_of_module)
+                previous_index = current_index
+                current_list_of_module = [current_module]
+
+        final_list.append(current_list_of_module)
+
+        return final_list
+
+
+def get_prerequisite_sorted_list(module_code):
+    '''
+        Get the prerequisites of the given module_code as a list of pairs,
+        where each pair is (index, prereq module) from the database, the list is
+        sorted in ascending order for the index values.
+    '''
+    prerequisites = database.get_prerequisite(module_code)
+
+    prereq_list = convert_to_list(prerequisites)
+
+    # sort list of lists based on index (which is the first elem of each row)
+    prereq_list.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+
+    return prereq_list
+
+
+def get_preclusion_list(module_code):
+    '''
+        Get the preclusions of the given module_code as a list of modules.
     '''
     preclusions = database.get_preclusion(module_code)
     preclude_list = convert_to_list(preclusions)
     processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
 
+    return processed_list
+
+
+def get_preclusion_as_string(module_code):
+    '''
+        Returns a string of preclusions of specified module_code
+    '''
+    processed_list = get_preclusion_list(module_code)
+
     preclude_string = ", ".join(processed_list)
 
     return preclude_string
+
+
+def get_preclusion_units(module_code):
+    '''
+        Retrieves all the preclusions of given module_code as a list
+        of modules.
+    '''
+    preclusion_list = get_preclusion_list(module_code)
+
+    return preclusion_list
 
 
 def convert_list_of_prereqs_to_string(prereq_list):
@@ -508,6 +576,21 @@ def replace_null_with_dash(table):
                 row[col] = '-'
 
     return table
+
+
+def convert_2D_to_1D_list(table):
+    '''
+        Converts a list of lists into a list, where
+        all elements in the 2D table is converted into
+        a 1D list.
+    '''
+    new_list = list()
+
+    for row in table:
+        for item in row:
+            new_list.append(item)
+
+    return new_list
 
 
 def replace_empty_quota_with_symbols(mounting_plan):

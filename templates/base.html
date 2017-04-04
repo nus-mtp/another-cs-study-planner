@@ -43,7 +43,7 @@ $def with (page)
 			$:page
 
 		$else:
-	        <a class="btn btn-info back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up"></span></a>
+	        <a class="btn btn-info back-to-top-btn page-scroll" href="#page-top"><span class="glyphicon glyphicon-chevron-up" id="back-to-top-btn"></span></a>
 	        <div id="page-top"></div>
 
 			<nav class="navbar navbar-default">
@@ -61,7 +61,7 @@ $def with (page)
 					</form>
 					<div class="navbar-form navbar-right">
 						<span class="well" id="id-well">
-							<span id="id-display-icon" class="glyphicon glyphicon-user"></span><span id="id-display">&nbsp;&nbsp;Logged in as: $web.cookies().get('user').upper()</span>
+							<span id="id-display-icon" class="glyphicon glyphicon-user"></span><span id="id-display">&nbsp;&nbsp;Logged in as: $web.cookies().get('user')</span>
 						</span>
 						<button class="btn btn-lg btn-danger" onclick="confirmLogout()">
 							<span class="glyphicon glyphicon-log-out"></span> Logout

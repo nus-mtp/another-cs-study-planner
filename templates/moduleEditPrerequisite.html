@@ -1,0 +1,82 @@
+$def with (moduleCode, prerequisites)
+
+$ title_string = 'Edit Prerequisites for ' + moduleCode
+$var title:$title_string
+
+$ home = ['#', 'Home']
+$ moduleInformation = ['/modules', 'Module Information']
+$ viewModule = ['/viewModule?code=' + moduleCode, moduleCode]
+$ editModule = ['/editModule?code=' + moduleCode, 'Edit: ' + moduleCode]
+$ editModulePrereqs = ['#', 'Edit Prerequisites for: ' + moduleCode]
+
+$var hierarchy = [home, moduleInformation, viewModule, editModule, editModulePrereqs]
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1 class="text-center"><b>Edit Prerequisites for <u id="module-code">$moduleCode</u></b></h1>
+			<h2>How to Edit Prerequisites:</h2>
+			<p>A module prerequisite specification is in the form (<b>R<sub>1</sub></b>) and (<b>R<sub>2</sub></b>) and (<b>R<sub>3</sub></b>) and ...</p>
+			<p>Each <u>row</u> represents a prerequisite unit <b>R<sub>i</sub></b> in the form of (<b>Module_A</b> or <b>Module_B</b> or <b>Module_C</b> or ...)</p>
+			<p>You may change the modules in the prerequisite units by changing the module code in the respective prerequisite units.</p>
+			<hr>
+		</div>
+		<div class="col-md-12">
+			<form id="prerequisites-form" action="#" method="post">
+				<div class="form-group">
+					<div class="table-responsive">
+						<table class="table table-hover text-center" id="edit-prereq-interface">
+							<thead>
+							</thead>
+							<tbody>
+								$for i in range(len(prerequisites)):
+									<tr class="unit">
+										<td class="edit-options">
+											<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Module to this unit" onclick="addModule(this)"><span class="glyphicon glyphicon-plus"></span></button>
+											<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Delete this unit" onclick="deletePrereqUnit(this)"  style="display: none;"><span class="glyphicon glyphicon-remove"></span></button>
+										</td>
+									$ modules_in_unit = prerequisites[i]
+									$for j in range(len(modules_in_unit)):
+										<td class="module">
+											<input type="text" value="$modules_in_unit[j]" maxlength="9" size="9">
+											<button type="button" class="btn btn-primary" id="remove-module" data-toggle="tooltip" data-placement="bottom" title="Remove Module from this unit" onclick="removeModule(this)"><span class="glyphicon glyphicon-minus"></span></button>
+										</td>
+										$if j == (len(modules_in_unit) - 1):
+											<td style="display: none;">or</td>
+										$else:
+											<td>or</td>
+									</tr>
+									<tr>
+									$if i == (len(prerequisites) - 1):
+										<td colspan="12" style="display: none;">and</td>
+									$else:
+										<td colspan="12">and</td>
+									</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</form>
+		</div>
+		<br>
+		<div class="col-md-12 text-center">
+			<button class="btn btn-lg btn-primary" id="add-prereq-unit" data-toggle="tooltip" data-placement="top" title="Add Prerequisite Unit" onclick="addPrereqUnit()"><span class="glyphicon glyphicon-plus"></span></button>
+			<button class="btn btn-lg btn-primary" id="save-changes" data-toggle="tooltip" data-placement="top" title="Save Changes" onclick="saveChangesPrerequisite()"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+			<button class="btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="Revert All Changes" onclick="revertChangesPrerequisite()"><span class="glyphicon glyphicon-refresh"></span></button>
+		</div>
+		<table style="display:none">
+			<tr id="prereq-unit-template" class="unit">
+				<td class="edit-options">
+					<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Module to this unit" onclick="addModule(this)"><span class="glyphicon glyphicon-plus"></span></button>
+					<button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Delete this unit" onclick="deletePrereqUnit(this)"><span class="glyphicon glyphicon-remove"></span></button>
+				</td>
+			</tr>
+			<tr>
+				<td id="module-template" class="module">
+					<input type="text" value="" maxlength="9" size="9">
+					<button type="button" class="btn btn-primary" id="remove-module" data-toggle="tooltip" data-placement="bottom" title="Remove Module from this unit" onclick="removeModule(this)"><span class="glyphicon glyphicon-minus"></span></button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
