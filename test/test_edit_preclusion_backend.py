@@ -103,6 +103,7 @@ class TestCode(object):
 
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(preclude_info is not None)
+            assert_equal(len(preclude_info), 1)
             assert_equal(self.test_preclude_code, preclude_info[0][0])
 
             model.delete_all_preclusions(self.test_module_code)
@@ -126,6 +127,7 @@ class TestCode(object):
 
             preclude_info = model.get_preclusion(self.test_module_code)
             assert_true(preclude_info is not None)
+            assert_equal(len(preclude_info), 1)
             assert_equal(self.test_preclude2_code, preclude_info[0][0])
 
             model.delete_all_preclusions(self.test_module_code)
@@ -186,6 +188,7 @@ class TestCode(object):
             preclude_info = model.get_preclusion(self.test_module_code)
 
             assert_true(preclude_info is not None)
+            assert_equal(len(preclude_info), 3)
             assert_equal(self.test_preclude_code, preclude_info[0][0])
             assert_equal(self.test_preclude2_code, preclude_info[1][0])
             assert_equal(self.test_preclude3_code, preclude_info[2][0])
@@ -213,6 +216,7 @@ class TestCode(object):
             preclude_info = model.get_preclusion(self.test_module_code)
 
             assert_true(preclude_info is not None)
+            assert_equal(len(preclude_info), 3)
             assert_equal(self.test_preclude_code, preclude_info[0][0])
             assert_equal(self.test_preclude2_code, preclude_info[1][0])
             assert_equal(self.test_preclude3_code, preclude_info[2][0])
@@ -238,6 +242,7 @@ class TestCode(object):
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_preclude2_code, self.ERROR_MSG_MODULE_DUPLICATED])
 
@@ -266,6 +271,7 @@ class TestCode(object):
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
@@ -289,6 +295,7 @@ class TestCode(object):
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_invalid_module_code, self.ERROR_MSG_MODULE_DOESNT_EXIST])
 
@@ -319,6 +326,7 @@ class TestCode(object):
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 1)
             assert_equal(error_list[0],
                          [self.test_preclude_code, self.ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ])
 
@@ -347,6 +355,7 @@ class TestCode(object):
             outcome = model.edit_preclusion(self.test_module_code, preclude_units_to_change_to)
             assert_false(outcome[0])
             error_list = outcome[1]
+            assert_equal(len(error_list), 2)
             assert_equal(error_list[0],
                          [self.test_module_code, self.ERROR_MSG_MODULE_CANNOT_BE_ITSELF])
             assert_equal(error_list[1],
