@@ -468,7 +468,7 @@ function highlightErrorFieldsPrerequisite(data) {
             }
 
             for (k = 0; k < modulesWithErrors.length; k++) {
-                if (modulesWithErrors[k][0] == moduleCode) {
+                if (modulesWithErrors[k][0].toUpperCase() == moduleCode.toUpperCase()) {
                     var messageElement = document.createElement("p");
                     messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
                     targetColumn.appendChild(messageElement);
@@ -495,7 +495,7 @@ function highlightErrorFieldsPreclusion(data) {
         var moduleCode = moduleCodeColumn.children[0].value;
 
         for (k = 0; k < data.length; k++) {
-            if (modulesWithErrors[k][0] == moduleCode) {
+            if (modulesWithErrors[k][0].toUpperCase() == moduleCode.toUpperCase()) {
                 var messageElement = document.createElement("p");
                 messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
                 moduleCodeColumn.appendChild(messageElement);
