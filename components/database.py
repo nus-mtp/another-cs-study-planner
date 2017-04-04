@@ -1474,6 +1474,8 @@ def migrate_to_next_aysem():
         5) All modules in fixed mounting will have their statuses updated to "Active"
            from "New"
         6) Increment all students' year of study by 1.
+
+        Returns true if the operation is successful, returns false otherwise.
     '''
     migrate_fixed_to_past_mounting()
     migrate_one_ay_from_tentative_to_fixed()
@@ -1482,7 +1484,12 @@ def migrate_to_next_aysem():
     update_active_modules_after_migration()
     increment_student_year_by_one()
 
-    CONNECTION.commit()
+    try:
+        CONNECTION.commit()
+    except psycopg2.Error:
+        CONNECTION.rollback()
+        return False
+    return True
 
 
 def migrate_fixed_to_past_mounting():
