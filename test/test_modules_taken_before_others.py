@@ -25,24 +25,30 @@ class TestCode(object):
                     ' to Other Modules</b></h1>'
     CONTENT_DESCRIPTION = '<p class="text-center">Shows all pairs of'+\
                           ' modules where module A is taken prior to module B</p>'
-    CONTENT_FORM = '<form action="/moduleTakenPriorToOthers" id="module-filter-form" method="GET">'
-    CONTENT_FORM_TITLE = '<p>Tell me the number of students who have taken</p>'
-    CONTENT_FORM_MODULEA = '<input type="text" name="moduleA", placeholder="Enter module'+\
-                           ' code here" pattern="[a-zA-Z0-9\s]+" '+\
-                           'oninvalid="this.setCustomValidity(\'Module'+\
+    CONTENT_FORM = '<form class="form-group" id="module-filter-form" '+\
+                   'action="/moduleTakenPriorToOthers" method="GET">'
+    CONTENT_FORM_TITLE = '<p><b>Tell me the number of students who have taken</b></p>'
+    CONTENT_FORM_MODULEA = '<input class="form-control prior-to-form-module-A"'+\
+                           ' data-provide="typeahead" autocomplete="off" type="text"'+\
+                           ' name="moduleA", placeholder="Enter module code here"'+\
+                           ' pattern="[a-zA-Z0-9\s]+"oninvalid="this.setCustomValidity'+\
+                           '(\'Module code must be alphanumeric and not empty\')"'+\
+                           ' oninput="setCustomValidity(\'\')" required>'
+    CONTENT_FORM_MODULEB = '<input class="form-control prior-to-form-module-B"'+\
+                           ' data-provide="typeahead" autocomplete="off" type="text" '+\
+                           'name="moduleB", placeholder="Enter module code here" '+\
+                           'pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity(\'Module'+\
                            ' code must be alphanumeric and not empty\')" '+\
                            'oninput="setCustomValidity(\'\')" required>'
-    CONTENT_FORM_MODULEB = '<input style="display:inline-block;" type="text" name="moduleB", '+\
-                           'placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" '+\
-                           'oninvalid="this.setCustomValidity(\'Module code must be alphanumeric '+\
-                           'and not empty\')" oninput="setCustomValidity(\'\')" required>'
-    CONTENT_FORM_SELECT = '<select style="display:inline-block;" name="aysem" required>'
-    CONTENT_TABLE = '<table class="table display dataTable table-bordered table-hover'+\
-                    ' text-center" id="modules-taken-prior-table">'
-    CONTENT_BUTTON = '<input class="btn btn-primary" style="margin-top: '+\
-                     '10px;" type="submit" value="Go">'
+    CONTENT_FORM_SELECT_AY = '<select class="form-control prior-to-form-module-B"'+\
+                          ' name="aysem" required>'
+    CONTENT_FORM_SUBMIT_BUTTON = '<input class="btn btn-primary" style="margin-top:'+\
+                                 ' 10px;" type="submit" value="Submit">'
 
     FORM_NAME = 'module-filter-form'
+    FILTER_FORM_NAME = 'ay-form'
+    FILTER_TABLE = '<table class="table display dataTable table-bordered '+\
+                   'table-hover text-center" id="modules-taken-prior-table">'
     REDIRECT_PAGE = '<h3 style="margin-bottom: 20px;">Students who took'+\
                     ' <b><a href="/viewModule?code=CS1010" target="_blank"'+\
                     ' data-toggle="tooltip" title="View general info for '+\
@@ -86,9 +92,8 @@ class TestCode(object):
         root.mustcontain(self.CONTENT_FORM_TITLE)
         root.mustcontain(self.CONTENT_FORM_MODULEA)
         root.mustcontain(self.CONTENT_FORM_MODULEB)
-        root.mustcontain(self.CONTENT_FORM_SELECT)
-        root.mustcontain(self.CONTENT_TABLE)
-        root.mustcontain(self.CONTENT_BUTTON)
+        root.mustcontain(self.CONTENT_FORM_SELECT_AY)
+        root.mustcontain(self.CONTENT_FORM_SUBMIT_BUTTON)
 
     def test_modules_taken_before_others_submit(self):
         '''
@@ -106,6 +111,20 @@ class TestCode(object):
         #check response is 200 OK
         assert_equal(response.status, 200)
         response.mustcontain(self.REDIRECT_PAGE)
+
+    def test_modules_taken_before_other_ay_submit(self):
+        '''
+            test that when the submit button for ay filter
+            is pressed, the table is shown
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
+
+        form = root.forms__get()[self.FILTER_FORM_NAME]
+        form.__setitem__("aysem", "AY 16/17 Sem 2")
+        response = form.submit()
+        assert_equal(response.status, 200)
+        response.mustcontain()
+
 
     @raises(Exception)
     def test_modules_taken_before_others_submit_invalid(self):

@@ -17,9 +17,6 @@ $if pageType == "all_pairs":
 		<h1 class="text-center"><b>Modules Taken Prior to Other Modules</b></h1>
 		<p class="text-center">Shows all pairs of modules where module A is taken prior to module B</p>
 		<br>
-
-		<!--<div class="modules-taken-prior-search-form">
-		</div>-->
         <div class="row pagination-centered text-center">
             <form id="ay-form" class="form-inline aysem-dropdown" action="/moduleTakenPriorToOthers" method="get">
                 <div class="form-group">
@@ -45,13 +42,11 @@ $if pageType == "all_pairs":
 		<div id="myModal" class="modal">
 			<div class="modal-content text-center">
 				<span class="closeModal">&times;</span>
-				<form class="form-group" action="/moduleTakenPriorToOthers" method="GET">
+				<form class="form-group" id="module-filter-form" action="/moduleTakenPriorToOthers" method="GET">
 					<p><b>Tell me the number of students who have taken</b></p>
-					<input class="form-control prior-to-form-module-A" data-provide="typeahead" autocomplete="off" type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"
-					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<input class="form-control prior-to-form-module-A" data-provide="typeahead" autocomplete="off" type="text" name="moduleA", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+"oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 					<p><b>before taking</b></p>
-					<input class="form-control prior-to-form-module-B" data-provide="typeahead" autocomplete="off" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" 
-					oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
+					<input class="form-control prior-to-form-module-B" data-provide="typeahead" autocomplete="off" type="text" name="moduleB", placeholder="Enter module code here" pattern="[a-zA-Z0-9\s]+" oninvalid="this.setCustomValidity('Module code must be alphanumeric and not empty')" oninput="setCustomValidity('')" required>
 					<p style="display:inline-block;"><b>&nbsp;in&nbsp;</b></p>
 					<select class="form-control prior-to-form-module-B" name="aysem" required>
 					$for aysem in allAySems:
