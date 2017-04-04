@@ -123,6 +123,8 @@ td > a {
 
 #welcome-message {
     vertical-align: text-bottom;
+    width: 350px;
+    height: 150px;
 }
 
 #accordion .panel-heading {
