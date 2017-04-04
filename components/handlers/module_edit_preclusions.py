@@ -22,7 +22,7 @@ class EditModulePreclusions(object):
             raise web.seeother('/login')
         else:
             input_data = model.validate_input(web.input(), ["code"])
-            module_code = input_data.code
+            module_code = input_data.code.upper()
 
             preclusions = model.get_preclusion_units(module_code)
             return RENDER.moduleEditPreclusion(module_code, preclusions)
@@ -38,7 +38,7 @@ class EditModulePreclusions(object):
         input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
         if input_data:
-            module_code = input_data.code
+            module_code = input_data.code.upper()
             preclusions = json.loads(input_data.preclusions)
             response = model.edit_preclusion(module_code, preclusions)
 
