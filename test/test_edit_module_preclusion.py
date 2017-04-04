@@ -41,6 +41,15 @@ class TestCode(object):
                                             'onclick="revertChangesPreclusion()">' +\
                                             '<span class="glyphicon glyphicon-refresh">' +\
                                             '</span></button>'
+    EDIT_MODULE_PRECLUSIONS_BACK_BUTTON = '<a class="btn btn-lg btn-primary" ' +\
+                                          'id="preclusion-back-button" ' +\
+                                          'href="/editModule?code=BT5110" ' +\
+                                          'data-toggle="tooltip" data-placement="top" ' +\
+                                          'title="Go Back to Editing BT5110">' +\
+                                          '<span class="glyphicon glyphicon-arrow-left">' +\
+                                          '</span></a>'
+
+    EDIT_MODULE_CORRECT_REDIRECT = 'Edit <b>General Information</b> For <b>BT5110</b>'
 
 
     def __init__(self):
@@ -64,10 +73,10 @@ class TestCode(object):
         session.tear_down(self.test_app)
 
 
-    def test_module_prereq_edit_direct_access_correct_response(self):
+    def test_module_preclusion_edit_direct_access_correct_response(self):
         '''
             Tests whether user can access a page for showing
-            edit-module-prerequisites page directly through a valid URL.
+            edit-module-preclusion page directly through a valid URL.
         '''
         root = self.test_app.get(self.URL_EDIT_MODULE_PRECLUSION_SPECIFIC_VALID)
         assert_equal(root.status, 200)
@@ -78,12 +87,24 @@ class TestCode(object):
         root.mustcontain(self.EDIT_MODULE_PRECLUSIONS_ADD_UNIT_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PRECLUSIONS_SAVE_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PRECLUSIONS_REVERT_BUTTON)
+        root.mustcontain(self.EDIT_MODULE_PRECLUSIONS_BACK_BUTTON)
+
+
+    def test_module_preclusion_edit_back_button(self):
+        '''
+            Tests if the back button for edit-module-preclusion page works.
+        '''
+        root = self.test_app.get(self.URL_EDIT_MODULE_PRECLUSION_SPECIFIC_VALID)
+        response = root.click(linkid="preclusion-back-button")
+
+        assert_equal(response.status, 200)
+        response.mustcontain(self.EDIT_MODULE_CORRECT_REDIRECT)
 
 
     @raises(Exception)
-    def test_module_prereq_edit_direct_access_invalid_code_url(self):
+    def test_module_preclusion_edit_direct_access_invalid_code_url(self):
         '''
-            Tests whether user will fail to access edit-module-prerequisites
+            Tests whether user will fail to access edit-module-preclusion
             page if an invalid URL (invalid module code) is used.
         '''
         self.test_app.get(self.URL_EDIT_MODULE_PRECLUSION_SPECIFIC_INVALID_CODE)

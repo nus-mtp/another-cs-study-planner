@@ -124,6 +124,8 @@ td > a {
 
 #welcome-message {
     vertical-align: text-bottom;
+    width: 350px;
+    height: 150px;
 }
 
 #accordion .panel-heading {
@@ -669,7 +671,7 @@ tr[id*='modified-details-child-row'] {
 #magnifying-glass {
     margin-left: 35px;
     font-size: 17px;
-    margin-top: 10px;
+    position: relative;
 }
 
 #find-module {

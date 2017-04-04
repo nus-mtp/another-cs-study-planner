@@ -24,7 +24,9 @@ function openSidebar() {
 
 /* Set the width of the side navigation to 0 */
 function closeSidebar() {
-    document.getElementById("sidebar").style.width = "0";
+    if (document.getElementById("sidebar") != null) {
+        document.getElementById("sidebar").style.width = "0";
+    }
 }
 
 $(function () {
@@ -104,11 +106,21 @@ $(function() {
  * FUNCTIONS FOR CUSTOM VALIDATION MESSAGES FOR LOGIN
  * AND REGISTRATION FORMS
  */
-function check(input) {
-    if (input.validity.patternMismatch) {
+function checkUsername(input) {
+    if (input.validity.patternMismatch == true) {
         input.setCustomValidity("User ID should be alphanumeric and within 9 characters.");
-    } else if (input.validity.valueMissing) {
+    } else if (input.validity.valueMissing == true) {
         input.setCustomValidity("Please fill in your User ID.");
+    } else {
+        input.setCustomValidity("");
+    }
+}
+
+function checkPassword(input) {
+    if (input.validity.valueMissing == true) {
+        input.setCustomValidity("Please enter a password.");
+    } else {
+        input.setCustomValidity("");
     }
 }
 
@@ -285,15 +297,18 @@ function saveChangesPrerequisite() {
             }
         }).success(function(data) {
             var parsedData = JSON.parse(data);
-            if (parsedData[0] == true) {
+            if (parsedData[0][0] == true) {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
+                    var new_prerequisites = parsedData[1];
+                    new_prerequisites = '<p id="prereq-display">' + new_prerequisites + ' <b>(saved)</b></p>';
+                    window.opener.document.getElementById("prereq-display").innerHTML = new_prerequisites;
                     window.close();
                 } else {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                highlightErrorFieldsPreclusion(parsedData[1]);
+                highlightErrorFieldsPrerequisite(parsedData[0][1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -317,7 +332,7 @@ function convertToDataPrerequisite() {
             var moduleCode = columns[j].children[0].value;
 
             if (moduleCode != "") {
-                modulesInUnit.push(columns[j].children[0].value);
+                modulesInUnit.push(columns[j].children[0].value.toUpperCase());
             }
         }
 
@@ -386,15 +401,18 @@ function saveChangesPreclusion() {
             }
         }).success(function(data) {
             var parsedData = JSON.parse(data);
-            if (parsedData[0] == true) {
+            if (parsedData[0][0] == true) {
                 window.alert("Your changes have been saved.");
                 if (window.opener != null) {
+                    var new_preclusions = parsedData[1];
+                    new_preclusions = '<p id="preclusion-display">' + new_preclusions + ' <b>(saved)</b></p>';
+                    window.opener.document.getElementById("preclusion-display").innerHTML = new_preclusions;
                     window.close();
                 } else {
                     window.location.href = ("/editModule?code=" + moduleCode);
                 }
             } else {
-                highlightErrorFieldsPreclusion(parsedData[1]);
+                highlightErrorFieldsPreclusion(parsedData[0][1]);
             }
         }).fail(function() {
             window.alert("There was an error processing your request.");
@@ -412,7 +430,7 @@ function convertToDataPreclusion() {
         var moduleInput = rows[i].children[1].children[0];
 
         if (moduleInput.value != "") {
-            preclusions.push(moduleInput.value);
+            preclusions.push(moduleInput.value.toUpperCase());
         }
     }
 
@@ -428,10 +446,11 @@ function revertChangesPreclusion() {
 }
 
 function highlightErrorFieldsPrerequisite(data) {
-    var message_start = "<p><b>Message for ";
-    var message_end = "</b></p>";
+    var modulesWithErrors = data;
 
     var rows = document.getElementsByTagName("tbody")[0].children;
+    var message_start = "<p><b>";
+    var message_end = "</b></p>";
 
     for (i = 0; i < rows.length; i+=2) {
         // Reads the prerequisite modules for each unit
@@ -447,11 +466,14 @@ function highlightErrorFieldsPrerequisite(data) {
                 targetColumn.removeChild(targetColumn.lastChild);
             }
 
-            if (moduleCode != "") {
-                var messageElement = document.createElement("p");
-                messageElement.innerHTML = (message_start + moduleCode + message_end);
-                targetColumn.appendChild(messageElement);
-                targetColumn.style.backgroundColor = "#d9534f";
+            for (k = 0; k < modulesWithErrors.length; k++) {
+                if (modulesWithErrors[k][0].toUpperCase() == moduleCode.toUpperCase()) {
+                    var messageElement = document.createElement("p");
+                    messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
+                    targetColumn.appendChild(messageElement);
+                    targetColumn.style.backgroundColor = "#d9534f";
+                    break;
+                }
             }
         }
     }
@@ -472,7 +494,7 @@ function highlightErrorFieldsPreclusion(data) {
         var moduleCode = moduleCodeColumn.children[0].value;
 
         for (k = 0; k < data.length; k++) {
-            if (modulesWithErrors[k][0] == moduleCode) {
+            if (modulesWithErrors[k][0].toUpperCase() == moduleCode.toUpperCase()) {
                 var messageElement = document.createElement("p");
                 messageElement.innerHTML = (message_start + modulesWithErrors[k][1] + message_end);
                 moduleCodeColumn.appendChild(messageElement);

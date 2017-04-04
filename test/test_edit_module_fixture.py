@@ -35,6 +35,9 @@ class TestCode(object):
                                        'target="_blank">Edit Prerequisites</a>'
     EDIT_MODULE_PREREQUISITES_HREF = '/editModulePrerequisites?code=BT5110'
 
+    EDIT_PREREQ_CORRECT_DIRECT = 'Edit Prerequisites'
+    EDIT_PRECLUSION_CORRECT_DIRECT = 'Edit Preclusions'
+
     TESTING_MODULE = 'BT5110'
     ALERT_MSG = "alert('Error: Failed to edit module.');"
 
@@ -172,6 +175,7 @@ class TestCode(object):
 
         button_response = response.click(linkid="edit-preclusion")
         assert_equal(button_response.status, 200)
+        button_response.mustcontain(self.EDIT_PRECLUSION_CORRECT_DIRECT)
 
 
     def test_module_edit_goto_edit_prerequisites(self):
@@ -185,9 +189,10 @@ class TestCode(object):
 
         button_response = response.click(linkid="edit-prerequisite")
         assert_equal(button_response.status, 200)
+        button_response.mustcontain(self.EDIT_PREREQ_CORRECT_DIRECT)
 
 
-    def test_module_edit_submit_invalid_quota_upperbond(self):
+    def test_module_edit_submit_invalid_quota_upperbound(self):
         '''
             Tests whether submitting the edit-module form with invalid
             inputs will fail.

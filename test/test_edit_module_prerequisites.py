@@ -31,6 +31,13 @@ class TestCode(object):
                                                 'onclick="addPrereqUnit()"><span ' +\
                                                 'class="glyphicon glyphicon-plus">' +\
                                                 '</span></button>'
+    EDIT_MODULE_PREREQUISITES_DELETE_UNIT_BUTTON = '<button type="button" class="btn btn-primary" ' +\
+                                                   'data-toggle="tooltip" data-placement="top" ' +\
+                                                   'title="Delete this unit" ' +\
+                                                   'onclick="deletePrereqUnit(this)" ' +\
+                                                   'style="display: none;">' +\
+                                                   '<span class="glyphicon ' +\
+                                                   'glyphicon-remove"></span></button>'
     EDIT_MODULE_PREREQUISITES_SAVE_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                             'id="save-changes" ' +\
                                             'data-toggle="tooltip" data-placement="top" ' +\
@@ -44,6 +51,15 @@ class TestCode(object):
                                               'onclick="revertChangesPrerequisite()">' +\
                                               '<span class="glyphicon glyphicon-refresh">' +\
                                               '</span></button>'
+    EDIT_MODULE_PREREQUISITES_BACK_BUTTON = '<a class="btn btn-lg btn-primary" ' +\
+                                            'id="prerequisite-back-button" ' +\
+                                            'href="/editModule?code=BT5110" ' +\
+                                            'data-toggle="tooltip" data-placement="top" ' +\
+                                            'title="Go Back to Editing BT5110">' +\
+                                            '<span class="glyphicon glyphicon-arrow-left">' +\
+                                            '</span></a>'
+
+    EDIT_MODULE_CORRECT_REDIRECT = 'Edit <b>General Information</b> For <b>BT5110</b>'
 
 
     def __init__(self):
@@ -79,8 +95,21 @@ class TestCode(object):
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_FORM)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_TABLE_INTERFACE)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_ADD_UNIT_BUTTON)
+        root.mustcontain(self.EDIT_MODULE_PREREQUISITES_DELETE_UNIT_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_SAVE_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_REVERT_BUTTON)
+        root.mustcontain(self.EDIT_MODULE_PREREQUISITES_BACK_BUTTON)
+
+
+    def test_module_prereq_edit_back_button(self):
+        '''
+            Tests if the back button for edit-module-prerequisites page works.
+        '''
+        root = self.test_app.get(self.URL_EDIT_MODULE_PREREQ_SPECIFIC_VALID)
+        response = root.click(linkid="prerequisite-back-button")
+
+        assert_equal(response.status, 200)
+        response.mustcontain(self.EDIT_MODULE_CORRECT_REDIRECT)
 
 
     @raises(Exception)

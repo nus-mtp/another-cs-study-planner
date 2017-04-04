@@ -25,14 +25,14 @@ $var title:Login to CSModify
                         <label for="id">User ID</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" id="id" name="id" pattern="^[a-zA-Z0-9]+$$" oninput="check(this)" autofocus required>
+                            <input type="text" class="form-control" id="id" name="id" pattern="^[a-zA-Z0-9]+$$" oninput="checkUsername(this)" autofocus required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" oninput="checkPassword(this)" required>
                         </div>
                     </div>
                     <input type="submit" value="Login" class="btn btn-primary">

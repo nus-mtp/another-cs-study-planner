@@ -22,7 +22,7 @@ class EditModulePrerequisites(object):
             raise web.seeother('/login')
         else:
             input_data = model.validate_input(web.input(), ["code"])
-            module_code = input_data.code
+            module_code = input_data.code.upper()
 
             prerequisites = model.get_prerequisite_units(module_code)
             return RENDER.moduleEditPrerequisite(module_code, prerequisites)
@@ -38,8 +38,11 @@ class EditModulePrerequisites(object):
         input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
         if input_data:
-            module_code = input_data.code
+            module_code = input_data.code.upper()
             prerequisites = json.loads(input_data.prerequisites)
             isSucessfullyUpdated = model.edit_prerequisite(module_code, prerequisites)
 
-        return json.dumps(isSucessfullyUpdated)
+        new_prerequisites = model.get_prerequisite_as_string(module_code)
+        response = [isSucessfullyUpdated, new_prerequisites]
+
+        return json.dumps(response)
