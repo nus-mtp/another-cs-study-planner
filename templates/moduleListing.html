@@ -5,6 +5,7 @@ $ home = ['/', 'Home']
 $ moduleInfo = ['#', 'Module Information']
 $var hierarchy = [home, moduleInfo]
 
+<script type="text/javascript" src="static/javascripts/moduleListing.js"></script>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -22,15 +23,28 @@ $var hierarchy = [home, moduleInfo]
                 </div>
             </div>
             <br>
+            <button id="toggleButton" style="float: right;" class="btn btn-info" onclick="toggleFilters()" 
+                data-toggle="tooltip" data-placement="left" title="Toggle filters">
+                Advanced Search &nbsp; <span id="chevron" class="glyphicon glyphicon-chevron-down"></span>
+            </button>
+            <br>
+            <br>
+            <br>
             <table class="table table-bordered table-hover display dataTable" id="module-listing-table">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>MCs</th>
-                        <th>Focus Area</th>
-                        <th>Is New Module?</th>
+                        <th>Code
+                            <br><input hidden type="text" class="filter" placeholder="Code" size="10"></th>
+                        <th>Name
+                            <br><input hidden type="text" class="filter" placeholder="Name" size="10"></th>
+                        <th>Description
+                            <br><input style="width:100%" hidden type="text" class="filter" placeholder="Description"></th>
+                        <th>MCs
+                            <br><input hidden type="text" class="filter" placeholder="MCs" size="3"></th>
+                        <th>Focus Area
+                            <br><input hidden type="text" class="filter" placeholder="Focus Area" size="10"></th>
+                        <th>Is New Module?
+                            <br><input hidden type="text" class="filter" placeholder="Is New?" size="3"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,7 +59,7 @@ $var hierarchy = [home, moduleInfo]
                         <td class="text-center">
                             <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
                         </td>
-                        <td style="width:15%">$moduleName</td>
+                        <td>$moduleName</td>
                         <td>$moduleDesc</td>
                         <td class="text-center">$moduleMc</td>
                         $if not moduleFocus:
