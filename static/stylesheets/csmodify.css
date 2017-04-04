@@ -8,6 +8,7 @@ tr > th {
 /*************************************************************************/
 /* ===================== STYLING FOR BASE TEMPLATE ===================== */
 /*************************************************************************/
+
 /* ========== STYLING FOR NAVBAR ========== */
 span[id*='id-display'] {
     font-size: 18px;
@@ -27,7 +28,7 @@ span[id*='id-display'] {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 10; /* Stay on top */
     top: 0;
     left: 0;
     background-color: #2d6a9f;
@@ -191,6 +192,36 @@ td > a {
 }
 
 
+/***********************************************************************************/
+/* ================== STYLING FOR FIXED/TENTATIVE MOUNTING PAGE ================== */
+/***********************************************************************************/
+
+.table-mounting-icon {
+    margin-right: 10px;
+    z-index: 2;
+}
+
+.toggle-columns-display {
+    display: none;
+    position: relative;
+    margin-top: 10px;
+    top: 40px;
+    z-index: 3;
+}
+
+.toggle-columns-display-checkbox {
+    margin-right: 15px;
+}
+
+#fixed-mounting-table {
+    display: none;
+}
+
+#tentative-mounting-table {
+    display: none;
+}
+
+
 /*************************************************************************/
 /* ==================== STYLING FOR MODULE-VIEW PAGE =================== */
 /*************************************************************************/
@@ -225,6 +256,22 @@ td > a {
     height: 350px;
 }
 
+#edit-specific-info-modal {
+    display: none;
+}
+
+#overlapping-mods-modal {
+    display: none;
+}
+
+#students-taking-modal {
+    display: none;
+}
+
+.module-view-aysemInfoTable>tbody>tr>td{
+    vertical-align: middle;
+    height: 45px;
+}
 
 /*************************************************************************/
 /* ============== STYLING FOR MODULES TAKEN TOGETHER PAGE ============== */
@@ -235,10 +282,26 @@ td > a {
     float: right;
 }
 
+#oversubscribed-modules-table {
+    display: none;
+}
+
+#common-module-table {
+    display: none;
+}
+
+#non-overlap-table {
+    display: none;
+}
+
 
 /*******************************************************************************************/
 /* ==================== STYLING FOR MODULES TAKEN PRIOR TO OTHERS PAGE =================== */
 /*******************************************************************************************/
+
+#modules-taken-prior-table {
+    display: none;
+}
 
 .modules-taken-prior-search-form{
     text-align: center; 
@@ -269,7 +332,7 @@ td > a {
 }
 
 .dropdown-btn-custom{
-    width: 100%;
+    width: 300px;
     align-self: flex-end;
     background-color: white;
     border: 0px;
@@ -286,6 +349,107 @@ td > a {
 .no-padding-margin{
     padding: 0px;
     margin: 0px;
+}
+
+.prior-table-aysem-title {
+    margin: 12px 0px 10px 0px;
+}
+
+.aysem-dropdown label {
+    font-size: 15px;
+}
+
+.aysem-dropdown input {
+    margin-left: 2px;
+    padding-top: 5px;
+}
+
+#aysem-dropdown-select {
+    width: 280px;
+    height: 33px;
+}
+
+.prior-to-form-module-A {
+    margin: 15px 5px 20px 5px;
+    width: 30%;
+    margin-left: 35%;
+}
+
+.prior-to-form-module-A + ul{
+    margin-left: 33%;
+    margin-top: 15px;
+}
+
+.prior-to-form-module-B {
+    margin: 10px 5px 15px 5px;
+    width: 280px;
+    display: inline-block;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    top: 100px;
+    padding: 10px 20px 10px;
+    border: 1px solid #888;
+    width: 60%;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+.modal-content h2 {
+    margin-left: 20px;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top: 0px; opacity: 0} 
+    to {top: 100; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {top: 0px; opacity: 0}
+    to {top: 100; opacity: 1}
+}
+
+.modal-content form {
+    margin-top: 25px;
+}
+
+#openModal {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.closeModal {
+    position: relative;
+    top: -5px;
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeModal:hover,
+.closeModal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 
@@ -450,9 +614,45 @@ tr[id*='modified-details-child-row'] {
 }
 
 
+/*******************************************************************************************/
+/* ==================== STYLING FOR EDIT-ALL-MOUNTINGS-AND-QUOTAS PAGE =================== */
+/*******************************************************************************************/
+
+#select-mod-to-edit-div {
+    margin-top: 25px;
+    margin-bottom: 40px;
+    font-size: 18px;
+}
+
+#select-mod-to-edit {
+    width: 400px;
+    height: 33px;
+}
+
+.typeahead.dropdown-menu { 
+    width: 400px;
+}
+
+#edit-all-table tr {
+    display: none;
+}
+
+#edit-all-table-header tr {
+    display: table-row;
+}
+
+.edit-all-bottom-button {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+    margin-left: 5px;
+}
+
+
 /********************************************************************************/
-/* ==================== General =================== */
+/* ================================== General ================================= */
 /********************************************************************************/
+
 .tooltip-inner {
     max-width: 250px;
     /* If max-width does not work, try using width instead */
@@ -464,4 +664,46 @@ tr[id*='modified-details-child-row'] {
     margin: .5rem 0;
     overflow: hidden;
     background-color: #eceeef;
+}
+
+#magnifying-glass {
+    margin-left: 35px;
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+#find-module {
+    width: 450px;
+    height: 36px;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-top: 3px;
+    padding-left: 7px;
+    border-radius: 5px;
+}
+
+#find-module + .dropdown-menu { 
+    width: 450px;
+    margin-left: 5px;
+}
+
+.form-control {
+    height: auto;
+}
+
+.oversub-warning {
+    color: #e88b00;
+}
+
+.unmounted-warning {
+    color: #c91c48;
+}
+
+.datatable {
+    width: 100%;
+}
+
+.loading-div img{
+    height: 100px;
+    width: auto;
 }

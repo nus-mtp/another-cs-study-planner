@@ -177,3 +177,15 @@ class TestCode(object):
         response = root.click(linkid="home-page", href="/moduleSpecificSize")
 
         assert_equal(response.status, 200)
+
+
+    def test_goto_edit_all_mountings_and_quotas(self):
+        '''
+            Test if user can access edit all mountings and quotas
+            page without request errors
+        '''
+        root = self.test_app.get('/')
+
+        response = root.click(linkid="home-page", href="/editAll")
+
+        assert_equal(response.status, 200)

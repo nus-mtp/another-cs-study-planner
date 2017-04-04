@@ -48,15 +48,16 @@ class EditModuleInfo(object):
             module_name = input_data.name
             module_desc = input_data.desc
             module_mc = input_data.mc
+
+            #validate inputs
+
+            if not model.check_name(module_name):
+                return model.outcome_invalid()
         except AttributeError:
             return Outcome().POST("edit_module", False, module_code)
 
         # Validate that MC is a number and is between 0 and 12
-        try:
-            module_mc = int(module_mc)
-        except ValueError:
-            return Outcome().POST("edit_module", False, module_code)
-        if module_mc < 0 or module_mc > 12:
+        if not model.check_mcs(module_mc):
             return Outcome().POST("edit_module", False, module_code)
 
         old_module_info = model.get_module(module_code)
@@ -145,7 +146,7 @@ class EditMountingInfo(object):
         if quota is not None:
             try:
                 quota = int(quota)
-                if quota < 0:
+                if quota < 0 or quota > 999:
                     outcome = False
             except ValueError:  # quota is not None or int
                 outcome = False

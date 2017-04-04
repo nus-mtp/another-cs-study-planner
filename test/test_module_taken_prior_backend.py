@@ -121,7 +121,7 @@ class TestCode(object):
         test_module_A_ay_sem = self.current_ay+' Sem 1'
         test_module_B_ay_sem = self.current_ay+' Sem 2'
 
-        module_pairs = model.get_modA_taken_prior_to_modB()
+        module_pairs = model.get_modA_taken_prior_to_modB(self.current_ay+' Sem 2')
         is_in_table = False
         student_count = -1
         for module_pair in module_pairs:
@@ -145,7 +145,7 @@ class TestCode(object):
         test_module_A_ay_sem = self.current_ay+' Sem 1'
         test_module_B_ay_sem = self.next_ay+' Sem 1'
 
-        module_pairs = model.get_modA_taken_prior_to_modB()
+        module_pairs = model.get_modA_taken_prior_to_modB(self.next_ay+' Sem 1')
         is_in_table = False
         student_count = -1
         for module_pair in module_pairs:
@@ -173,7 +173,7 @@ class TestCode(object):
         test_module_A = "PT1002"
         test_module_B = "PT1001"
 
-        module_pairs = model.get_modA_taken_prior_to_modB()
+        module_pairs = model.get_modA_taken_prior_to_modB(self.current_ay+' Sem 1')
         is_in_table = False
         for module_pair in module_pairs:
             module_A = module_pair[0]
@@ -188,7 +188,7 @@ class TestCode(object):
         test_module_A = "PT1003"
         test_module_B = "PT1001"
 
-        module_pairs = model.get_modA_taken_prior_to_modB()
+        module_pairs = model.get_modA_taken_prior_to_modB(self.current_ay+' Sem 1')
         is_in_table = False
         for module_pair in module_pairs:
             module_A = module_pair[0]
@@ -210,7 +210,7 @@ class TestCode(object):
         test_module_A = "PT1001"
         test_module_B = "PT1004"
 
-        module_pairs = model.get_modA_taken_prior_to_modB()
+        module_pairs = model.get_modA_taken_prior_to_modB(self.next_ay+' Sem 2')
         is_in_table = False
         for module_pair in module_pairs:
             module_A = module_pair[0]

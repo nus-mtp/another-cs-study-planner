@@ -44,7 +44,7 @@ $var hierarchy = [home, moduleInfo, viewModule, individualModuleInfo, editIndivi
                         <div class="form-group">
                             <label for="class-quota">Class Quota</label>
                             $if mountingValue == 1:
-                                <input class="form-control" id="quota" type="number" min="0" size="10" name="quota" value="$quota">
+                                <input class="form-control" id="quota" type="number" min="0" max="999" size="10" name="quota" value="$quota">
                             $else:
                                 <input class="form-control" id="quota" type="number" min="0" size="10" name="quota" value="$quota" disabled>
                             <br>

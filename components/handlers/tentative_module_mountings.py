@@ -19,7 +19,9 @@ class Tentative(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 4 attributes (code, name, sem 1 mounting, sem 2 mounting)
+            Each subplan is a list of 8 attributes
+            (code, name, sem 1 mounting, sem 2 mounting, sem 1 quota, sem 2 quota,
+            number of students taking in sem 1, number of students taking in sem 2)
             For tentative mountings, each mounting has 3 possible values (-1 or 0 or 1)
             -1 = not mounted; 0 = unmounted; 1 = mounted
         '''
@@ -36,13 +38,13 @@ class Tentative(object):
         for info in module_infos:
             code = info[0]
             name = info[1]
-            subplan = ["", "", -1, -1]
+            subplan = ["", "", -1, -1, None, None, 0, 0]
             subplan[0] = code
             subplan[1] = name
             self.full_mounting_plan.append(subplan)
 
 
-    def populate_mounting_values(self, selected_ay):
+    def populate_module_ay_sem_data(self, selected_ay):
         '''
             Populate each subplan with sem 1 and sem 2 mounting values
         '''
@@ -61,15 +63,18 @@ class Tentative(object):
                 curr_module_code = curr_subplan[0]
             ay_sem = info[2]
             sem = ay_sem[9:14]
+            quota = info[3]
             if sem == "Sem 1":
                 curr_subplan[2] = 1
+                curr_subplan[4] = quota
             elif sem == "Sem 2":
                 curr_subplan[3] = 1
+                curr_subplan[5] = quota
 
         # Generate full mounting plan for fixed mountings
         fixed_mounting_handler = Fixed()
         fixed_mounting_handler.populate_module_code_and_name()
-        fixed_mounting_handler.populate_mounting_values()
+        fixed_mounting_handler.populate_module_ay_sem_data()
         fixed_full_mounting_plan = fixed_mounting_handler.full_mounting_plan
 
         # Mark module that are unmounted
@@ -86,24 +91,49 @@ class Tentative(object):
             if fixed_sem_2_mounting == 1 and tenta_sem_2_mounting == -1:
                 tenta_full_mounting_plan[i][3] = 0
 
+        student_stats = model.get_student_stats_for_all_mods()
+
+        subplan_index = 0
+        curr_subplan = tenta_full_mounting_plan[subplan_index]
+        selected_ay = model.get_next_ay(model.get_current_ay())
+
+        for stat in student_stats:
+            code = stat[1]
+            curr_module_code = curr_subplan[0]
+            while code != curr_module_code:
+                subplan_index += 1
+                curr_subplan = tenta_full_mounting_plan[subplan_index]
+                curr_module_code = curr_subplan[0]
+            ay_sem = stat[2]
+            number_of_students = stat[0]
+            if ay_sem == selected_ay+" Sem 1":
+                curr_subplan[6] = number_of_students
+            elif ay_sem == selected_ay+" Sem 2":
+                curr_subplan[7] = number_of_students
+
         self.full_mounting_plan = tenta_full_mounting_plan
 
 
-    def GET(self):
+    def GET(self, to_render=True, logged_in=False):
         '''
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
-        if not session.validate_session():
+        if not session.validate_session() and not logged_in:
             raise web.seeother('/login')
 
         # Currently, tentative mounting will be shown for the next AY
         selected_ay = model.get_next_ay(model.get_current_ay())
 
         self.populate_module_code_and_name()
-        self.populate_mounting_values(selected_ay)
+        self.populate_module_ay_sem_data(selected_ay)
 
-        return RENDER.moduleMountingTentative(selected_ay, self.full_mounting_plan)
+        full_mounting_plan = model.replace_empty_quota_with_symbols(self.full_mounting_plan)
+
+        if to_render:
+            return RENDER.moduleMountingTentative(selected_ay, full_mounting_plan)
+        else:
+            self.full_mounting_plan = full_mounting_plan
 
 
     def POST(self):
@@ -114,4 +144,5 @@ class Tentative(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
+        #used in fixed module mountings
         raise web.seeother('/moduleMountingTentative')

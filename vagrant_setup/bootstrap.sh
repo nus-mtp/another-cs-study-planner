@@ -11,11 +11,6 @@ echo "==================== [ INSTALLING ESSENTIALS ] ===================="
 sudo apt-get update
 sudo apt-get install build-essential
 
-#echo ""
-#echo ""
-#echo "==================== [ INSTALLING APACHE SERVER ] ===================="
-#sudo apt-get install -y apache2
-
 echo ""
 echo ""
 echo "==================== [ INSTALLING PYTHON & PIP ] ===================="
@@ -53,5 +48,7 @@ sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$DB_USER_PASSWORD';
 # By default, we use the 'postgres' database.
 # 
 # If you wish to use another database, please make sure you create the database
-echo "\n =============== [ CREATING DATABASE ] =============== "
+echo ""
+echo ""
+echo " ==================== [ CREATING DATABASE ] ==================== "
 createdb -O $DB_OWNER -U $DB_USER $DB_NAME

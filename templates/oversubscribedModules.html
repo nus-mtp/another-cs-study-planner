@@ -1,43 +1,82 @@
-$def with (list_of_oversub_mod)
+$def with (list_of_oversub_mod, all_ay_sems, target_ay_sem)
 
 $var title:View Oversubscribed Modules
 $ home = ['/', 'Home']
 $ oversubscribedModules = ['#', 'Oversubscribed Modules']
 
 $var hierarchy = [home, oversubscribedModules]
-<div class="container-fluid">
-	<h1 class="text-center"><b>Oversubscribed Modules</b></h1>
+
+<script type="text/javascript" src="static/javascripts/fixedAndTentaMounting.js"></script>
+
+<div class="container-fluid" onload="myFunction()">
+	<h1 class="text-center"><b>Oversubscribed Modules in $target_ay_sem</b></h1>
 	<p class="text-center">Shows all modules with <b>demand &gt; supply</b></p>
 	<br>
-	<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
-		<thead>
-			<tr>
-				<th>Code</th>
-				<th>Name</th>
-				<th>AY-Semester</th>
-				<th>Class Quota</th>
-				<th>Number of Students Taking Module</th>
-			</tr>
-		</thead>
-		<tbody>
-			$if list_of_oversub_mod == None:
+    <div class="row"><!--request form-->
+        <div class="col-md-12 pagination-centered text-center">
+            <form id="ay-form" class="form-inline aysem-dropdown" action="/oversubscribedModules" method="get">
+                <div class="form-group">
+                    <label for="ay-sem">Select AY-Semester:&nbsp;</label>
+                    <select id="aysem-dropdown-select" class="form-control" name="aysem">
+                        <option value="" disabled selected hidden>Please choose a target AY-Semester</option>
+                        $for aysem in all_ay_sems:
+                            $if target_ay_sem == aysem:
+                                <option value="$aysem" selected>$aysem</option>
+                            $else:
+                                <option value="$aysem">$aysem</option>
+                    </select>
+                </div>
+                <div class="form-group aysem-dropdown">
+                    <input type="submit"  value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row loading-div text-center">
+        <img src="static/images/loading.gif">
+        <h3>Loading data, please wait...</h3>
+    </div>
+    <div class="col-md-12">
+		<table class="table display dataTable table-bordered table-hover text-center" id="oversubscribed-modules-table">
+			<thead>
 				<tr>
-					<th>Nil</th>
-					<th>Nil</th>
-					<th>Nil</th>
-					<th>Nil</th>
-					<th>Nil</th>
+					<th>Code</th>
+					<th>Name</th>
+					<th>AY-Semester</th>
+					<th onclick="replaceNilQuotasWithNumbers('#oversubscribed-modules-table');">Class Quota</th>
+					<th>Number of Students Taking Module</th>
+					<th>Oversubscribed Amount</th>
 				</tr>
-			$else:
-				$for module in list_of_oversub_mod:
-					$ address = '/viewModule?code=' + module[0]
-					<tr>						
-						<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
-						<td>$module[1]</td>
-						<td>$module[2]</td>
-						<td>$module[3]</td>
-						<td>$module[4]</td>
+			</thead>
+			<tbody>
+				$if list_of_oversub_mod == None:
+					<tr>
+						<th>Nil</th>
+						<th>Nil</th>
+						<th>Nil</th>
+						<th>Nil</th>
+						<th>Nil</th>
 					</tr>
-		</tbody>
-	</table>
+				$else:
+					$for module in list_of_oversub_mod:
+						$ address = '/viewModule?code=' + module[0]
+						<tr>						
+							<td><a href="$:address" target="_blank" data-toggle="tooltip" title="View general info for $module[0]">$module[0]</a></td>
+							<td>$module[1]</td>
+							<td>$module[2]</td>
+							<td>
+								$ quota = module[3]
+								$if quota == "-":
+									<span data-toggle="tooltip" data-placement="bottom" title="Not Mounted">&mdash;</span>
+								$elif quota == "?":
+									<span data-toggle="tooltip" data-placement="bottom" title="Unspecified">?</span>
+								$else:
+									$quota
+							</td>
+							<td>$module[4]</td>
+							<td>$module[5]</td>
+						</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

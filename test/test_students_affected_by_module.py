@@ -14,9 +14,10 @@ class TestCode(object):
     '''
 
     URL_NORMAL = '/studentsAffectedByModule?code=IT1005&aysem=AY+17%2F18+Sem+1'
-    CONTENT_TITLE = '<h1 class="text-center">Students Planning To Take This Module</h1>'
-    CONTENT_DESCRIPTION = '<p class="text-center">Students who are planning'+\
-                          ' to take this module.</p>'
+    CONTENT_TITLE = '<h1 class="text-center">Students Taking This Module</h1>'
+    CONTENT_DESCRIPTION = '<p class="text-center">Show students who <b>have taken</b>, '+\
+                          'are <b>currently taking</b>, or are <b>planning to take</b> ' +\
+                          'this module.</p>'
     CONTENT_SUBTITLE = 'For <b>IT1005</b> in <b>AY 17/18 Sem 1</b>'
 
 
