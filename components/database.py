@@ -8,9 +8,9 @@ import hashlib
 ## Prevent model.py from being imported twice
 from sys import modules
 try:
-    from components import model
+    from components import helper
 except ImportError:
-    model = modules['components.model']
+    helper = modules['components.helper']
 
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
@@ -323,15 +323,15 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
 
-    if model.is_aysem_in_list(given_aysem, fixed_sems):
+    if helper.is_aysem_in_list(given_aysem, fixed_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    elif model.is_aysem_in_list(given_aysem, tenta_sems):
+    elif helper.is_aysem_in_list(given_aysem, tenta_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
     else: # No such aysem found
         return list()
 
     required_list = DB_CURSOR.fetchall()
-    processed_list = model.convert_to_list(required_list)
+    processed_list = helper.convert_to_list(required_list)
 
     return processed_list
 
@@ -524,7 +524,7 @@ def get_list_students_take_module(code, aysem):
     for student in list_of_students_taking_with_no_focus_areas:
         current_list_of_students.append([student[0], student[1], "-", "-"])
 
-    return model.replace_null_with_dash(current_list_of_students)
+    return helper.replace_null_with_dash(current_list_of_students)
 
 
 def get_oversub_mod():
@@ -548,7 +548,7 @@ def get_oversub_mod():
         for num_plan_aysem_pair in num_student_plan_aysem_list:
             num_student_planning = num_plan_aysem_pair[0]
             ay_sem = num_plan_aysem_pair[1]
-            real_quota = model.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
+            real_quota = helper.get_quota_in_aysem(ay_sem, aysem_quota_merged_list)
 
             # ensures that quota will be a number which is not None
             if real_quota is None:
@@ -602,7 +602,7 @@ def get_num_students_by_yr_study():
     DB_CURSOR.execute(sql_command)
 
     table_with_non_zero_students = DB_CURSOR.fetchall()
-    final_table = model.append_missing_year_of_study(table_with_non_zero_students)
+    final_table = helper.append_missing_year_of_study(table_with_non_zero_students)
 
     # Sort the table based on year
     final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
@@ -1028,9 +1028,9 @@ def get_mods_no_one_take(aysem):
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
 
-    if model.is_aysem_in_list(aysem, fixed_sems):
+    if helper.is_aysem_in_list(aysem, fixed_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-    elif model.is_aysem_in_list(aysem, tenta_sems):
+    elif helper.is_aysem_in_list(aysem, tenta_sems):
         DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
     else: # No such aysem found
         return list()

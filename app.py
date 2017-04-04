@@ -4,11 +4,6 @@
 
 
 import web
-from sys import modules
-try:
-    from components import model
-except ImportError:
-    model = modules['components.model']
 from components import database
 
 '''

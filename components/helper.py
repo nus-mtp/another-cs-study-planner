@@ -5,13 +5,12 @@
 
 ## Prevent model.py from being imported twice
 from sys import modules
-import datetime
-
 try:
-    from components import model
+    from components import database
 except ImportError:
-    model = modules['components.model']
+    database = modules['components.database']
 
+import datetime
 import web
 
 INDEX_FIRST_ELEM = 0
@@ -46,7 +45,7 @@ def get_all_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
     '''
         Returns all the AY-Sems in the system
     '''
-    current_ay = model.get_current_ay()
+    current_ay = database.get_current_ay()
     ay_sems_in_system = [current_ay+" Sem 1", current_ay+" Sem 2"]
     target_ay = current_ay
     for i in range(ay_count-1):
@@ -61,7 +60,7 @@ def get_all_future_ay_sems(ay_count=NUMBER_OF_AY_IN_SYSTEM):
         Returns all the FUTURE AY-Sems in the system
     '''
     future_ay_sems_in_system = []
-    target_ay = model.get_current_ay()
+    target_ay = database.get_current_ay()
     for i in range(ay_count-1):
         target_ay = get_next_ay(target_ay)
         future_ay_sems_in_system.append(target_ay+" Sem 1")
@@ -218,7 +217,7 @@ def get_prerequisite_as_string(module_code):
     '''
         Returns a string of pre-requisites of specified module_code
     '''
-    prerequisites = model.get_prerequisite(module_code)
+    prerequisites = database.get_prerequisite(module_code)
     prereq_list = convert_to_list(prerequisites)
 
     # sort list of lists based on index (which is the first elem of each row)
@@ -233,7 +232,7 @@ def get_preclusion_as_string(module_code):
     '''
         Returns a string of preclusions of specified module_code
     '''
-    preclusions = model.get_preclusion(module_code)
+    preclusions = database.get_preclusion(module_code)
     preclude_list = convert_to_list(preclusions)
     processed_list = [preclude[INDEX_FIRST_ELEM] for preclude in preclude_list]
 
@@ -371,7 +370,7 @@ def validate_input(input_data, input_types, is_future=False,
                     raise web.notfound(error)
                 else:
                     return False
-            module_exist = model.is_existing_module(module_code.upper())
+            module_exist = database.is_existing_module(module_code.upper())
             if not module_exist:
                 if show_404:
                     error = RENDER.notfound('Module code "' + module_code +\
@@ -460,14 +459,14 @@ def validate_input(input_data, input_types, is_future=False,
             elif not is_moduleA_specified and not is_moduleB_specified:
                 continue
 
-            module_exist = model.is_existing_module(moduleA_code.upper())
+            module_exist = database.is_existing_module(moduleA_code.upper())
             if not module_exist:
                 error = RENDER.notfound('Module code "' + moduleA_code +\
                                         '" does not exist in our system')
                 raise web.notfound(error)
             else:
                 input_data.moduleA = moduleA_code.upper()
-            module_exist = model.is_existing_module(moduleB_code.upper())
+            module_exist = database.is_existing_module(moduleB_code.upper())
             if not module_exist:
                 error = RENDER.notfound('Module code "' + moduleB_code +\
                                         '" does not exist in our system')
@@ -521,7 +520,7 @@ def replace_empty_quota_with_symbols(mounting_plan):
     SEM1_QUOTA_INDEX = 4
     SEM2_QUOTA_INDEX = 5
 
-    mounting_plan = model.convert_to_list(mounting_plan)
+    mounting_plan = convert_to_list(mounting_plan)
     for i in range(len(mounting_plan)):
         subplan = mounting_plan[i]
         sem1_quota = subplan[SEM1_QUOTA_INDEX]
