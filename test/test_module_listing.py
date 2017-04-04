@@ -29,6 +29,7 @@ class TestCode(object):
     TABLE_HEADER_MC = '<th>MCs</th>'
     TABLE_HEADER_STATUS = '<th>Is New Module?</th>'
 
+
     global_var = None
 
     def __init__(self):

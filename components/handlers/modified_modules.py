@@ -252,14 +252,3 @@ class Modified(object):
         return RENDER.moduleModified(modify_type, modified_modules_summary,
                                      modified_modules_mounting, modified_modules_quota,
                                      modified_modules_details, module_code, modified_modules)
-
-
-    def POST(self):
-        '''
-            Directs users to the page for tentative module mountings.
-
-            This method is invoked when users click on the button
-            to navigate to the tentative module mountings, that is
-            present in other valid pages.
-        '''
-        raise web.seeother('/modifiedModules')

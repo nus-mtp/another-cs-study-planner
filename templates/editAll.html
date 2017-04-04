@@ -31,8 +31,12 @@ $var hierarchy = [home, editAll]
             <p class="text-center">Edit the mountings and quotas for the AY <b>one year after the current AY</b>.</p>
             <br>
             <div id="select-mod-to-edit-div" class="col-md-8 col-md-offset-2 text-center">
-                <b>Select module(s) to edit:&nbsp;&nbsp;</b>
-                <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead">
+                <b style="font-size:20px;">Select module(s) to edit:&nbsp;</b>
+                <br>
+                <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead" placeholder="Enter module code or name here" style="display:inline; margin-top: 8px;" >
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-html="true" style="margin-left: 5px; position: relative; top: 5px; font-size:22px;" 
+                title="<p>Type the code or name of the module that you wish to edit, then select the module<br>(left click or press enter) 
+                when it appears in the dropdown menu.</p><p>If no modules appear, it means that<br>no matches are found.</p>"></span>
             </div>
             <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
                 <table class="table table-bordered text-center" id="edit-all-table">
@@ -87,17 +91,17 @@ $var hierarchy = [home, editAll]
 
                             $if sem1Quota == '-':
                                 <td>
-                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem1Quota == '?':
                                 <td>
-                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" >
                                 </td>
                             $else:
                                 <td>
-                                    <input type="number" min="0" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
 
@@ -116,17 +120,17 @@ $var hierarchy = [home, editAll]
 
                             $if sem2Quota == '-':
                                 <td>
-                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();" disabled>
                                 </td>
                             $elif sem2Quota == '?':
                                 <td>
-                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
                             $else:
                                 <td>
-                                    <input type="number" min="0" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
                                     onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
                                 </td>
                             $if True:

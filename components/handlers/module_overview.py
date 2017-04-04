@@ -7,6 +7,7 @@
 from app import RENDER
 import web
 from components import model, session
+from components.handlers.outcome import Outcome
 
 
 class ViewMod(object):

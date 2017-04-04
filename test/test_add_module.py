@@ -3,7 +3,7 @@
 '''
 
 from paste.fixture import TestApp
-from nose.tools import assert_equal, raises
+from nose.tools import assert_equal
 from app import APP
 from components import model, session
 
@@ -51,6 +51,10 @@ class TestCode(object):
 
     OUTCOME_SUCCESS_MESSAGE = "alert('Module %s has been added successfully!');"
     OUTCOME_SUCCESS_REDIRECT = "window.location = '/viewModule?code=%s';"
+
+    OUTCOME = '<title>Validating...</title>'
+    ERR_MESSAGE = 'Invalid input for module name/code/MCs/description'
+    ERR_MESSAGE2 = 'Error: failed to add module'
 
 
     def __init__(self):
@@ -130,7 +134,6 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
         response = addModuleForm.submit()
-
         response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE % self.TEST_ADD_MODULE_CODE))
         response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT % self.TEST_ADD_MODULE_CODE)
 
@@ -153,16 +156,15 @@ class TestCode(object):
 
         response = addModuleForm.submit()
 
-        response.mustcontain((self.OUTCOME_SUCCESS_MESSAGE %
-                              self.TEST_ADD_MODULE_CODE_RELAXED.upper()))
+        response.mustcontain(self.OUTCOME_SUCCESS_MESSAGE %
+                             self.TEST_ADD_MODULE_CODE_RELAXED.upper())
         response.mustcontain(self.OUTCOME_SUCCESS_REDIRECT %
-                              self.TEST_ADD_MODULE_CODE_RELAXED.upper())
+                             self.TEST_ADD_MODULE_CODE_RELAXED.upper())
 
         # For reusing data, delete it after it is successfully added.
         model.delete_module(self.TEST_ADD_MODULE_CODE_RELAXED)
 
 
-    @raises(Exception)
     def test_add_module_with_blank_code_input(self):
         '''
             Tests that adding a module with blank module code
@@ -177,9 +179,9 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
         response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE2)
 
 
-    @raises(Exception)
     def test_add_module_with_blank_name_input(self):
         '''
             Tests that adding a module with blank module name
@@ -194,9 +196,9 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', self.TEST_ADD_MODULE_MC)
 
         response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE2)
 
 
-    @raises(Exception)
     def test_add_module_with_blank_mc_input(self):
         '''
             Tests that adding a module with blank number of MCs
@@ -211,75 +213,75 @@ class TestCode(object):
         addModuleForm.__setitem__('mc', None)
 
         response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE2)
+
+    def test_add_module_with_invalid_module_code(self):
+        '''
+            Tests that adding a module with invalid module code
+            should fail.
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
+
+        addModuleForm = root.forms__get()['addModForm']
+        addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
+        addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
+        addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
+        addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
+
+        response = addModuleForm.submit()
+        assert_equal(response.status, 200)
+
+        response.mustcontain(self.OUTCOME)
+        response.mustcontain(self.ERR_MESSAGE)
 
 
-    # The below test cases are commented out as back-end validations are
-    # not implemented yet.
-    #
-    # @raises(Exception)
-    # def test_add_module_with_invalid_module_code(self):
-    #     '''
-    #         Tests that adding a module with invalid module code
-    #         should fail.
-    #     '''
-    #     root = self.test_app.get(self.URL_NORMAL)
+    def test_add_module_with_invalid_module_name(self):
+        '''
+            Tests that adding a module with invalid module name
+            should fail.
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
 
-    #     addModuleForm = root.forms__get()['addModForm']
-    #     addModuleForm.__setitem__('code', self.TEST_ADD_INVALID_MODULE_CODE)
-    #     addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
-    #     addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-    #     addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
+        addModuleForm = root.forms__get()['addModForm']
+        addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
+        addModuleForm.__setitem__('name', self.TEST_ADD_INVALID_MODULE_NAME)
+        addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
+        addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
 
-    #     response = addModuleForm.submit()
-    #     print(response)
+        response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE)
 
 
-    # @raises(Exception)
-    # def test_add_module_with_invalid_module_name(self):
-    #     '''
-    #         Tests that adding a module with invalid module name
-    #         should fail.
-    #     '''
-    #     root = self.test_app.get(self.URL_NORMAL)
 
-    #     addModuleForm = root.forms__get()['addModForm']
-    #     addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
-    #     addModuleForm.__setitem__('name', self.TEST_ADD_INVALID_MODULE_NAME)
-    #     addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-    #     addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
+    def test_add_module_with_invalid_mc_lower_boundary(self):
+        '''
+            Tests that adding a module with invalid number of MCs
+            before lower boundary should fail.
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
 
-    #     response = addModuleForm.submit()
+        addModuleForm = root.forms__get()['addModForm']
+        addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
+        addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
+        addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
 
-
-    # @raises(Exception)
-    # def test_add_module_with_invalid_mc_lower_boundary(self):
-    #     '''
-    #         Tests that adding a module with invalid number of MCs
-    #         before lower boundary should fail.
-    #     '''
-    #     root = self.test_app.get(self.URL_NORMAL)
-
-    #     addModuleForm = root.forms__get()['addModForm']
-    #     addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
-    #     addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
-    #     addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-    #     addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MIN)
-
-    #     response = addModuleForm.submit()
+        response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE)
 
 
-    # @raises(Exception)
-    # def test_add_module_with_invalid_mc_upper_boundary(self):
-    #     '''
-    #         Tests that adding a module with invalid number of MCs
-    #         beyond upper boundary should fail.
-    #     '''
-    #     root = self.test_app.get(self.URL_NORMAL)
 
-    #     addModuleForm = root.forms__get()['addModForm']
-    #     addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
-    #     addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
-    #     addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
-    #     addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MAX)
+    def test_add_module_with_invalid_mc_upper_boundary(self):
+        '''
+            Tests that adding a module with invalid number of MCs
+            beyond upper boundary should fail.
+        '''
+        root = self.test_app.get(self.URL_NORMAL)
 
-    #     response = addModuleForm.submit()
+        addModuleForm = root.forms__get()['addModForm']
+        addModuleForm.__setitem__('code', self.TEST_ADD_MODULE_CODE)
+        addModuleForm.__setitem__('name', self.TEST_ADD_MODULE_NAME)
+        addModuleForm.__setitem__('description', self.TEST_ADD_MODULE_DESCRIPTION)
+        addModuleForm.__setitem__('mc', self.TEST_ADD_INVALID_MODULE_MC_MAX)
+
+        response = addModuleForm.submit()
+        response.mustcontain(self.ERR_MESSAGE)
