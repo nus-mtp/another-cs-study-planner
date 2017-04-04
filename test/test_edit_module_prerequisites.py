@@ -31,6 +31,13 @@ class TestCode(object):
                                                 'onclick="addPrereqUnit()"><span ' +\
                                                 'class="glyphicon glyphicon-plus">' +\
                                                 '</span></button>'
+    EDIT_MODULE_PREREQUISITES_DELETE_UNIT_BUTTON = '<button type="button" class="btn btn-primary" ' +\
+                                                   'data-toggle="tooltip" data-placement="top" ' +\
+                                                   'title="Delete this unit" ' +\
+                                                   'onclick="deletePrereqUnit(this)" ' +\
+                                                   'style="display: none;">' +\
+                                                   '<span class="glyphicon ' +\
+                                                   'glyphicon-remove"></span></button>'
     EDIT_MODULE_PREREQUISITES_SAVE_BUTTON = '<button class="btn btn-lg btn-primary" ' +\
                                             'id="save-changes" ' +\
                                             'data-toggle="tooltip" data-placement="top" ' +\
@@ -78,6 +85,7 @@ class TestCode(object):
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_FORM)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_TABLE_INTERFACE)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_ADD_UNIT_BUTTON)
+        root.mustcontain(self.EDIT_MODULE_PREREQUISITES_DELETE_UNIT_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_SAVE_BUTTON)
         root.mustcontain(self.EDIT_MODULE_PREREQUISITES_REVERT_BUTTON)
 
