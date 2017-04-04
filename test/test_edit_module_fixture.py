@@ -161,7 +161,6 @@ class TestCode(object):
 
         assert_equal(response.status, 200)
         response.mustcontain(self.ALERT_MSG)
-        response.mustcontain("alert('Error: Failed to edit module.');")
 
     def test_module_edit_submit_invalid_name(self):
         '''
