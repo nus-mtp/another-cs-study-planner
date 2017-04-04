@@ -33,13 +33,16 @@ class EditModulePreclusions(object):
             Handles the submission of updated module preclusions
             for a target module.
         '''
-        response = False
+        isSucessfullyUpdated = False
 
         input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
         if input_data:
             module_code = input_data.code.upper()
             preclusions = json.loads(input_data.preclusions)
-            response = model.edit_preclusion(module_code, preclusions)
+            isSucessfullyUpdated = model.edit_preclusion(module_code, preclusions)
+
+        new_preclusions = model.get_preclusion_as_string(module_code)
+        response = [isSucessfullyUpdated, new_preclusions]
 
         return json.dumps(response)

@@ -42,4 +42,7 @@ class EditModulePrerequisites(object):
             prerequisites = json.loads(input_data.prerequisites)
             isSucessfullyUpdated = model.edit_prerequisite(module_code, prerequisites)
 
-        return json.dumps(isSucessfullyUpdated)
+        new_prerequisites = model.get_prerequisite_as_string(module_code)
+        response = [isSucessfullyUpdated, new_prerequisites]
+
+        return json.dumps(response)
