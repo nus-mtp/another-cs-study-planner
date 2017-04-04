@@ -101,7 +101,7 @@ $var hierarchy = [home, db_migrate]
         </div>
         <br>
         <div class="text-center">
-            <form id="db-migrate-form" action="/migrateDatabase" method="post">
+            <form id="db-migrate-form" action="/migrateDatabase" onsubmit="if(!window.confirm('This operation is IRREVERSIBLE. Proceed anyway?')){event.preventDefault();}" method="post">
                 <a class="btn btn-lg btn-primary" id="db-migrate-go-back" href="/">Go Back</a>
                 <button class="btn btn-lg btn-danger" id="db-migrate-btn" type="submit" style="display: none;">Proceed with Database Migration</button>
             </form>
