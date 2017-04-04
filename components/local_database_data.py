@@ -2,9 +2,9 @@
 # This file needs not be committed.
 database_name = 'postgres'    # change this to the name of your database. By default we use 'postgres'.
 user_name = 'postgres'        # change this to the username of your database user. By default we use 'postgres'.
-password = '12345678'         # change this to the password of your database user, if required.
+password = 'super'         # change this to the password of your database user, if required.
 host_name = 'localhost'
-port = '5432'                 # change this to the port number that is used by PostgreSQL on your machine.
+port = '5433'                 # change this to the port number that is used by PostgreSQL on your machine.
 
 def get_database_name():
 	return database_name
