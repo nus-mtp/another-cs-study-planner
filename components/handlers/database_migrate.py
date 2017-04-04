@@ -20,7 +20,12 @@ class DatabaseMigrate(object):
         if not session.validate_session():
             raise web.seeother('/login')
         else:
-            current_database_ay = model.get_all_fixed_ay_sems()[0][0][0:8]
+            current_ay_with_current_date = model.get_current_ay_sem()[0:8]
+            current_database_ay = model.get_current_ay()
+
+            if current_ay_with_current_date == current_database_ay:
+                raise web.seeother("/")
+
             next_ay = model.get_next_ay(current_database_ay)
             future_ay = model.get_next_ay(next_ay)
 
@@ -28,5 +33,13 @@ class DatabaseMigrate(object):
 
 
     def POST(self):
+        '''
+            Performs the database migration, should the user acknowledges
+            the implication involved, and presses the 'Proceed' button in
+            the web page.
+        '''
+        # TODO: retrieve a Boolean from the migration function to determine
+        # if the migration was completed successfully, and use JavaScript to
+        # redirect to index page.
         model.migrate_to_next_aysem()
         web.seeother("/")
