@@ -26,13 +26,16 @@ class TestCode(object):
     EDIT_MODULE_SPECIFIC_TITLE = ' <h1 class="title text-center">Edit <b>BT5110</b> ' +\
                                  'For <b>AY 17/18 Sem 1</b></h1>'
     EDIT_MODULE_PRECLUSIONS_BUTTON = '<a class="btn btn-primary" id="edit-preclusion" ' +\
-                                     'href="/editModulePreclusions?code=BT5110" ' +\
-                                     'target="_blank">Edit Preclusions</a>'
+                                     'href="/editModulePreclusions?code=BT5110">' +\
+                                     'Edit Preclusions</a>'
     EDIT_MODULE_PRECLUSIONS_HREF = '/editModulePreclusions?code=BT5110'
     EDIT_MODULE_PREREQUISITES_BUTTON = '<a class="btn btn-primary" id="edit-prerequisite" ' +\
-                                       'href="/editModulePrerequisites?code=BT5110" ' +\
-                                       'target="_blank">Edit Prerequisites</a>'
+                                       'href="/editModulePrerequisites?code=BT5110">' +\
+                                       'Edit Prerequisites</a>'
     EDIT_MODULE_PREREQUISITES_HREF = '/editModulePrerequisites?code=BT5110'
+
+    EDIT_PREREQ_CORRECT_DIRECT = 'Edit Prerequisites'
+    EDIT_PRECLUSION_CORRECT_DIRECT = 'Edit Preclusions'
 
     TESTING_MODULE = 'BT5110'
 
@@ -168,6 +171,7 @@ class TestCode(object):
 
         button_response = response.click(linkid="edit-preclusion")
         assert_equal(button_response.status, 200)
+        button_response.mustcontain(self.EDIT_PRECLUSION_CORRECT_DIRECT)
 
 
     def test_module_edit_goto_edit_prerequisites(self):
@@ -181,3 +185,4 @@ class TestCode(object):
 
         button_response = response.click(linkid="edit-prerequisite")
         assert_equal(button_response.status, 200)
+        button_response.mustcontain(self.EDIT_PREREQ_CORRECT_DIRECT)
