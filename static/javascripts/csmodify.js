@@ -75,17 +75,52 @@ $(function() {
  }
 
 /*
- * FUNCTIONS FOR ENABLING SORTING FOR CERTAIN TABLES
+ * FUNCTIONS FOR CUSTOM VALIDATION MESSAGES FOR LOGIN
+ * AND REGISTRATION FORMS
  */
+function check(input) {
+    if (input.validity.patternMismatch) {
+        input.setCustomValidity("User ID should be alphanumeric and within 9 characters.");
+    } else if (input.validity.valueMissing) {
+        input.setCustomValidity("Please fill in your User ID.");
+    }
+}
 
- $(document).ready(function() {
+
+/* ========== DOCUMENT-READY FUNCTIONS ========== */
+$(document).ready(function() {
+    /*
+     * READY FUNCTION:FUNCTIONS FOR ENABLING SORTING FOR CERTAIN TABLES
+     */
+
     /*
      * order: [column #, asc/desc],
      * where column # uses 0-based indexing
      * from left to right
     */
-    $('#module-listing-table').DataTable( {
-        "aaSorting": []
+    var table = $('#module-listing-table').DataTable( {
+        "aaSorting": [],
+    } );
+
+    // Apply the search
+    table.columns().every( function () {
+        var col = this;
+ 
+        $('input', this.header()).on('keyup change', function () {
+            if (col.search() !== this.value) {
+                col
+                    .search(this.value)
+                    .draw();
+            }
+        } );
+
+        $('#toggleButton').on('click', function () {
+            if (col.search() !== this.value) {
+                col
+                    .search(this.value)
+                    .draw();
+            }
+        } );
     } );
 
     $('#delete-module-table').DataTable( {
@@ -199,5 +234,4 @@ $(function() {
     $('#mod-specific-size-table').DataTable( {
         "order": [[ 2, "asc"]]
     } );
-} );
-
+});

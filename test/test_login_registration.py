@@ -45,21 +45,22 @@ class TestCode(object):
 
     FORM_USER_LOGIN = '<form id="loginForm" action="/login" method="post">'
     FORM_USER_LOGIN_USERNAME_LABEL = '<label for="id">User ID</label>'
-    FORM_USER_LOGIN_USERNAME_FIELD = '<input type="text" class=""form-control" ' +\
-                                     'id="id" name="id" placeholder="User ID" ' +\
-                                     'pattern="^[a-zA-Z0-9]+$" required>'
+    FORM_USER_LOGIN_USERNAME_FIELD = '<input type="text" class="form-control" ' +\
+                                     'id="id" name="id" pattern="^[a-zA-Z0-9]+$$" ' +\
+                                     'oninput="check(this)" autofocus required>'
     FORM_USER_LOGIN_PASSWORD_LABEL = '<label for="password">Password</label>'
     FORM_USER_LOGIN_PASSWORD_FIELD = '<input type="password" class="form-control" ' +\
                                      'id="password" name="password" ' +\
-                                     'placeholder="Password" required>'
+                                     'required>'
     FORM_USER_LOGIN_BUTTON = '<input type="submit" value="Login" ' +\
                              'class="btn btn-primary">'
 
     FORM_USER_REGISTRATION = '<form id="registerForm" action="/register" method="post">'
     FORM_USER_REGISTRATION_USERNAME_LABEL = '<label for="id">User ID</label>'
-    FORM_USER_REGISTRATION_USERNAME_FIELD = '<input type="text" class="form-control"' +\
-                                            ' id="id" name="id" placeholder="User ' +\
-                                            'ID" pattern="^[a-zA-Z0-9]+$" required>'
+    FORM_USER_REGISTRATION_USERNAME_FIELD = '<input type="text" class="form-control" ' +\
+                                            'id="id" name="id" pattern="^[a-zA-Z0-9]+$$" ' +\
+                                            'maxlength="9" oninput="check(this)" ' +\
+                                            'autofocus required>'
     FORM_USER_REGISTRATION_PASSWORD_LABEL = '<label for="password">Password</label>'
     FORM_USER_REGISTRATION_PASSWORD_FIELD = '<input type="password" class="form-control"' +\
                                             'id="password" name="password" placeholder=' +\

@@ -29,10 +29,11 @@ class Outcome(object):
                     outcome_message = "Module " + module_code + " has been added successfully!"
                     redirect_page = "/viewModule?code="+module_code
                 else:
-                    outcome_message = "Error: Module code already exists! " +\
-                                      "Please use another module code."
+                    if module_code is None:
+                        outcome_message = "Error: failed to add module!"
+                    else:
+                        outcome_message = "Error: " + module_code + " is an existing module!"
                     redirect_page = "/modules"
-
             elif action == "edit_module":
                 if outcome is True:
                     outcome_message = "Module " + module_code + " has been edited successfully!"
@@ -43,6 +44,9 @@ class Outcome(object):
                         redirect_page = "/modules"
                     else:
                         redirect_page = "/viewModule?code="+module_code
+            elif action == "invalid_input":
+                outcome_message = "Invalid input for module name/code/MCs/description"
+                redirect_page = "/"
 
             elif action == "edit_mounting":
                 ay_sem = data[3]
@@ -127,5 +131,11 @@ class Outcome(object):
             elif action == "mods-before-internship":
                 outcome_message = "The AY-Semester you specified does not exist!"
                 redirect_page = "/moduleTakenPriorToInternship"
+
+            elif action == "back-to-listing":
+                outcome_message = "The module you want to view has been deleted by another user!"
+                redirect_page = "/"
+            else:
+                outcome_message = "unknown error has occured with action " + action
 
             return RENDER.outcome(outcome_message, redirect_page)
