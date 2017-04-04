@@ -3,6 +3,7 @@ $def with (page)
 <html>
 	<head>
 		<title>$:page.title</title>
+		<link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" type="text/css" href="static/stylesheets/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="static/stylesheets/bootstrap-theme.min.css">
 		<link rel="stylesheet" type="text/css" href="static/stylesheets/dataTables.bootstrap.min.css">
@@ -13,6 +14,7 @@ $def with (page)
 		<script type="text/javascript" src="static/javascripts/dataTables.bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/jquery.easing.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/jquery.canvasjs.min.js"></script>
+		<script type="text/javascript" src="static/javascripts/bootstrap3-typeahead.min.js"></script>
 		<script type="text/javascript" src="static/javascripts/csmodify.js"></script>
 	</head>
 
@@ -64,8 +66,8 @@ $def with (page)
 				<h3 id="sidebar"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Change Curriculum</h3>
 				<ul id="sidebar">
 					<!--li><a href="#">Change Module Quota</a></li>
-					<li><a href="#">Change Preclusions/Prerequisites</a></li>
-					<li><a href="#">Edit Module</a></li-->
+					<li><a href="#">Change Preclusions/Prerequisites</a></li-->
+					<li><a id="sidebar" href="/editAll">Edit All Mountings and Quotas</a></li>
 					<li><a id="sidebar" href="/addModule">Add Module</a></li>
 					<li><a id="sidebar" href="/deleteModule">Delete Module</a></li>
 				</ul>
@@ -104,6 +106,5 @@ $def with (page)
 				</ol>
 			</div>
 			$:page
-
 	</body>
 </html>

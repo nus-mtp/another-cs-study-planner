@@ -19,7 +19,8 @@ class Tentative(object):
     def __init__(self):
         '''
             Full_mounting_plan is a list of 'subplans'
-            Each subplan is a list of 4 attributes (code, name, sem 1 mounting, sem 2 mounting)
+            Each subplan is a list of 6 attributes
+            (code, name, sem 1 mounting, sem 2 mounting, sem 1 quota, sem 2 quota)
             For tentative mountings, each mounting has 3 possible values (-1 or 0 or 1)
             -1 = not mounted; 0 = unmounted; 1 = mounted
         '''
@@ -36,7 +37,7 @@ class Tentative(object):
         for info in module_infos:
             code = info[0]
             name = info[1]
-            subplan = ["", "", -1, -1]
+            subplan = ["", "", -1, -1, None, None]
             subplan[0] = code
             subplan[1] = name
             self.full_mounting_plan.append(subplan)
@@ -61,10 +62,13 @@ class Tentative(object):
                 curr_module_code = curr_subplan[0]
             ay_sem = info[2]
             sem = ay_sem[9:14]
+            quota = info[3]
             if sem == "Sem 1":
                 curr_subplan[2] = 1
+                curr_subplan[4] = quota
             elif sem == "Sem 2":
                 curr_subplan[3] = 1
+                curr_subplan[5] = quota
 
         # Generate full mounting plan for fixed mountings
         fixed_mounting_handler = Fixed()
@@ -114,4 +118,5 @@ class Tentative(object):
             to navigate to the tentative module mountings, that is
             present in other valid pages.
         '''
+        #used in fixed module mountings
         raise web.seeother('/moduleMountingTentative')

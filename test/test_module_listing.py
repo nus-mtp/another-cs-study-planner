@@ -32,7 +32,6 @@ class TestCode(object):
     ADVANCED_SEARCH_TEXT = 'Advanced Search &nbsp; <span id="chevron" '+\
                            'class="glyphicon glyphicon-chevron-down"></span>'
     ADVANCED_SEARCH_INPUT = '<input hidden type="text" class="filter" placeholder="Code" size="10">'
-    global_var = None
 
     def __init__(self):
         self.middleware = None

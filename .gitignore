@@ -1,3 +1,4 @@
 *.pyc
 components/local_database_data.py
 sessions/
+.vagrant

@@ -3,7 +3,7 @@
     Acts as a facade for database.py and helper.py
 '''
 
-from components import database, helper
+from components import database, helper, check_string
 
 INDEX_FIRST_ELEM = 0
 INDEX_SECOND_ELEM = 1
@@ -122,6 +122,10 @@ def delete_fixed_mounting(code, ay_sem):
     return database.delete_fixed_mounting(code, ay_sem)
 
 
+def delete_all_fixed_mountings(code):
+    return database.delete_all_fixed_mountings(code)
+
+
 def add_tenta_mounting(code, ay_sem, quota):
     return database.add_tenta_mounting(code, ay_sem, quota)
 
@@ -132,6 +136,10 @@ def update_quota(code, ay_sem, quota):
 
 def delete_tenta_mounting(code, ay_sem):
     return database.delete_tenta_mounting(code, ay_sem)
+
+
+def delete_all_tenta_mountings(code):
+    return database.delete_all_tenta_mountings(code)
 
 
 ######################################################################################
@@ -453,3 +461,21 @@ def convert_to_list(table):
 
 def replace_null_with_dash(table):
     return helper.replace_null_with_dash(table)
+######################################################################################
+# validation functions from check_string
+######################################################################################
+
+def check_name(name):
+    return check_string.check_name(name)
+
+
+def check_mcs(mcs):
+    return check_string.check_mcs(mcs)
+
+
+def check_code(code):
+    return check_string.check_code(code)
+
+
+def outcome_invalid():
+    return check_string.outcome_invalid()

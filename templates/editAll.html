@@ -1,0 +1,172 @@
+$def with (selectedAY, fullMountingPlan)  
+
+$ title_string = 'Edit All Mountings and Quotas'
+
+$var title:$title_string
+$ home = ['/', 'Home']
+$ editAll = ['#', title_string]
+
+$var hierarchy = [home, editAll]
+
+<script type="text/javascript">
+    $$(document).ready(function(){
+        //Load the list of modules into the 'Select module to edit' input
+        var moduleSource = [];
+        var moduleCodeAndName = "";
+        $for subplan in fullMountingPlan:
+            moduleCodeAndName = "$subplan[0]"+" - "+"$subplan[1]"
+            moduleSource.push(moduleCodeAndName);
+        $$("input.typeahead").typeahead({
+            minLength: 1,
+            source: moduleSource,
+            updater: function(selectedModule) {
+                var selectedModuleCode = selectedModule.split(" ")[0];
+                var isModuleEdited = selectedModuleCode + "_isEdited";
+                showModuleInTable(selectedModuleCode, isModuleEdited);
+            }
+        })
+    });
+</script>
+<script type="text/javascript" src="static/javascripts/editAll.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center"><b>Edit All Mountings and Quotas in <u>$selectedAY</u></b></h1>
+            <p class="text-center">Edit the mountings and quotas for the AY <b>one year after the current AY</b>.</p>
+            <br>
+            <div id="select-mod-to-edit-div" class="col-md-8 col-md-offset-2 text-center">
+                <b style="font-size:20px;">Select module(s) to edit:&nbsp;</b>
+                <br>
+                <input type="text" id="select-mod-to-edit" class="typeahead" data-provide="typeahead" placeholder="Enter module code or name here" style="display:inline; margin-top: 8px;" >
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-html="true" style="margin-left: 5px; position: relative; top: 5px; font-size:22px;" 
+                title="<p>Type the code or name of the module that you wish to edit, then select the module<br>(left click or press enter) 
+                when it appears in the dropdown menu.</p><p>If no modules appear, it means that<br>no matches are found.</p>"></span>
+            </div>
+            <form id="edit-all-form" name="edit-all-form" action="/editAll" method="post">
+                <table class="table table-bordered text-center" id="edit-all-table">
+                    <thead id="edit-all-table-header">
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Mounted In Sem 1</th>
+                            <th>Sem 1 Quota</th>
+                            <th>Mounted In Sem 2</th>
+                            <th>Sem 2 Quota</th>
+                            <th>Remove</th>
+                        </tr>
+                        <tr id="edit-all-table-no-modules">
+                            <td colspan=7>No modules selected</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        $for subplan in fullMountingPlan:
+                            $ moduleCode = subplan[0]
+                            $ moduleName = subplan[1]
+                            $ sem1Mounting = subplan[2]
+                            $ sem2Mounting = subplan[3]
+                            $ sem1Quota = subplan[4]
+                            $ sem2Quota = subplan[5]
+
+                            $ moduleRow = moduleCode + "_row"
+                            $ sem1MountingOption = moduleCode + "_Sem1Mounting"
+                            $ sem2MountingOption = moduleCode + "_Sem2Mounting"
+                            $ sem1QuotaInput = moduleCode + "_Sem1Quota"
+                            $ sem2QuotaInput = moduleCode + "_Sem2Quota"
+                            $ isModuleEdited = moduleCode + "_isEdited"
+
+                            <tr id="$moduleRow">
+                                <td class="text-center">
+                                    <a href="/viewModule?code=$moduleCode" target="_blank" data-toggle="tooltip" title="View general info for $moduleCode">$moduleCode</a>
+                                </td>
+                                <td>$moduleName</td>
+
+                            $if sem1Mounting == 1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting" checked>
+                                </td>
+                            $elif sem1Mounting == 0:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
+                                </td>
+                            $elif sem1Mounting == -1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem1QuotaInput'); checkMountingChange(this, '$sem1Mounting', '$sem1Quota', '$sem1MountingOption', '$sem1QuotaInput');" id="$sem1MountingOption" name="$sem1MountingOption" value="sem1Mounting">
+                                </td>
+
+                            $if sem1Quota == '-':
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" disabled>
+                                </td>
+                            $elif sem1Quota == '?':
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();" >
+                                </td>
+                            $else:
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem1QuotaInput" name="$sem1QuotaInput" value="$sem1Quota" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem1Quota', '$sem1QuotaInput');" onpaste="event.preventDefault();">
+                                </td>
+
+                            $if sem2Mounting == 1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting" checked>
+                                </td>
+                            $elif sem2Mounting == 0:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
+                                </td>
+                            $elif sem2Mounting == -1:
+                                <td>
+                                    <input type="checkbox" onclick="toggleQuotaState('$sem2QuotaInput'); checkMountingChange(this, '$sem2Mounting', '$sem2Quota', '$sem2MountingOption', '$sem2QuotaInput');" id="$sem2MountingOption" name="$sem2MountingOption" value="sem2Mounting">
+                                </td>
+
+                            $if sem2Quota == '-':
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();" disabled>
+                                </td>
+                            $elif sem2Quota == '?':
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
+                                </td>
+                            $else:
+                                <td>
+                                    <input type="number" oninput="maxLengthCheck(this)" min="0" max="999" maxlength="3" id="$sem2QuotaInput" name="$sem2QuotaInput" value="$sem2Quota" onkeydown="checkQuotaKeypress();" 
+                                    onkeyup="checkQuotaChange(this, '$sem2Quota', '$sem2QuotaInput');" onpaste="event.preventDefault();">
+                                </td>
+                            $if True:
+                                <td>
+                                    <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom" title="Remove module from this table" onclick="resetMountingAndQuota('$sem1Mounting', '$sem2Mounting', '$sem1Quota', '$sem2Quota', '$sem1MountingOption', '$sem2MountingOption', '$sem1QuotaInput', '$sem2QuotaInput'); removeModuleFromTable('$moduleRow', '$isModuleEdited');">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                                <input type="hidden" id="$isModuleEdited" name="$isModuleEdited" value="False">      
+                            </tr>
+                    </tbody>
+                </table>
+                <div class="col-md-2 col-md-offset-10">
+                    <table style="float:right;">
+                        <tr>
+                            <td style="width:30px; background-color:#fffdcc; border:1px solid gray;"></td> 
+                            <td style="padding:2px 0px 0px 7px; vertical-align:middle; font-size: 14px;">= Modified</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <button type="submit" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Save changes" onclick="if(!confirm('Are you sure you want to save your changes?')){event.preventDefault();}">
+                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                    </button>
+                    <button type="button" id="edit-all-reset-button" class="btn btn-primary edit-all-bottom-button" data-toggle="tooltip" data-placement="bottom" title="Reset table" onclick="if(!confirm('Are you sure you want to reset the table and discard all your changes?')){event.preventDefault();} else {location.href='/editAll';}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
