@@ -123,7 +123,7 @@ class TestCode(object):
         form.__setitem__("aysem", "AY 16/17 Sem 2")
         response = form.submit()
         assert_equal(response.status, 200)
-        response.mustcontain()
+        response.mustcontain(self.FILTER_TABLE)
 
 
     @raises(Exception)
