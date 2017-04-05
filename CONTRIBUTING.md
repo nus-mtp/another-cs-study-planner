@@ -22,7 +22,7 @@ Should you wish to contribute to this project, please make sure you fulfil the [
 
 ## Project Prerequisites
 
-***Project setup instructions will not be covered here. Please refer to [INSTALLING.md](INSTALLING.md) instead.***
+***Project setup instructions will not be covered here. Please refer to [INSTALLING.md](https://github.com/nus-mtp/cs-modify/blob/master/INSTALLING.md) instead.***
 
 This application was built on [`Python 2.7.12`](https://www.python.org/downloads/) using the [`web.py`](http://webpy.org/install) framework. This application is best viewed in [Google Chrome](https://www.google.com/chrome/) browser.
 

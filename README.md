@@ -18,11 +18,11 @@ Module planning itself is, by no means, an easy feat. As there is no central sys
 
 ## Installing Instructions
 
-Please read [INSTALLING.md](INSTALLING.md) for instructions for installing the project on your machine.
+Please read [INSTALLING.md](https://github.com/nus-mtp/cs-modify/blob/master/INSTALLING.md) for instructions for installing the project on your machine.
 
 ## Contributing To The Project
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for instructions for how to contribute to the project.
+Please read [CONTRIBUTING.md](https://github.com/nus-mtp/cs-modify/blob/master/CONTRIBUTING.md) for instructions for how to contribute to the project.
 
 ## About Us
 
