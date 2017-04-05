@@ -47,3 +47,15 @@ def outcome_invalid():
         Outcome page: returns the outcome page when an invalid input is detected
     '''
     return Outcome().POST("invalid_input", None, None)
+
+
+def is_alpha_numeric(my_str):
+    '''
+        Args
+        param (str): str representing the user id
+
+        Return:
+        bool: true if id is alpha numeric
+    '''
+    pattern = re.compile('^[0-9a-zA-Z]{1,20}$')
+    return bool(pattern.match(str(my_str)))

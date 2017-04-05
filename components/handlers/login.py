@@ -36,7 +36,10 @@ class Login(object):
         except AttributeError:
             return Outcome().POST("login_user", False, None)
 
-        if credentials.id == '' or credentials.password == '':
+        # User ID and password should not be more than 20 characters long,
+        # and should not contain special characters
+        if not model.is_alpha_numeric(input_id) or \
+        not model.is_alpha_numeric(input_password):
             return Outcome().POST("login_user", False, None)
 
         is_valid = model.validate_admin(credentials.id, credentials.password)
