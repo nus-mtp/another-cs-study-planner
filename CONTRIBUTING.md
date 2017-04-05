@@ -10,11 +10,11 @@ Should you wish to contribute to this project, please make sure you fulfil the [
 * [Downloading the Project Files](#downloading-the-project-files)
 * [Project Workflow](#project-workflow)
 * [Procedure for Submitting Pull Requests](#procedure-for-submitting-pull-requests)
-* Follow-up Actions for Pull Requests
+* [Follow-up Actions for Pull Requests](#follow-up-actions-for-pull-requests)
   * [Your pull request is approved](#your-pull-request-is-approved)
   * [Changes are requested for your pull request](#changes-are-requested-for-your-pull-request)
   * [Your pull request is rejected](#your-pull-request-is-rejected)
-* Issue Formats
+* [Issue Formats](#issue-formats)
   * [Issue: Bug](#issue-bug)
   * [Issue: Enhancement](#issue-enhancement)
 * [List of Possible Contributions](#list-of-possible-contributions)
