@@ -1,10 +1,28 @@
 # Contributing to the Project
 
+This document details how you should contribute to this project, as a developer.
+
 Should you wish to contribute to this project, please make sure you fulfil the [project prerequisites](#project-prerequisites), understand the [workflow](#project-workflow) behind this project, and follow the [procedure](#procedure-for-submitting-pull-requests) as described in this page.
+
+## Contents
+
+* [Project Prerequisites](#project-prerequisites)
+* [Downloading the Project Files](#downloading-the-project-files)
+* [Project Workflow](#project-workflow)
+* [Procedure for Submitting Pull Requests](#procedure-for-submitting-pull-requests)
+* Follow-up Actions for Pull Requests
+  * [Your pull request is approved](#your-pull-request-is-approved)
+  * [Changes are requested for your pull request](#changes-are-requested-for-your-pull-request)
+  * [Your pull request is rejected](#your-pull-request-is-rejected)
+* Issue Formats
+  * [Issue: Bug](#issue-bug)
+  * [Issue: Enhancement](#issue-enhancement)
+* [List of Possible Contributions](#list-of-possible-contributions)
+* [Other Queries](#other-queries)
 
 ## Project Prerequisites
 
-***Project setup instructions will not be covered here. Please refer to the README instead.***
+***Project setup instructions will not be covered here. Please refer to [INSTALLING.md](INSTALLING.md) instead.***
 
 This application was built on [`Python 2.7.12`](https://www.python.org/downloads/) using the [`web.py`](http://webpy.org/install) framework. This application is best viewed in [Google Chrome](https://www.google.com/chrome/) browser.
 
@@ -157,4 +175,4 @@ Some of the possible contributions are listed here, for your convenience:
 
 ## Other Queries
 
-If you have any other queries on how to contribute to our project, you may contact us directly on GitHub.
+If you have any other queries on how to contribute to our project, you may contact us directly on GitHub, or drop us a mail at `nus-dot-csmodify-at-gmail-dot-com`.
