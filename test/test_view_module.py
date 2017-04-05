@@ -248,6 +248,6 @@ class TestCode(object):
             Tests the display of the oversubscribed warning icons
             that appear in Module Overview
         '''
-        root = self.test_app.get('/viewModule?code=CS2309')
+        root = self.test_app.get('/viewModule?code=CP2201')
         root.mustcontain(self.OVERSUB_ORANGE_ICON)
         root.mustcontain(self.OVERSUB_RED_ICON)
