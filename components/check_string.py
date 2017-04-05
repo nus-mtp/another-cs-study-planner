@@ -48,6 +48,7 @@ def outcome_invalid():
     '''
     return Outcome().POST("invalid_input", None, None)
 
+
 def is_alpha_numeric(my_str):
     '''
         Args
@@ -56,5 +57,5 @@ def is_alpha_numeric(my_str):
         Return:
         bool: true if id is alpha numeric
     '''
-    pattern = re.compile('^[0-9a-zA-Z]{0,20}$')
+    pattern = re.compile('^[0-9a-zA-Z]{1,20}$')
     return bool(pattern.match(str(my_str)))

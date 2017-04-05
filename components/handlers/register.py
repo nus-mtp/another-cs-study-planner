@@ -42,12 +42,14 @@ class Register(object):
         except AttributeError:
             raise web.seeother('/register')
 
-        if credentials.id == '' or credentials.password == '':
-            raise web.seeother('/register')
-
-        # If user ID already exists, alert user that the ID is taken.
-        if model.is_userid_taken(credentials.id):
+        # User ID and password should not be more than 20 characters long,
+        # and should not contain special characters
+        if not model.is_alpha_numeric(input_id) or \
+        not model.is_alpha_numeric(input_password):
             outcome = False
+        # If user ID already exists, alert user that the ID is taken.
+        elif model.is_userid_taken(credentials.id):
+            outcome = "taken"
         # Else, the new account is valid, and add it to the database.
         else:
             salt = uuid.uuid4().hex

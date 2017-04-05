@@ -102,9 +102,14 @@ class Outcome(object):
                     outcome_message = "Your account has been created successfully. " +\
                                       "Please proceed to login."
                     redirect_page = "/login"
-                else:
+                elif outcome == "taken":
                     outcome_message = "The username has been taken. " +\
                                       "Please register with a different username."
+                    redirect_page = "/register"
+                else:
+                    outcome_message = "Error: Invalid UserID/password. " +\
+                                      "Please check that your UserID/password is not more than " +\
+                                      "20 characters long and does not contain special characters."
                     redirect_page = "/register"
 
             elif action == "login_user":
