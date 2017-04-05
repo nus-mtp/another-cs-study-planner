@@ -45,6 +45,7 @@ def get_all_modules():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_modules_and_focus():
@@ -62,6 +63,7 @@ def get_all_modules_and_focus():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_module(code):
@@ -74,6 +76,7 @@ def get_module(code):
         return DB_CURSOR.fetchone()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_module_name(code):
@@ -86,6 +89,7 @@ def get_module_name(code):
         return DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
+        return ""
 
 
 def is_existing_module(code):
@@ -99,6 +103,7 @@ def is_existing_module(code):
         number_module = DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
+        return False
     return number_module > 0
 
 
@@ -112,6 +117,7 @@ def get_all_original_module_info():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_original_module_info(code):
@@ -124,6 +130,7 @@ def get_original_module_info(code):
         return DB_CURSOR.fetchone()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_new_modules():
@@ -136,6 +143,7 @@ def get_new_modules():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -239,6 +247,7 @@ def get_all_past_mounted_modules():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_fixed_mounted_modules():
@@ -253,6 +262,7 @@ def get_all_fixed_mounted_modules():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 def get_all_tenta_mounted_modules():
     '''
@@ -266,6 +276,7 @@ def get_all_tenta_mounted_modules():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
@@ -283,6 +294,7 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_fixed_mounting_and_quota(code):
@@ -296,6 +308,7 @@ def get_fixed_mounting_and_quota(code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_tenta_mounting_and_quota(code):
@@ -309,6 +322,7 @@ def get_tenta_mounting_and_quota(code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
@@ -323,6 +337,7 @@ def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
         return result[0] == 1    # True == Mounted, False == Not Mounted
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
     '''
@@ -336,6 +351,7 @@ def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
         return result[0] == 1    # True == Mounted, False == Not Mounted
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     '''
@@ -352,6 +368,7 @@ def get_quota_of_target_fixed_ay_sem(code, ay_sem):
             return False
     except psycopg2.Error:
         CONNECTION.rollback()
+        return False
 
 
 def get_quota_of_target_tenta_ay_sem(code, ay_sem):
@@ -369,6 +386,7 @@ def get_quota_of_target_tenta_ay_sem(code, ay_sem):
             return False
     except psycopg2.Error:
         CONNECTION.rollback()
+        return False
 
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
@@ -415,6 +433,7 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
         return processed_list
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -531,6 +550,7 @@ def get_current_ay():
         return DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_fixed_ay_sems():
@@ -544,6 +564,7 @@ def get_all_fixed_ay_sems():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_tenta_ay_sems():
@@ -557,6 +578,7 @@ def get_all_tenta_ay_sems():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -574,6 +596,7 @@ def get_number_students_planning(code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
@@ -591,6 +614,7 @@ def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
         return DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_list_students_take_module(code, aysem):
@@ -630,6 +654,7 @@ def get_list_students_take_module(code, aysem):
         return helper.replace_null_with_dash(current_list_of_students)
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_oversub_mod():
@@ -689,6 +714,7 @@ def get_student_stats_for_all_mods():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -705,6 +731,7 @@ def get_all_focus_areas():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_num_students_by_yr_study():
@@ -728,6 +755,7 @@ def get_num_students_by_yr_study():
         return final_table
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 def get_num_students_by_focus_area_non_zero():
     '''
@@ -745,6 +773,7 @@ def get_num_students_by_focus_area_non_zero():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_focus_areas_with_no_students_taking():
@@ -761,6 +790,7 @@ def get_focus_areas_with_no_students_taking():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_number_students_without_focus_area():
@@ -776,6 +806,7 @@ def get_number_students_without_focus_area():
         return DB_CURSOR.fetchone()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return 0
 
 
 def get_num_students_by_focus_areas():
@@ -920,6 +951,7 @@ def get_modules_with_modified_details():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_modules_with_modified_quota():
@@ -945,6 +977,7 @@ def get_modules_with_modified_quota():
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -985,6 +1018,7 @@ def get_mod_taken_together_with(code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_mod_taken_together_with_mod_and_aysem(code, aysem):
@@ -1018,6 +1052,7 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_all_mods_taken_together(aysem=None):
@@ -1056,6 +1091,7 @@ def get_all_mods_taken_together(aysem=None):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_modA_taken_prior_to_modB(aysem):
@@ -1098,6 +1134,7 @@ def get_modA_taken_prior_to_modB(aysem):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, module_B_ay_sem):
     '''
@@ -1126,6 +1163,7 @@ def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, modul
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_mod_before_intern(ay_sem):
@@ -1157,7 +1195,7 @@ def get_mod_before_intern(ay_sem):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
-
+        return []
 
 def get_mods_no_one_take(aysem):
     '''
@@ -1210,7 +1248,7 @@ def get_mods_no_one_take(aysem):
         return required_list
     except psycopg2.Error:
         CONNECTION.rollback()
-
+        return []
 
 ######################################################################################
 # Functions that query prerequisite or preclusion information
@@ -1226,6 +1264,7 @@ def get_prerequisite(module_code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def get_preclusion(module_code):
@@ -1238,6 +1277,7 @@ def get_preclusion(module_code):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 ######################################################################################
@@ -1518,6 +1558,7 @@ def get_starred_modules(staff_id):
         return DB_CURSOR.fetchall()
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def is_module_starred(module_code, staff_id):
@@ -1569,6 +1610,7 @@ def is_userid_taken(userid):
         return len(result) != 0
     except psycopg2.Error:
         CONNECTION.rollback()
+        return []
 
 
 def delete_admin(username):
@@ -1625,6 +1667,7 @@ def add_session(username, session_salt):
         CONNECTION.rollback()
 
 
+
 def validate_session(username, session_id):
     '''
         Check if a provided session-id is valid.
@@ -1641,6 +1684,7 @@ def validate_session(username, session_id):
             return is_valid
     except psycopg2.Error:
         CONNECTION.rollback()
+        return False
 
 
 def clean_old_sessions(date_to_delete):
