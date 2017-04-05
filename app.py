@@ -58,6 +58,13 @@ URLS = (
 '''
 all_modules = database.get_all_modules()
 
+
+'''
+    Set debug mode
+'''
+web.config.debug = False
+
+
 '''
     This defines the directory where the application should access
     to render its webpage templates.
