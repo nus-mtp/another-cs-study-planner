@@ -611,6 +611,11 @@ tr[id*='modified-details-child-row'] {
     vertical-align: middle;
 }
 
+.glyphicon-info-sign {
+    position: relative;
+    top: -1px;
+}
+
 .glyphicon-in-text, #back-to-top-btn {
     position: relative;
 }
