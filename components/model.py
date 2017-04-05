@@ -541,3 +541,6 @@ def check_code(code):
 
 def outcome_invalid():
     return check_string.outcome_invalid()
+
+def is_alpha_numeric(my_str):
+    return check_string.is_alpha_numeric(my_str)
