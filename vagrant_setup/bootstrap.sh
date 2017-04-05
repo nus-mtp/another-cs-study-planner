@@ -1,9 +1,5 @@
-# Some variables are provided for you here, for some
-# convenience in modifying your PostgreSQL settings.
-DB_OWNER='postgres'
-DB_USER='postgres'
+# The password variable is provided, for convenience.
 DB_USER_PASSWORD='12345678'
-DB_NAME='postgres'
 
 echo ""
 echo ""
@@ -42,13 +38,3 @@ echo ""
 echo ""
 echo "==================== [ CONFIGURING DATABASE USER ] ===================="
 sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$DB_USER_PASSWORD';"
-
-# This command creates the database required for the app.
-# 
-# By default, we use the 'postgres' database.
-# 
-# If you wish to use another database, please make sure you create the database
-echo ""
-echo ""
-echo " ==================== [ CREATING DATABASE ] ==================== "
-createdb -O $DB_OWNER -U $DB_USER $DB_NAME
