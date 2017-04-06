@@ -757,6 +757,7 @@ def get_num_students_by_yr_study():
         CONNECTION.rollback()
         return []
 
+
 def get_num_students_by_focus_area_non_zero():
     '''
         Retrieves the number of students for each focus area as a table,
@@ -1068,8 +1069,6 @@ def get_all_mods_taken_together(aysem=None):
         Discrete Structures, AY 16/17 Sem 1, 5)] means there are 5 students
         taking CS1010 and CS1231 together in AY 16/17 Sem 1.
     '''
-    current_ay = get_current_ay()
-
     sql_command = "SELECT sp1.moduleCode, m1.name, sp2.moduleCode, m2.name," + \
                   " sp1.acadYearAndSem, COUNT(*) " + \
                   "FROM studentPlans sp1, studentPlans sp2, module m1, module m2 " + \
@@ -1136,6 +1135,7 @@ def get_modA_taken_prior_to_modB(aysem):
         CONNECTION.rollback()
         return []
 
+
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, module_B_ay_sem):
     '''
         Retrieves the number of students who took module A some time before
@@ -1197,6 +1197,7 @@ def get_mod_before_intern(ay_sem):
         CONNECTION.rollback()
         return []
 
+
 def get_mods_no_one_take(aysem):
     '''
         Retrieves the list of all modules which no student take together
@@ -1249,6 +1250,7 @@ def get_mods_no_one_take(aysem):
     except psycopg2.Error:
         CONNECTION.rollback()
         return []
+
 
 ######################################################################################
 # Functions that query prerequisite or preclusion information
