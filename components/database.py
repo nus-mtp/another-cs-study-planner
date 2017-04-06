@@ -1601,8 +1601,9 @@ def add_admin(username, salt, hashed_pass):
 
 def is_userid_taken(userid):
     '''
-        Retrieves all account ids for testing if a user id supplied
-        during account creation
+        Tests if a userID already exists.
+        Returns True if query fails or if ID already taken
+
     '''
     sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
     try:
@@ -1612,7 +1613,7 @@ def is_userid_taken(userid):
         return len(result) != 0
     except psycopg2.Error:
         CONNECTION.rollback()
-        return []
+        return True
 
 
 def delete_admin(username):
