@@ -328,6 +328,7 @@ def get_tenta_mounting_and_quota(code):
 def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
     '''
         Get the mounting status of a module in a target fixed AY/Sem
+        Returns False if query fails, or if module not mounted
     '''
     try:
         sql_command = "SELECT COUNT(*) FROM moduleMounted " +\
@@ -337,11 +338,12 @@ def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
         return result[0] == 1    # True == Mounted, False == Not Mounted
     except psycopg2.Error:
         CONNECTION.rollback()
-        return []
+        return False
 
 def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
     '''
         Get the mounting status of a module in a target tentative AY/Sem
+        Returns False if query fails, or if module not mounted
     '''
     try:
         sql_command = "SELECT COUNT(*) FROM moduleMountTentative " +\
@@ -351,7 +353,7 @@ def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
         return result[0] == 1    # True == Mounted, False == Not Mounted
     except psycopg2.Error:
         CONNECTION.rollback()
-        return []
+        return False
 
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     '''
@@ -550,7 +552,7 @@ def get_current_ay():
         return DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
-        return []
+        return ""
 
 
 def get_all_fixed_ay_sems():
@@ -602,7 +604,8 @@ def get_number_students_planning(code):
 def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
     '''
         Retrieves the number of students who have taken or are taking the module
-        in the target AY-Sem
+        in the target AY-Sem.
+        Returns -1 if query fails
     '''
     sql_command = "SELECT COUNT(*) " + \
                   "FROM studentPlans sp " + \
@@ -614,7 +617,7 @@ def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
         return DB_CURSOR.fetchone()[0]
     except psycopg2.Error:
         CONNECTION.rollback()
-        return []
+        return -1
 
 
 def get_list_students_take_module(code, aysem):
