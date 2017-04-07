@@ -1,67 +1,31 @@
-INSERT INTO module VALUES('MM1001', 'Dummy Modified Module 1', 'Quota of sem 1 is modified', 1);
-INSERT INTO moduleMounted VALUES('MM1001', 'AY 16/17 Sem 1', 10);
-INSERT INTO moduleMounted VALUES('MM1001', 'AY 16/17 Sem 2', 10);
-INSERT INTO moduleMountTentative VALUES('MM1001', 'AY 17/18 Sem 1', 999);
-INSERT INTO moduleMountTentative VALUES('MM1001', 'AY 17/18 Sem 2', 10);
+UPDATE moduleMountTentative SET quota=250 WHERE moduleCode='CS2103' AND acadyearAndSem='AY 17/18 Sem 1';
 
-INSERT INTO module VALUES('MM1002', 'Dummy Modified Module 2', 'Quota of sem 2 is modified', 2);
-INSERT INTO moduleMounted VALUES('MM1002', 'AY 16/17 Sem 1', 20);
-INSERT INTO moduleMounted VALUES('MM1002', 'AY 16/17 Sem 2', 20);
-INSERT INTO moduleMountTentative VALUES('MM1002', 'AY 17/18 Sem 1', 20);
-INSERT INTO moduleMountTentative VALUES('MM1002', 'AY 17/18 Sem 2', 888);
+UPDATE moduleMountTentative SET quota=800 WHERE moduleCode='CS2106' AND acadyearAndSem='AY 17/18 Sem 2';
 
-INSERT INTO module VALUES('MM1003', 'Dummy Modified Module 3', 'Quota of sem 1 has become specified', 3);
-INSERT INTO moduleMounted VALUES('MM1003', 'AY 16/17 Sem 1', NULL);
-INSERT INTO moduleMounted VALUES('MM1003', 'AY 16/17 Sem 2', NULL);
-INSERT INTO moduleMountTentative VALUES('MM1003', 'AY 17/18 Sem 1', 777);
-INSERT INTO moduleMountTentative VALUES('MM1003', 'AY 17/18 Sem 2', NULL);
+UPDATE moduleMountTentative SET quota=40 WHERE moduleCode='CS3284' AND acadyearAndSem='AY 17/18 Sem 1';
 
-INSERT INTO module VALUES('MM1004', 'Dummy Modified Module 4', 'Quota of sem 2 has become unspecified', 4);
-INSERT INTO moduleMounted VALUES('MM1004', 'AY 16/17 Sem 1', 40);
-INSERT INTO moduleMounted VALUES('MM1004', 'AY 16/17 Sem 2', 40);
-INSERT INTO moduleMountTentative VALUES('MM1004', 'AY 17/18 Sem 1', 40);
-INSERT INTO moduleMountTentative VALUES('MM1004', 'AY 17/18 Sem 2', NULL);
+UPDATE moduleMountTentative SET quota=NULL WHERE moduleCode='CS1010E' AND acadyearAndSem='AY 17/18 Sem 2';
 
-INSERT INTO module VALUES('MM1005', 'Dummy Modified Module 5', 'Quota of both sem 1 and sem 2 has been modified', 5);
-INSERT INTO moduleMounted VALUES('MM1005', 'AY 16/17 Sem 1', 50);
-INSERT INTO moduleMounted VALUES('MM1005', 'AY 16/17 Sem 2', 50);
-INSERT INTO moduleMountTentative VALUES('MM1005', 'AY 17/18 Sem 1', NULL);
-INSERT INTO moduleMountTentative VALUES('MM1005', 'AY 17/18 Sem 2', 666);
+UPDATE moduleMountTentative SET quota=NULL WHERE moduleCode='CS2102' AND acadyearAndSem='AY 17/18 Sem 1';
+UPDATE moduleMountTentative SET quota=500 WHERE moduleCode='CS2102' AND acadyearAndSem='AY 17/18 Sem 2';
 
-INSERT INTO module VALUES('MM1006', 'Dummy Modified Module 6', 'Unmounted from sem 1', 6);
-INSERT INTO moduleMounted VALUES('MM1006', 'AY 16/17 Sem 1', 60);
-INSERT INTO moduleMounted VALUES('MM1006', 'AY 16/17 Sem 2', 60);
-INSERT INTO moduleMountTentative VALUES('MM1006', 'AY 17/18 Sem 2', 60);
+DELETE FROM moduleMountTentative WHERE moduleCode='CS2107' AND acadyearAndSem='AY 17/18 Sem 1';
 
-INSERT INTO module VALUES('MM1007', 'Dummy Modified Module 7', 'Remounted in sem 2', 7);
-INSERT INTO moduleMounted VALUES('MM1007', 'AY 16/17 Sem 1', 70);
-INSERT INTO moduleMountTentative VALUES('MM1007', 'AY 17/18 Sem 1', 70);
-INSERT INTO moduleMountTentative VALUES('MM1007', 'AY 17/18 Sem 2', 70);
+INSERT INTO moduleMountTentative VALUES('CS4243', 'AY 17/18 Sem 2', 100);
 
-INSERT INTO module VALUES('MM1008', 'Dummy Modified Module 8', 'Changed from mounted in sem 1 to sem 2', 8);
-INSERT INTO moduleMounted VALUES('MM1008', 'AY 16/17 Sem 1', 80);
-INSERT INTO moduleMountTentative VALUES('MM1008', 'AY 17/18 Sem 2', 80);
+DELETE FROM moduleMountTentative WHERE moduleCode='CS2107' AND acadyearAndSem='AY 17/18 Sem 1';
 
-INSERT INTO module VALUES('MM1009', 'Dummy Modified Module 9', 'Name is modified', 9);
-INSERT INTO moduleBackup VALUES('MM1009', 'Original Module Name', 'Name is modified', 9);
+DELETE FROM moduleMountTentative WHERE moduleCode='CS2104' AND acadyearAndSem='AY 17/18 Sem 1';
+INSERT INTO moduleMountTentative VALUES('CS2104', 'AY 17/18 Sem 2', 120);
 
-INSERT INTO module VALUES('MM1010', 'Dummy Modified Module 10', 'Description is modified', 10);
-INSERT INTO moduleBackup VALUES('MM1010', 'Dummy Modified Module 10', 'Original Description', 10);
+INSERT INTO moduleBackup VALUES('CP2201', 'Journey of the Entrepreneur', 'Innovators practice the art of persuading people to accept changes in how they live and work, leisure and social interaction. This module&#39;s object is to introduce students to digital innovation, and to encourage them to embark on a personal journey of creativity and challenge. Inspirational innovators will be invited to present topics related to digital innovation, such as successful innovative projects of start-up teams and advanced development teams, innovative approaches such as Design Thinking, and opportunities for innovation, the vibrant intersection of energising technology trends and new markets. This module will be graded as Completed Satisfactory or Completed Unsatisfactory (CS/CU).', 2);
 
-INSERT INTO module VALUES('MM1011', 'Dummy Modified Module 11', 'MC is modified', 0);
-INSERT INTO moduleBackup VALUES('MM1011', 'Dummy Modified Module 11', 'MC is modified', 11);
+INSERT INTO moduleBackup VALUES('CS2010', 'Data Structures and Algorithms II', 'This module is the third part of a three-part series on introductory programming and problem solving by computing. It continues the introduction in CS1010 and CS1020, and emphasises object-oriented programming with application to complex data structures. Topics covered include trees, binary search trees, order property, prefix/infix/postfix expressions, heaps, priority queues, graphs and their algorithmic design, recursive algorithms, problem formulation and problem solving with applications of complex data structures, data structure design principles and implementation strategies, and algorithm analysis.', 4);
 
-INSERT INTO module VALUES('MM1012', 'Dummy Modified Module 12', 'Name and description are modified', 12);
-INSERT INTO moduleBackup VALUES('MM1012', 'Original Module Name', 'Original Description', 12);
+INSERT INTO moduleBackup VALUES('CS3103', 'Computer Networks Practice', 'This module aims to provide an opportunity for the students to learn commonly-used network protocols in greater technical depth with their implementation details than a basic networking course. Students will perform hands-on experiments in configuring and interconnecting LANs using networking devices/technologies (e.g., routers, switches, SDN switches, and hubs), networking protocols (e.g., DHCP, DNS, RIP, OSPF, ICMP, TCP, UDP, wireless LAN, VLAN protocols, SIP, SSL, IPSec-VPN) and networking tools (e.g, tcpdump, netstat, ping, traceroute). Students will learn higher-layer network protocols and develop network applications (client/server, P2P) via socket programming.', 2);
 
-INSERT INTO module VALUES('MM1013', 'Dummy Modified Module 13', 'Mounting and name are modified', 1);
-INSERT INTO moduleMounted VALUES('MM1013', 'AY 16/17 Sem 1', 130);
-INSERT INTO moduleBackup VALUES('MM1013', 'Original Module Name', 'Mounting and name are modified', 1);
+UPDATE moduleMountTentative SET quota=200 WHERE moduleCode='CG1001' AND acadyearAndSem='AY 17/18 Sem 1';
+INSERT INTO moduleBackup VALUES('CG1001', 'Introduction to Computer Engineering', 'This module aims to provide an overview of Computer Engineering to the freshmen students. The module introduces the sub-areas, the issues, the impacts, and the challenges of Computer Engineering in transforming the world. The module demonstrates Computer Engineering as a multi-disciplinary field that transcends the traditional boundary of Computer Science and Electrical Engineering. It also gives the students an idea of the possible areas of specializations in their senior years of study.', 3);
 
-INSERT INTO module VALUES('MM1014', 'Dummy Modified Module 14', 'Quota and MC are modified', 2);
-INSERT INTO moduleMounted VALUES('MM1014', 'AY 16/17 Sem 2', 140);
-INSERT INTO moduleMountTentative VALUES('MM1014', 'AY 17/18 Sem 2', 555);
-INSERT INTO moduleBackup VALUES('MM1014', 'Dummy Modified Module 14', 'Quota and MC are modified', 12);
-
-INSERT INTO module VALUES('MM1015', 'Dummy Modified Module 15', 'Remounted in sem 1, but quota is not specified', 8);
-INSERT INTO moduleMountTentative VALUES('MM1015', 'AY 17/18 Sem 2', NULL);
+INSERT INTO moduleMountTentative VALUES('CS1231', 'AY 17/18 Sem 2', 300);
+INSERT INTO moduleBackup VALUES('CS1231', 'Discrete Structures', 'This module introduces mathematical tools required in the study of computer science. Topics include: (i) Logic and proof techniques: propositions, conditionals, quantifications. (ii) Relations and Functions: Equivalence relations and partitions. Partially ordered sets. Well-Ordering Principle. Function equality. Boolean/identity/inverse functions. Bijection. (iii) Mathematical formulation of data models (linear model, trees and graphs). (iv) Counting and Combinatoric: Pigeonhole Principle. Inclusion-Exclusion Principle. Number of relations on a set, number of injections from one finite set to another, Diagonalisation proof: An infinite countable set has an uncountable power set; Algorithmic proof: An infinite set has a countably infinite subset.', 4);
