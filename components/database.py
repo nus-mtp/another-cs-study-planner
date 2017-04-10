@@ -33,6 +33,7 @@ ERROR_MSG_MODULE_DOESNT_EXIST = "This module does not exist"
 ERROR_MSG_MODULE_PREREQ_ALREADY_PRECLUSION = "This module is a preclusion of the target module"
 ERROR_MSG_MODULE_PRECLUSION_ALREADY_PREREQ = "This module is a prerequisite of the target module"
 
+MAX_NUMBER_OF_ATTEMPTS = 30
 
 ######################################################################################
 # Functions that query general module information
@@ -57,7 +58,7 @@ def get_all_modules_and_focus():
         and focus areas of all modules
     '''
     number_of_attempts = 0
-    while number_of_attempts < 30:
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             sql_command = "SELECT m.*, b.focusArea " +\
                             "FROM module m " +\
@@ -78,7 +79,7 @@ def get_module(code):
         Get the module code, name, description, MCs and status of a single module
     '''
     number_of_attempts = 0
-    while number_of_attempts < 30:
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             sql_command = "SELECT * FROM module WHERE code=%s"
             DB_CURSOR.execute(sql_command, (code,))
@@ -94,13 +95,17 @@ def get_module_name(code):
     '''
         Retrieves the module name of a module given its module code.
     '''
-    try:
-        sql_command = "SELECT name FROM module WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code,))
-        return DB_CURSOR.fetchone()[0]
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return ""
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT name FROM module WHERE code=%s"
+            DB_CURSOR.execute(sql_command, (code,))
+            return DB_CURSOR.fetchone()[0]
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def is_existing_module(code):
@@ -108,53 +113,69 @@ def is_existing_module(code):
         Returns true if specified module code exists in the database,
         returns false otherwise.
     '''
-    try:
-        sql_command = "SELECT COUNT(*) FROM module WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code,))
-        number_module = DB_CURSOR.fetchone()[0]
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
-    return number_module > 0
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT COUNT(*) FROM module WHERE code=%s"
+            DB_CURSOR.execute(sql_command, (code,))
+            number_module = DB_CURSOR.fetchone()[0]
+            return number_module > 0
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_original_module_info():
     '''
         Get the original info of all modules from module backup
     '''
-    try:
-        sql_command = "SELECT * FROM moduleBackup"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT * FROM moduleBackup"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_original_module_info(code):
     '''
         Get the original info of a module from module backup
     '''
-    try:
-        sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code, ))
-        return DB_CURSOR.fetchone()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT * FROM moduleBackup WHERE code=%s"
+            DB_CURSOR.execute(sql_command, (code, ))
+            return DB_CURSOR.fetchone()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_new_modules():
     '''
         Get the module code, name, description and MCs of modules with status 'New'
     '''
-    try:
-        sql_command = "SELECT * FROM module WHERE status='New'"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT * FROM module WHERE status='New'"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -250,156 +271,199 @@ def get_all_past_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all past mounted modules
     '''
-    try:
-        sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                      "FROM module m1, moduleMountedPast m2 WHERE m2.moduleCode = m1.code " +\
-                      "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                          "FROM module m1, moduleMountedPast m2 WHERE m2.moduleCode = m1.code " +\
+                          "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_fixed_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all fixed mounted modules
     '''
-    try:
-        sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                      "FROM module m1, moduleMounted m2 WHERE m2.moduleCode = m1.code " +\
-                      "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                          "FROM module m1, moduleMounted m2 WHERE m2.moduleCode = m1.code " +\
+                          "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
+
 
 def get_all_tenta_mounted_modules():
     '''
         Get the module code, name, AY/Sem and quota of all tentative mounted modules
     '''
-    try:
-        sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                      "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
-                      "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                          "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                          "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     '''
         Get the module code, name, AY/Sem and quota of all tenta mounted mods of a selected AY
     '''
-    try:
-        sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                      "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
-                      "AND M2.acadYearAndSem LIKE %s" + \
-                      "ORDER BY m2.moduleCode, m2.acadYearAndSem"
-        processed_ay = selected_ay + "%"
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
+                          "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                          "AND M2.acadYearAndSem LIKE %s" + \
+                          "ORDER BY m2.moduleCode, m2.acadYearAndSem"
+            processed_ay = selected_ay + "%"
 
-        DB_CURSOR.execute(sql_command, (processed_ay,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            DB_CURSOR.execute(sql_command, (processed_ay,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_fixed_mounting_and_quota(code):
     '''
         Get the fixed AY/Sem and quota of a mounted module
     '''
-    try:
-        sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted " +\
-                      "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
-        DB_CURSOR.execute(sql_command, (code, ))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT acadYearAndSem, quota FROM moduleMounted " +\
+                          "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
+            DB_CURSOR.execute(sql_command, (code, ))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_tenta_mounting_and_quota(code):
     '''
         Get the tentative AY/Sem and quota of a mounted module
     '''
-    try:
-        sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative " +\
-                      "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
-        DB_CURSOR.execute(sql_command, (code, ))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT acadYearAndSem, quota FROM moduleMountTentative " +\
+                          "WHERE moduleCode=%s ORDER BY acadYearAndSem ASC"
+            DB_CURSOR.execute(sql_command, (code, ))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_mounting_of_target_fixed_ay_sem(code, ay_sem):
     '''
         Get the mounting status of a module in a target fixed AY/Sem
-        Returns False if query fails, or if module not mounted
+        Returns False if module not mounted
     '''
-    try:
-        sql_command = "SELECT COUNT(*) FROM moduleMounted " +\
-                      "WHERE moduleCode=%s AND acadYearAndSem=%s"
-        DB_CURSOR.execute(sql_command, (code, ay_sem))
-        result = DB_CURSOR.fetchone()
-        return result[0] == 1    # True == Mounted, False == Not Mounted
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT COUNT(*) FROM moduleMounted " +\
+                          "WHERE moduleCode=%s AND acadYearAndSem=%s"
+            DB_CURSOR.execute(sql_command, (code, ay_sem))
+            result = DB_CURSOR.fetchone()
+            return result[0] == 1    # True == Mounted, False == Not Mounted
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
+
 
 def get_mounting_of_target_tenta_ay_sem(code, ay_sem):
     '''
         Get the mounting status of a module in a target tentative AY/Sem
         Returns False if query fails, or if module not mounted
     '''
-    try:
-        sql_command = "SELECT COUNT(*) FROM moduleMountTentative " +\
-                      "WHERE moduleCode=%s AND acadYearAndSem=%s"
-        DB_CURSOR.execute(sql_command, (code, ay_sem))
-        result = DB_CURSOR.fetchone()
-        return result[0] == 1    # True == Mounted, False == Not Mounted
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT COUNT(*) FROM moduleMountTentative " +\
+                          "WHERE moduleCode=%s AND acadYearAndSem=%s"
+            DB_CURSOR.execute(sql_command, (code, ay_sem))
+            result = DB_CURSOR.fetchone()
+            return result[0] == 1    # True == Mounted, False == Not Mounted
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
+
 
 def get_quota_of_target_fixed_ay_sem(code, ay_sem):
     '''
         Get the quota of a mod in a target fixed AY/Sem (if any)
     '''
-    try:
-        sql_command = "SELECT quota FROM moduleMounted " +\
-                      "WHERE moduleCode=%s AND acadYearAndSem=%s"
-        DB_CURSOR.execute(sql_command, (code, ay_sem))
-        result = DB_CURSOR.fetchone()
-        if result is not None:
-            return result[0]
-        else:
-            return False
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT quota FROM moduleMounted " +\
+                          "WHERE moduleCode=%s AND acadYearAndSem=%s"
+            DB_CURSOR.execute(sql_command, (code, ay_sem))
+            result = DB_CURSOR.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return False
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_quota_of_target_tenta_ay_sem(code, ay_sem):
     '''
         Get the quota of a mod in a target tentative AY/Sem (if any)
     '''
-    try:
-        sql_command = "SELECT quota FROM moduleMountTentative " +\
-                      "WHERE moduleCode=%s AND acadYearAndSem=%s"
-        DB_CURSOR.execute(sql_command, (code, ay_sem))
-        result = DB_CURSOR.fetchone()
-        if result is not None:
-            return result[0]
-        else:
-            return False
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return False
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT quota FROM moduleMountTentative " +\
+                          "WHERE moduleCode=%s AND acadYearAndSem=%s"
+            DB_CURSOR.execute(sql_command, (code, ay_sem))
+            result = DB_CURSOR.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return False
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
@@ -432,21 +496,26 @@ def get_mod_specified_class_size(given_aysem, quota_lower, quota_higher):
 
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
-    try:
-        if helper.is_aysem_in_list(given_aysem, fixed_sems):
-            DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-        elif helper.is_aysem_in_list(given_aysem, tenta_sems):
-            DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
-        else: # No such aysem found
-            return list()
 
-        required_list = DB_CURSOR.fetchall()
-        processed_list = helper.convert_to_list(required_list)
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            if helper.is_aysem_in_list(given_aysem, fixed_sems):
+                DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+            elif helper.is_aysem_in_list(given_aysem, tenta_sems):
+                DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+            else: # No such aysem found
+                return list()
 
-        return processed_list
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            required_list = DB_CURSOR.fetchall()
+            processed_list = helper.convert_to_list(required_list)
+
+            return processed_list
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -557,41 +626,53 @@ def get_current_ay():
         so just get the AY from the first entry.
         Test case will ensure that all entries in fixed mountings have the same AY
     '''
-    try:
-        sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchone()[0]
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return ""
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT LEFT(acadYearAndSem, 8) FROM moduleMounted LIMIT(1)"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchone()[0]
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_fixed_ay_sems():
     '''
         Get all the distinct AY/Sem in the fixed mounting table
     '''
-    try:
-        sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted " +\
-                      "ORDER BY acadYearAndSem ASC"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMounted " +\
+                          "ORDER BY acadYearAndSem ASC"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_tenta_ay_sems():
     '''
         Get all the distinct AY/Sem in the tentative mounting table
     '''
-    try:
-        sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative " +\
-                      "ORDER BY acadYearAndSem ASC"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT DISTINCT acadYearAndSem FROM moduleMountTentative " +\
+                          "ORDER BY acadYearAndSem ASC"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -602,33 +683,40 @@ def get_number_students_planning(code):
     '''
         Get the number of students planning to take a mounted module
     '''
-    try:
-        sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE " +\
-                      "moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
-        DB_CURSOR.execute(sql_command, (code, ))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT COUNT(*), acadYearAndSem FROM studentPlans WHERE " +\
+                          "moduleCode=%s GROUP BY acadYearAndSem ORDER BY acadYearAndSem"
+            DB_CURSOR.execute(sql_command, (code, ))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_number_of_students_taking_module_in_ay_sem(module_code, ay_sem):
     '''
         Retrieves the number of students who have taken or are taking the module
         in the target AY-Sem.
-        Returns -1 if query fails
     '''
     sql_command = "SELECT COUNT(*) " + \
                   "FROM studentPlans sp " + \
                   "WHERE sp.moduleCode = %s " + \
                   "AND sp.acadYearAndSem = %s " + \
                   "ORDER BY COUNT(*) DESC"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code, ay_sem))
-        return DB_CURSOR.fetchone()[0]
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return -1
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (module_code, ay_sem))
+            return DB_CURSOR.fetchone()[0]
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_list_students_take_module(code, aysem):
@@ -656,19 +744,23 @@ def get_list_students_take_module(code, aysem):
                         "AND sp.studentid = s.nusnetid AND " + \
                         "sp.studentid = tfa.nusnetid" + \
                     ")"
-    try:
-        DB_CURSOR.execute(sql_command_1, (code, aysem))
-        current_list_of_students = DB_CURSOR.fetchall()
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command_1, (code, aysem))
+            current_list_of_students = DB_CURSOR.fetchall()
 
-        DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
-        list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
-        for student in list_of_students_taking_with_no_focus_areas:
-            current_list_of_students.append([student[0], student[1], "-", "-"])
+            DB_CURSOR.execute(sql_command_2, (code, aysem, code, aysem))
+            list_of_students_taking_with_no_focus_areas = DB_CURSOR.fetchall()
+            for student in list_of_students_taking_with_no_focus_areas:
+                current_list_of_students.append([student[0], student[1], "-", "-"])
 
-        return helper.replace_null_with_dash(current_list_of_students)
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            return helper.replace_null_with_dash(current_list_of_students)
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_oversub_mod():
@@ -721,14 +813,18 @@ def get_student_stats_for_all_mods():
         For each module/AY-Sem that has at least 1 student taking,
         get the number of students taking
     '''
-    try:
-        sql_command = "SELECT COUNT(*), moduleCode, acadYearAndSem FROM studentPlans " +\
-                      "GROUP BY moduleCode, acadYearAndSem ORDER BY moduleCode, acadYearAndSem"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT COUNT(*), moduleCode, acadYearAndSem FROM studentPlans " +\
+                          "GROUP BY moduleCode, acadYearAndSem ORDER BY moduleCode, acadYearAndSem"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -739,13 +835,17 @@ def get_all_focus_areas():
     '''
         Get all distinct focus areas
     '''
-    try:
-        sql_command = "SELECT DISTINCT name FROM focusarea"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT DISTINCT name FROM focusarea"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_num_students_by_yr_study():
@@ -755,21 +855,25 @@ def get_num_students_by_yr_study():
         e.g. [(1, 4), (2, 3)] means four year 1 students
         and two year 3 students
     '''
-    try:
-        sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
-                      " ORDER BY year"
-        DB_CURSOR.execute(sql_command)
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT year, COUNT(*) FROM student GROUP BY year" + \
+                          " ORDER BY year"
+            DB_CURSOR.execute(sql_command)
 
-        table_with_non_zero_students = DB_CURSOR.fetchall()
-        final_table = helper.append_missing_year_of_study(table_with_non_zero_students)
+            table_with_non_zero_students = DB_CURSOR.fetchall()
+            final_table = helper.append_missing_year_of_study(table_with_non_zero_students)
 
-        # Sort the table based on year
-        final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
+            # Sort the table based on year
+            final_table.sort(key=lambda row: row[INDEX_FIRST_ELEM])
 
-        return final_table
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            return final_table
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_num_students_by_focus_area_non_zero():
@@ -780,15 +884,19 @@ def get_num_students_by_focus_area_non_zero():
         Each row will contain (focus area, number of students) pair.
         See: get_num_students_by_focus_areas() for more details.
     '''
-    try:
-        sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
-                      " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
-        DB_CURSOR.execute(sql_command)
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT f.name, COUNT(*) FROM focusarea f, takesfocusarea t" + \
+                          " WHERE f.name = t.focusarea1 OR f.name = t.focusarea2 GROUP BY f.name"
+            DB_CURSOR.execute(sql_command)
 
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_focus_areas_with_no_students_taking():
@@ -799,13 +907,16 @@ def get_focus_areas_with_no_students_taking():
                   "SELECT f.name FROM focusarea f, takesfocusarea t " + \
                   "WHERE (f.name = t.focusarea1 OR f.name = t.focusarea2) " + \
                   "AND f2.name = f.name GROUP BY f.name)"
-    try:
-        DB_CURSOR.execute(sql_command)
-
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_number_students_without_focus_area():
@@ -815,13 +926,16 @@ def get_number_students_without_focus_area():
     '''
     sql_command = "SELECT COUNT(*) FROM takesfocusarea WHERE " + \
                   "focusarea1 IS NULL AND focusarea2 IS NULL"
-    try:
-        DB_CURSOR.execute(sql_command)
-
-        return DB_CURSOR.fetchone()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return 0
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchone()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_num_students_by_focus_areas():
@@ -961,12 +1075,16 @@ def get_modules_with_modified_details():
                   "FROM moduleBackup m1, module m2 " +\
                   "WHERE m1.code = m2.code " +\
                   "ORDER BY code ASC"
-    try:
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:     
+        try:
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_modules_with_modified_quota():
@@ -987,12 +1105,16 @@ def get_modules_with_modified_quota():
                   ") " +\
                   "AND m1.moduleCode = m3.code " +\
                   "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
-    try:
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:   
+        try:
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -1028,12 +1150,16 @@ def get_mod_taken_together_with(code):
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
                   "sp1.acadYearAndSem " + \
                   "ORDER BY COUNT(*) DESC"
-    try:
-        DB_CURSOR.execute(sql_command, (code,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (code,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_mod_taken_together_with_mod_and_aysem(code, aysem):
@@ -1062,12 +1188,16 @@ def get_mod_taken_together_with_mod_and_aysem(code, aysem):
                   "AND m1.code = sp1.moduleCode AND m2.code = sp2.moduleCode " + \
                   "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name " + \
                   "ORDER BY COUNT(*) DESC"
-    try:
-        DB_CURSOR.execute(sql_command, (code, aysem))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (code, aysem))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_mods_taken_together(aysem=None):
@@ -1095,16 +1225,20 @@ def get_all_mods_taken_together(aysem=None):
                    "GROUP BY sp1.moduleCode, m1.name, sp2.moduleCode, m2.name, " + \
                    "sp1.acadYearAndSem ORDER BY COUNT(*) DESC"
 
-    try:
-        if aysem is not None:
-            DB_CURSOR.execute(sql_command, (aysem,))
-        else:
-            DB_CURSOR.execute(sql_command)
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            if aysem is not None:
+                DB_CURSOR.execute(sql_command, (aysem,))
+            else:
+                DB_CURSOR.execute(sql_command)
 
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_modA_taken_prior_to_modB(aysem):
@@ -1142,12 +1276,16 @@ def get_modA_taken_prior_to_modB(aysem):
                   "sp1.acadYearAndSem, sp2.acadYearAndSem, " + \
                   "m1.name, m2.name " + \
                   "ORDER BY COUNT(*) DESC"
-    try:
-        DB_CURSOR.execute(sql_command, (aysem,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (aysem,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, module_B_ay_sem):
@@ -1171,13 +1309,16 @@ def get_number_of_students_who_took_modA_prior_to_modB(module_A, module_B, modul
                   "AND sp1.isTaken = True " + \
                   "GROUP BY sp1.acadYearAndSem " + \
                   "ORDER BY COUNT(*) DESC"
-
-    try:
-        DB_CURSOR.execute(sql_command, (module_A, module_B, module_B_ay_sem))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (module_A, module_B, module_B_ay_sem))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_mod_before_intern(ay_sem):
@@ -1204,12 +1345,16 @@ def get_mod_before_intern(ay_sem):
                   "AND (sp2.moduleCode = 'CP3200' OR sp2.moduleCode = 'CP3202' " + \
                   "OR sp2.moduleCode = 'CP3880')) " + \
                   "GROUP BY sp.moduleCode, m.name"
-    try:
-        DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (ay_sem, ay_sem))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_mods_no_one_take(aysem):
@@ -1252,18 +1397,22 @@ def get_mods_no_one_take(aysem):
     fixed_sems = get_all_fixed_ay_sems()
     tenta_sems = get_all_tenta_ay_sems()
 
-    try:
-        if helper.is_aysem_in_list(aysem, fixed_sems):
-            DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
-        elif helper.is_aysem_in_list(aysem, tenta_sems):
-            DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
-        else: # No such aysem found
-            return list()
-        required_list = DB_CURSOR.fetchall()
-        return required_list
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            if helper.is_aysem_in_list(aysem, fixed_sems):
+                DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNTED)
+            elif helper.is_aysem_in_list(aysem, tenta_sems):
+                DB_CURSOR.execute(sql_command, MAP_TABLE_TO_MODULE_MOUNT_TENTA)
+            else: # No such aysem found
+                return list()
+            required_list = DB_CURSOR.fetchall()
+            return required_list
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -1275,12 +1424,16 @@ def get_prerequisite(module_code):
         Get a prerequisite from the prerequisite table.
     '''
     sql_command = "SELECT index, prerequisiteModuleCode FROM prerequisite WHERE moduleCode = %s"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (module_code,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_preclusion(module_code):
@@ -1288,12 +1441,16 @@ def get_preclusion(module_code):
         Get all preclusions of module_code from the precludes table.
     '''
     sql_command = "SELECT precludedByModuleCode FROM precludes WHERE moduleCode = %s"
-    try:
-        DB_CURSOR.execute(sql_command, (module_code,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (module_code,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 ######################################################################################
@@ -1569,12 +1726,16 @@ def get_starred_modules(staff_id):
     '''
     sql_command = "SELECT m.* FROM module m, starred s WHERE s.staffId = %s " +\
                 "AND m.code = s.modulecode"
-    try:
-        DB_CURSOR.execute(sql_command, (staff_id,))
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            DB_CURSOR.execute(sql_command, (staff_id,))
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def is_module_starred(module_code, staff_id):
@@ -1657,8 +1818,8 @@ def validate_admin(username, unhashed_pass):
         DB_CURSOR.execute(sql_command, (username,))
         admin = DB_CURSOR.fetchall()
     except psycopg2.Error:
-        CONNECTION.rollback()
         return False
+
     if not admin:
         return False
     else:
@@ -1702,6 +1863,7 @@ def validate_session(username, session_id):
     except psycopg2.Error:
         CONNECTION.rollback()
         return False
+    
 
 
 def clean_old_sessions(date_to_delete):
