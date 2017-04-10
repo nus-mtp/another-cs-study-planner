@@ -43,13 +43,17 @@ def get_all_modules():
     '''
         Get the module code, name, description, and MCs of all modules
     '''
-    try:
-        sql_command = "SELECT * FROM module ORDER BY code"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+        try:
+            sql_command = "SELECT * FROM module ORDER BY code"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_all_modules_and_focus():
@@ -1277,7 +1281,7 @@ def get_modA_taken_prior_to_modB(aysem):
                   "m1.name, m2.name " + \
                   "ORDER BY COUNT(*) DESC"
     number_of_attempts = 0
-    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
+    while number_of_attempts < 2:
         try:
             DB_CURSOR.execute(sql_command, (aysem,))
             return DB_CURSOR.fetchall()
