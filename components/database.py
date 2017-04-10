@@ -3,6 +3,9 @@
     Contains functions that directly communicate with or manipulate the database
 '''
 import hashlib
+from random import randint
+from time import sleep
+import web
 
 ## Prevent helper.py from being imported twice
 from sys import modules
@@ -53,30 +56,38 @@ def get_all_modules_and_focus():
         Get the module code, name, description, MCs,
         and focus areas of all modules
     '''
-    try:
-        sql_command = "SELECT m.*, b.focusArea " +\
-                        "FROM module m " +\
-                        "LEFT JOIN belongstofocus b " +\
-                        "ON m.code = b.ModuleCode " +\
-                        "ORDER BY m.code"
-        DB_CURSOR.execute(sql_command)
-        return DB_CURSOR.fetchall()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < 10:
+        try:
+            sql_command = "SELECT m.*, b.focusArea " +\
+                            "FROM module m " +\
+                            "LEFT JOIN belongstofocus b " +\
+                            "ON m.code = b.ModuleCode " +\
+                            "ORDER BY m.code"
+            DB_CURSOR.execute(sql_command)
+            return DB_CURSOR.fetchall()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_module(code):
     '''
         Get the module code, name, description, MCs and status of a single module
     '''
-    try:
-        sql_command = "SELECT * FROM module WHERE code=%s"
-        DB_CURSOR.execute(sql_command, (code,))
-        return DB_CURSOR.fetchone()
-    except psycopg2.Error:
-        CONNECTION.rollback()
-        return []
+    number_of_attempts = 0
+    while number_of_attempts < 10:
+        try:
+            sql_command = "SELECT * FROM module WHERE code=%s"
+            DB_CURSOR.execute(sql_command, (code,))
+            return DB_CURSOR.fetchone()
+        except psycopg2.Error:
+            CONNECTION.rollback()
+            sleep(1)
+            number_of_attempts += 1
+    raise web.seeother('/')
 
 
 def get_module_name(code):
