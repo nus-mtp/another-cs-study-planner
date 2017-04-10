@@ -57,7 +57,7 @@ def get_all_modules_and_focus():
         and focus areas of all modules
     '''
     number_of_attempts = 0
-    while number_of_attempts < 10:
+    while number_of_attempts < 30:
         try:
             sql_command = "SELECT m.*, b.focusArea " +\
                             "FROM module m " +\
@@ -78,7 +78,7 @@ def get_module(code):
         Get the module code, name, description, MCs and status of a single module
     '''
     number_of_attempts = 0
-    while number_of_attempts < 10:
+    while number_of_attempts < 30:
         try:
             sql_command = "SELECT * FROM module WHERE code=%s"
             DB_CURSOR.execute(sql_command, (code,))
