@@ -1772,7 +1772,7 @@ def add_admin(username, salt, hashed_pass):
         activation done
     '''
     try:
-        sql_command = "INSERT INTO admin VALUES (%s, %s, %s, FALSE, TRUE)"
+        sql_command = "INSERT INTO users VALUES (%s, %s, %s, FALSE, TRUE)"
         DB_CURSOR.execute(sql_command, (username, salt, hashed_pass))
         CONNECTION.commit()
     except psycopg2.DataError: #if username too long
@@ -1785,7 +1785,7 @@ def is_userid_taken(userid):
         Returns True if query fails or if ID already taken
 
     '''
-    sql_command = "SELECT staffid FROM admin WHERE staffID=%s"
+    sql_command = "SELECT staffid FROM users WHERE staffID=%s"
     try:
         DB_CURSOR.execute(sql_command, (userid,))
 
@@ -1807,7 +1807,7 @@ def delete_admin(username):
         sql_command = "DELETE FROM sessions WHERE staffid=%s"
         DB_CURSOR.execute(sql_command, (username, ))
 
-        sql_command = "DELETE FROM admin WHERE staffID=%s"
+        sql_command = "DELETE FROM users WHERE staffID=%s"
         DB_CURSOR.execute(sql_command, (username,))
         CONNECTION.commit()
     except psycopg2.Error:
@@ -1818,7 +1818,7 @@ def validate_admin(username, unhashed_pass):
     '''
         Check if a provided admin-password pair is valid.
     '''
-    sql_command = "SELECT salt, password FROM admin WHERE staffID=%s"
+    sql_command = "SELECT salt, password FROM users WHERE staffID=%s"
     try:
         DB_CURSOR.execute(sql_command, (username,))
         admin = DB_CURSOR.fetchall()
