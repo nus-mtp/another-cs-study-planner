@@ -3,9 +3,7 @@
     Contains functions that directly communicate with or manipulate the database
 '''
 import hashlib
-from random import randint
 from time import sleep
-import web
 
 ## Prevent helper.py from being imported twice
 from sys import modules
@@ -14,6 +12,7 @@ try:
 except ImportError:
     helper = modules['components.helper']
 
+import web
 import components.database_adapter # database_adaptor.py handles the connection to database
 import psycopg2
 from psycopg2.extensions import AsIs
@@ -317,7 +316,8 @@ def get_all_tenta_mounted_modules():
     while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                          "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                          "FROM module m1, moduleMountTentative m2 " +\
+                          "WHERE m2.moduleCode = m1.code " +\
                           "ORDER BY m2.moduleCode, m2.acadYearAndSem"
             DB_CURSOR.execute(sql_command)
             return DB_CURSOR.fetchall()
@@ -336,7 +336,8 @@ def get_all_tenta_mounted_modules_of_selected_ay(selected_ay):
     while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             sql_command = "SELECT m2.moduleCode, m1.name, m2.acadYearAndSem, m2.quota " +\
-                          "FROM module m1, moduleMountTentative m2 WHERE m2.moduleCode = m1.code " +\
+                          "FROM module m1, moduleMountTentative m2 " +\
+                          "WHERE m2.moduleCode = m1.code " +\
                           "AND M2.acadYearAndSem LIKE %s" + \
                           "ORDER BY m2.moduleCode, m2.acadYearAndSem"
             processed_ay = selected_ay + "%"
@@ -1080,7 +1081,7 @@ def get_modules_with_modified_details():
                   "WHERE m1.code = m2.code " +\
                   "ORDER BY code ASC"
     number_of_attempts = 0
-    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:     
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             DB_CURSOR.execute(sql_command)
             return DB_CURSOR.fetchall()
@@ -1110,7 +1111,7 @@ def get_modules_with_modified_quota():
                   "AND m1.moduleCode = m3.code " +\
                   "ORDER BY m1.moduleCode, m1.acadYearAndSem, m2.acadYearAndSem"
     number_of_attempts = 0
-    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:   
+    while number_of_attempts < MAX_NUMBER_OF_ATTEMPTS:
         try:
             DB_CURSOR.execute(sql_command)
             return DB_CURSOR.fetchall()
@@ -1867,7 +1868,7 @@ def validate_session(username, session_id):
     except psycopg2.Error:
         CONNECTION.rollback()
         return False
-    
+
 
 
 def clean_old_sessions(date_to_delete):
