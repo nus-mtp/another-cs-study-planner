@@ -23,11 +23,11 @@ PRIMARY KEY (acadYearAndSem, moduleCode, mountingPlanID),
 FOREIGN KEY (moduleCode) REFERENCES module(code)
 );
 
-CREATE TABLE admin (
+CREATE TABLE users (
 staffId VARCHAR(9) PRIMARY KEY,
 salt VARCHAR(32),
 password VARCHAR(256) NOT NULL,
-isSuper BOOLEAN,
+isAdmin BOOLEAN,
 isActivated BOOLEAN
 );
  
@@ -92,7 +92,7 @@ moduleCode VARCHAR(10),
 staffID VARCHAR(9),
 PRIMARY KEY (moduleCode, staffID),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
-FOREIGN KEY (staffID) REFERENCES admin(staffID)
+FOREIGN KEY (staffID) REFERENCES users(staffID)
 );
 
 CREATE TABLE moduleBackup (
@@ -106,7 +106,7 @@ CREATE TABLE sessions (
 staffID VARCHAR(9) PRIMARY KEY,
 sessionSalt VARCHAR(32),
 date TIMESTAMPTZ DEFAULT now(),
-FOREIGN KEY (staffID) REFERENCES admin(staffID)
+FOREIGN KEY (staffID) REFERENCES users(staffID)
 );
 
 CREATE TABLE moduleMountedPast(
