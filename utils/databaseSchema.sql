@@ -83,6 +83,7 @@ isTaken BOOLEAN,
 moduleCode VARCHAR(10),
 acadYearAndSem VARCHAR(20),
 PRIMARY KEY (studentId, moduleCode, acadYearAndSem),
+FOREIGN KEY (moduleCode) REFERENCES module(code),
 FOREIGN KEY (studentId) REFERENCES student(nusnetId)
 );
  
@@ -98,7 +99,8 @@ CREATE TABLE moduleBackup (
 code VARCHAR(10) PRIMARY KEY,
 name VARCHAR(64),
 description VARCHAR(4096),
-mc INT
+mc INT,
+FOREIGN KEY (code) REFERENCES module(code)
 );
 
 CREATE TABLE sessions (
