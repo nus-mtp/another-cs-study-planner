@@ -52,7 +52,6 @@ FOREIGN KEY (focusArea2) REFERENCES focusArea(name)
 CREATE TABLE belongsToFocus (
 moduleCode VARCHAR(10),
 focusArea VARCHAR(64),
-lastMounted DATE,
 type VARCHAR(64),
 PRIMARY KEY (moduleCode, focusArea),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
