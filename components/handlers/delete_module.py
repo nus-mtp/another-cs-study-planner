@@ -4,7 +4,7 @@
 '''
 
 
-from app import RENDER
+from app import RENDER, set_template
 import web
 from components import model, session
 from components.handlers.outcome import Outcome
@@ -53,4 +53,5 @@ class DeleteMod(object):
                 else:
                     return Outcome().POST("delete_module", "is_starred", module_code)
             else:
+                set_template()   # Refresh list of modules in module search
                 return Outcome().POST("delete_module", True, module_code)

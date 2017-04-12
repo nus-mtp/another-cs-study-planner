@@ -2,10 +2,11 @@
     This module contains the handlers for add module page
 '''
 
-from app import RENDER
+from app import RENDER, set_template
 import web
 from components import model, session
 from components.handlers.outcome import Outcome
+
 
 class AddModule(object):
     '''
@@ -19,6 +20,7 @@ class AddModule(object):
             raise web.seeother('/login')
 
         return RENDER.addModules()
+
 
     def POST(self):
         '''
@@ -37,6 +39,10 @@ class AddModule(object):
                 return model.outcome_invalid()
 
             outcome = model.add_module(module_code, module_name, module_desc, module_mc, 'New')
+            if outcome is True:
+                set_template()   # Refresh list of modules in module search
+
             return Outcome().POST("add_module", outcome, module_code)
+
         except AttributeError:
             return Outcome().POST("add_module", False, None)

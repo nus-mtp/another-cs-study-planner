@@ -53,10 +53,31 @@ URLS = (
     '/editAll', 'components.handlers.edit_all_mountings_and_quotas.EditAll'
 )
 
-'''
-    Retrieve a list of all modules, to be used for autocompleting module search
-'''
-all_modules = database.get_all_modules()
+
+all_modules = None
+RENDER = web.template.render('templates', base='base')
+
+def set_template():
+    '''
+        all_modules: 
+        A list of all modules, to be used for autocompleting module search
+
+        RENDER: 
+        Defines the directory where the application should access
+        to render its webpage templates. 
+        In this case, this tells the application that it should access the 'templates' directory 
+        and use the 'base.html' as the base template for all other pages.
+        Also set the global variables to be used across all templates.
+    '''    
+    global all_modules
+    global RENDER
+
+    all_modules = database.get_all_modules()
+    RENDER._cache = {}
+    RENDER._add_global(web, name="web")
+    RENDER._add_global(all_modules, name="all_modules")
+
+set_template()
 
 
 '''
@@ -66,22 +87,12 @@ web.config.debug = False
 
 
 '''
-    This defines the directory where the application should access
-    to render its webpage templates.
-
-    In this case, this tells the application that it should access the
-    'templates' directory and use the 'base.html' as the base template
-    for all other pages.
-'''
-RENDER = web.template.render('templates', base='base',
-                             globals={'web':web, 'all_modules':all_modules})
-
-'''
     This creates the application instance with the defined
     URL routing mappings, and global variables that are obtained using
     globals().
 '''
 APP = web.application(URLS, globals())
+
 
 def notfound():
     '''
