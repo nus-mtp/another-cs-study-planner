@@ -34,16 +34,13 @@ class TestCode(object):
                                                self.test_quota_higher_1)
 
         required_list = [["CS6101", "Exploration of Computer Science Research", 0],
-                         ["MM1001", "Dummy Modified Module 1", 10],
                          ["FMC1206", "Freshman Seminar: Computing for a Better World", 15],
                          ["CS2309", "CS Research Methodology", 20],
-                         ["MM1002", "Dummy Modified Module 2", 20],
                          ["CS6203", "Advanced Topics in Database Systems", 30],
                          ["CS6880", "Advanced Topics in Software Engineering", 30],
                          ["CS2220", "Introduction to Computational Biology", 30],
                          ["CS6231", "Topics in System Security", 40],
-                         ["CS3205", "Information Security Capstone Project", 40],
-                         ["MM1004", "Dummy Modified Module 4", 40]
+                         ["CS3205", "Information Security Capstone Project", 40]
                         ]
 
         assert_equal(len(list_of_modules), len(required_list))
@@ -59,8 +56,7 @@ class TestCode(object):
             model.get_mod_specified_class_size(self.test_aysem_2, self.test_quota_lower_2,
                                                self.test_quota_higher_2)
 
-        required_list = [["CS2106", "Introduction to Operating Systems", 180],
-                         ["CS2103", "Software Engineering", 180],
+        required_list = [["CS2103", "Software Engineering", 180],
                          ["CS2107", "Introduction to Information Security", 200],
                          ["CS1010S", "Programming Methodology", 200]
                         ]

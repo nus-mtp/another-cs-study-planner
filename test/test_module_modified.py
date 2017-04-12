@@ -14,15 +14,15 @@ class TestCode(object):
 
     URL_VALID_GENERAL_CHANGE_LISTING = '/modifiedModules'
     URL_VALID_SPECIFIC_MOUNTING_CHANGE = '/modifiedModules?' +\
-                                         'modifyType=mounting&code=MM1006'
+                                         'modifyType=mounting&code=CS2104'
     URL_VALID_SPECIFIC_QUOTA_CHANGE = '/modifiedModules?' +\
-                                      'modifyType=quota&code=MM1008'
+                                      'modifyType=quota&code=CG1001'
     URL_VALID_SPECIFIC_DETAILS_CHANGE = '/modifiedModules?' +\
-                                        'modifyType=moduleDetails&code=MM1009'
+                                        'modifyType=moduleDetails&code=CS2010'
     URL_INVALID_MODULE_CODE = '/modifiedModules?' +\
-                              'modifyType=mounting&code=MM0000'
+                              'modifyType=mounting&code=CS0000'
     URL_INVALID_CHANGE_TYPE = '/modifiedModules?' +\
-                              'modifyType=mounting&code=MM1009'
+                              'modifyType=mounting&code=CP2201'
 
     TAB_VIEW_HEADERS = '<ul class="nav nav-tabs nav-justified">'
     TAB_VIEW_CONTENT = '<div class="tab-content">'
@@ -146,7 +146,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_VALID_SPECIFIC_MOUNTING_CHANGE)
 
-        root.mustcontain('Modified Mounting of <b>MM1006</b>')
+        root.mustcontain('Modified Mounting of <b>CS2104</b>')
         root.mustcontain(self.ALL_TABLES_CODE_HEADER)
         root.mustcontain(self.ALL_TABLES_NAME_HEADER)
         root.mustcontain(self.ALL_TABLES_RESTORE_HEADER)
@@ -170,7 +170,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_VALID_SPECIFIC_QUOTA_CHANGE)
 
-        root.mustcontain('Modified Quota of <b>MM1008</b>')
+        root.mustcontain('Modified Quota of <b>CG1001</b>')
         root.mustcontain(self.ALL_TABLES_CODE_HEADER)
         root.mustcontain(self.ALL_TABLES_NAME_HEADER)
         root.mustcontain(self.ALL_TABLES_RESTORE_HEADER)
@@ -197,7 +197,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_VALID_SPECIFIC_DETAILS_CHANGE)
 
-        root.mustcontain('Modified Module Details of <b>MM1009</b>')
+        root.mustcontain('Modified Module Details of <b>CS2010</b>')
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_PANELS)
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_OLD_DETAILS)
         root.mustcontain(self.DETAIL_CHANGES_TARGET_MODULE_NEW_DETAILS)
@@ -228,7 +228,7 @@ class TestCode(object):
         '''
         root = self.test_app.get(self.URL_INVALID_CHANGE_TYPE)
         assert_equal(root.status, 200)
-        root.mustcontain("Modified Mounting of <b>MM1009</b>")
+        root.mustcontain("Modified Mounting of <b>CP2201</b>")
 
         assert '<td>' not in root.body
 

@@ -1,65 +1,47 @@
-# cs-modify
+# CSModify: A Module Planner for Module Administrators in NUS School of Computing (SoC)
 
-## App structure:
+## Contents
 
-1. app.py
-  * The application's home file
-2. /components
-  * Contains all logical components
-  * This folder contains:
-    * /handlers (for py file to handle web requests)
-    * database_adapter.py (handles connection to database and database repopulation)
-    * local_database_data.py (stores data and getters for local database connection)
-    * model.py (handles queries to the database)
-3. /static
-  * This folder is split into:
-    * /fonts (for storing glyphicons)
-    * /stylesheets (for CSS resources)
-    * /javascripts (for JS scripts)
-    * /images (for storing image files)
-4. /templates
-  * Contains all web.py template files
-5. /test
-  * Contains all test cases
-6. /utils
-  * Contains internal scripts
-7. .travis.yml
-  * For building the app environment in Travis CI
-8. Procfile
-  * For defining which python file to run in Heroku
-9. requirements.txt
-  * For defining app requirements in Heroku
-10. README.md
+* [About the Project](#about-the-project)
+* [Installing Instructions](#installing-instructions)
+* [Contributing To The Project](#contributing-to-the-project)
+* [About Us](#about-us)
+* [License](#license)
 
-## How to create local\_database_data.py manually ?
+## About the Project
 
-In order to run our code in your local computer, you would be
-required to have Postgres installed ([link](https://www.postgresql.org/download/))
-and manually create the local\_database_data.py file (see steps below)
+CSModify is a web application that displays data visualizations and simulate module changes, to assist in module planning for NUS School of Computing (SoC).
 
-1. Create a file named "local\_database_data.py" inside your `components/` folder.
-2. Write this inside your file `local_database_data.py`:
+Module planning is a process where module administrators make various decisions for modules. Some examples would be deciding which modules should be mounted/dismounted for a particular Academic Year-Semester (denoted as an AY-Sem), determining the quota that should be allocated to a module, or finding out how many students will be affected should a module be taken down in a particular AY-Sem.
 
+Module planning itself is, by no means, an easy feat. As there is no central system for doing this currently, what this project aims to do would be to assist module planners by showing data visualizations of their queries in a manner that is easy to process. By doing so, we hope that they will be able to make decisions regarding module planning with greater convenience and ease.
 
-```
-    database_name = '<your_database_name>' # Replace with your postgres database name
-    user_name = '<your_user_name>'         # Replace with your postgres username
-    password = '<your_password>'           # Replace with your postgres password
-    host_name = 'localhost'  
-    port = '<your_port_number>'            # Replace with the port number used by postgres
-    
-    def get_database_name():
-          return database_name
+## Installing Instructions
 
-    def get_user_name():
-          return user_name
+Please read [INSTALLING.md](https://github.com/nus-mtp/cs-modify/blob/master/INSTALLING.md) for instructions for installing the project on your machine.
 
-    def get_password():
-          return password
+## Contributing To The Project
 
-    def get_host_name():
-          return host_name
+Please read [CONTRIBUTING.md](https://github.com/nus-mtp/cs-modify/blob/master/CONTRIBUTING.md) for instructions for how to contribute to the project.
 
-    def get_port():
-          return port
-```
+## Demo Video
+
+You can watch our demo / promotional video by clicking [here](https://youtu.be/pTA6v-26WiU)
+
+## About Us
+
+We at Team Lezzgo are students of NUS School of Computing.
+
+If you would like to talk to us, you may do so on GitHub, or drop us a mail at `nus-dot-csmodify-at-gmail-dot-com`.
+
+### Members
+
+* [GQ](https://github.com/tgqiang)
+* [Nicholas](https://github.com/nlzz22)
+* [QX](https://github.com/helloqx)
+* [Rufus](https://github.com/xaterz)
+* [XiaoXiao](https://github.com/a0129998)
+
+## License
+
+This project is licensed under the MIT License.
