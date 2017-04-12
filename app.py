@@ -59,16 +59,16 @@ RENDER = web.template.render('templates', base='base')
 
 def set_template():
     '''
-        all_modules: 
+        all_modules:
         A list of all modules, to be used for autocompleting module search
 
-        RENDER: 
+        RENDER:
         Defines the directory where the application should access
-        to render its webpage templates. 
-        In this case, this tells the application that it should access the 'templates' directory 
+        to render its webpage templates.
+        In this case, this tells the application that it should access the 'templates' directory
         and use the 'base.html' as the base template for all other pages.
         Also set the global variables to be used across all templates.
-    '''    
+    '''
     global all_modules
     global RENDER
 
