@@ -23,11 +23,11 @@ PRIMARY KEY (acadYearAndSem, moduleCode, mountingPlanID),
 FOREIGN KEY (moduleCode) REFERENCES module(code)
 );
 
-CREATE TABLE admin (
+CREATE TABLE users (
 staffId VARCHAR(9) PRIMARY KEY,
 salt VARCHAR(32),
 password VARCHAR(256) NOT NULL,
-isSuper BOOLEAN,
+isAdmin BOOLEAN,
 isActivated BOOLEAN
 );
  
@@ -52,7 +52,6 @@ FOREIGN KEY (focusArea2) REFERENCES focusArea(name)
 CREATE TABLE belongsToFocus (
 moduleCode VARCHAR(10),
 focusArea VARCHAR(64),
-lastMounted DATE,
 type VARCHAR(64),
 PRIMARY KEY (moduleCode, focusArea),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
@@ -84,6 +83,7 @@ isTaken BOOLEAN,
 moduleCode VARCHAR(10),
 acadYearAndSem VARCHAR(20),
 PRIMARY KEY (studentId, moduleCode, acadYearAndSem),
+FOREIGN KEY (moduleCode) REFERENCES module(code),
 FOREIGN KEY (studentId) REFERENCES student(nusnetId)
 );
  
@@ -92,21 +92,22 @@ moduleCode VARCHAR(10),
 staffID VARCHAR(9),
 PRIMARY KEY (moduleCode, staffID),
 FOREIGN KEY (moduleCode) REFERENCES module(code),
-FOREIGN KEY (staffID) REFERENCES admin(staffID)
+FOREIGN KEY (staffID) REFERENCES users(staffID)
 );
 
 CREATE TABLE moduleBackup (
 code VARCHAR(10) PRIMARY KEY,
 name VARCHAR(64),
 description VARCHAR(4096),
-mc INT
+mc INT,
+FOREIGN KEY (code) REFERENCES module(code)
 );
 
 CREATE TABLE sessions (
 staffID VARCHAR(9) PRIMARY KEY,
 sessionSalt VARCHAR(32),
 date TIMESTAMPTZ DEFAULT now(),
-FOREIGN KEY (staffID) REFERENCES admin(staffID)
+FOREIGN KEY (staffID) REFERENCES users(staffID)
 );
 
 CREATE TABLE moduleMountedPast(
