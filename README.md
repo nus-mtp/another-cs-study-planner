@@ -24,6 +24,10 @@ Please read [INSTALLING.md](https://github.com/nus-mtp/cs-modify/blob/master/INS
 
 Please read [CONTRIBUTING.md](https://github.com/nus-mtp/cs-modify/blob/master/CONTRIBUTING.md) for instructions for how to contribute to the project.
 
+## Demo Video
+
+You can watch our demo / promotional video by clicking [here](https://youtu.be/pTA6v-26WiU)
+
 ## About Us
 
 We at Team Lezzgo are students of NUS School of Computing.
