@@ -114,14 +114,15 @@ class Tentative(object):
         self.full_mounting_plan = tenta_full_mounting_plan
 
 
-    def GET(self, to_render=True, logged_in=False):
+    def GET(self, to_render=True, logged_in=False, is_testing=False):
         '''
             Renders the tentative mounting page if users requested
             for the page through the GET method.
         '''
-        web.header('X-Frame-Options', 'SAMEORIGIN')
-        web.header('X-Content-Type-Options', 'nosniff')
-        web.header('X-XSS-Protection', '1')
+        if not is_testing:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
         if not session.validate_session() and not logged_in:
             raise web.seeother('/login')
 

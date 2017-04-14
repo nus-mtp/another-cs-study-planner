@@ -21,15 +21,16 @@ class TakePriorTo(object):
             at least 1 student who has taken module A
             prior to taking module B
         '''
-        web.header('X-Frame-Options', 'SAMEORIGIN')
-        web.header('X-Content-Type-Options', 'nosniff')
-        web.header('X-XSS-Protection', '1')
+
         is_testing = (len(test_data) > 0)
         if is_testing:
             module_A = test_data[0]
             module_B = test_data[1]
             target_ay_sem = test_data[2]
         else:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
             if not session.validate_session():
                 raise web.seeother('/login')
             input_data = model.validate_input(web.input(), ["moduleAandB", "aysem"],

@@ -21,12 +21,13 @@ class OversubModule(object):
             Renders the oversubscribed modules page if users requested
             for the page through the GET method.
         '''
-        web.header('X-Frame-Options', 'SAMEORIGIN')
-        web.header('X-Content-Type-Options', 'nosniff')
-        web.header('X-XSS-Protection', '1')
+
         if test_data:
             target_ay_sem = test_data[0]
         else:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
             if not session.validate_session():
                 raise web.seeother('/login')
 
@@ -83,7 +84,7 @@ class OversubModule(object):
 
         else:
             tenta_mounting_handler = Tentative()
-            tenta_mounting_handler.GET(to_render=False, logged_in=True)
+            tenta_mounting_handler.GET(to_render=False, logged_in=True, is_testing=True)
             full_mounting_plan = tenta_mounting_handler.full_mounting_plan
 
             if target_ay_sem[9:15] == "Sem 1":
