@@ -51,7 +51,7 @@ class TestCode(object):
     FORM_USER_LOGIN_PASSWORD_LABEL = '<label for="password">Password</label>'
     FORM_USER_LOGIN_PASSWORD_FIELD = '<input type="password" class="form-control" ' +\
                                      'id="password" name="password" ' +\
-                                     'required>'
+                                     'autocomplete="off" required>'
     FORM_USER_LOGIN_BUTTON = '<input type="submit" value="Login" ' +\
                              'class="btn btn-primary">'
 
@@ -64,7 +64,7 @@ class TestCode(object):
     FORM_USER_REGISTRATION_PASSWORD_LABEL = '<label for="password">Password</label>'
     FORM_USER_REGISTRATION_PASSWORD_FIELD = '<input type="password" class="form-control"' +\
                                             'id="password" name="password" placeholder=' +\
-                                            '"Password" required>'
+                                            '"Password" autocomplete="off" required>'
     FORM_USER_REGISTRATION_BUTTON = '<input type="submit" value="Create Account"' +\
                                     'class="btn btn-primary"'
 
