@@ -23,8 +23,8 @@ def init_session(user_id):
     session_salt = uuid.uuid4().hex
     components.model.add_session(user_id, session_salt)
     session_id = hashlib.sha512(user_id + session_salt).hexdigest()
-    web.setcookie('user', user_id, COOKIE_TIME)
-    web.setcookie('session_id', session_id, COOKIE_TIME)
+    web.setcookie('user', user_id, COOKIE_TIME, httponly=True)
+    web.setcookie('session_id', session_id, COOKIE_TIME, httponly=True)
 
 
 def validate_session():
@@ -46,8 +46,8 @@ def refresh_sessions(user, session_id):
     '''
         Refresh the session by extending the cookie expiry time.
     '''
-    web.setcookie('user', user, COOKIE_TIME)
-    web.setcookie('session_id', session_id, COOKIE_TIME)
+    web.setcookie('user', user, COOKIE_TIME, httponly=True)
+    web.setcookie('session_id', session_id, COOKIE_TIME, httponly=True)
 
 
 def clean_up_sessions():
