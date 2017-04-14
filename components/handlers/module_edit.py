@@ -43,6 +43,9 @@ class EditModuleInfo(object):
         if test_data:   # for testing purposes
             input_data = test_data[0]
         else:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
             input_data = model.validate_input(web.input(), ["code"], show_404=False)
 
         module_code = None

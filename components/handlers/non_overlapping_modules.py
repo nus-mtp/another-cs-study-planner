@@ -61,6 +61,9 @@ class NonOverlappingModules(object):
             called from search with ay sem form
         '''
         #will have input data as function is called from button
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["aysem"])
         ay_sem = input_data.aysem
 

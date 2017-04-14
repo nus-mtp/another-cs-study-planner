@@ -4,6 +4,7 @@
 '''
 
 from app import RENDER
+import web
 
 
 class Outcome(object):
@@ -16,6 +17,9 @@ class Outcome(object):
             and display the corresponding message based on the execution's outcome.
         '''
         if received_data is not None:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
             data = received_data
             action = data[0]
             outcome = data[1]

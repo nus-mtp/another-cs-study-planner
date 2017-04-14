@@ -37,6 +37,9 @@ class Register(object):
             we also perform validation here should the front-end happen to be
             bypassed in some manner.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         credentials = web.input()
 
         try:

@@ -132,4 +132,7 @@ class Fixed(object):
             present in other valid pages.
             used by module mountingtentative
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         raise web.seeother('/moduleMountingFixed')

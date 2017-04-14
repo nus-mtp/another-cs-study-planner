@@ -90,6 +90,9 @@ class ModuleSpecificSize(object):
             called from search with form
         '''
         # Input data will have valid inputs as function is called from submit button
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["aysem"])
         try:
             ay_sem_of_interest = input_data.aysem

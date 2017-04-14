@@ -55,6 +55,9 @@ class Modules(object):
             This function might be called from button links from other pages.
         '''
         # Detects if this function is called from button links from another page.
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         referrer_page = web.ctx.env.get('HTTP_REFERER', self.URL_THIS_PAGE)
         parts = referrer_page.split("/")
         referrer_page_shortform = "/" + parts[len(parts) - 1]

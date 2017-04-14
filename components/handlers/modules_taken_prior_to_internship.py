@@ -64,6 +64,9 @@ class TakePriorInternship(object):
             before internship with a specified AY-Sem
         '''
         # will have input data as function is called from button
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["aysem"])
         ay_sem = input_data.aysem
 

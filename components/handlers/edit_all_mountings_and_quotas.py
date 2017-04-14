@@ -46,6 +46,9 @@ class EditAll(object):
         if test_data:
             input_data = test_data[0]
         else:
+            web.header('X-Frame-Options', 'SAMEORIGIN')
+            web.header('X-Content-Type-Options', 'nosniff')
+            web.header('X-XSS-Protection', '1')
             input_data = web.input()
         all_modules = model.get_all_modules()
         target_ay = model.get_next_ay(model.get_current_ay())

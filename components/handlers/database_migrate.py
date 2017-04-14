@@ -43,6 +43,9 @@ class DatabaseMigrate(object):
             the implication involved, and presses the 'Proceed' button in
             the web page.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         hasSucceeded = model.migrate_to_next_aysem()
 
         return Outcome().POST("migrate-database", hasSucceeded, None)

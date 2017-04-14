@@ -34,6 +34,9 @@ class DeleteMod(object):
             Handles the deletion of a module
         '''
         # Verify that module exists
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["code"], show_404=False)
         try:
             module_code = input_data.code

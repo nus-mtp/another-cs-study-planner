@@ -29,6 +29,9 @@ class AddModule(object):
         '''
             Handles the submitting of the add module form
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         #get module values from form
         try:
             data = web.input()

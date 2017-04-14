@@ -36,6 +36,9 @@ class EditModulePrerequisites(object):
             Handles the submission of updated module prerequisites
             for a target module.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         isSucessfullyUpdated = False
 
         input_data = model.validate_input(web.input(), ["code"], show_404=False)
