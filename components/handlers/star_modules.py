@@ -16,6 +16,9 @@ class StarModule(object):
         '''
             This function is called when /starModule is accessed.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         if not session.validate_session():
             raise web.seeother('/login')
         else:
@@ -43,6 +46,9 @@ class StarredModulesList(object):
         '''
             This function is called when /starredModules is accessed.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         if not session.validate_session():
             raise web.seeother('/login')
         else:

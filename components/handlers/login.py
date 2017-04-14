@@ -19,6 +19,9 @@ class Login(object):
         '''
             This function is called when /login is accessed.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         return RENDER.login(session.validate_session())
 
 

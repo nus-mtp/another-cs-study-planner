@@ -20,6 +20,9 @@ class EditModuleInfo(object):
         '''
             Handles the loading of the 'Edit General Module Info' page
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["code"])
         module_code = input_data.code
 
@@ -104,6 +107,9 @@ class EditMountingInfo(object):
         '''
             Handles the loading of the 'Edit Specific Module Info' page
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         input_data = model.validate_input(web.input(), ["code", "aysem"], is_future=True)
         module_code = input_data.code
         ay_sem = input_data.aysem

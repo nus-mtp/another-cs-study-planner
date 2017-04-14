@@ -200,6 +200,9 @@ class Modified(object):
             Renders the modified modules page if users requested
             for the page through the GET method.
         '''
+        web.header('X-Frame-Options', 'SAMEORIGIN')
+        web.header('X-Content-Type-Options', 'nosniff')
+        web.header('X-XSS-Protection', '1')
         if not session.validate_session():
             raise web.seeother('/login')
 
