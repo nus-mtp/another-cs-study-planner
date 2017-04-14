@@ -27,33 +27,10 @@ class TestCode(object):
 
     URL_STUDENT_ENROLLMENT = '/studentEnrollment'
 
-    TABLE_HEADER_SENIORITY = '<th>Year of Study</th>'
-    TABLE_HEADER_FOCUS_AREA = '<th>Focus Area</th>'
-    TABLE_HEADER_STUDENT_COUNT = '<th>Number of Students</th>'
-
-    TABLE_FOCUS_AREAS = [
-        'Have Not Indicated',
-        'Algorithms &amp; Theory',
-        'Artificial Intelligence',
-        'Computer Graphics and Games',
-        'Database Systems',
-        'Multimedia Information Retrieval',
-        'Networking and Distributed Systems',
-        'Parallel Computing',
-        'Programming Languages',
-        'Software Engineering'
-    ]
-
-    # Single-degree students have highest candidature period of 5 years
-    # Double-degree students have highest candidature period of 6 years
-    TABLE_YEARS_OF_STUDY = [
-        '<td>1</td>',
-        '<td>2</td>',
-        '<td>3</td>',
-        '<td>4</td>',
-        '<td>5</td>',
-        '<td>6</td>'
-    ]
+    YEAR_OF_STUDY_BAR_CHART = 'year_of_study_bar_values.push'
+    YEAR_OF_STUDY_PIE_CHART = 'year_of_study_pie_values.push'
+    FOCUS_AREA_BAR_CHART = 'focus_area_bar_values.push'
+    FOCUS_AREA_PIE_CHART = 'focus_area_pie_values.push'
 
 
     def __init__(self):
@@ -87,49 +64,14 @@ class TestCode(object):
         assert_equal(root.status, 200)
 
 
-    def test_student_enrollment_contents(self):
+    def test_student_enrollment_valid_contents(self):
         '''
-            Tests if the student enrollment page contains
-            the necessary views.
-        '''
-        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
-
-        root.mustcontain(self.TABLE_HEADER_SENIORITY)
-        root.mustcontain(self.TABLE_HEADER_FOCUS_AREA)
-        root.mustcontain(self.TABLE_HEADER_STUDENT_COUNT)
-
-
-    def test_student_enrollment_focus_area_table_contents(self):
-        '''
-            Tests if the focus area table contains the correct
-            listing of all focus areas, inclusive of those who
-            have not indicated any focus areas.
+            Tests whether the expected contents in the
+            student enrollment page are present.
         '''
         root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
 
-        root.mustcontain(self.TABLE_FOCUS_AREAS[0],
-                         self.TABLE_FOCUS_AREAS[1],
-                         self.TABLE_FOCUS_AREAS[2],
-                         self.TABLE_FOCUS_AREAS[3],
-                         self.TABLE_FOCUS_AREAS[4],
-                         self.TABLE_FOCUS_AREAS[5],
-                         self.TABLE_FOCUS_AREAS[6],
-                         self.TABLE_FOCUS_AREAS[7],
-                         self.TABLE_FOCUS_AREAS[8],
-                         self.TABLE_FOCUS_AREAS[9])
-
-
-    def test_student_enrollment_student_year_table_contents(self):
-        '''
-            Tests if the student year-of-study table contains the
-            correct listing of all possible student years.
-
-            Currently assumes that the most senior student is up
-            to year 4 of study.
-        '''
-        root = self.test_app.get(self.URL_STUDENT_ENROLLMENT)
-
-        root.mustcontain(self.TABLE_YEARS_OF_STUDY[0],
-                         self.TABLE_YEARS_OF_STUDY[1],
-                         self.TABLE_YEARS_OF_STUDY[2],
-                         self.TABLE_YEARS_OF_STUDY[3])
+        root.mustcontain(self.YEAR_OF_STUDY_BAR_CHART)
+        root.mustcontain(self.YEAR_OF_STUDY_PIE_CHART)
+        root.mustcontain(self.FOCUS_AREA_BAR_CHART)
+        root.mustcontain(self.FOCUS_AREA_PIE_CHART)
