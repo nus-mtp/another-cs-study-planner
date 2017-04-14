@@ -37,23 +37,6 @@ $for i in range(len(focus_area_count)):
 		<button class="btn btn-primary enrollment-chart-button active" id="enrollment-student-year-bar-chart-button" onclick="showStudentYearBarChart();">Bar Chart</button>
 	</div>
 	<div class="row">
-		<!--<div class="col-md-4" id="enrollment-student-year-table-container">
-			<table class="table display dataTable table-bordered table-hover text-center" id="enrollment-student-year-table">
-				<thead>
-					<tr>
-						<th>Year of Study</th>
-						<th>Number of Students</th>
-					</tr>
-				</thead>
-				<tbody>
-					$for year_count_pair in year_of_study_count:
-						<tr>
-							<td>$year_count_pair[0]</td>
-							<td>$year_count_pair[1]</td>
-						</tr>
-				</tbody>
-			</table>
-		</div>-->
 		<div id="enrollment-student-year-bar-chart" class="col-md-12"></div>
 		<div id="enrollment-student-year-pie-chart" class="col-md-12"></div>
 	</div>
@@ -68,23 +51,6 @@ $for i in range(len(focus_area_count)):
 		<button class="btn btn-primary enrollment-chart-button active" id="enrollment-focus-area-bar-chart-button" onclick="showFocusAreaBarChart();">Bar Chart</button>
 	</div>
 	<div class="row">
-		<!--<div class="col-md-4" id="enrollment-focus-area-table-container">
-			<table class="table display dataTable table-bordered table-hover text-center" id="enrollment-focus-area-table">
-				<thead>
-					<tr>
-						<th>Focus Area</th>
-						<th>Number of Students</th>
-					</tr>
-				</thead>
-				<tbody>
-					$for focus_count_pair in focus_area_count:
-						<tr>
-							<td>$focus_count_pair[0]</td>
-							<td>$focus_count_pair[1]</td>
-						</tr>
-				</tbody>
-			</table>
-		</div>-->
 		<div id="enrollment-focus-area-bar-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
 		<div id="enrollment-focus-area-pie-chart" class="col-md-12" style="height: 400px; margin-top: 30px;"></div>
 	</div>

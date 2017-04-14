@@ -9,7 +9,7 @@ $var hierarchy = [home, addModule]
 <div class="container container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="row"><!--header-->
+            <div class="row">
                 <h1 class="text-center"><b>Modules with Specific Class Size</b></h1>
                 <p class="text-center" >Shows all modules with specific class size in specified AY-Semester</p>
                 <br>
@@ -46,13 +46,13 @@ $var hierarchy = [home, addModule]
             </div>
             <!-- Render table only if ay-sem and class size range values are specified. -->
             $if not ayOfInterest is None and not lowerRange is None and not higherRange is None:
-                <div class="row"><!--subheader-->
+                <div class="row">
                     <div class="col-md-12 pagination-centered text-center">
                         <h2>Modules in $ayOfInterest with class size between $lowerRange and $higherRange:</h2>
                         <br>
                     </div>
                 </div>
-                <div class="row"><!--table-->
+                <div class="row">
                     <table class="table display dataTable table-bordered table-hover text-center" id="mod-specific-size-table">
                         <thead>
                             <tr>

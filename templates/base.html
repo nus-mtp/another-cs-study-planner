@@ -1,5 +1,7 @@
 $def with (page)
 
+$# This template serves as the base for all other pages, and renders other page contents within itself.
+
 <html>
 	<head>
 		<title>$:page.title</title>
@@ -40,6 +42,7 @@ $def with (page)
 		</script>
 
 		$if page.title == 'Login to CSModify' or page.title == 'Register for CSModify Account' or page.title == 'Validating...' or page.title == '404 Page Not Found':
+			$# These pages do not have sidebar, therefore only the page element needs to be rendered
 			$:page
 
 		$else:
@@ -67,7 +70,7 @@ $def with (page)
 							<span class="glyphicon glyphicon-log-out"></span> Logout
 						</button>
 					</div>
-				</div><!-- /.container-fluid -->
+				</div>
 			</nav>
 
 			<div id="sidebar" class="sidebar">
@@ -75,21 +78,15 @@ $def with (page)
 				<h3 id="sidebar"><span class="glyphicon glyphicon-align-left"></span>&nbsp;&nbsp;&nbsp;Module Views</h3>
 				<ul id="sidebar">
 					<li><a id="sidebar" href="/oversubscribedModules">Oversubscribed Modules</a></li>
-					<!--li><a href="#">View by Focus Area</a></li-->
 					<li><a id="sidebar" href="/modules">Module Information</a></li>
 					<li><a id="sidebar" href="/modifiedModules">Modified Modules</a></li>
 					<li><a id="sidebar" href="/moduleSpecificSize">Modules with Specific Class Size</a></li>
-					<!--li><a href="#">Sort/Filter Modules</a></li>
-					<li><a href="#">Recently Removed Modules</a></li-->
 					<li><a id="sidebar" href="/starredModules">Starred Modules</a></li>
 					<li><a id="sidebar" href="/moduleMountingFixed">Module Mountings for Current AY</a></li>
 					<li><a id="sidebar" href="/moduleMountingTentative">Module Mountings for Other AYs</a></li>
-					<!--li><a href="#">View Past Module Demand</a></li-->
 				</ul>
 				<h3 id="sidebar"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;&nbsp;Change Curriculum</h3>
 				<ul id="sidebar">
-					<!--li><a href="#">Change Module Quota</a></li>
-					<li><a href="#">Change Preclusions/Prerequisites</a></li-->
 					<li><a id="sidebar" href="/editAll">Edit All Mountings and Quotas</a></li>
 					<li><a id="sidebar" href="/addModule">Add Module</a></li>
 					<li><a id="sidebar" href="/deleteModule">Delete Module</a></li>
@@ -106,14 +103,7 @@ $def with (page)
 				</ul>
 				<h3 id="sidebar"><span class="glyphicon glyphicon-education"></span>&nbsp;&nbsp;&nbsp;Student Statistics</h3>
 				<ul id="sidebar">
-					<!--li><a href="javascript:void(0)">Module Demand</a></li>
-						<ul>
-							<li><a href="#">Current Semester</a></li>
-							<li><a href="#">Next Semester</a></li>
-							<li><a href="#">In Specific Semester</a></li>
-						</ul-->
 					<li><a id="sidebar" href="/studentEnrollment">Student Enrollment Info</a></li>
-					<!--li><a href="#">Module Timeline</a></li-->
 				</ul>
 			</div>
 			<div class="container">
