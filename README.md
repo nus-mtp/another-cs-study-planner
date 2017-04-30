@@ -1,3 +1,10 @@
+[![Build
+Status](https://travis-ci.org/nus-mtp/cs-modify.svg?branch=master)](https://travis-ci.org/nus-mtp/cs-modify)
+[![Test
+Coverage](https://codeclimate.com/github/nus-mtp/cs-modify/badges/coverage.svg)](https://codeclimate.com/github/nus-mtp/cs-modify/coverage)
+[![Code
+Climate](https://codeclimate.com/github/nus-mtp/cs-modify/badges/gpa.svg)](https://codeclimate.com/github/nus-mtp/cs-modify)
+
 # CSModify: A Module Planner for Module Administrators in NUS School of Computing (SoC)
 
 ## Contents

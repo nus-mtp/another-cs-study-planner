@@ -13,5 +13,9 @@ install:
 - pip install web.py
 - pip install psycopg2
 - pip install paste
+- pip install coverage
+- pip install codeclimate-test-reporter
 
-script: nosetests -v
+script: 
+- nosetests --with-coverage -v
+- codeclimate-test-reporter
