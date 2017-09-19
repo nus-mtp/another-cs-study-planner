@@ -175,4 +175,4 @@ Some of the possible contributions are listed here, for your convenience:
 
 ## Other Queries
 
-If you have any other queries on how to contribute to our project, you may contact us directly on GitHub, or drop us a mail at `nus-dot-csmodify-at-gmail-dot-com`.
+If you have any other queries on how to contribute to our project, you may contact us directly on GitHub, or drop us a mail at `tayguoqiang1993-at-gmail-dot-com`.
